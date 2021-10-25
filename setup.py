@@ -8,6 +8,7 @@ setup(
    author_email='fiorefabris@gmail.com.com',
    packages=['adler'],  #same as name
    install_requires=['matplotlib', 'pandas','numpy'], #external packages as dependencies
-   scripts=[]
+   packages=['adler', 'adler.get_time_series','adler.plotting','adler.pulse_detection'],
 )
 #multiprocessing,,'itertools','functools','pickle','math','time'
+#scripts
