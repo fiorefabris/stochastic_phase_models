@@ -7,7 +7,7 @@ setup(
    author='fiorefabris',
    author_email='fiorefabris@gmail.com.com',
    packages=['adler'],  #same as name
-   install_requires=['matplotlib', 'pandas','numpy','itertools','functools','pickle','math','time'], #external packages as dependencies
+   install_requires=['matplotlib', 'pandas','numpy'], #external packages as dependencies
    scripts=[]
 )
-#multiprocessing
+#multiprocessing,,'itertools','functools','pickle','math','time'
