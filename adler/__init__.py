@@ -1,3 +1,3 @@
-import get_time_series
-import plotting
-import pulse_detection
+import adler.get_time_series
+import adler.plotting
+import adler.pulse_detection
