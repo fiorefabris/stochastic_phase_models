@@ -1,5 +1,5 @@
-from pulse_detection.quantifiers_main import  compute_fft, compute_FPT,get_consecutive
-from pulse_detection.pulse_detection_main import compute_pulse_detection,compute_pulses_quantifiers
+from adler.pulse_detection.quantifiers_main import  compute_fft, compute_FPT,get_consecutive
+from adler.pulse_detection.pulse_detection_main import compute_pulse_detection,compute_pulses_quantifiers
 
 
 

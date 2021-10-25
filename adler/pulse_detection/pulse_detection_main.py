@@ -10,7 +10,7 @@ from functools import partial
 import pandas as pd
 import time
 
-from plotting.plotting_main import check_file, save_data, download_data
+from adler.plotting.plotting_main import check_file, save_data, download_data
 
 
 #%%

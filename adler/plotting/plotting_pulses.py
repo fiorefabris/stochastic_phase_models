@@ -7,10 +7,10 @@ from functools import partial
 import matplotlib.gridspec as gridspec
 import seaborn as sns
 
-from plotting.plotting_main import set_scale,download_data,check_file
-from pulse_detection.pulse_detection_main import get_fixed_points
+from adler.plotting.plotting_main import set_scale,download_data,check_file
+from adler.pulse_detection.pulse_detection_main import get_fixed_points
 
-from pulse_detection.quantifiers_main import time
+from adler.pulse_detection.quantifiers_main import time
 
 
 

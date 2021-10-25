@@ -11,7 +11,7 @@ matplotlib.rcParams['xtick.minor.size'] = 10
 matplotlib.rcParams['xtick.minor.width'] = 0.25
 
 
-from plotting.plotting_time_series import plot_time_series
-from plotting.plotting_fft import plot_fft_all, plot_fft
-from plotting.plotting_fpt import plot_FPT_all, plot_FPT
-from plotting.plotting_pulses import  plot_pulses,plot_quantifiers_histograms,plot_activity, plot_consecutiveness
+from adler.plotting.plotting_time_series import plot_time_series
+from adler.plotting.plotting_fft import plot_fft_all, plot_fft
+from adler.plotting.plotting_fpt import plot_FPT_all, plot_FPT
+from adler.plotting.plotting_pulses import  plot_pulses,plot_quantifiers_histograms,plot_activity, plot_consecutiveness
