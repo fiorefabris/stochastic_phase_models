@@ -54,7 +54,6 @@ def plot_pulses_alpha(data_folder_ts,data_folder_pulses,save_path_name,dt,T,d,TS
     PFE , PFI = get_fixed_points(alpha)
     print('alpha = ', alpha)
     T_n = ceil(int(T/dt)/d) #número de puntos de la serie temporal
-    print('T_n',T_n)
 
 ###############################################################################
 ### Plotting parameters
@@ -87,7 +86,9 @@ def plot_pulses_alpha(data_folder_ts,data_folder_pulses,save_path_name,dt,T,d,TS
         print(row.D,'plotting ',order,number);D = row.D
         ax = axs[k]; ax.grid(False);
         ax.plot(t,np.sin(theta),linewidth=0.8,color = colors[k])
-        
+        print('T_n',T_n)
+        print(t,'----------'+len(t))
+
         
         if (check_file(file_name_max,data_folder_pulses)):
                         
