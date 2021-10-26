@@ -87,7 +87,7 @@ def plot_pulses_alpha(data_folder_ts,data_folder_pulses,save_path_name,dt,T,d,TS
         ax = axs[k]; ax.grid(False);
         ax.plot(t,np.sin(theta),linewidth=0.8,color = colors[k])
         print('T_n',T_n)
-        print(t,'----------'+len(t))
+        print(t,'----------'+str(len(t)))
 
         
         if (check_file(file_name_max,data_folder_pulses)):
