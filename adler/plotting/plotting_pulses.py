@@ -59,7 +59,8 @@ def plot_pulses_alpha(data_folder_ts,data_folder_pulses,save_path_name,dt,T,d,TS
     alpha = np.round(i/omega,4)  
     PFE , PFI = get_fixed_points(alpha)
     print('alpha = ', alpha)
-    T_n = ceil(int(T/dt)/d)
+    T_n = ceil(int(T/dt)/d) #número de puntos de la serie temporal
+    print(T_n)
 
 ###############################################################################
 ### Plotting parameters
@@ -91,7 +92,7 @@ def plot_pulses_alpha(data_folder_ts,data_folder_pulses,save_path_name,dt,T,d,TS
         t = time(dt,T,d)[::delta]
         print(row.D,'plotting ',order,number);D = row.D
         ax = axs[k]; ax.grid(False);
-        ax.plot(t,np.cos(theta),linewidth=0.8,color = colors[k])
+        ax.plot(t,np.sin(theta),linewidth=0.8,color = colors[k])
         
         
         if (check_file(file_name_max,data_folder_pulses)):
@@ -100,6 +101,7 @@ def plot_pulses_alpha(data_folder_ts,data_folder_pulses,save_path_name,dt,T,d,TS
             MIN          = mask_arr(T_n, download_data(data_folder_pulses + 'min_xf_'+ file_name))
             left_minima  = mask_arr(T_n, download_data(data_folder_pulses + 'left_minima_'+ file_name) )
             right_minima = mask_arr(T_n, download_data(data_folder_pulses + 'right_minima_'+ file_name) )
+            print(MAX)
             
             ax.plot(t[MAX],np.cos(theta)[MAX],'o',color = 'red',markersize = 8)
             ax.plot(t[MIN],np.cos(theta)[MIN],'o',color = 'blue',markersize =8)
