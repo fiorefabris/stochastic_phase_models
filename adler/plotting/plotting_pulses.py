@@ -96,12 +96,12 @@ def plot_pulses_alpha_sine(data_folder_ts,data_folder_pulses,save_path_name,dt,T
         if (check_file(file_name_max,data_folder_pulses)):
                         
             MAX          = mask_arr(T_n, download_data(data_folder_pulses + file_name_max))
+            print(MAX)
             MIN          = mask_arr(T_n, download_data(data_folder_pulses + 'min_xf_'+ file_name))
             left_minima  = mask_arr(T_n, download_data(data_folder_pulses + 'left_minima_'+ file_name) )
             right_minima = mask_arr(T_n, download_data(data_folder_pulses + 'right_minima_'+ file_name) )
             
             
-            print('MAX',MAX)
             ax.plot(t[MAX],np.sin(theta)[MAX],'o',color = 'red',markersize = 8)
             ax.plot(t[MIN],np.sin(theta)[MIN],'o',color = 'blue',markersize =8)
             ax.plot(t[left_minima],np.sin(theta)[left_minima],'<',color = 'black',markersize = 8)
