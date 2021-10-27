@@ -29,7 +29,7 @@ def plot_pulses(description_file,data_folder_ts,data_folder_pulses,save_path_nam
     ref.set_index('Unnamed: 0',inplace=True);
     
     pool = mp.Pool(processes= ceil(mp.cpu_count()/4))
-    plot_pulses_alpha_ = partial(plot_pulses_alpha_sine,data_folder_ts,data_folder_pulses,save_path_name,dt,T,d,TS,N,delta)
+    plot_pulses_alpha_ = partial(plot_pulses_alpha_sine,data_folder_ts,data_folder_pulses,save_path_name,dt,T,d,TS,N,1)
     pool.map(plot_pulses_alpha_,ref.groupby(['alpha']) )
     pool.close()
     pool.join()
@@ -45,7 +45,6 @@ def plot_pulses_alpha_sine(data_folder_ts,data_folder_pulses,save_path_name,dt,T
     data_folder_pulses : donde está la data de los pulsos
     save_path_name : donde queres guardar la figura  
     plotea el primer archivo solamente de la serie temporal! (variable j)
-    hay un problema con el delta!
     '''
     i,rows = tuple_[0],tuple_[1]; j = 0
 ###############################################################################
@@ -56,7 +55,7 @@ def plot_pulses_alpha_sine(data_folder_ts,data_folder_pulses,save_path_name,dt,T
     alpha = np.round(i/omega,4)  
     PFE , PFI = get_fixed_points(alpha)
     print('alpha = ', alpha)
-    T_n = ceil(int(T/dt)/d)
+    T_n = ceil(int(T/dt)/d) # la cantidad de puntos de la serie temporal, sin considerar la resolución delta del plotting
     print('TN: ',T_n)
 ###############################################################################
 ### Plotting parameters
@@ -86,8 +85,10 @@ def plot_pulses_alpha_sine(data_folder_ts,data_folder_pulses,save_path_name,dt,T
 
         theta = download_data(data_folder_ts + file_name)[:T_n:delta]
         t = time(dt,T,d)[::delta]
-        print(len(theta),len(t),'\n',t)
+
+        assert len(theta) == len(t)
         print(row.D,'plotting ',order,number);D = row.D
+
         ax = axs[k]; ax.grid(False);
         ax.plot(t,np.sin(theta),linewidth=0.8,color = colors[k])
         
@@ -98,6 +99,7 @@ def plot_pulses_alpha_sine(data_folder_ts,data_folder_pulses,save_path_name,dt,T
             MIN          = mask_arr(T_n, download_data(data_folder_pulses + 'min_xf_'+ file_name))
             left_minima  = mask_arr(T_n, download_data(data_folder_pulses + 'left_minima_'+ file_name) )
             right_minima = mask_arr(T_n, download_data(data_folder_pulses + 'right_minima_'+ file_name) )
+            
             
             print('MAX',MAX)
             ax.plot(t[MAX],np.sin(theta)[MAX],'o',color = 'red',markersize = 8)
