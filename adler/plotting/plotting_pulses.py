@@ -57,7 +57,7 @@ def plot_pulses_alpha_sine(data_folder_ts,data_folder_pulses,save_path_name,dt,T
     PFE , PFI = get_fixed_points(alpha)
     print('alpha = ', alpha)
     T_n = ceil(int(T/dt)/d)
-
+    print('TN: ',T_n)
 ###############################################################################
 ### Plotting parameters
 ###############################################################################    
@@ -86,6 +86,7 @@ def plot_pulses_alpha_sine(data_folder_ts,data_folder_pulses,save_path_name,dt,T
 
         theta = download_data(data_folder_ts + file_name)[:T_n:delta]
         t = time(dt,T,d)[::delta]
+        print(len(theta),len(t),'\n',t)
         print(row.D,'plotting ',order,number);D = row.D
         ax = axs[k]; ax.grid(False);
         ax.plot(t,np.sin(theta),linewidth=0.8,color = colors[k])
@@ -98,6 +99,7 @@ def plot_pulses_alpha_sine(data_folder_ts,data_folder_pulses,save_path_name,dt,T
             left_minima  = mask_arr(T_n, download_data(data_folder_pulses + 'left_minima_'+ file_name) )
             right_minima = mask_arr(T_n, download_data(data_folder_pulses + 'right_minima_'+ file_name) )
             
+            print('MAX',MAX)
             ax.plot(t[MAX],np.sin(theta)[MAX],'o',color = 'red',markersize = 8)
             ax.plot(t[MIN],np.sin(theta)[MIN],'o',color = 'blue',markersize =8)
             ax.plot(t[left_minima],np.sin(theta)[left_minima],'<',color = 'black',markersize = 8)
@@ -121,7 +123,7 @@ def plot_pulses_alpha_sine(data_folder_ts,data_folder_pulses,save_path_name,dt,T
         ax.tick_params(labelsize=20)
 
 
-    plt.savefig(save_path_name + 'pulses_sine_alpha_'+str(alpha)+'.pdf', format='pdf')
+    plt.savefig(save_path_name + 'pulses_alpha_'+str(alpha)+'.pdf', format='pdf')
     return(0)
 
 #%%
