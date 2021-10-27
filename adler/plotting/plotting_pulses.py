@@ -23,109 +23,8 @@ def mask_arr(end,arr):
     
 
 def plot_pulses(description_file,data_folder_ts,data_folder_pulses,save_path_name,dt,T,d,TS,N,delta):
-    ref = pd.read_excel(description_file,sheet_name= 'File_references')
-    ref.set_index('Unnamed: 0',inplace=True);
+    ''' plotea los pulsos con el seno'''
     
-    pool = mp.Pool(processes= ceil(mp.cpu_count()/4))
-    plot_pulses_alpha_ = partial(plot_pulses_alpha,data_folder_ts,data_folder_pulses,save_path_name,dt,T,d,TS,N,delta)
-    pool.map(plot_pulses_alpha_,ref.groupby(['alpha']) )
-    pool.close()
-    pool.join()
-    return (1)
-# =============================================================================
-# plotting pulses module
-# =============================================================================
-
-def plot_pulses_alpha(data_folder_ts,data_folder_pulses,save_path_name,dt,T,d,TS,N,delta,tuple_):
-    '''
-    plor pulses for a certain alpha
-    data_folder_ts : carpeta donde estan las series temporales
-    data_folder_pulses : donde está la data de los pulsos
-    save_path_name : donde queres guardar la figura  
-    plotea el primer archivo solamente de la serie temporal! (variable j)
-    '''
-    i,rows = tuple_[0],tuple_[1]; j = 0
-###############################################################################
-### Parameters
-###############################################################################
-
-    omega =  rows.omega.unique()[0]
-    alpha = np.round(i/omega,4)  
-    PFE , PFI = get_fixed_points(alpha)
-    print('alpha = ', alpha)
-    T_n = ceil(int(T/dt)/d) #número de puntos de la serie temporal
-
-###############################################################################
-### Plotting parameters
-###############################################################################    
-    xlim = [-5,T+5] ; ylim = [-1.1,1.1] ;         
-    Cols = TS; Tot = len(rows.groupby(['D'])) ;
-    Rows = ceil(Tot/ Cols)
-    colors =  sns.color_palette(sns.color_palette("viridis",Rows*1))
-    colors =  colors[::1]
-
-###############################################################################
-### Figure
-###############################################################################    
-
-    fig, axs = plt.subplots(Rows, Cols, sharex=True, sharey=True, figsize=(8.27*5, 11.69*2))
-    fig.subplots_adjust(bottom=0.15, top=0.9, left=0.15, right=0.8, wspace=0.1, hspace=0.1)
-    text = r'$\omega = \frac{2\pi}{7 min}$' +' ~ ' + r'$\alpha = $' +str(alpha) + r'$ \frac{2\pi}{7 min}$' #+' ~ ' + r'$ \Delta\theta = $'+ text_dtheta
-    axs[0].text(0,1.5, text, ha='center', va='center', transform=axs[0].transAxes, fontsize=35)
-    
-    
-    for k,(ix,row_) in  enumerate(rows.groupby(['D'])):
-        
-        row = row_.iloc[j]; order = int(row.order); number = int(row.number)
-
-        file_name =  str(number)+'_'+str(order)+'.pkl'
-        file_name_max = 'max_xf_'+file_name
-
-        theta = download_data(data_folder_ts + file_name)[:T_n:delta]
-        t = time(dt,T,d)[::delta]
-        print(row.D,'plotting ',order,number);D = row.D
-        ax = axs[k]; ax.grid(False);
-        ax.plot(t,np.sin(theta),linewidth=0.8,color = colors[k])
-        print('T_n',T_n)
-        print(t,'----------'+str(len(t)))
-
-        
-        if (check_file(file_name_max,data_folder_pulses)):
-                        
-            MAX          = mask_arr(T_n, download_data(data_folder_pulses + file_name_max))
-            MIN          = mask_arr(T_n, download_data(data_folder_pulses + 'min_xf_'+ file_name))
-            left_minima  = mask_arr(T_n, download_data(data_folder_pulses + 'left_minima_'+ file_name) )
-            right_minima = mask_arr(T_n, download_data(data_folder_pulses + 'right_minima_'+ file_name) )
-            print('MAX_index',MAX)
-            
-            ax.plot(t[MAX],np.sin(theta)[MAX],'o',color = 'red',markersize = 8)
-            ax.plot(t[MIN],np.sin(theta)[MIN],'o',color = 'blue',markersize =8)
-            ax.plot(t[left_minima],np.cos(theta)[left_minima],'<',color = 'black',markersize = 8)
-            ax.plot(t[right_minima],np.cos(theta)[right_minima],'>',color='black',markersize = 8)
-            
-        ################################################
-        #### Plotting
-        ################################################
-        text = 'D = ' + str(np.round(D,5))
-        ax.text(1.05, 0.9, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
-        ax.set_ylim(ylim);
-        ax.set_xlim(xlim)
-        if k == len(axs)-Cols:
-            ax.set_ylabel(r'$\cos(\theta)$', fontsize=30);
-            ax.set_xlabel('time', fontsize=30)
-            ax.xaxis.set_label_coords(0.5, -0.1);
-            ax.yaxis.set_label_coords(-0.05, 0.5)
-
-        set_scale(ax, [0,T], [-1,1])
-        ax.set_xticklabels([0,T])
-        ax.tick_params(labelsize=20)
-
-
-    plt.savefig(save_path_name + 'pulses_alpha_'+str(alpha)+'.pdf', format='pdf')
-    return(0)
-
-#%%
-def plot_pulses_sine(description_file,data_folder_ts,data_folder_pulses,save_path_name,dt,T,d,TS,N,delta):
     ref = pd.read_excel(description_file,sheet_name= 'File_references')
     ref.set_index('Unnamed: 0',inplace=True);
     
@@ -146,6 +45,7 @@ def plot_pulses_alpha_sine(data_folder_ts,data_folder_pulses,save_path_name,dt,T
     data_folder_pulses : donde está la data de los pulsos
     save_path_name : donde queres guardar la figura  
     plotea el primer archivo solamente de la serie temporal! (variable j)
+    hay un problema con el delta!
     '''
     i,rows = tuple_[0],tuple_[1]; j = 0
 ###############################################################################
@@ -246,7 +146,7 @@ def compute_st_values(ax,samples,bins,scale,fs = 6):
     samples es el dataset que queres estudiar, y bins es el histograma que estas graficando.
     scale es por loque tengo que dividir samples para llegar a minutos. fs es el fontsize del texto. '''           
     
-    if True:
+    if len(samples) < 0:
         pass
     else:
         mode = (bins[1][np.argmax(bins[0])] + bins[1][np.argmax(bins[0])+1])/2 ; 

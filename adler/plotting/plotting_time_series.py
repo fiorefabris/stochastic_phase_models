@@ -118,17 +118,7 @@ def plot_time_series_alpha(data_folder,save_path_name,dt,T,d,TS,N,delta,tuple_):
 
     omega =  rows.omega.unique()[0]
     alpha = np.round(i/omega,4)  
-    
-    if alpha > 1:
-        dtheta = np.pi* (1-2*np.arcsin(1/alpha)/np.pi)
-        text_dtheta =  str(np.round(dtheta/np.pi,2)) + r'$\pi$'
-    elif alpha == 1:
-        dtheta = 0
-        text_dtheta = r'$0  \pi$'
-    else:
-        dtheta = None
-        text_dtheta = 'NO'
-    print('alpha = ', alpha, ' & d_theta = ', text_dtheta)
+    print('alpha = ', alpha)
 
 ###############################################################################
 ### Plotting parameters
@@ -170,7 +160,7 @@ def plot_time_series_alpha(data_folder,save_path_name,dt,T,d,TS,N,delta,tuple_):
             theta = download_data(data_folder + file_name) 
             t = time(dt,T,d)
             end = len(t)
-            ax.plot(t[:end:delta],np.cos(theta)[:end:delta],linewidth=2,color=colors[k])
+            ax.plot(t[:end:delta],np.sin(theta)[:end:delta],linewidth=2,color=colors[k])
         ################################################
         #### Plotting
         ################################################
