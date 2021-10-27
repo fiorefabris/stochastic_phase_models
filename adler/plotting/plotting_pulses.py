@@ -22,14 +22,14 @@ def mask_arr(end,arr):
     return ([i for i in arr if i  < end])
     
 
-def plot_pulses(description_file,data_folder_ts,data_folder_pulses,save_path_name,dt,T,d,TS,N,delta):
+def plot_pulses(description_file,data_folder_ts,data_folder_pulses,save_path_name,dt,T,d,TS,N):#delta 
     ''' plotea los pulsos con el seno'''
     
     ref = pd.read_excel(description_file,sheet_name= 'File_references')
     ref.set_index('Unnamed: 0',inplace=True);
     
     pool = mp.Pool(processes= ceil(mp.cpu_count()/4))
-    plot_pulses_alpha_ = partial(plot_pulses_alpha_sine,data_folder_ts,data_folder_pulses,save_path_name,dt,T,d,TS,N,1)
+    plot_pulses_alpha_ = partial(plot_pulses_alpha_sine,data_folder_ts,data_folder_pulses,save_path_name,dt,T,d,N)
     pool.map(plot_pulses_alpha_,ref.groupby(['alpha']) )
     pool.close()
     pool.join()
@@ -38,7 +38,7 @@ def plot_pulses(description_file,data_folder_ts,data_folder_pulses,save_path_nam
 # plotting pulses module
 # =============================================================================
 
-def plot_pulses_alpha_sine(data_folder_ts,data_folder_pulses,save_path_name,dt,T,d,TS,N,delta,tuple_):
+def plot_pulses_alpha_sine(data_folder_ts,data_folder_pulses,save_path_name,dt,T,d,N,tuple_):
     '''
     plor pulses for a certain alpha
     data_folder_ts : carpeta donde estan las series temporales
@@ -56,12 +56,12 @@ def plot_pulses_alpha_sine(data_folder_ts,data_folder_pulses,save_path_name,dt,T
     PFE , PFI = get_fixed_points(alpha)
     print('alpha = ', alpha)
     T_n = ceil(int(T/dt)/d) # la cantidad de puntos de la serie temporal, sin considerar la resolución delta del plotting
-    print('TN: ',T_n)
+
 ###############################################################################
 ### Plotting parameters
 ###############################################################################    
     xlim = [-5,T+5] ; ylim = [-1.1,1.1] ;         
-    Cols = TS; Tot = len(rows.groupby(['D'])) ;
+    Cols = 1; Tot = len(rows.groupby(['D'])) ;
     Rows = ceil(Tot/ Cols)
     colors =  sns.color_palette(sns.color_palette("viridis",Rows*1))
     colors =  colors[::1]
@@ -83,8 +83,8 @@ def plot_pulses_alpha_sine(data_folder_ts,data_folder_pulses,save_path_name,dt,T
         file_name =  str(number)+'_'+str(order)+'.pkl'
         file_name_max = 'max_xf_'+file_name
 
-        theta = download_data(data_folder_ts + file_name)[:T_n:delta]
-        t = time(dt,T,d)[::delta]
+        theta = download_data(data_folder_ts + file_name)[:T_n]#:delta
+        t = time(dt,T,d)#[::delta]
 
         assert len(theta) == len(t)
         print(row.D,'plotting ',order,number);D = row.D
@@ -319,9 +319,9 @@ def plot_quantifiers_histograms_D(data_folder,save_path_name,tuple_):
 #     activity plot blocking
 # =============================================================================     
 
-def load_activity(row_,data_folder,dt,T,d,delta):
+def load_activity(row_,data_folder,dt,T,d):
     '''
-    load_activity(row_,dt,T,d,delta). Calcula la activity para cada par D, alpha.
+    load_activity(row_,dt,T,d). Calcula la activity para cada par D, alpha.
     
     row_: DataFrame
         variable que viene del excel. Es el grupo de filas del excel de descripción,
@@ -346,7 +346,7 @@ def load_activity(row_,data_folder,dt,T,d,delta):
     return activity,silent,n_cell
 
 
-def plot_activity(dt,T,d,delta,description_file,data_folder,save_path_name):
+def plot_activity(dt,T,d,description_file,data_folder,save_path_name):
     '''
     data folder: donde están los dt
     '''
@@ -356,13 +356,13 @@ def plot_activity(dt,T,d,delta,description_file,data_folder,save_path_name):
     pool = mp.Pool(processes= ceil(mp.cpu_count()))
     
     tuple_ = ref.groupby(['alpha'])
-    plot_activity_D_ = partial(plot_activity_D,dt,T,d,delta,data_folder,save_path_name)
+    plot_activity_D_ = partial(plot_activity_D,dt,T,d,data_folder,save_path_name)
     pool.map(plot_activity_D_,tuple_)
     pool.close()
     pool.join()
     return (2)
 
-def plot_activity_D(dt,T,d,delta,data_folder,save_path_name,tuple_):
+def plot_activity_D(dt,T,d,data_folder,save_path_name,tuple_):
 
     i,rows = tuple_[0],tuple_[1]
     omega =  rows.omega.unique()[0]
@@ -381,7 +381,7 @@ def plot_activity_D(dt,T,d,delta,data_folder,save_path_name,tuple_):
  
     for k,(D,row_) in  enumerate(rows.groupby(['D'])):
         plt.rc('axes.spines', top=False, bottom=True, left=True, right=False); 
-        activity,silent,n_cell = load_activity(row_,data_folder,dt,T,d,delta)
+        activity,silent,n_cell = load_activity(row_,data_folder,dt,T,d)
         ax1 = plt.subplot(gs_col0[k])
         
         if len(activity) > 0:
@@ -486,7 +486,7 @@ def compute_total_consecutive(box_consecutiveness_cumulative):
 
 def load_consecutiveness_st(row_,data_folder):
     '''
-    load_consecutiveness_st(row_,dt,T,d,delta). Calcula la estadistica de la consecutividad para cada par D, alpha.
+    load_consecutiveness_st(row_,dt,T,d). Calcula la estadistica de la consecutividad para cada par D, alpha.
     
     row_: DataFrame
         variable que viene del excel. Es el grupo de filas del excel de descripción,

@@ -17,7 +17,7 @@ from adler.pulse_detection.quantifiers_main import time
 ### Time series plotting module
 ###############################################################################
 
-def plot_time_series(dt,T,d,TS,N,delta,description_file,data_folder,save_path_name):
+def plot_time_series(dt,T,d,N,delta,description_file,data_folder,save_path_name):
     '''
     plot_time_series(description_file,data_folder,save_path_name)
     Auxiliary funtion for parallelizing the time Series plotting function.
@@ -30,8 +30,6 @@ def plot_time_series(dt,T,d,TS,N,delta,description_file,data_folder,save_path_na
         total time lenght of the time series. Is the interval you want to plot, starting from zero.
     d : integer
         the decimation factor of the experiment (i.e. how often do you save your time series in dt units).
-    TS : int -- not sure if it is working for TS > 1. 
-        the number of time series you want to plot.
     N : int 
         number of repetitions of the time series with same parameters.
     delta : integer
@@ -59,7 +57,7 @@ def plot_time_series(dt,T,d,TS,N,delta,description_file,data_folder,save_path_na
     ref.set_index('Unnamed: 0',inplace=True);
 
 ######## Parameters & files
-    #dt = 0.0001 ;T = 10000; d=10; TS = 1; delta = 1000 
+    #dt = 0.0001 ;T = 10000; d=10;  delta = 1000 
 
 ######## Paralelization & running
     aux_iterator = ref.groupby(['alpha'])
@@ -89,8 +87,6 @@ def plot_time_series_alpha(data_folder,save_path_name,dt,T,d,TS,N,delta,tuple_):
         total time lenght of the time series. Is the interval you want to plot, starting from zero.
     d : integer
         the decimation factor of the experiment (i.e. how often do you save your time series in dt units).
-    TS : int -- not sure if it is working for TS > 1. 
-        the number of time series you want to plot.
     N : int 
         number of repetitions of the time series with same parameters.
     delta : integer
