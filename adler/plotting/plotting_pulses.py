@@ -146,7 +146,7 @@ def compute_st_values(ax,samples,bins,scale,fs = 6):
     samples es el dataset que queres estudiar, y bins es el histograma que estas graficando.
     scale es por loque tengo que dividir samples para llegar a minutos. fs es el fontsize del texto. '''           
     
-    if len(samples) < 0:
+    if len(samples) <= 0:
         pass
     else:
         mode = (bins[1][np.argmax(bins[0])] + bins[1][np.argmax(bins[0])+1])/2 ; 
