@@ -104,8 +104,10 @@ def filter_extremes_aux(MAX,MIN,X):
     
     This auxiliary function ensures that in between two maxima in MAX there is one 
     and only one minimum in MIN, and in between two minima in MIN there is one and 
-    only one maximum in MAX. 
+    only one maximum in MAX.
     
+    Esto está pensado para buscar los máximos del coseno. Sin embargo, 
+    los usamos como referencia para encontrar los PFI y PFE de cada pulso. 
     Parameters
     -------
     X : list
@@ -245,6 +247,8 @@ def get_left_minima(MAX,MIN,PFE,PFI,theta):
     gets the beginning of a pulse as the following: moving backwards in time from a given maxima,
     searchs from the first time point in wich the dynamical systems crosses the unstable fixed point
     
+
+    
     Parameters
     ----------
     MAX : list 
@@ -380,31 +384,38 @@ def get_rigth_minima(left_minima,MAX,MIN,PFE,PFI,theta):
 def get_pulses(theta,TH,W,PFE,PFI):
     # Ddetecta pulsos : primero agarra los maximos y minimos, luego los filtra. Luego, calcula los comienzpy y finales de los pulsos.
     # respues testea cosas: todos los pulsos tienen unpo y solo uno proincipio, may, min y final (PONER EXACTAMENTE BIEN QUE TESTEA)
-    t0 = time.time() ; print('start searching for pulses: 4 steps pending')
-    MAX,MIN = search_extremes(np.cos(theta),TH,W)
+    t0 = time.time() ; print('start searching for pulses: 5 steps pending')
+    
+    MAX_cos,MIN_cos = search_extremes(np.cos(theta),TH,W)
     t1 = time.time() - t0
-    print('step 1/1 finished: extremes detected',t1, 'sec')
+    print('step 1/5 finished: cos extremes detected',t1, 'sec')
     
-    if (len(MAX)>0) and (len(MIN)>0): 
-        MAX, MIN =  filter_extremes(MAX,MIN,np.cos(theta))
+    if (len(MAX_cos)>0) and (len(MIN_cos)>0): 
+        MAX_cos, MIN_cos =  filter_extremes(MAX_cos,MIN_cos,np.cos(theta))
         t2 = time.time() - t1
-        print('step 2/4 finished: 1 minimum between 2 maxima',t2, 'sec')
+        print('step 2/5 finished: 1 minimum between 2 cos maxima',t2, 'sec')
     
-    if (len(MAX)>0) and (len(MIN)>0): 
-        left_minima, MAX ,MIN = get_left_minima(MAX,MIN,PFE,PFI,theta)
+    if (len(MAX_cos)>0) and (len(MIN_cos)>0): 
+        left_minima, MAX_cos ,MIN_cos = get_left_minima(MAX_cos,MIN_cos,PFE,PFI,theta)
         t3 = time.time() - t2
-        print('step 3/4 finished: left pulse minima detected',t3, 'sec')
+        print('step 3/5 finished: left pulse cos minima detected',t3, 'sec')
         
-        left_minima, right_minima, MAX, MIN = get_rigth_minima(left_minima,MAX,MIN,PFE,PFI,theta)
+        left_minima, right_minima, MAX_cos, MIN_cos = get_rigth_minima(left_minima,MAX_cos,MIN_cos,PFE,PFI,theta)
         t4 = time.time() - t3
-        print('step 4/4 finished: right pulse minima detected',t4, 'sec')
+        print('step 4/5 finished: right pulse cos minima detected',t4, 'sec')
         
-        test_pulses(left_minima,right_minima,MAX,MIN)
+        test_pulses(left_minima,right_minima,MAX_cos,MIN_cos)
+
+        MAX_sine , _ = search_extremes(np.sin(theta),TH,W)
+        t5 = time.time() - t4     #MAX_sine , MiN_sine =  filter_extremes(MAX_sine , MiN_sine,np.cos(theta))
+        print('step 5/5 finished: sine extremes detected',t5, 'sec')
+        test_pulses_sine(left_minima,right_minima,MAX_sine)
+
         
-        return left_minima,right_minima,MAX,MIN
+        return left_minima,right_minima,MAX_sine
     else:
         print('The trace has no maxima or minima values available')
-        return [],[],[],[]
+        return [],[],[]
 
 
 
@@ -414,13 +425,12 @@ def main_pulse_detection(theta,alpha,omega,D,save_path_name,file_name):
         print('running pulse detection',alpha,D)      
         TH = 0.90;W = 100
         PFE , PFI = get_fixed_points(alpha)
-        left_minima,right_minima,MAX,MIN = get_pulses(theta,TH,W,PFE,PFI)
+        left_minima,right_minima,MAX = get_pulses(theta,TH,W,PFE,PFI)
         print('pulse detection ended')
         
-        if (len(MAX)>0) and (len(MIN)>0): 
+        if (len(MAX)>0) #and (len(MIN)>0): 
             print('saving pulse detection results')
             save_data(MAX,save_path_name+'max_xf_'+file_name)
-            save_data(MIN,save_path_name+'min_xf_'+file_name)
             save_data(left_minima,save_path_name+'left_minima_'+file_name)
             save_data(right_minima,save_path_name+'right_minima_'+file_name)
             print(file_name,'saving finished')
@@ -432,7 +442,7 @@ def main_pulse_detection(theta,alpha,omega,D,save_path_name,file_name):
 
 
     
-def main_pulse_detection_(data_folder,save_path_name,delta,tuple_,overwrite_flag = True):
+def main_pulse_detection_(data_folder,save_path_name,tuple_,overwrite_flag = True):
    #ES UNA funcion auxiliar para paralelizar
 
     (i,D,order),row = tuple_[0],tuple_[1]
@@ -446,22 +456,21 @@ def main_pulse_detection_(data_folder,save_path_name,delta,tuple_,overwrite_flag
             pass
         else:
             print('file name:',file_name)
-            theta = download_theta(file_name,data_folder)[::delta]
+            theta = download_theta(file_name,data_folder)
             main_pulse_detection(theta,alpha,omega,D,save_path_name,file_name)
     else:
         print('ERROR: file not available',file_name)
     return(1)
 
 
-def compute_pulse_detection(delta,description_file,data_folder,save_path_name):
+def compute_pulse_detection(description_file,data_folder,save_path_name):
     #esta es la funcion que le calcula a cada seite temporal suspulsos
-    #delta es la resolucion de la serie temporal
     ref = pd.read_excel(description_file,sheet_name= 'File_references')
     ref.set_index('Unnamed: 0',inplace=True);
     pool = mp.Pool(processes= ceil(mp.cpu_count()))
     
     tuple_ = ref.groupby(['alpha','D','order'])
-    main_pulse_detection__ = partial(main_pulse_detection_,data_folder,save_path_name,delta)
+    main_pulse_detection__ = partial(main_pulse_detection_,data_folder,save_path_name)
     pool.map(main_pulse_detection__,tuple_)
     pool.close()
     pool.join()
@@ -483,6 +492,7 @@ def download_theta(file_name,data_folder):
         print(file_name,'filename not available')
         return []
 
+#%%
 def test_pulses(left_minima,right_minima,MAX,MIN):
     ''' testea que todos los vectores sean de la misma longitud, y que siempre venga
     primero un left minimum, después un max, despues un min, despues un rigth min'''
@@ -498,7 +508,28 @@ def test_pulses(left_minima,right_minima,MAX,MIN):
     
     assert all([(i>=j)*1 for (i,j) in zip(left_minima[1:],right_minima[:-1])]),str([(i-j) for (i,j) in zip(left_minima[1:],right_minima[:-1])]) 
 
-#%% ESTE MODULO ES PARA COMPUTAR LOS CUANTIFICADORES DE PULSOS
+def test_pulses_sine(left_minima,right_minima,MAX):
+    ''' testea que todos los vectores sean de la misma longitud, y que siempre venga
+    primero un left minimum, después un max, despues un min, despues un rigth min'''
+    
+    #assert len(MIN) == len(MAX)
+    assert len(left_minima) == len(MAX), str(len(left_minima))+' is not equal to ' + str(len(MAX))
+    assert len(right_minima) == len(MAX) , str(len(right_minima))+' is not equal to ' + str(len(MAX))
+    
+    #los proximos 3 iguales estan mal
+    assert all([(i<=j)*1 for (i,j) in zip(left_minima,MAX)]), '----- ' + str([(j-i)*1 for (i,j) in zip(left_minima,MAX)])
+    assert all([(i<=j)*1 for (i,j) in zip(MAX,right_minima)])
+    
+    assert all([(i>=j)*1 for (i,j) in zip(left_minima[1:],right_minima[:-1])]),str([(i-j) for (i,j) in zip(left_minima[1:],right_minima[:-1])])
+
+#%% 
+# =============================================================================
+# =============================================================================
+# =============================================================================
+#  ESTE MODULO ES PARA COMPUTAR LOS CUANTIFICADORES DE PULSOS
+# =============================================================================
+# =============================================================================
+# =============================================================================
 
 
 def test_pulses_quantifiers(dt,IPI,dm,joint_duration,MAX):
