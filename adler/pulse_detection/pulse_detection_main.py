@@ -376,7 +376,11 @@ def get_rigth_minima(left_minima,MAX,MIN,PFE,PFI,theta):
     assert (len(right_minima) == len(MIN)),'right_minima: '+ str(right_minima) + ' MIN:' + str(MIN)
     
     return(left_minima,right_minima,MAX,MIN )
-
+#%%
+    
+    
+    
+#%%
 def filter_maxima_sine(left_minima,right_minima,MAX):
     ''' remueve los bordes de los maximos de seno para que queden entre los minimos de pulsos, y descarta el resto'''
     
@@ -394,7 +398,7 @@ def filter_maxima_sine(left_minima,right_minima,MAX):
 
 #%%
     
-def get_pulses(theta,TH,W,PFE,PFI):
+def get_pulses(theta,TH,W,PFE,PFI,alpha,D):
     # Ddetecta pulsos : primero agarra los maximos y minimos, luego los filtra. Luego, calcula los comienzpy y finales de los pulsos.
     # respues testea cosas: todos los pulsos tienen unpo y solo uno proincipio, may, min y final (PONER EXACTAMENTE BIEN QUE TESTEA)
     t0 = time.time() ; print('start searching for pulses: 5 steps pending')
@@ -417,6 +421,7 @@ def get_pulses(theta,TH,W,PFE,PFI):
         t4 = time.time() - t3
         print('step 4/5 finished: right pulse cos minima detected',t4, 'sec')
         
+        print('testing alpha,d: ',alpha,D)
         test_pulses(left_minima,right_minima,MAX_cos,MIN_cos)
 
         MAX_sine , MiN_sine = search_extremes(np.sin(theta),TH,W)
@@ -439,7 +444,7 @@ def main_pulse_detection(theta,alpha,omega,D,save_path_name,file_name):
         print('running pulse detection',alpha,D)      
         TH = 0.90;W = 100
         PFE , PFI = get_fixed_points(alpha)
-        left_minima,right_minima,MAX = get_pulses(theta,TH,W,PFE,PFI)
+        left_minima,right_minima,MAX = get_pulses(theta,TH,W,PFE,PFI,alpha,D)
         print('pulse detection ended')
         
         if (len(MAX)>0): #and (len(MIN)>0): 
