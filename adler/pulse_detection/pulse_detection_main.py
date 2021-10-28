@@ -380,13 +380,14 @@ def get_rigth_minima(left_minima,MAX,MIN,PFE,PFI,theta):
 def filter_maxima_sine(left_minima,right_minima,MAX):
     ''' remueve los bordes de los maximos de seno para que queden entre los minimos de pulsos, y descarta el resto'''
     
+    
     remove_list_index = []
     
     for i,M in enumerate(MAX):
         if M < left_minima[0]:
-            remove_list_index.append(M)
+            remove_list_index.append(i)
         if M > right_minima[-1]:
-            remove_list_index.append(M)
+            remove_list_index.append(i)
     
     return(pop_list(MAX,remove_list_index))
 
