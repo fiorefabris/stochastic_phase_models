@@ -383,32 +383,34 @@ def get_rigth_minima(left_minima,MAX,MIN,PFE,PFI,theta):
 def filter_maxima_sine(left_minima,right_minima,MAX):
     ''' remueve los bordes de los maximos de seno para que queden entre los minimos de pulsos, y descarta el resto'''
     
+    if len(left_minima) > 0 and len(right_minima) > 0 and len(MAX) > 0:
+        MAX_remove_list_index = []
+        
+        for i,M in enumerate(MAX):
+            if M < left_minima[0]:
+                MAX_remove_list_index.append(i)
+            if M > right_minima[-1]:
+                MAX_remove_list_index.append(i)
+        print('MAX_remove_list_index:', MAX_remove_list_index)
+        
+        #remuev el caso en que nunca tocó el maximo del seno, pero por ruido llego al del coseno
+        NEW_left_minima, NEW_right_minima  = [], []
     
-    MAX_remove_list_index = []
-    
-    for i,M in enumerate(MAX):
-        if M < left_minima[0]:
-            MAX_remove_list_index.append(i)
-        if M > right_minima[-1]:
-            MAX_remove_list_index.append(i)
-    print('MAX_remove_list_index:', MAX_remove_list_index)
-    
-    #remuev el caso en que nunca tocó el maximo del seno, pero por ruido llego al del coseno
-    NEW_left_minima, NEW_right_minima  = [], []
-
-    n = 0
-    for i,(l,r) in enumerate(zip(left_minima,right_minima)):
-        M = MAX[i-n]
-        assert l < r
-        if (l < M) and (r > M):
-            #hago esto y no los elimino de la lista por si existen minimos compartidos
-            NEW_left_minima.append(l)
-            NEW_right_minima.append(r)
-            n = n + 1
-        else:
-            pass
-    
-    return(NEW_left_minima,NEW_right_minima,pop_list(MAX,MAX_remove_list_index))
+        n = 0
+        for i,(l,r) in enumerate(zip(left_minima,right_minima)):
+            M = MAX[i-n]
+            assert l < r
+            if (l < M) and (r > M):
+                #hago esto y no los elimino de la lista por si existen minimos compartidos
+                NEW_left_minima.append(l)
+                NEW_right_minima.append(r)
+                n = n + 1
+            else:
+                pass
+        
+        return(NEW_left_minima,NEW_right_minima,pop_list(MAX,MAX_remove_list_index))
+    else:
+        return ([],[],[])
 
 
 #%%
