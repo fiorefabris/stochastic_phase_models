@@ -377,6 +377,18 @@ def get_rigth_minima(left_minima,MAX,MIN,PFE,PFI,theta):
     
     return(left_minima,right_minima,MAX,MIN )
 
+def filter_maxima_sine(left_minima,right_minima,MAX):
+    ''' remueve los bordes de los maximos de seno para que queden entre los minimos de pulsos, y descarta el resto'''
+    
+    remove_list_index = []
+    
+    for i,M in enumerate(MAX):
+        if M < left_minima[0]:
+            remove_list_index.append(M)
+        if M > right_minima[-1]:
+            remove_list_index.append(M)
+    
+    return(pop_list(MAX,remove_list_index))
 
 
 #%%
@@ -407,10 +419,10 @@ def get_pulses(theta,TH,W,PFE,PFI):
         test_pulses(left_minima,right_minima,MAX_cos,MIN_cos)
 
         MAX_sine , MiN_sine = search_extremes(np.sin(theta),TH,W)
-        MAX_sine , _ =  filter_extremes(MAX_sine , MiN_sine,np.sin(theta))
+        MAX_sine =  filter_maxima_sine(left_minima,right_minima,MAX_sine)
         t5 = time.time() - t4
         print('step 5/5 finished: sine extremes detected',t5, 'sec')
-        #test_pulses_sine(left_minima,right_minima,MAX_sine)
+        test_pulses_sine(left_minima,right_minima,MAX_sine)
 
         
         return left_minima,right_minima,MAX_sine
@@ -514,11 +526,11 @@ def test_pulses_sine(left_minima,right_minima,MAX):
     primero un left minimum, después un max, despues un min, despues un rigth min'''
     
     #assert len(MIN) == len(MAX)
-    assert len(left_minima) == len(MAX), str(len(left_minima))+' is not equal to ' + str(len(MAX))
-    assert len(right_minima) == len(MAX) , str(len(right_minima))+' is not equal to ' + str(len(MAX))
+    assert len(left_minima) == len(MAX), str(len(left_minima))+' (sine checking) is not equal to ' + str(len(MAX))
+    assert len(right_minima) == len(MAX) , str(len(right_minima))+' (sine checking) is not equal to ' + str(len(MAX))
     
     #los proximos 3 iguales estan mal
-    assert all([(i<=j)*1 for (i,j) in zip(left_minima,MAX)]), '----- ' + str([(j-i)*1 for (i,j) in zip(left_minima,MAX)])
+    assert all([(i<=j)*1 for (i,j) in zip(left_minima,MAX)]), '--(sine checking)--- ' + str([(j-i)*1 for (i,j) in zip(left_minima,MAX)])
     assert all([(i<=j)*1 for (i,j) in zip(MAX,right_minima)])
     
     assert all([(i>=j)*1 for (i,j) in zip(left_minima[1:],right_minima[:-1])]),str([(i-j) for (i,j) in zip(left_minima[1:],right_minima[:-1])])
