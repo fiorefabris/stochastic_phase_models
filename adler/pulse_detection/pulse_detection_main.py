@@ -410,7 +410,7 @@ def get_pulses(theta,TH,W,PFE,PFI):
         MAX_sine , _ =  filter_extremes(MAX_sine , MiN_sine,np.sin(theta))
         t5 = time.time() - t4
         print('step 5/5 finished: sine extremes detected',t5, 'sec')
-        test_pulses_sine(left_minima,right_minima,MAX_sine)
+        #test_pulses_sine(left_minima,right_minima,MAX_sine)
 
         
         return left_minima,right_minima,MAX_sine
