@@ -428,7 +428,7 @@ def main_pulse_detection(theta,alpha,omega,D,save_path_name,file_name):
         left_minima,right_minima,MAX = get_pulses(theta,TH,W,PFE,PFI)
         print('pulse detection ended')
         
-        if (len(MAX)>0) #and (len(MIN)>0): 
+        if (len(MAX)>0): #and (len(MIN)>0): 
             print('saving pulse detection results')
             save_data(MAX,save_path_name+'max_xf_'+file_name)
             save_data(left_minima,save_path_name+'left_minima_'+file_name)
