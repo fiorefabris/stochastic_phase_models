@@ -398,7 +398,7 @@ def filter_maxima_sine(left_minima,right_minima,MAX):
         NEW_left_minima, NEW_right_minima  = [], []
     
         for M in MAX:
-            for l,r in enumerate(zip(left_minima,right_minima)):
+            for l,r in zip(left_minima,right_minima):
                 assert l < r    
 
                 if (l < M) and (r > M):
