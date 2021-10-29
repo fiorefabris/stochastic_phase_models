@@ -626,17 +626,17 @@ def test_pulses(left_minima,right_minima,MAX,MIN):
 
 def test_pulses_sine(left_minima,right_minima,MAX):
     ''' testea que todos los vectores sean de la misma longitud, y que siempre venga
-    primero un left minimum, después un max, despues un min, despues un rigth min'''
+    primero un left minimum, después un max, despues un rigth min'''
     
     #assert len(MIN) == len(MAX)
     assert len(left_minima) == len(MAX), str(len(left_minima))+' (sine checking) is not equal to ' + str(len(MAX))
     assert len(right_minima) == len(MAX) , str(len(right_minima))+' (sine checking) is not equal to ' + str(len(MAX))
     
     #los proximos 3 iguales estan mal
-    assert all([(i<=j)*1 for (i,j) in zip(left_minima,MAX)]), '--(sine checking)--- ' + str([(j-i)*1 for (i,j) in zip(left_minima,MAX)])
-    assert all([(i<=j)*1 for (i,j) in zip(MAX,right_minima)])
+    assert all([(i<j)*1 for (i,j) in zip(left_minima,MAX)]), '--(sine checking)--- ' + str([(j-i)*1 for (i,j) in zip(left_minima,MAX)])
+    assert all([(i<j)*1 for (i,j) in zip(MAX,right_minima)])
     
-    assert all([(i>=j)*1 for (i,j) in zip(left_minima[1:],right_minima[:-1])]),str([(i-j) for (i,j) in zip(left_minima[1:],right_minima[:-1])])
+    assert all([(i>j)*1 for (i,j) in zip(left_minima[1:],right_minima[:-1])]),str([(i-j) for (i,j) in zip(left_minima[1:],right_minima[:-1])])
 
 #%% 
 # =============================================================================
