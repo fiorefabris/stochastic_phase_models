@@ -87,7 +87,7 @@ def plot_pulses_alpha_sine(data_folder_ts,data_folder_pulses,save_path_name,dt,T
         t = time(dt,T,d)#[::delta]
 
         assert len(theta) == len(t)
-        print(row.D,'plotting ',order,number);D = row.D
+        print(row.D,'D --- plotting number, order : ',number,order);D = row.D
 
         ax = axs[k]; ax.grid(False);
         ax.plot(t,np.sin(theta),linewidth=0.8,color = colors[k])

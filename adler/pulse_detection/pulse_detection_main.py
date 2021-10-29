@@ -12,8 +12,38 @@ import time
 
 from adler.plotting.plotting_main import check_file, save_data, download_data
 
+def pop_list(list_,remove_list_index):
+    new_list = []
+    for (index,value) in enumerate(list_):
+        if index in remove_list_index:
+            pass
+        else:
+            new_list.append(value)
+    assert (len(list_) == len(remove_list_index) + len(new_list))
+    return(new_list)
 
+def download_theta(file_name,data_folder):
+    #esta funcion es para leer la serie temporal
+    list_data_folder = os.listdir(data_folder)
+    if file_name in list_data_folder:
+        print(file_name,' available')
+        if check_file(file_name,data_folder):           
+            return(download_data(data_folder + file_name))
+        else:
+            print(file_name,'filename empty')
+            return []
+    else:
+        print(file_name,'filename not available')
+        return []
 #%%
+# =============================================================================
+# =============================================================================
+# =============================================================================
+#                   PULSE DETECTION MODULE
+# =============================================================================
+# =============================================================================
+# =============================================================================
+
 
 def search_extremes(X,TH,W):
     '''
@@ -22,7 +52,7 @@ def search_extremes(X,TH,W):
     
     
     Searchs for the local maxima and minima on the time series x that are grater (maxima) than a treshold or 
-    smaller (minima) than - threshold. 
+    smaller (minima) than these same threshold, multiplied to -1. 
     The extremes have at least W separation. 
     
     
@@ -32,7 +62,8 @@ def search_extremes(X,TH,W):
         amplitude values of the time series
     TH : float
         threshold value
-    W : minimum distance between maxima / minima
+    W : float
+        minimum distance between maxima / minima, given in indexes.
     
     
     Returns
@@ -96,6 +127,7 @@ def search_extremes(X,TH,W):
     MAX.pop(0);MIN.pop(0)
     return(MAX,MIN)
     #%%
+    
 def filter_extremes_aux(MAX,MIN,X):
     ''' filter_extremes_aux(MAX,MIN,X)
     Ensures that in between two maxima there is only one minimum, and in between 
@@ -106,13 +138,14 @@ def filter_extremes_aux(MAX,MIN,X):
     and only one minimum in MIN, and in between two minima in MIN there is one and 
     only one maximum in MAX.
     
-    Esto está pensado para buscar los máximos del coseno. Sin embargo, 
-    los usamos como referencia para encontrar los PFI y PFE de cada pulso. 
+    This is disigned to look for the may and min of cos(theta).Nevertheless, we use it as a reference 
+    to find the PFE and PFI that defines a pulse. 
+    
     Parameters
     -------
     X : list
         amplitude values of the time series
-     MAX : list 
+    MAX : list 
         position of the maxima in X
     MIN : list
         position of the minima in X
@@ -229,16 +262,6 @@ def get_fixed_points(alpha):
 
 #%%
 
-def pop_list(list_,remove_list_index):
-    new_list = []
-    for (index,value) in enumerate(list_):
-        if index in remove_list_index:
-            pass
-        else:
-            new_list.append(value)
-    assert (len(list_) == len(remove_list_index) + len(new_list))
-    return(new_list)
-    
 def get_left_minima(MAX,MIN,PFE,PFI,theta):
     '''
     get_left_minima(MAX,PFE,PFI,theta)
@@ -381,8 +404,34 @@ def get_rigth_minima(left_minima,MAX,MIN,PFE,PFI,theta):
     
 #%%
 def filter_maxima_sine(left_minima,right_minima,MAX):
-    ''' remueve los bordes de los maximos de seno para que queden entre los minimos de pulsos, y descarta el resto.
-    Remueve el caso en que nunca tocó el maximo del seno, pero por ruido llego al del coseno '''
+    ''' filter_maxima_sine(left_minima,right_minima,MAX)
+    Removes the sine maxima that are not in between two minima that define a pulse, 
+    and the minima that do not have a maxima in between the, 
+    
+    Removes the sine maxima that are not in between two minima that define a pulse.
+    Remove the edges of the sine maxima so that they are between the pulse minima, and discard the rest.
+    Remove the case in which two minima do not have a maxima in between, case that can happen if because of noise the system reaches the
+    fixed points but the turn back. 
+    
+    Parameters
+    ----------
+    left_minima: list
+        position of the starting point of each pulses 
+    right_minima : list 
+        position of the ending point of each pulses 
+    MAX : list 
+        position of the maxima of a pulse of a given time series (in genral, sine of theta)
+    
+    Returns
+    -------
+    left_minima: list
+        filtered position of the starting point of each pulses 
+    right_minima : list 
+        filtered position of the ending point of each pulses 
+    MAX : list 
+        filtered position of the maxima of a pulse of a given time series (in genral, sine of theta)
+        
+    '''
     
     if len(left_minima) > 0 and len(right_minima) > 0 and len(MAX) > 0:
         MAX_remove_list_index = []
@@ -417,8 +466,51 @@ def filter_maxima_sine(left_minima,right_minima,MAX):
 #%%
     
 def get_pulses(theta,TH,W,PFE,PFI,alpha,D):
-    # Ddetecta pulsos : primero agarra los maximos y minimos, luego los filtra. Luego, calcula los comienzpy y finales de los pulsos.
-    # respues testea cosas: todos los pulsos tienen unpo y solo uno proincipio, may, min y final (PONER EXACTAMENTE BIEN QUE TESTEA)
+    '''
+    get_pulses(theta,TH,W,PFE,PFI,alpha,D)
+    Find the pulses of the time series theta for our definition
+    
+    Find the pulses of the time series theta, defined as starting in the PFI and ending in the PFI. 
+    We consider that the signal is the sine of theta. This definition is for the Adler dynamical system.
+    If there are no pulses, it returns empty lists.
+    
+    STEP 1 & 2 : detects the cosine maxima and minima, that approach the PFI and PFE. 
+    STEP 3 & 4 : Computhes the beginning  and end of the pulses. 
+    TEST       : verifies that all pulses have only one beggining, one maxima, one minima and one end in terms of the cosine of theta (**poner mejor que testea**). 
+    STEP 5     : detects the sine maxima. 
+    TEST       : TBD  
+    
+    Parameters
+    ----------
+    theta : list
+        amplitude values of the time series given in angles
+    TH : float
+        threshold value
+    W : float
+        minimum distance between maxima / minima, given in indexes.
+    PFE : float
+        stable fixed point - angular 
+    PFI : float
+        unstable fixed point - angular 
+    alpha : float
+        parameter of the Adler deterministic equation
+    D : float
+        noise strengh of the dynamical system of this project
+
+    
+    Returns
+    -------
+    left_minima: list
+        position of the starting point of each pulse 
+    right_minima : list 
+        position of the ending point of each pulse 
+    MAX_sine : list 
+        position of the maxima of a pulse of a given time series (in genral, sine of theta)
+
+    
+    '''
+    
+
     t0 = time.time() ; print('start searching for pulses: 5 steps pending')
     
     MAX_cos,MIN_cos = search_extremes(np.cos(theta),TH,W)
@@ -439,7 +531,7 @@ def get_pulses(theta,TH,W,PFE,PFI,alpha,D):
         t4 = time.time() - t3
         print('step 4/5 finished: right pulse cos minima detected',t4, 'sec')
         
-        print('testing alpha, D: ',alpha,D)
+        print('testing cosine parameters alpha, D: ',alpha,D)
         test_pulses(left_minima,right_minima,MAX_cos,MIN_cos)
 
         MAX_sine , MIN_sine = search_extremes(np.sin(theta),TH,W)
@@ -447,7 +539,7 @@ def get_pulses(theta,TH,W,PFE,PFI,alpha,D):
         left_minima,right_minima,MAX_sine =  filter_maxima_sine(left_minima,right_minima,MAX_sine)
         t5 = time.time() - t4
         print('step 5/5 finished: sine extremes detected',t5, 'sec')
-        #test_pulses_sine(left_minima,right_minima,MAX_sine)
+        test_pulses_sine(left_minima,right_minima,MAX_sine)
 
         
         return left_minima,right_minima,MAX_sine
@@ -515,20 +607,6 @@ def compute_pulse_detection(description_file,data_folder,save_path_name):
     return (2)
 
 
-#%%
-def download_theta(file_name,data_folder):
-    #esta funcion es para leer la serie temporal
-    list_data_folder = os.listdir(data_folder)
-    if file_name in list_data_folder:
-        print(file_name,' available')
-        if check_file(file_name,data_folder):           
-            return(download_data(data_folder + file_name))
-        else:
-            print(file_name,'filename empty')
-            return []
-    else:
-        print(file_name,'filename not available')
-        return []
 
 #%%
 def test_pulses(left_minima,right_minima,MAX,MIN):
