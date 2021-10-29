@@ -319,6 +319,7 @@ def get_consecutive_trains_of_pulses_cells(tuple_,data_folder):
 ################################################
 #### FFT FDT  Module for computing the consecutiveness
 ################################################  
+#from adler.pulse_detection.consecutive_main import consecutive_cumulative,consecutive_non_cumulative
 
 def get_consecutive(description_file,data_folder,save_folder):
     '''

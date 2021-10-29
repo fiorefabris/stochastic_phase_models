@@ -13,7 +13,6 @@ from math import ceil
 from functools import partial 
 import os
 from adler.plotting.plotting_main import check_file, save_data, download_data
-from adler.pulse_detection.consecutive_main import consecutive_cumulative,consecutive_non_cumulative
 #%%
 ################################################
 #### Fast Fourier Transform computation
