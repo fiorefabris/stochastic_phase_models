@@ -9,7 +9,7 @@ import seaborn as sns
 
 from adler.plotting.plotting_main import set_scale,download_data,check_file
 from adler.pulse_detection.pulse_detection_main import get_fixed_points
-from adler.pulse_detection.FFt_FDT_main import time
+from adler.pulse_detection.FFT_FDT_main import time
 
 
 
