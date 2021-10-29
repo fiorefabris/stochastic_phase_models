@@ -1,535 +1,118 @@
-'''
-Data analysis quantifiers module
-
-Author: Fiorella Fabris
-Date  : 01/2020 
-
-'''
-
-import multiprocessing as mp
 import numpy as np
-import pandas as pd
+import multiprocessing as mp
 from math import ceil
 from functools import partial 
-import os
+import pandas as pd
+
+from adler.pulse_detection.pulse_detection_main import test_pulses_sine
 from adler.plotting.plotting_main import check_file, save_data, download_data
-from adler.pulse_detection.consecutive_main import consecutive_cumulative,consecutive_non_cumulative
-#%%
-################################################
-#### Fast Fourier Transform computation
-################################################  
+
+#%% 
+# =============================================================================
+# =============================================================================
+# =============================================================================
+#               COMPUTING PULSES QUANTIFIERS MODULE
+# =============================================================================
+# =============================================================================
+# =============================================================================
 
 
-def norm_fft_yf(data, Dt, max_freq = None):
-    '''
-    norm_fft_yf(data, Dt, max_freq = None)
-    Computes a one-dimentional discrete Fourier Transform. 
+def test_pulses_quantifiers(dt,IPI,dm,joint_duration,MAX):
     
-    Computes the one-dimensional discrete Fourier Transform (DFT) with the efficient Fast Fourier Transform (FFT)
-    algorithm. Returns the FFT on a orthonomal basis so Parseval equality is satisfied. 
+    assert len(dm) == len(IPI)
+    assert len(joint_duration) == len(IPI)
+    assert len(dt) == len(MAX)
     
-    Parameters
-    -----------
-    data : list of floats
-        amplitude time serie.
-    Dt : float
-        sampling rate.
-    max_freq: float, optional --- actually is not working
-        maximum frequency of the FFT. 
+    assert all([(i + j == k)*1 for (i,j,k) in zip(dm,joint_duration,IPI)]), 'dm:'+str(dm) + ' joint_duration: ' + str(joint_duration) + ' IPI: '+str(IPI)
+
+
+def get_pulses_quantifiers(left_minima,right_minima,MAX):
+    
+    ''' Falta descripcion'''
+    IPI = []; dt = []; dm = []; joint_duration = []
+    
+    for left,right in zip(left_minima,right_minima):
+        assert (right-left >= 0), 'left_minima: ' +str(left_minima) + ' right_minima : '+str(right_minima)
+        dt.append(right - left)
         
-    Returns
-    --------
-        yf : complex ndarray 
-        The Fast Fourier Transfrom values, in which only the positive frequencies are considered and the main frequency is not considered.
-        The maximum frequency resolved is the nyquist frequency.
-        The frequency resolution is 2*Dt / T, where T is the time series lenght.  
+    for M1,M2 in zip(MAX[:-1],MAX[1:]):
+        assert (M2-M1 >= 0)
+        IPI.append(M2-M1)
         
-    See Also
-    ---------
-    norm_fft_xf: for obtenining the frequencies involved on the FFT transform.
-
-    '''
-    
-    N = data.shape[0]
-    Nf = N // 2 #if max_freq is None else int(max_freq * T)
-    yf =  np.fft.fft(data,norm='ortho')
-    return (yf[:Nf])[1:][0::]
-
-def norm_fft_xf(data, Dt, max_freq = None):
-    '''
-    norm_fft_xf(data, Dt, max_freq = None)
-    Gives the frequencies involved on the one-dimentional discrete Fourier Transform. 
-
-    
-    Parameters
-    -----------
-    data : list of floats
-        amplitude time serie.
-    Dt : float
-        sampling rate.
-    max_freq: float, optional --- actually is not working
-        maximum frequency of the FFT. 
+        right_filter = list(filter(lambda x: (x >= M1 and x<=M2), right_minima))[0]
+        left_filter = list(filter(lambda x: (x <= M2 and x>=M1), left_minima))[-1]
         
-    Returns
-    --------
-        xf : complex ndarray 
-        The angular frequencies involved on the one-dimentional discrete Fourier Transfor, in which only the positive frequencies are considered and the main frequency is not considered.
-        The maximum frequency resolved is the nyquist frequency.
-        The frequency resolution is 2*Dt / T, where T is the time series lenght.  
+        ##### PROBLEMA
+        #lo que está pasando es que el maximo de la derecha es tambien un minimo (el left)
+        # eso lo vimos como list(filter(lambda x: (x > M1 and x < M2), left_minima))
         
-    See Also
-    ---------
-    norm_fft_yf: for computing he one-dimentional discrete Fourier Transform. 
+        assert ((right_filter-M1) + (M2 -left_filter) <= M2-M1), str(M1)+ ' --- ' + str(M2) + ' --- ' + str(left_filter) + ' --- '+str(right_filter)
+        assert ((right_filter-M1) + (M2 -left_filter) > 0)
+        joint_duration.append((right_filter-M1) + (M2 -left_filter)) 
+    
+    assert all([(i<j)*1 for (i,j) in zip(left_minima,right_minima)])  
+    assert all([(i>=j)*1 for (i,j) in zip(left_minima[1:],right_minima[:-1])]) 
+    for right,left in zip(right_minima[:-1],left_minima[1:]):
+        assert (left - right >= 0),str(left) + ' ' +str(right)+'left_minima: ' +str(left_minima) + ' right_minima : '+str(right_minima)
 
+        dm.append(left - right)
+    
+    test_pulses_quantifiers(dt,IPI,dm,joint_duration,MAX)
+    return(dt,IPI,dm,joint_duration)
+    
+    
+def get_pulses_quantifiers_(data_folder,save_path_name,tuple_):
     '''
-    N = data.shape[0]
-    Nf = N // 2 #if max_freq is None else int(max_freq * T)
-    xf = np.linspace(0.0, 0.5 / Dt, N // 2)
-    return (xf[:Nf]*(2*np.pi))[1:][0::]
-
-
-def norm_fft_statistics_aux_yf(data_folder,dt,d,ix_data):
-    
+    data folder: donde están los pulsos
     '''
-    norm_fft_statistics_aux_yf(data_folder,dt,d,ix_data)
-    Auxiliary function for computing the one-dimentional discrete Fourier Transform on a N repetition experiments.
 
-    
-    Parameters
-    -----------
-    data_folder : string
-        path of where the time series are stored. 
-    dt : float
-        time resolution of the time series. 
-    d : integer
-        the decimation factor of the experiment (i.e. how often do you save your time series in dt units).
-    ix_data: generator
-        datasheet with the time series parameters and saving names.
-                
-    Returns
-    --------
-        out : list of complex ndarrays 
-        For each time serie, a ndarray containing the Fast Fourier Transfrom values, in which only the positive frequencies are considered and the main frequency is not considered.
-        The maximum frequency resolved is the nyquist frequency.
-        The frequency resolution is 2*Dt / T, where T is the time series lenght.  
-        
-    See Also
-    ---------
-    norm_fft_statistics_aux_xf : for obtenining the frequencies involved on the FFT transform.
-    norm_fft_yf : for computing he one-dimentional discrete Fourier Transform for an individual time series. 
-
-
-    '''
-    order = int(ix_data[1].order);number = int(ix_data[1].number)
-    file_name =  str(number)+'_'+str(order)+'.pkl'
-    
-    if check_file(file_name,data_folder):
-        return norm_fft_yf(np.cos(download_data(data_folder + file_name) ),dt * d) 
-    else:
-       return []
-    
-def norm_fft_statistics_aux_xf(data_folder,dt,d,ix_data):
-    '''
-    norm_fft_statistics_aux_xf(data_folder,dt,d,ix_data)
-    Auxiliary function for obtaining the frequencies involved on the one-dimentional discrete Fourier Transform on a N repetition experiments.
-
-    
-    Parameters
-    -----------
-    data_folder : string
-        path of where the time series are stored. 
-    dt : float
-        time resolution of the time series. 
-    d : integer
-        the decimation factor of the experiment (i.e. how often do you save your time series in dt units)
-    ix_data: generator
-        datasheet with the time series parameters and saving names.
-                
-    Returns
-    --------
-
-        For each time serie, a ndarray containing the angular frequencies involved on the one-dimentional discrete Fourier Transform, in which only the positive frequencies are considered and the main frequency is not considered.
-        The maximum frequency resolved is the nyquist frequency.
-        The frequency resolution is 2*Dt / T, where T is the time series lenght.  
-        
-    See Also
-    ---------
-    norm_fft_statistics_aux_yf :  for computing the one-dimentional discrete Fourier Transforms. 
-    norm_fft_xf: for obtenining the frequencies involved on the FFT transform.
-
-    '''
-    order = int(ix_data[1].order);number = int(ix_data[1].number)
-    file_name =  str(number)+'_'+str(order)+'.pkl'
-    
-    if check_file(file_name,data_folder):
-        return norm_fft_xf(np.cos(download_data(data_folder + file_name)),dt * d) 
-    else:
-        return []
-
-
-def filter_nans(list_):
-    ''' Filters the empty elements of a list of elements. 
-    
-    Parameters
-    -----------
-    list_: list
-    list of arrays or lists
- 
-    Returns
-    --------
-    out: list
-        same list as list_ without the empty elements.
-
- 
-    '''
-    for arr in list_:
-        aux = []
-        if len(arr) == 0:
-            pass
-        else:
-            aux.append(arr)
-    return(aux)
-
-def norm_fft_statistics(row,data_folder,dt,d):   
-    '''
-    norm_fft_statistics(row,data_folder,dt,d)
-    Function for computing on parallel the one-dimentional discrete Fourier Transform on a N repetition experiments.
-    
-    Parameters
-    -----------
-    row: generator
-    datasheet with the time series parameters and saving names.
-    data_folder : string
-        path of where the time series are stored. 
-    dt : float
-        time resolution of the time series. 
-    d : integer
-        the decimation factor of the experiment (i.e. how often do you save your time series in dt units).
-                
-    Returns
-    --------
-        YF : list of floats (creo)
-        The mean value of the squared absolute value of the Fourier Amplitudes. The mean is made over all the Fourier Ampolitudes of the time series.
-        XF : list of floats (creo)
-        The mean value of all the Fourier frequencies. The mean is made over all the Fourier frequencies related related to the time series.
-
- 
-        
-    See Also
-    ---------
-    norm_fft_statistics_aux_xf : for obtenining the frequencies involved on the FFT transform.
-    norm_fft_statistics_aux_yf :  for computing the one-dimentional discrete Fourier Transforms. 
-    norm_fft_yf : for computing he one-dimentional discrete Fourier Transform for an individual time series. 
-    norm_fft_xf: for obtenining the frequencies involved on the FFT transform of individual time series.
-    
-    Notes
-    -----
-    Computes the one-dimensional discrete Fourier Transform (DFT) with the efficient Fast Fourier Transform (FFT)
-    algorithm. 
-    The Fourier amplitudes are on a orthonomal basis so Parseval equality is satisfied. 
-    Only the positive frequencies are considered and the main frequency is not considered.
-    The maximum frequency resolved is the nyquist frequency.
-    The frequency resolution is 2*Dt / T, where T is the time series lenght. 
-    This function works even if the simulation is not finished, or some time series files are missing or brocken. For these cases, returns empty YF and XF lists.
-
-    '''
-     
-    pool = mp.Pool(processes= ceil(mp.cpu_count()))
-    norm_fft_statistics_aux_yf_=partial(norm_fft_statistics_aux_yf,data_folder,dt,d)
-    YF = pool.map(norm_fft_statistics_aux_yf_,row.iterrows())
-    pool.close()
-    pool.join()
-    print('YF finished')
-    
-    pool2 = mp.Pool(processes= ceil(mp.cpu_count()))
-    norm_fft_statistics_aux_xf_=partial(norm_fft_statistics_aux_xf,data_folder,dt,d)
-    XF = pool2.map(norm_fft_statistics_aux_xf_,row.iterrows())
-    pool2.close()
-    pool2.join()
-    print('XF finished')
-    
-    YF = filter_nans(YF); XF = filter_nans(XF)
-
-    if len(YF)*len(XF)>0:
-        print('len >>>')  
-        return(np.mean(XF,axis=0),np.mean(np.abs(YF)**2,axis=0) )
-    else:
-        print('len <<<')    
-        return ([],[])
-
-    
-
-def compute_fft_aux(save_path_name,data_folder,dt,d,i,D,row):
-    ''' 
-    Auxiliary function for running norm_fft_statistics and save the results
-    
-    '''
-    
+    (i,D,order),row = tuple_[0],tuple_[1]
     omega =  row.omega.unique()[0]
-    alpha = np.round(i/omega,4)
-    print('running',alpha,D)      
-    xf,yf = norm_fft_statistics(row,data_folder,dt,d)
-    print('calculation ended')
-    if len(xf)*len(yf) > 0:
-        print('--- saving')
-        save_data(xf,save_path_name+'fft_xf_'+str(omega)+'_'+str(alpha)+'_'+str(D)+'.pkl')
-        save_data(yf,save_path_name+'fft_yf_'+str(omega)+'_'+str(alpha)+'_'+str(D)+'.pkl')
-        print(alpha,D,'saving finished')
+    alpha = np.round(i/omega,4)  
+    file_name =  str(int(row.number))+'_'+str(int(order))+'.pkl'
+    
+    if (check_file('max_xf_'+file_name,data_folder)):
+        
+        print('running pulses quantifiers computation alpha, D : ',alpha,D)      
+        
+        MAX = download_data(data_folder + 'max_xf_'+file_name) 
+        #MIN = download_data(data_folder + 'min_xf_'+ file_name) 
+        left_minima = download_data(data_folder + 'left_minima_'+ file_name) 
+        right_minima = download_data(data_folder + 'right_minima_'+ file_name) 
+        test_pulses_sine(left_minima,right_minima,MAX)
+        
+        dt,IPI,dm,joint_duration = get_pulses_quantifiers(left_minima,right_minima,MAX)
+        
+        print('Ready! Saving files --- alpha, d : ',alpha,D)      
+        save_data(dt,save_path_name+'dt_xf_'+file_name)
+        save_data(IPI,save_path_name+'IPI_xf_'+file_name)
+        save_data(dm,save_path_name+'dm_xf_'+file_name)
+        save_data(joint_duration,save_path_name+'joint_duration_xf_'+file_name)
+        print(alpha,D,'pulses quantifiers computation finished :)')
     else:
-        print('not saving')
-    print('calculation ended')
-    return(0)
+        print(file_name,'maxima file not available')
 
-def compute_fft(description_file,data_folder,dt,d,save_path_name):    
-    ''' 
-    Function for running several experiments bla bla 
-    Te devuelve numpy arrays
-    '''
-    ref = pd.read_excel(description_file,sheet_name= 'File_references')
-    ref.set_index('Unnamed: 0',inplace=True);
-
-    compute_fft_aux_= partial(compute_fft_aux,save_path_name,data_folder,dt,d)
-    for (i,D), row in ref.groupby(['alpha','D']):
-        compute_fft_aux_(i,D,row)
-    print('the end')
-    return (1)
-
-#    '''
-#    Power spectral density Fourier plotting function
-#    '''
-
-#%%
-
-################################################
-#### Module for computing the FPT
-################################################  
-
-def time(dt,T,d):
-    '''
-    time(dt,T,d)
-    Computes the time vector of a desired time series.
-    
-    Parameters
-    -----------
-        dt : float
-            time resolution of the time series. 
-        T : float
-            total time lenght of the time series.
-        d : integer
-            the decimation factor of the experiment (i.e. how often do you save your time series in dt units).
-    
-    Returns
-    -------
-        out : numpy array
-            time vector of the desired time series.
-            
-    Notes
-    ------
-    dt * d is the sampling rate.
-    '''
-    return(np.linspace(0,T,ceil(int(T/dt)/d)) )
-    
-
-def fpt(t,theta): 
-    '''
-    first_passage_time(t,theta)
-    Computes the first passage time distribution for the (t,theta) time series.
-    
-    
-    Parameters
-    -----------    
-        t : list
-            time vector
-        theta : list
-            angular time series
-    
-    Returns
-    --------
-        out: list
-            first passage time statistics on the time vector units
-    
-    See Also
-    ---------
-    fpt_statistics : for obtaining the first passage time distribution of a group of time series.
-    
-    Notes
-    ------
-    Here the first passage time is defined as the time needed for the angle variable to increase in one period 2pi.
-            
-    '''
-    FPT_index = []; 
-    init= theta[0]; FPT_index.append(0)
-    for j,value in enumerate(theta):
-        if value-init >= 2*np.pi:
-            FPT_index.append(j)
-            init = value
-    return([t[f] - t[i] for i,f in zip(FPT_index[:-1],FPT_index[1:])]) 
-    
-def fpt_statistics(dt,T,d,data_folder,row):
-    '''
-    fpt_statistics(dt,T,d,data_folder,row)
-    Computes the first passage time distribution of a group of time series.
-    
-    Parameters
-    ----------
-    dt : float
-        time resolution of the time series. 
-    T : float
-        total time lenght of the time series.
-    d : integer
-        the decimation factor of the experiment (i.e. how often do you save your time series in dt units).
-    data_folder : string
-        path of where the time series are stored.  
-    row : generator
-        datasheet with the time series parameters and saving names.
-
-
-    Returns
-    --------
-        out: list
-            First passage time distribution of the desired dataset.
-            
-    See Also
-    ---------
-    fpt : for obtaining the first passage time distribution of an individual time series.
-    time : for obtaining the time vector of an individual time series.
-
-    
-    Notes
-    ------
-    Here the first passage time is defined as the time needed for the angle variable to increase in one period 2pi.
-    '''
-
-    list_data_folder = os.listdir(data_folder)
+    return(1)
    
-    ################################################
-    #### FPT & checking
-    ################################################  
+    #%%
     
-    FPT = []
-    for ix,data in row.iterrows():
-        order = int(data.order); number = int(data.number)
-        file_name =  str(number)+'_'+str(order)+'.pkl'
-        if file_name in list_data_folder:
-            print(file_name,' available')
-            if check_file(file_name,data_folder):
-               
-                theta = download_data(data_folder + file_name) 
-                t = time(dt,T,d)
-                FPT.append(fpt(t,theta))
-        else:
-            print(file_name,' not available')         
-    return([value for list_ in FPT for value in list_]) 
     
-
-
-
-def compute_FPT_aux(save_path_name,data_folder,dt,d,T,tuple_):
+def compute_pulses_quantifiers(description_file,data_folder,save_path_name):
     '''
-    auxiliary function for computing on parallel the calculation of the first passage time for different experiments of N repetitions experiments each.
-    
-    See also
-    ---------
-    compute_FPT
-    fpt_statistics
-    
-    *** FALTA COMPLETAR ESTA DESCRIPCION***
-    '''
-    (i,D),row = tuple_[0],tuple_[1]
-    omega =  row.omega.unique()[0]
-    alpha = np.round(i/omega,4)      
-
-    FPT = fpt_statistics(dt,T,d,data_folder,row)
-    save_data(FPT,save_path_name+'FPT_'+str(omega)+'_'+str(alpha)+'_'+str(D)+'.pkl')
-    print(alpha,D)
-    return(0)
-
-def compute_FPT(description_file,save_path_name,dt,T,d,data_folder):
-    '''
-    compute_FPT(description_file,save_path_name,dt,T,d,data_folder)
-    Function for computing on parallel the calculation of the first passage time for different experiments of N repetitions experiments each.
-    
-    Parameters
-    -----------
-    description_file : string
-        path of the datasheet with the time series parameters and saving names.
-    save_path_name : string
-        path in where the first passage time statistics is going to be saved.
-    dt : float
-        time resolution of the time series. 
-    T : float
-        total time lenght of the time series.
-    d : integer
-        the decimation factor of the experiment (i.e. how often do you save your time series in dt units).
-    data_folder : string
-        path of where the time series are stored.  
-
-                
-    Returns
-    --------
-        Saves the first passage time of an experiment on a pickle on the same file.
-        
-    
-    See also
-    --------
-    compute_FPT_aux
-    
-    *** FALTA COMPLETAR ESTA DESCRIPCION***
-    '''
-    ref = pd.read_excel(description_file,sheet_name= 'File_references')
-    ref.set_index('Unnamed: 0',inplace=True);
-    pool = mp.Pool(processes= ceil(mp.cpu_count()/4))
-    tuple_ = ref.groupby(['alpha','D'])
-
-    compute_FPT_aux_ = partial(compute_FPT_aux,save_path_name,data_folder,dt,d,T)
-    pool.map(compute_FPT_aux_,tuple_)
-    pool.close()
-    pool.join()
-    return (1)
-
-#%%
-################################################
-#### Module for computing the consecutiveness
-################################################  
-
-def get_consecutive(description_file,data_folder,save_folder):
-    '''
-    data folder: donde están los dt
+    data folder: donde están los pulsos
     '''
 
     ref = pd.read_excel(description_file,sheet_name= 'File_references')
     ref.set_index('Unnamed: 0',inplace=True);
     pool = mp.Pool(processes= ceil(mp.cpu_count()))
     
-    tuple_ = ref.groupby(['alpha','D'])
-    get_consecutive_trial_D_ = partial(get_consecutive_trial,data_folder,save_folder)
-    pool.map(get_consecutive_trial_D_,tuple_)
+    tuple_ = ref.groupby(['alpha','D','order'])
+    get_pulses_quantifiers__ = partial(get_pulses_quantifiers_,data_folder,save_path_name)
+    pool.map(get_pulses_quantifiers__,tuple_)
     pool.close()
     pool.join()
     return (2)
 
-def get_consecutive_trial(data_folder,save_folder,tuple_):
-    
-    (i,D),row_ = tuple_[0],tuple_[1]
-    omega =  row_.omega.unique()[0]
-    alpha = np.round(i/omega,4)  
-    for (order,row) in row_.groupby(['order']):
-        number      = int(row.number)
-        file_name   =  str(number)+'_'+str(order)+'.pkl'
-            
-        if (check_file('min_xf_'+file_name,data_folder)):       
-            consecutive_cumulative_ = consecutive_cumulative(number,order,data_folder)
-            box_consecutive_cumulative_trial = consecutive_cumulative_.get_consecutive_trains_of_pulses()#
-            
-            consecutive_non_cumulative_ = consecutive_non_cumulative(number,order,data_folder)
-            box_consecutive_non_cumulative_trial = consecutive_non_cumulative_.get_consecutive_trains_of_pulses()
-            
-            assert  len(box_consecutive_cumulative_trial) == len(box_consecutive_non_cumulative_trial)
-            assert np.sum([(i+1)*j for i,j in enumerate(box_consecutive_non_cumulative_trial)]) == box_consecutive_cumulative_trial[0]
-            
-            save_data(box_consecutive_non_cumulative_trial,save_folder+'c_nc_'+file_name)
-            save_data(box_consecutive_cumulative_trial,save_folder+'c_c_'+file_name)
-        else:
-            pass
-    return(0)
+
+
 

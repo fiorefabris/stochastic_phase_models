@@ -610,14 +610,35 @@ def compute_pulse_detection(description_file,data_folder,save_path_name):
 
 #%%
 def test_pulses(left_minima,right_minima,MAX,MIN):
-    ''' testea que todos los vectores sean de la misma longitud, y que siempre venga
-    primero un left minimum, después un max, despues un min, despues un rigth min'''
+    ''' 
+    test_pulses(left_minima,right_minima,MAX,MIN)
+    testing function for cosine outcome of the pulse detection
+    
+    Tests (1) that every vector has the same length, (2) that allways comes first the starting of the pulse,
+    then the maxima, then the minima, and then the end of the pulse.
+    
+    Parameters
+    ----------
+    left_minima: list
+        position of the starting point of each pulse for our definition
+    right_minima : list 
+        position of the ending point of each pulses for our definition
+    MAX : list 
+        position of the maximum of a pulse of a given time series (in genral, cosine of theta)
+    MIN : list 
+        position of the minimum of a pulse of a given time series (in genral, cosine of theta)   
+    
+    See also
+    ----------
+    - test_pulses_sine(left_minima,right_minima,MAX)
+
+    '''
     
     assert len(MIN) == len(MAX)
     assert len(left_minima) == len(MAX), str(len(left_minima))+' is not equal to ' + str(len(MAX))
     assert len(right_minima) == len(MAX) , str(len(right_minima))+' is not equal to ' + str(len(MAX))
     
-    #los proximos 3 iguales estan mal
+    #los proximos 3 iguales estan mal, pero los ponemos porque fallan cuando hay mucho ruido
     assert all([(i<=j)*1 for (i,j) in zip(left_minima,MAX)]), '----- ' + str([(j-i)*1 for (i,j) in zip(left_minima,MAX)])
     assert all([(i<=j)*1 for (i,j) in zip(MAX,MIN)])
     assert all([(i<=j)*1 for (i,j) in zip(MIN,right_minima)])
@@ -625,9 +646,28 @@ def test_pulses(left_minima,right_minima,MAX,MIN):
     assert all([(i>=j)*1 for (i,j) in zip(left_minima[1:],right_minima[:-1])]),str([(i-j) for (i,j) in zip(left_minima[1:],right_minima[:-1])]) 
 
 def test_pulses_sine(left_minima,right_minima,MAX):
-    ''' testea que todos los vectores sean de la misma longitud, y que siempre venga
-    primero un left minimum, después un max, despues un rigth min'''
+    ''' 
+    test_pulses(left_minima,right_minima,MAX,MIN)
+    testing function for cosine outcome of the pulse detection
     
+    Tests (1) that every vector has the same length, (2) that allways comes first the starting of the pulse,
+    then the maxima, and then the end of the pulse.
+    
+    Parameters
+    ----------
+    left_minima: list
+        position of the starting point of each pulse for our definition
+    right_minima : list 
+        position of the ending point of each pulses for our definition
+    MAX : list 
+        position of the maximum of a pulse of a given time series (in genral, sine of theta)
+ 
+
+    See also
+    ----------
+    - test_pulses(left_minima,right_minima,MAX,MIN)
+
+    '''
     #assert len(MIN) == len(MAX)
     assert len(left_minima) == len(MAX), str(len(left_minima))+' (sine checking) is not equal to ' + str(len(MAX))
     assert len(right_minima) == len(MAX) , str(len(right_minima))+' (sine checking) is not equal to ' + str(len(MAX))
@@ -638,232 +678,8 @@ def test_pulses_sine(left_minima,right_minima,MAX):
     #the equal is because they can share minima 
     assert all([(i>=j)*1 for (i,j) in zip(left_minima[1:],right_minima[:-1])]),str([(i-j) for (i,j) in zip(left_minima[1:],right_minima[:-1])])
 
-#%% 
-# =============================================================================
-# =============================================================================
-# =============================================================================
-#  ESTE MODULO ES PARA COMPUTAR LOS CUANTIFICADORES DE PULSOS
-# =============================================================================
-# =============================================================================
-# =============================================================================
 
 
-def test_pulses_quantifiers(dt,IPI,dm,joint_duration,MAX):
-    
-    assert len(dm) == len(IPI)
-    assert len(joint_duration) == len(IPI)
-    assert len(dt) == len(MAX)
-    
-    assert all([(i + j == k)*1 for (i,j,k) in zip(dm,joint_duration,IPI)]), 'dm:'+str(dm) + ' joint_duration: ' + str(joint_duration) + ' IPI: '+str(IPI)
-
-
-def get_pulses_quantifiers(left_minima,right_minima,MAX,MIN):
-    ''' Falta descripcion'''
-    IPI = []; dt = []; dm = []; joint_duration = []
-    
-    for left,right in zip(left_minima,right_minima):
-        assert (right-left >= 0), 'left_minima: ' +str(left_minima) + ' right_minima : '+str(right_minima)
-        dt.append(right - left)
-        
-    for M1,M2 in zip(MAX[:-1],MAX[1:]):
-        assert (M2-M1 >= 0)
-        IPI.append(M2-M1)
-        
-        right_filter = list(filter(lambda x: (x >= M1 and x<=M2), right_minima))[0]
-        left_filter = list(filter(lambda x: (x <= M2 and x>=M1), left_minima))[-1]
-        
-        ##### PROBLEMA
-        #lo que está pasando es que el maximo de la derecha es tambien un minimo (el left)
-        # eso lo vimos como list(filter(lambda x: (x > M1 and x < M2), left_minima))
-        
-        assert ((right_filter-M1) + (M2 -left_filter) <= M2-M1), str(M1)+ ' --- ' + str(M2) + ' --- ' + str(left_filter) + ' --- '+str(right_filter)
-        assert ((right_filter-M1) + (M2 -left_filter) > 0)
-        joint_duration.append((right_filter-M1) + (M2 -left_filter)) 
-    
-    assert all([(i<j)*1 for (i,j) in zip(left_minima,right_minima)])  
-    assert all([(i>=j)*1 for (i,j) in zip(left_minima[1:],right_minima[:-1])]) 
-    for right,left in zip(right_minima[:-1],left_minima[1:]):
-        assert (left - right >= 0),str(left) + ' ' +str(right)+'left_minima: ' +str(left_minima) + ' right_minima : '+str(right_minima)
-
-        dm.append(left - right)
-    
-    test_pulses_quantifiers(dt,IPI,dm,joint_duration,MAX)
-    return(dt,IPI,dm,joint_duration)
-    
-    
-def get_pulses_quantifiers_(data_folder,save_path_name,tuple_):
-    '''
-    data folder: donde están los pulsos
-    '''
-
-    (i,D,order),row = tuple_[0],tuple_[1]
-    omega =  row.omega.unique()[0]
-    alpha = np.round(i/omega,4)  
-    file_name =  str(int(row.number))+'_'+str(int(order))+'.pkl'
-    
-    if (check_file('max_xf_'+file_name,data_folder)):
-        
-        print('running pulses quantifiers computation',alpha,D)      
-        
-        MAX = download_data(data_folder + 'max_xf_'+file_name) 
-        MIN = download_data(data_folder + 'min_xf_'+ file_name) 
-        left_minima = download_data(data_folder + 'left_minima_'+ file_name) 
-        right_minima = download_data(data_folder + 'right_minima_'+ file_name) 
-        test_pulses(left_minima,right_minima,MAX,MIN)
-        
-        dt,IPI,dm,joint_duration = get_pulses_quantifiers(left_minima,right_minima,MAX,MIN)
-        
-        print('Ready! Saving files --- ',alpha,D)      
-        save_data(dt,save_path_name+'dt_xf_'+file_name)
-        save_data(IPI,save_path_name+'IPI_xf_'+file_name)
-        save_data(dm,save_path_name+'dm_xf_'+file_name)
-        save_data(joint_duration,save_path_name+'joint_duration_xf_'+file_name)
-        print(alpha,D,'pulses quantifiers computation finished')
-    else:
-        print(file_name,'maxima file not available')
-
-    return(1)
-   
-    #%%
-    
-    
-def compute_pulses_quantifiers(description_file,data_folder,save_path_name):
-    '''
-    data folder: donde están los pulsos
-    '''
-
-    ref = pd.read_excel(description_file,sheet_name= 'File_references')
-    ref.set_index('Unnamed: 0',inplace=True);
-    pool = mp.Pool(processes= ceil(mp.cpu_count()))
-    
-    tuple_ = ref.groupby(['alpha','D','order'])
-    get_pulses_quantifiers__ = partial(get_pulses_quantifiers_,data_folder,save_path_name)
-    pool.map(get_pulses_quantifiers__,tuple_)
-    pool.close()
-    pool.join()
-    return (2)
-
-
-
-#%%
-# =============================================================================
-# eSTE MODULO ES PARA COMPUTAR CONSECUTIVIDAD
-# =============================================================================
-''' module for computing consecutive trains of pulses 
-    como concepto general, la box tiene en cada lugar una celula
-'''
-
-
-def is_isolated_cell(MAX,joint_duration,dm):
-    # solo para una celula
-    # calcula el numero de picos no consecutivis (isolated)
-    # tiene en cuenta las celulas de un solo pulso
-    # te devuelve la suma del total de picos menos los que son parte de intervalos consecutivos de pulsos
-
-    return(np.sum(MAX) - sum(is_consecutive_cell(joint_duration,dm,True)))
-    
-def is_isolated_box(tuple_,data_folder):
-    #Para cada conjunto de celulas, te da la estadistica de pulsos aislados
-    box = []
-    for row in tuple_[1]:
-        file_name =  str(int(row.number))+'_'+str(int(row.order))+'.pkl'
-        if (check_file('max_xf_'+file_name,data_folder)):
-            box.append(is_isolated_cell(download_data(data_folder + 'max_xf_'+file_name),download_data(data_folder + 'joint_duration_xf_'+file_name),download_data(data_folder + 'dm_xf_'+file_name)))
-    return(box)
-
-
-def is_consecutive_cell(joint_duration,dm,number_of_pulses = False):
-    # para cada celula (data), te devuelve un array con 1 representando pares de pulsos consecutivos y
-    # 0 pares de pulsos no consecutivos
-    #con number of pulses true te devuelve la cantidad de pulsos consecutivos . sino, te devuelve pares de pulsos
-    consecutive = []
-    for i in range(len(joint_duration)):
-        if joint_duration[i]*0.5 >= dm[i]:
-            if (number_of_pulses and (len(consecutive) ==0 or consecutive[-1] ==0)): 
-                consecutive.append(1)
-            consecutive.append(1)
-        else:
-            consecutive.append(0) 
-    return(consecutive)
-    
-
-    
-def is_consecutive_box(tuple_,data_folder):
-    #Para cada conjunto de celulas, te da la estadistica de pulsos consecutivos en una lista
-    box = []
-    for row in tuple_[1]:
-        file_name =  str(int(row.number))+'_'+str(int(row.order))+'.pkl'
-        if (check_file('max_xf_'+file_name,data_folder)):
-            box.append(is_consecutive_cell(download_data(data_folder + 'joint_duration_xf_'+file_name),download_data(data_folder + 'dm_xf_'+file_name)))
-    return(box)
-
-def raise_order_consecutiveness(box):
-    #Te da lista vacia cuando no hay mas pares de pulsos. 
-    # Calcula un nivel más de consecutividad
-    new_box = []
-    for consecutive_ in box:
-        aux_consecutive_ = []
-        for i,j in zip(consecutive_[:-1],consecutive_[1:]):
-            aux_consecutive_.append(i*j)
-        new_box.append(aux_consecutive_)
-    return(new_box)
-
-def count_consecutive_pulses(box, population = False):
-    #cuenta la cantidad de unos aislados que hay en un vector 
-    #si population es True , te devuelve la suma directamente sobretoda la poblacion
-    count_box = []
-    for consecutive_ in box:
-        count = 0
-        for j,n in enumerate(consecutive_):
-            if n == 1:
-                if j == 0:
-                    if len(consecutive_) > 1:
-                        if consecutive_[j+1] == 0:
-                            count = count + 1
-                    else:
-                        count = count + 1 #este else no estoy segura! que pasa cuando hay solo un uno en el array?
-                elif j == len(consecutive_)-1 :
-                    if consecutive_[j-1] == 0:
-                        count = count + 1
-                else:
-                    if (consecutive_[j-1] + consecutive_[j+1]) == 0:
-                        count = count + 1
-            else: 
-                pass
-        count_box.append(count)
-    if population:
-        return(np.sum(count_box)) #te tira el total sobre todo el dataset
-    else:
-        return(count_box) # te lo tira por celula
-
-
-#%%
-    
-def get_consecutive_trains_of_pulses(tuple_,data_folder):
-    #te da la suma sobre todo el dataset
-    
-    isolated = is_isolated_box(tuple_,data_folder)
-    box = is_consecutive_box(tuple_,data_folder)
-    
-    box_plot_consecutive = [np.sum(isolated)]
-    
-    while np.sum([np.sum(l) for l in box]) > 0:
-        box_plot_consecutive.append(count_consecutive_pulses(box,True))
-        box = raise_order_consecutiveness(box)
-        
-    return(box_plot_consecutive)
-
-
-def get_consecutive_trains_of_pulses_cells(tuple_,data_folder):
-    #cada lugarcito es la suma en una celula
-    isolated = is_isolated_box(tuple_,data_folder)
-    box = is_consecutive_box(tuple_,data_folder)
-    box_plot_consecutive = [isolated]
-    
-    while np.sum([np.sum(l) for l in box]) > 0:
-        box_plot_consecutive.append(count_consecutive_pulses(box,False))
-        box = raise_order_consecutiveness(box)
-    return(box_plot_consecutive)
 
 
 
