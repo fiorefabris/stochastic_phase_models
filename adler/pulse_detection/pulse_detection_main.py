@@ -439,11 +439,11 @@ def get_pulses(theta,TH,W,PFE,PFI,alpha,D):
         t4 = time.time() - t3
         print('step 4/5 finished: right pulse cos minima detected',t4, 'sec')
         
-        print('testing alpha,d: ',alpha,D)
+        print('testing alpha, D: ',alpha,D)
         test_pulses(left_minima,right_minima,MAX_cos,MIN_cos)
 
         MAX_sine , MIN_sine = search_extremes(np.sin(theta),TH,W)
-        MAX_sine, MIN_sine =  filter_extremes(MAX_sine,MIN_sine,np.sine(theta))        
+        MAX_sine, MIN_sine =  filter_extremes(MAX_sine,MIN_sine,np.sin(theta))        #en realidad, creo que si pondriamos otros parametros de max/min detection no haria falta hacer este paso en este lugar
         left_minima,right_minima,MAX_sine =  filter_maxima_sine(left_minima,right_minima,MAX_sine)
         t5 = time.time() - t4
         print('step 5/5 finished: sine extremes detected',t5, 'sec')
