@@ -42,12 +42,13 @@ def plot_dt_alpha(description_file,data_folder,save_path_name):
             file_name =  str(number)+'_'+str(order)+'.pkl'
     
             if (check_file('dt_xf_'+file_name,data_folder)):        
-                dt = dt.append(download_data(data_folder+'dt_xf_'+file_name))
+                dt.append(download_data(data_folder+'dt_xf_'+file_name))
             else:
-                pass        
+                dt.append([0])        
 ################################################
 #### Plotting
 ################################################
+         
         ax.plot(alphas,[np.mean(i) for i in dt],linewidth=2,color=colors[k],label = D)
 
 #        ax.set_ylim(ylim);
