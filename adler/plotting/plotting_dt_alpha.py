@@ -48,7 +48,7 @@ def plot_dt_alpha(description_file,data_folder,save_path_name):
 ################################################
 #### Plotting
 ################################################
-         
+        print(dt)
         ax.plot(alphas,[np.mean(i) for i in dt],linewidth=2,color=colors[k],label = D)
 
 #        ax.set_ylim(ylim);
