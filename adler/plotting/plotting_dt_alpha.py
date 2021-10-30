@@ -4,6 +4,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from adler.plotting.plotting_main import download_data,check_file
 
+#tiene ax[1]
+# el numero de orden order donde levantas el archivo es cero. 
 
 def plot_dt_alpha(description_file,data_folder,save_path_name):
     
@@ -31,7 +33,7 @@ def plot_dt_alpha(description_file,data_folder,save_path_name):
         fig, axs = plt.subplots(2, 1, sharex=True, sharey=True, figsize=(8.27, 11.69))
         fig.subplots_adjust(bottom=0.15, top=0.9, left=0.15, right=0.8, wspace=0.1, hspace=0.2)
         axs = axs.ravel();        
-        ax = axs[0]; ax.grid(False);
+        ax = axs[1]; ax.grid(False);
 
 ###############################################################################
 ### Download data
@@ -40,7 +42,6 @@ def plot_dt_alpha(description_file,data_folder,save_path_name):
         for (number,row_) in row.groupby(['number']):
             order = 0
             file_name =  str(number)+'_'+str(order)+'.pkl'
-            print(file_name,data_folder)
             if (check_file('dt_xf_'+file_name,data_folder)):        
                 dt.append(download_data(data_folder+'dt_xf_'+file_name))
             else:
@@ -48,8 +49,7 @@ def plot_dt_alpha(description_file,data_folder,save_path_name):
 ################################################
 #### Plotting
 ################################################
-        print(dt)
-        ax.plot(alphas,[np.mean(i) for i in dt],linewidth=2,color=colors[k],label = D)
+        ax.plot(alphas,[np.mean(i) for i in dt],linewidth=2,'o',color=colors[k],label = D)
 
 #        ax.set_ylim(ylim);
 #        ax.set_xlim(xlim)
