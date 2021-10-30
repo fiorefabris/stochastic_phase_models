@@ -49,7 +49,7 @@ def plot_dt_alpha(description_file,data_folder,save_path_name):
 ################################################
 #### Plotting
 ################################################
-        ax.plot(alphas,[np.mean(i) for i in dt],linewidth=2,'o',color=colors[k],label = D)
+        ax.plot(alphas,[np.mean(i) for i in dt],'o',color=colors[k],label = D)
 
 #        ax.set_ylim(ylim);
 #        ax.set_xlim(xlim)
