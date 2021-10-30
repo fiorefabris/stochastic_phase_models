@@ -40,7 +40,7 @@ def plot_dt_alpha(description_file,data_folder,save_path_name):
         for (number,row_) in row.groupby(['number']):
             order = row_.order
             file_name =  str(number)+'_'+str(order)+'.pkl'
-    
+            print(file_name,data_folder)
             if (check_file('dt_xf_'+file_name,data_folder)):        
                 dt.append(download_data(data_folder+'dt_xf_'+file_name))
             else:
