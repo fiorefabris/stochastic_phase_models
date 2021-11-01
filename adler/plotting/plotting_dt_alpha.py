@@ -4,6 +4,27 @@ import numpy as np
 import matplotlib.pyplot as plt
 from adler.plotting.plotting_main import download_data,check_file
 
+#%%
+def download_dt_alpha(row,data_folder):
+    '''
+    te arma una lista con todos los dt, en donde cada lugar de la lista (que es una lista) es un alpha distinto
+    si un dt no esta en la carpeta, devuelve un cero
+    '''
+    dt = []; 
+    for (number,row_) in row.groupby(['number']):
+        order = 0
+        print('order',row_.order)
+        print('row_ :',row_)
+        file_name =  str(number)+'_'+str(order)+'.pkl'
+        if (check_file('dt_xf_'+file_name,data_folder)):        
+            dt.append(download_data(data_folder+'dt_xf_'+file_name))
+        else:
+            dt.append([0])        
+    return(dt)
+
+
+
+#%%
 #tiene ax[1]
 # el numero de orden order donde levantas el archivo es cero. 
 
@@ -23,7 +44,6 @@ def plot_dt_alpha(description_file,data_folder,save_path_name):
 
         omega =  row.omega.unique()[0]
         alphas = row.alpha.values/omega
-        print('omrga, alphas :',omega,alphas)
 
 ###############################################################################
 ### Figure
@@ -37,15 +57,8 @@ def plot_dt_alpha(description_file,data_folder,save_path_name):
 ###############################################################################
 ### Download data
 ###############################################################################    
-        dt = []; #esta es una duración para un D determinado
-        for (number,row_) in row.groupby(['number']):
-            order = 0
-            print('row_ :',row_)
-            file_name =  str(number)+'_'+str(order)+'.pkl'
-            if (check_file('dt_xf_'+file_name,data_folder)):        
-                dt.append(download_data(data_folder+'dt_xf_'+file_name))
-            else:
-                dt.append([0])        
+        dt =download_dt_alpha(row,data_folder)
+        print(dt)
 ################################################
 #### Plotting
 ################################################
@@ -65,4 +78,3 @@ def plot_dt_alpha(description_file,data_folder,save_path_name):
     plt.savefig(save_path_name + 'dt_alpha.pdf', format='pdf')
     return(0)
 
-   
