@@ -70,8 +70,8 @@ def plot_dt_alpha(description_file,data_folder,save_path_name):
     axs[1].set_ylabel('mean duration (min)', fontsize=10);
     axs[1].set_xlabel('alpha/omega', fontsize=10)
     
-    #axs[0].set_ylim([0,100]);
-    axs[1].set_ylim([0,100]);
+    #axs[0].set_xlim([0,100]);
+    axs[1].set_ylim([-1,100]);
     
     axs[1].xaxis.set_label_coords(0.5, -0.1);
     axs[1].yaxis.set_label_coords(-0.1, 0.5)
@@ -79,7 +79,8 @@ def plot_dt_alpha(description_file,data_folder,save_path_name):
     axs[0].legend(fontsize=8, ncol=1, framealpha=0, fancybox=True)
     axs[1].legend(fontsize=8, ncol=1, framealpha=0, fancybox=True)
     
-    axs[1].set_xticklabels([np.round(i,2) for i in alphas])
+    xticks = [np.round(i,2) for i in alphas]
+    axs[1].set_xticks(xticks); axs[1].set_xticklabels(xticks)
     axs[1].tick_params(labelsize=10)
 
     plt.savefig(save_path_name + 'dt_alpha.pdf', format='pdf')
