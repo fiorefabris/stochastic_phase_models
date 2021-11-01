@@ -58,10 +58,10 @@ def plot_dt_alpha(description_file,data_folder,save_path_name):
         std_dt  = [np.std(i) for i in dt]
         
         axs[0].plot(alphas,mean_dt,'o',color=colors[k],label = D)
-        axs[0].fill_between(alphas,mean_dt-std_dt,mean_dt+std_dt,color =colors[k],alpha = 0.2)
+        axs[0].fill_between(alphas,[i-j for i,j in zip(mean_dt,std_dt)],[i+j for i,j in zip(mean_dt,std_dt)],color =colors[k],alpha = 0.2)
         
         axs[1].plot(alphas,[np.mean(i) for i in dt],'o',color=colors[k],label = D)
-        axs[1].fill_between(alphas,mean_dt-std_dt,mean_dt+std_dt,color =colors[k],alpha = 0.2)
+        axs[1].fill_between(alphas,[i-j for i,j in zip(mean_dt,std_dt)],[i+j for i,j in zip(mean_dt,std_dt)],color =colors[k],alpha = 0.2)
 
 
 
