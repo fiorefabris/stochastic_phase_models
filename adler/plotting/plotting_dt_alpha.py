@@ -58,6 +58,7 @@ def compute_theoretical_dt(omega,epsilon,delta):
 #tiene ax[1]
 # el numero de orden order donde levantas el archivo es cero. 
 
+
 def plot_dt_alpha(description_file,data_folder,save_path_name):
     
     ref = pd.read_excel(description_file,sheet_name='File_references')
@@ -68,7 +69,8 @@ def plot_dt_alpha(description_file,data_folder,save_path_name):
 ###############################################################################
 ### Figure
 ###############################################################################  
-    
+   
+    plt.clf()
     fig, axs = plt.subplots(2, 1, sharex=False, sharey=True, figsize=(8.27, 11.69))
     fig.subplots_adjust(bottom=0.15, top=0.9, left=0.15, right=0.8, wspace=0.1, hspace=0.2)
     axs = axs.ravel();        
