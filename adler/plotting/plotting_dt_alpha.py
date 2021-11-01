@@ -39,7 +39,7 @@ def plot_dt_alpha(description_file,data_folder,save_path_name):
 ### Figure
 ###############################################################################  
     
-    fig, axs = plt.subplots(2, 1, sharex=True, sharey=False, figsize=(8.27, 11.69))
+    fig, axs = plt.subplots(2, 1, sharex=False, sharey=True, figsize=(8.27, 11.69))
     fig.subplots_adjust(bottom=0.15, top=0.9, left=0.15, right=0.8, wspace=0.1, hspace=0.2)
     axs = axs.ravel();        
     
@@ -66,12 +66,12 @@ def plot_dt_alpha(description_file,data_folder,save_path_name):
         axs[1].fill_between(alphas,[i-j for i,j in zip(mean_dt,std_dt)],[i+j for i,j in zip(mean_dt,std_dt)],linewidth = 0,color =colors[k],alpha = 0.2)
 
 
-    axs[1].set_yscale('log'); axs[0].set_yscale('linear')
-    axs[1].set_ylabel('mean duration', fontsize=10);
+    axs[1].set_xscale('log'); axs[0].set_xscale('linear')
+    axs[1].set_ylabel('mean duration (min)', fontsize=10);
     axs[1].set_xlabel('alpha/omega', fontsize=10)
     
-    axs[0].set_ylim([0,50]);
-    axs[1].set_ylim([5e-5,50]);
+    #axs[0].set_ylim([0,100]);
+    axs[1].set_ylim([0,100]);
     
     axs[1].xaxis.set_label_coords(0.5, -0.1);
     axs[1].yaxis.set_label_coords(-0.1, 0.5)
