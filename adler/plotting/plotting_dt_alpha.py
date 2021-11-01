@@ -70,8 +70,8 @@ def plot_dt_alpha(description_file,data_folder,save_path_name):
     axs[1].set_ylabel('mean duration (min)', fontsize=10);
     axs[1].set_xlabel('alpha/omega', fontsize=10)
     
-    axs[0].set_xlim([-1,100]);
-    axs[1].set_ylim([-1,100]);axs[1].set_xlim([0.5,1.2]);
+    axs[0].set_ylim([-1,100]);
+    axs[1].set_ylim([-1,100]);axs[1].set_xlim(1,1.2]);
     
     axs[1].xaxis.set_label_coords(0.5, -0.1);
     axs[1].yaxis.set_label_coords(-0.1, 0.5)
