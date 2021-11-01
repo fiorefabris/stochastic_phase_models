@@ -13,10 +13,9 @@ def plot_dt_alpha(description_file,data_folder,save_path_name):
     ref.set_index('Unnamed: 0',inplace=True);
 
     colors =  sns.color_palette(sns.color_palette("viridis",len(ref.groupby(['D']))))
-    colors =  colors[::1]
 
     for k,(D,row) in enumerate(ref.groupby(['D'])):
-
+        print('row : ',row)
         
 ###############################################################################
 ### Parameters
@@ -24,7 +23,7 @@ def plot_dt_alpha(description_file,data_folder,save_path_name):
 
         omega =  row.omega.unique()[0]
         alphas = row.alpha.values/omega
-    
+        print('omrga, alphas :',omega,alphas)
 
 ###############################################################################
 ### Figure
@@ -38,9 +37,10 @@ def plot_dt_alpha(description_file,data_folder,save_path_name):
 ###############################################################################
 ### Download data
 ###############################################################################    
-        dt = []; 
+        dt = []; #esta es una duración para un D determinado
         for (number,row_) in row.groupby(['number']):
             order = 0
+            print('row_ :',row_)
             file_name =  str(number)+'_'+str(order)+'.pkl'
             if (check_file('dt_xf_'+file_name,data_folder)):        
                 dt.append(download_data(data_folder+'dt_xf_'+file_name))
@@ -57,6 +57,7 @@ def plot_dt_alpha(description_file,data_folder,save_path_name):
     ax.set_xlabel('alpha/omega', fontsize=30)
     ax.xaxis.set_label_coords(0.5, -0.1);
     ax.yaxis.set_label_coords(-0.05, 0.5)
+    ax.legend(fontsize=6, ncol=1, framealpha=0, fancybox=True)
 
     ax.set_xticklabels(alphas)
     ax.tick_params(labelsize=20)
