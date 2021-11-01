@@ -35,34 +35,28 @@ def plot_dt_alpha(description_file,data_folder,save_path_name):
 
     colors =  sns.color_palette(sns.color_palette("viridis",len(ref.groupby(['D']))))
 
+###############################################################################
+### Figure
+###############################################################################  
+    
+    fig, axs = plt.subplots(2, 1, sharex=True, sharey=True, figsize=(8.27, 11.69))
+    fig.subplots_adjust(bottom=0.15, top=0.9, left=0.15, right=0.8, wspace=0.1, hspace=0.2)
+    axs = axs.ravel();        
+    ax = axs[1]; ax.grid(False);
+
     for k,(D,row) in enumerate(ref.groupby(['D'])):
-        print('row : ',row)
         
 ###############################################################################
-### Parameters
+### Parameters and data -- plotting
 ###############################################################################
 
         omega =  row.omega.unique()[0]
         alphas = row.alpha.values/omega
-
-###############################################################################
-### Figure
-###############################################################################    
-
-        fig, axs = plt.subplots(2, 1, sharex=True, sharey=True, figsize=(8.27, 11.69))
-        fig.subplots_adjust(bottom=0.15, top=0.9, left=0.15, right=0.8, wspace=0.1, hspace=0.2)
-        axs = axs.ravel();        
-        ax = axs[1]; ax.grid(False);
-
-###############################################################################
-### Download data
-###############################################################################    
+        
         dt =download_dt_alpha(row,data_folder)
-        print(dt)
-################################################
-#### Plotting
-################################################
         ax.plot(alphas,[np.mean(i) for i in dt],'o',color=colors[k],label = D)
+
+
 
 #        ax.set_ylim(ylim);
 #        ax.set_xlim(xlim)
