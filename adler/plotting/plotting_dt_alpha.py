@@ -65,7 +65,8 @@ def plot_dt_alpha(description_file,data_folder,save_path_name):
 
 
 
-    axs[1].set_ylim([0,10e5]);
+    axs[0].set_ylim([-10,5e4]);
+    axs[1].set_ylim([-10,5e4]);
 #        ax.set_xlim(xlim)
         
     axs[1].set_yscale('log'); axs[0].set_yscale('linear')
