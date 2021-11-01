@@ -57,21 +57,19 @@ def plot_dt_alpha(description_file,data_folder,save_path_name):
         mean_dt = [np.mean(i) for i in dt]
         std_dt  = [np.std(i) for i in dt]
         
-        axs[0].plot(alphas,mean_dt,'o',color=colors[k],label = D)
+        axs[0].plot(alphas,mean_dt,'o',linewidth = 1,color=colors[k],label = D)
         axs[0].fill_between(alphas,[i-j for i,j in zip(mean_dt,std_dt)],[i+j for i,j in zip(mean_dt,std_dt)],linewidth = 0, color =colors[k],alpha = 0.2)
         
-        axs[1].plot(alphas,[np.mean(i) for i in dt],'o',color=colors[k],label = D)
+        axs[1].plot(alphas,[np.mean(i) for i in dt],'o',linewidth = 1, color=colors[k],label = D)
         axs[1].fill_between(alphas,[i-j for i,j in zip(mean_dt,std_dt)],[i+j for i,j in zip(mean_dt,std_dt)],linewidth = 0,color =colors[k],alpha = 0.2)
 
 
-
-    axs[0].set_ylim([-10,5e4]);
-    axs[1].set_ylim([-10,5e4]);
-#        ax.set_xlim(xlim)
-        
     axs[1].set_yscale('log'); axs[0].set_yscale('linear')
     axs[1].set_ylabel('mean duration', fontsize=10);
     axs[1].set_xlabel('alpha/omega', fontsize=10)
+    
+    axs[0].set_ylim([-10,5e4]);
+    axs[1].set_ylim([5e-5,5e4]);
     
     axs[1].xaxis.set_label_coords(0.5, -0.1);
     axs[1].yaxis.set_label_coords(-0.1, 0.5)
