@@ -96,7 +96,7 @@ def plot_dt_alpha(description_file,data_folder,save_path_name):
         axs[1].plot(alphas,mean_dt,'-o',linewidth = 1, color=colors[k],label = D)
         axs[1].fill_between(alphas,[i-j for i,j in zip(mean_dt,std_dt)],[i+j for i,j in zip(mean_dt,std_dt)],linewidth = 0,color =colors[k],alpha = 0.2)
 
-    EPS = np.linspace(10e-10,1.10)
+    EPS = np.linspace(10e-10,5,5)
     colors_eps =  sns.color_palette(sns.color_palette("Greys",len(EPS)))
 
     for m,eps in enumerate(EPS):
