@@ -14,7 +14,6 @@ def download_dt_alpha(row,data_folder):
     for (number,row_) in row.groupby(['number']):
         order = 0
         print('order',row_.order)
-        print('row_ :',row_)
         file_name =  str(number)+'_'+str(order)+'.pkl'
         if (check_file('dt_xf_'+file_name,data_folder)):        
             dt.append(download_data(data_folder+'dt_xf_'+file_name))
@@ -62,15 +61,18 @@ def plot_dt_alpha(description_file,data_folder,save_path_name):
 #        ax.set_ylim(ylim);
 #        ax.set_xlim(xlim)
         
-    axs[1].set_yscale('log')
+    axs[1].set_yscale('log'); axs[0].set_yscale('linear')
     axs[1].set_ylabel('mean duration', fontsize=10);
     axs[1].set_xlabel('alpha/omega', fontsize=10)
+    
     axs[1].xaxis.set_label_coords(0.5, -0.1);
     axs[1].yaxis.set_label_coords(-0.05, 0.5)
+    
     axs[0].legend(fontsize=8, ncol=1, framealpha=0, fancybox=True)
     axs[1].legend(fontsize=8, ncol=1, framealpha=0, fancybox=True)
-    axs[1].set_xticklabels(alphas)
-    axs[1].tick_params(labelsize=20)
+    
+    axs[1].set_xticklabels([np.round(i,2) for i in alphas])
+    axs[1].tick_params(labelsize=10)
 
     plt.savefig(save_path_name + 'dt_alpha.pdf', format='pdf')
     return(0)
