@@ -13,7 +13,7 @@ def download_dt_alpha(row,data_folder):
     dt = []; 
     for (number,row_) in row.groupby(['number']):
         order = 0
-        print('order',row_.order)
+        print('order',row_.order.values)
         file_name =  str(number)+'_'+str(order)+'.pkl'
         if (check_file('dt_xf_'+file_name,data_folder)):        
             dt.append(download_data(data_folder+'dt_xf_'+file_name))
@@ -38,7 +38,7 @@ def plot_dt_alpha(description_file,data_folder,save_path_name):
 ### Figure
 ###############################################################################  
     
-    fig, axs = plt.subplots(2, 1, sharex=True, sharey=True, figsize=(8.27, 11.69))
+    fig, axs = plt.subplots(2, 1, sharex=True, sharey=False, figsize=(8.27, 11.69))
     fig.subplots_adjust(bottom=0.15, top=0.9, left=0.15, right=0.8, wspace=0.1, hspace=0.2)
     axs = axs.ravel();        
     
@@ -71,7 +71,7 @@ def plot_dt_alpha(description_file,data_folder,save_path_name):
     axs[0].legend(fontsize=8, ncol=1, framealpha=0, fancybox=True)
     axs[1].legend(fontsize=8, ncol=1, framealpha=0, fancybox=True)
     
-    axs[1].set_xticklabels([np.round(i,2) for i in alphas])
+    axs[1].set_xticklabels([np.round(i,2) for i in alphas],fontsizte = 10)
     axs[1].tick_params(labelsize=10)
 
     plt.savefig(save_path_name + 'dt_alpha.pdf', format='pdf')
