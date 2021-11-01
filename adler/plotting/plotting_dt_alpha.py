@@ -80,7 +80,7 @@ def plot_dt_alpha(description_file,data_folder,save_path_name):
     axs[1].legend(fontsize=8, ncol=1, framealpha=0, fancybox=True)
     
     xticks = [np.round(i,2) for i in alphas]
-    axs[1].set_xticks(xticks); axs[1].set_xticklabels(xticks)
+   # axs[1].set_xticks(xticks); axs[1].set_xticklabels(xticks)
     axs[1].tick_params(labelsize=10)
 
     plt.savefig(save_path_name + 'dt_alpha.pdf', format='pdf')
