@@ -9,11 +9,12 @@ def download_dt_alpha(row,data_folder):
     '''
     te arma una lista con todos los dt, en donde cada lugar de la lista (que es una lista) es un alpha distinto
     si un dt no esta en la carpeta, devuelve un cero
+    
+    Esta preparado para solo tomar un numero de orden, es decir una serie temporal por parametros.
     '''
     dt = []; 
     for (number,row_) in row.groupby(['number']):
-        order = 0
-        print('order',row_.order.values)
+        order = row_.order.values[0]
         file_name =  str(number)+'_'+str(order)+'.pkl'
         if (check_file('dt_xf_'+file_name,data_folder)):        
             dt.append(download_data(data_folder+'dt_xf_'+file_name))
@@ -71,7 +72,7 @@ def plot_dt_alpha(description_file,data_folder,save_path_name):
     axs[0].legend(fontsize=8, ncol=1, framealpha=0, fancybox=True)
     axs[1].legend(fontsize=8, ncol=1, framealpha=0, fancybox=True)
     
-    axs[1].set_xticklabels([np.round(i,2) for i in alphas],fontsizte = 10)
+    axs[1].set_xticklabels([np.round(i,2) for i in alphas])
     axs[1].tick_params(labelsize=10)
 
     plt.savefig(save_path_name + 'dt_alpha.pdf', format='pdf')
