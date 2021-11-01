@@ -22,8 +22,35 @@ def download_dt_alpha(row,data_folder):
             dt.append([0])        
     return(dt)
 
+#%%
+
+def cociente(delta):
+    return np.sqrt((delta - 1)/(delta + 1))
+
+def f_(epsilon,delta):
+    return epsilon * cociente(delta) / (2 - epsilon * cociente(delta))
+    
+def compute_theoretical_dt(omega,epsilon,delta):
+    return -2 / (omega * np.sqrt(delta**2 - 1)) * np.log(f_(epsilon,delta))
+    
 
 
+#%%
+#compute_theoretical_dt(omega,1e-100,1.0005) #tiende a cero eventualemnte
+#
+#EPS   = np.linspace(10e-10,0.1,10) #PASA ALGO RARO EN 5
+#omega = 2* np.pi/7
+#DEL = [1.001,1.005,1.01,1.03,1.05,1.1,1.3,1.5]
+#
+#for delta in DEL:
+#    aux = [compute_theoretical_dt(omega,eps,delta) for eps in EPS]
+#    plt.plot(EPS,aux,'-o')  # el eje y es en minutos creo
+#    plt.ylim([0,100])
+#
+#for epsilon in EPS:
+#    aux = [compute_theoretical_dt(omega,epsilon,delta) for delta in DEL]
+#    plt.plot(DEL,aux,'-o') 
+#    plt.ylim([0,100])
 #%%
 #tiene ax[1]
 # el numero de orden order donde levantas el archivo es cero. 
@@ -62,8 +89,16 @@ def plot_dt_alpha(description_file,data_folder,save_path_name):
         axs[0].plot(alphas,mean_dt,'-o',linewidth = 1,color=colors[k],label = D)
         axs[0].fill_between(alphas,[i-j for i,j in zip(mean_dt,std_dt)],[i+j for i,j in zip(mean_dt,std_dt)],linewidth = 0, color =colors[k],alpha = 0.2)
         
+        
         axs[1].plot(alphas,mean_dt,'-o',linewidth = 1, color=colors[k],label = D)
         axs[1].fill_between(alphas,[i-j for i,j in zip(mean_dt,std_dt)],[i+j for i,j in zip(mean_dt,std_dt)],linewidth = 0,color =colors[k],alpha = 0.2)
+
+    EPS = np.linspace(10e-10,0.1,10)
+    colors_eps =  sns.color_palette(sns.color_palette("Greys",len(EPS)))
+
+    for m,eps in enumerate(EPS):
+        aux = [compute_theoretical_dt(omega,eps,delta) for delta in alphas]
+        axs[0].plot(alphas,aux,'-o',color = colors_eps[m],label = eps)
 
 
     axs[1].set_xscale('log',basex=2); axs[0].set_xscale('linear')
