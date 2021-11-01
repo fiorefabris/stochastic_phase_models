@@ -54,8 +54,14 @@ def plot_dt_alpha(description_file,data_folder,save_path_name):
         alphas = row.alpha.values/omega
         
         dt =download_dt_alpha(row,data_folder)
-        axs[0].plot(alphas,[np.mean(i) for i in dt],'o',color=colors[k],label = D)
+        mean_dt = [np.mean(i) for i in dt]
+        std_dt  = [np.std(i) for i in dt]
+        
+        axs[0].plot(alphas,mean_dt,'o',color=colors[k],label = D)
+        axs[0].fill_between(alphas,mean_dt-std_dt,mean_dt+std_dt,color =colors[k],alpha = 0.2)
+        
         axs[1].plot(alphas,[np.mean(i) for i in dt],'o',color=colors[k],label = D)
+        axs[1].fill_between(alphas,mean_dt-std_dt,mean_dt+std_dt,color =colors[k],alpha = 0.2)
 
 
 
@@ -67,7 +73,7 @@ def plot_dt_alpha(description_file,data_folder,save_path_name):
     axs[1].set_xlabel('alpha/omega', fontsize=10)
     
     axs[1].xaxis.set_label_coords(0.5, -0.1);
-    axs[1].yaxis.set_label_coords(-0.05, 0.5)
+    axs[1].yaxis.set_label_coords(-0.1, 0.5)
     
     axs[0].legend(fontsize=8, ncol=1, framealpha=0, fancybox=True)
     axs[1].legend(fontsize=8, ncol=1, framealpha=0, fancybox=True)
