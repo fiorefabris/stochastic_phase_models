@@ -62,11 +62,11 @@ def plot_dt_alpha(description_file,data_folder,save_path_name):
         axs[0].plot(alphas,mean_dt,'-o',linewidth = 1,color=colors[k],label = D)
         axs[0].fill_between(alphas,[i-j for i,j in zip(mean_dt,std_dt)],[i+j for i,j in zip(mean_dt,std_dt)],linewidth = 0, color =colors[k],alpha = 0.2)
         
-        axs[1].plot(alphas,[np.mean(i) for i in dt],'-o',linewidth = 1, color=colors[k],label = D)
+        axs[1].plot(alphas,mean_dt,'-o',linewidth = 1, color=colors[k],label = D)
         axs[1].fill_between(alphas,[i-j for i,j in zip(mean_dt,std_dt)],[i+j for i,j in zip(mean_dt,std_dt)],linewidth = 0,color =colors[k],alpha = 0.2)
 
 
-    axs[1].set_xscale('log'); axs[0].set_xscale('linear')
+    axs[1].set_xscale('log',basex=2); axs[0].set_xscale('linear')
     axs[1].set_ylabel('mean duration (min)', fontsize=10);
     axs[1].set_xlabel('alpha/omega', fontsize=10)
     
