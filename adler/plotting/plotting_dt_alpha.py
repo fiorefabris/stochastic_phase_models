@@ -58,14 +58,14 @@ def plot_dt_alpha(description_file,data_folder,save_path_name):
         std_dt  = [np.std(i) for i in dt]
         
         axs[0].plot(alphas,mean_dt,'o',color=colors[k],label = D)
-        axs[0].fill_between(alphas,[i-j for i,j in zip(mean_dt,std_dt)],[i+j for i,j in zip(mean_dt,std_dt)],color =colors[k],alpha = 0.2)
+        axs[0].fill_between(alphas,[i-j for i,j in zip(mean_dt,std_dt)],[i+j for i,j in zip(mean_dt,std_dt)],linewidth = 0, color =colors[k],alpha = 0.2)
         
         axs[1].plot(alphas,[np.mean(i) for i in dt],'o',color=colors[k],label = D)
-        axs[1].fill_between(alphas,[i-j for i,j in zip(mean_dt,std_dt)],[i+j for i,j in zip(mean_dt,std_dt)],color =colors[k],alpha = 0.2)
+        axs[1].fill_between(alphas,[i-j for i,j in zip(mean_dt,std_dt)],[i+j for i,j in zip(mean_dt,std_dt)],linewidth = 0,color =colors[k],alpha = 0.2)
 
 
 
-#        ax.set_ylim(ylim);
+    axs[1].set_ylim([0,10e5]);
 #        ax.set_xlim(xlim)
         
     axs[1].set_yscale('log'); axs[0].set_yscale('linear')
