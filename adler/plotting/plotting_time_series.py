@@ -69,9 +69,9 @@ def plot_time_series(dt,T,d,N,delta,description_file,data_folder,save_path_name)
     return (0)
 
 
-def plot_time_series_alpha(data_folder,save_path_name,dt,T,d,TS,N,delta,tuple_):
+def plot_time_series_alpha(data_folder,save_path_name,dt,T,d,N,delta,tuple_):
     '''
-    plot_time_series_alpha(data_folder,save_path_name,dt,T,d,TS,delta,tuple_)
+    plot_time_series_alpha(data_folder,save_path_name,dt,T,d,delta,tuple_)
     Auxiliary funtion for parallelizong the time Series plotting function.
     
     Parameters
@@ -119,7 +119,8 @@ def plot_time_series_alpha(data_folder,save_path_name,dt,T,d,TS,N,delta,tuple_):
 ### Plotting parameters
 ###############################################################################    
     xlim = [-5,T+5] ; ylim = [-1.1,1.1] ;         
-    Cols = TS; Tot = len(rows.groupby(['D'])) ;
+    Cols = 1 #TS; 
+    Tot = len(rows.groupby(['D'])) ;
     Rows = ceil(Tot/ Cols)
     colors =  sns.color_palette(sns.color_palette("viridis",Rows*1))
     colors =  colors[::1]
