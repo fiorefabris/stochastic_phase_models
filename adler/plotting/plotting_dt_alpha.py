@@ -102,9 +102,9 @@ def plot_dt_alpha(description_file,data_folder,save_path_name):
     colors_eps =  sns.color_palette(sns.color_palette("Greys",len(EPS)))
 
     for m,eps in enumerate(EPS):
-        deltas = alphas[1:] 
+        deltas = np.linspace(1,1.5,1000) #alphas[1:] 
         aux = [compute_theoretical_dt(omega,eps,delta) for delta in deltas]
-        axs[0].plot(deltas,aux,'-o',color = colors_eps[m],alpha = 0.5,label = eps)
+        axs[0].plot(deltas,aux,'-.',color = colors_eps[m],alpha = 0.7,label = eps)
 
 
     axs[1].set_xscale('linear'); axs[0].set_xscale('linear') #axs[1].set_xscale('log',basex=2)
