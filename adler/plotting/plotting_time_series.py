@@ -62,7 +62,7 @@ def plot_time_series(dt,T,d,N,delta,description_file,data_folder,save_path_name)
     aux_iterator = ref.groupby(['alpha'])
 
     pool = mp.Pool(processes= mp.cpu_count())
-    plot_time_series_alpha_ = partial(plot_time_series_alpha, data_folder,save_path_name,dt,T,d,TS,N,delta)
+    plot_time_series_alpha_ = partial(plot_time_series_alpha, data_folder,save_path_name,dt,T,d,N,delta)
     pool.map(plot_time_series_alpha_,aux_iterator )
     pool.close()
     pool.join()
