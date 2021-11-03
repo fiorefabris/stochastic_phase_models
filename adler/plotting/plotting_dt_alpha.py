@@ -34,20 +34,22 @@ def f_(epsilon,delta):
     return epsilon * cociente(delta) / (2 - epsilon * cociente(delta))
     
 def compute_theoretical_dt(omega,epsilon,delta):
-    return -2 / (omega * np.sqrt(delta**2 - 1)) * np.log(f_(epsilon,delta))
-    
-
+    if f_(epsilon,delta) >=0 :
+        return -2 / (omega * np.sqrt(delta**2 - 1)) * np.log(f_(epsilon,delta))
+    else:
+        return 0
 
 #%%
 #compute_theoretical_dt(omega,1e-100,1.0005) #tiende a cero eventualemnte
 #
-#EPS   = np.linspace(10e-10,0.1,10) #PASA ALGO RARO EN 5
+#EPS   =np.linspace(2,5,5) #PASA ALGO RARO EN 5
 #omega = 2* np.pi/7
 #DEL = [1.001,1.005,1.01,1.03,1.05,1.1,1.3,1.5]
 #
 #for delta in DEL:
 #    aux = [compute_theoretical_dt(omega,eps,delta) for eps in EPS]
-#    plt.plot(EPS,aux,'-o')  # el eje y es en minutos creo
+#    #aux = [np.log(f_(eps,delta)) for eps in EPS]
+#    plt.plot(EPS,aux,'-o')# el eje y es en minutos creo
 #    plt.ylim([0,100])
 #
 #for epsilon in EPS:
@@ -92,7 +94,7 @@ def plot_dt_alpha(description_file,data_folder,save_path_name):
         std_dt  = [np.std(i)/scale for i in dt]
         
         axs[0].plot(alphas,mean_dt,'-o',linewidth = 1,color=colors[k],label = D)
-        axs[0].fill_between(alphas,[i-j for i,j in zip(mean_dt,std_dt)],[i+j for i,j in zip(mean_dt,std_dt)],linewidth = 0, color =colors[k],alpha = 0.2)
+        #axs[0].fill_between(alphas,[i-j for i,j in zip(mean_dt,std_dt)],[i+j for i,j in zip(mean_dt,std_dt)],linewidth = 0, color =colors[k],alpha = 0.2)
         
         
         axs[1].plot(alphas,mean_dt,'-o',linewidth = 1, color=colors[k],label = D)
