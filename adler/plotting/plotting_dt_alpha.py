@@ -96,7 +96,7 @@ def plot_dt_alpha(description_file,data_folder,save_path_name):
         
         
         axs[1].plot(alphas,mean_dt,'-o',linewidth = 1, color=colors[k],label = D)
-        axs[1].fill_between(alphas,[i-j for i,j in zip(mean_dt,std_dt)],[i+j for i,j in zip(mean_dt,std_dt)],linewidth = 0,color =colors[k],alpha = 0.2)
+        #axs[1].fill_between(alphas,[i-j for i,j in zip(mean_dt,std_dt)],[i+j for i,j in zip(mean_dt,std_dt)],linewidth = 0,color =colors[k],alpha = 0.2)
 
     EPS = np.linspace(1,10,5)
     colors_eps =  sns.color_palette(sns.color_palette("Greys",len(EPS)))
@@ -111,8 +111,8 @@ def plot_dt_alpha(description_file,data_folder,save_path_name):
     axs[1].set_ylabel('mean duration (min)', fontsize=10);
     axs[1].set_xlabel('alpha/omega', fontsize=10)
     
-    axs[0].set_ylim([-1,100]);axs[0].set_xlim([1,1.2]); 
-    axs[1].set_ylim([-1,100]);axs[1].set_xlim([1,1.2]); 
+    axs[0].set_ylim([-1,100]);axs[0].set_xlim([1,1.1]); 
+    axs[1].set_ylim([-1,100]);axs[1].set_xlim([1,1.1]); 
     
     axs[1].xaxis.set_label_coords(0.5, -0.1);
     axs[1].yaxis.set_label_coords(-0.1, 0.5)
