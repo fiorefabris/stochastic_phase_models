@@ -34,10 +34,8 @@ def f_(epsilon,delta):
     return epsilon * cociente(delta) / (2 - epsilon * cociente(delta))
     
 def compute_theoretical_dt(omega,epsilon,delta):
-    if f_(epsilon,delta) >=0 :
-        return -2 / (omega * np.sqrt(delta**2 - 1)) * np.log(f_(epsilon,delta))
-    else:
-        return 0
+    return -2 / (omega * np.sqrt(delta**2 - 1)) * np.log(f_(epsilon,delta))
+
 
 #%%
 #compute_theoretical_dt(omega,1e-100,1.0005) #tiende a cero eventualemnte
