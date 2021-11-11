@@ -2,6 +2,7 @@ import pandas as pd
 import seaborn as sns
 import numpy as np
 import matplotlib.pyplot as plt
+from adler.pulse_detection.pulse_detection_main import get_fixed_points
 from adler.plotting.plotting_main import download_data,check_file,set_scale,silent_ax
 from adler.get_time_series.get_simulated_dt import get_all_combinations_alphas
 
@@ -232,8 +233,11 @@ def plot_theta_alpha(data_folder,save_path_name,params):
         
         for l,th in enumerate(theta):
             ax = axs[k,l]
-            
+            theta_end,theta_beg = get_fixed_points(alphas[l]/omega)
+
             ax.plot(np.cos(th),np.sin(th),linewidth=2,color=colors[k])
+            ax.plot(np.cos(theta_beg),np.sin(theta_beg),'o',color='red')
+            ax.plot(np.cos(theta_end),np.sin(theta_end),'o',color='red')
             ax.set_ylim([-1.05,1.05]); ax.set_xlim([-1.05,1.05])
               
             if k == EPS-1 and l == ALP-1 :
