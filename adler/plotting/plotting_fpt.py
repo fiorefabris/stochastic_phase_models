@@ -6,7 +6,7 @@ from math import ceil
 from functools import partial 
 import seaborn as sns
 
-from adler.plotting.plotting_main import download_data,check_file
+from adler.data_managing_functions import download_data,check_file
 
 
 

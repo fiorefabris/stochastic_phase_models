@@ -2,9 +2,9 @@ import pandas as pd
 import seaborn as sns
 import numpy as np
 import matplotlib.pyplot as plt
-from adler.pulse_detection.pulse_detection_main import get_fixed_points
-from adler.plotting.plotting_main import download_data,check_file,set_scale,silent_ax
+from adler.data_managing_functions import download_data,check_file,get_fixed_points
 from adler.get_time_series.get_simulated_dt import get_all_combinations_alphas
+from adler.plotting.plotting_main import set_scale,silent_ax
 
 ''' Este modulo es para el primer approach que tuvimos para simular dt'''
 

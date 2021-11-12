@@ -1,6 +1,5 @@
 import numpy as np
-from adler.pulse_detection.pulse_detection_main import get_fixed_points
-from adler.get_time_series.main import save_data
+from adler.data_managing_functions import save_data, get_fixed_points
 from functools import partial
 from itertools import product
 import time

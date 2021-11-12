@@ -5,7 +5,7 @@ from functools import partial
 import pandas as pd
 
 from adler.pulse_detection.pulse_detection_main import test_pulses_sine
-from adler.plotting.plotting_main import check_file, save_data, download_data
+from adler.data_managing_functions import check_file, save_data, download_data
 
 #%% 
 # =============================================================================

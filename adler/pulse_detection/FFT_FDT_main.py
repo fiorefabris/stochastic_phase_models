@@ -12,7 +12,7 @@ import pandas as pd
 from math import ceil
 from functools import partial 
 import os
-from adler.plotting.plotting_main import check_file, save_data, download_data
+from adler.data_managing_functions import check_file, save_data, download_data, time
 #%%
 ################################################
 #### Fast Fourier Transform computation
@@ -303,30 +303,7 @@ def compute_fft(description_file,data_folder,dt,d,save_path_name):
 #### Module for computing the FPT
 ################################################  
 
-def time(dt,T,d):
-    '''
-    time(dt,T,d)
-    Computes the time vector of a desired time series.
-    
-    Parameters
-    -----------
-        dt : float
-            time resolution of the time series. 
-        T : float
-            total time lenght of the time series.
-        d : integer
-            the decimation factor of the experiment (i.e. how often do you save your time series in dt units).
-    
-    Returns
-    -------
-        out : numpy array
-            time vector of the desired time series.
-            
-    Notes
-    ------
-    dt * d is the sampling rate.
-    '''
-    return(np.linspace(0,T,ceil(int(T/dt)/d)) )
+
     
 
 def fpt(t,theta): 

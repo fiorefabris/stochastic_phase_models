@@ -10,7 +10,7 @@ from functools import partial
 import pandas as pd
 import time
 
-from adler.plotting.plotting_main import check_file, save_data, download_data
+from adler.data_managing_functions import check_file, save_data, download_data, get_fixed_points
 
 def pop_list(list_,remove_list_index):
     new_list = []
@@ -229,35 +229,6 @@ def filter_extremes(MAX,MIN,X):
     assert len(MAX) == len(MIN)
     return(MAX,MIN)
     
-
-
-#%%#
-def get_fixed_points(alpha):
-    '''
-    get_fixed_points(alpha)
-    returns the fixed points for an adler dynamical system. 
-    If the system is oscillatory and not excitable, it returns the point called ghost of less veoloty. 
-    
-    Parameters
-    ----------
-    alpha : float
-        parameter of the adler equation. In omega units
-    
-    Returns
-    -------
-    PFE : float
-        stable fixed point - angular . On the  3rd cuadrant.
-    PFI : float
-        unstable fixed point - angular . On the 4th cuadrant
-    '''
-    if alpha >= 1:
-        res = np.arcsin(-1/alpha)
-        PFE = -res + np.pi  #np.sin(PFE)
-        PFI = (2*np.pi + res)  #np.sin(PFI)
-    else: 
-        PFE = -np.pi/2 + 2*np.pi
-        PFI = -np.pi/2 + 2*np.pi
-    return(PFE,PFI)
 
 
 #%%

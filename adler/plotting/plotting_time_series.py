@@ -6,11 +6,8 @@ from math import ceil
 from functools import partial 
 import seaborn as sns
 
-from adler.plotting.plotting_main import set_scale,download_data,check_file
-from adler.pulse_detection.FFT_FDT_main import time
-
-
-
+from adler.data_managing_functions import download_data,check_file,time
+from adler.plotting.plotting_main import set_scale
 
 ###############################################################################
 ### Time series plotting module

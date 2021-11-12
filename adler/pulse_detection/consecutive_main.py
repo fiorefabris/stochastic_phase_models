@@ -1,5 +1,5 @@
 import numpy as np
-from adler.plotting.plotting_main import download_data
+from adler.data_managing_functions import download_data
 from itertools import groupby
 
 def count_iterable(iterator):
