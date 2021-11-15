@@ -5,15 +5,14 @@ from math import ceil
 
 
 def download_data(filename):
-    infile =  open(filename,'rb')
-    results = pickle.load(infile)
-    infile.close()
+    with open(filename,'rb') as infile:
+        results = pickle.load(infile)
     return(results)
 
 def save_data(data, filename):
-    outfile= open(filename,'wb')
-    pickle.dump(data,outfile,protocol=-1)
-    outfile.close()
+    with open(filename,'wb') as outfile:
+        pickle.dump(data,outfile,protocol=-1)
+    
 
 def check_file(file_name,data_folder):
     flag = False

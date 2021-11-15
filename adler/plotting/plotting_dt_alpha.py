@@ -48,8 +48,8 @@ def plot_simulated_dt_alpha(data_folder,save_path_name,params):
         alphas = [a/omega for a in alphas]
 
 
-        dt_filename = data_folder + 'simulated_dt_'+str(np.round(omega,2))+'_eps_'+str(np.round(epsilon,2))+'.pkl'
-        if check_file('simulated_dt_'+str(np.round(omega,2))+'_eps_'+str(np.round(epsilon,2))+'.pkl',data_folder):
+        dt_filename = data_folder + 'simulated_dt_'+str(np.round(omega,2))+'_eps_'+str(epsilon)+'.pkl'
+        if check_file('simulated_dt_'+str(np.round(omega,2))+'_eps_'+str(epsilon)+'.pkl',data_folder):
             dt =  download_data(dt_filename)
         else:
             dt = [[] for i in alphas]
@@ -107,7 +107,7 @@ def plot_theta_alpha(data_folder,save_path_name,params):
     #para cada fila
     for k,((omega,epsilon),alphas) in enumerate(get_all_combinations_alphas(params)):
         alphas = [a/omega for a in alphas]
-        theta_filename = 'theta_example_simulated_dt_'+str(np.round(omega,2))+'_eps_'+str(np.round(epsilon,2))+'.pkl'
+        theta_filename = 'theta_example_simulated_dt_'+str(np.round(omega,2))+'_eps_'+str(epsilon)+'.pkl'
         
         print(check_file(theta_filename ,data_folder))
         print(theta_filename)
@@ -126,7 +126,7 @@ def plot_theta_alpha(data_folder,save_path_name,params):
             ax.plot(np.cos(theta_end),np.sin(theta_end),'o',color='red')
             ax.set_ylim([-1.05,1.05]); ax.set_xlim([-1.05,1.05])
               
-            if k == EPS-1 and l == ALP-1 :
+            if k == EPS-1 and l == 0 :
                 ax.set_ylabel(r'$\sin(\theta)$', fontsize=10);
                 ax.set_xlabel(r'$\cos(\theta)$', fontsize=10)
                 ax.xaxis.set_label_coords(0.5, -0.1);
@@ -136,7 +136,7 @@ def plot_theta_alpha(data_folder,save_path_name,params):
 
             elif k == 0:
                 text = r'$\alpha = $' + str(alphas[l]) 
-                ax.text(0.7, 0.8, text , ha='center', va='center', transform=ax.transAxes, fontsize=10)
+                ax.text(0.7, 0.8, text , ha='center', va='center', transform=ax.transAxes, fontsize=5)
                 silent_ax(ax)
 
 
@@ -145,7 +145,7 @@ def plot_theta_alpha(data_folder,save_path_name,params):
 
             if l == 0 :
                 text = 'eps = ' + str(epsilon)
-                ax.text(0.7, 1.1, text , ha='center', va='center', transform=ax.transAxes, fontsize=10)
+                ax.text(0.7, 1.1, text , ha='center', va='center', transform=ax.transAxes, fontsize=5)
 
         
     plt.savefig(save_path_name + 'time_series_.pdf', format='pdf')

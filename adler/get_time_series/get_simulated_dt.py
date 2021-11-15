@@ -77,11 +77,11 @@ def get_simulated_dt_alpha(main_filename,N,dt,p):
             theta,dt_aux = get_simulated_dt(dt,omega,alpha,epsilon)
             DT_aux.append(dt_aux)
         DT.append(DT_aux)
-        theta_example.append(theta)
+        theta_example.append(theta[::100])
     
     
-    DT_filename = main_filename + 'simulated_dt_'+str(np.round(omega,2))+'_eps_'+str(np.round(epsilon,2))+'.pkl'
-    theta_filename = main_filename +  'theta_example_simulated_dt_'+str(np.round(omega,2))+'_eps_'+str(np.round(epsilon,2))+'.pkl'
+    DT_filename = main_filename + 'simulated_dt_'+str(np.round(omega,2))+'_eps_'+str(epsilon)+'.pkl'
+    theta_filename = main_filename +  'theta_example_simulated_dt_'+str(np.round(omega,2))+'_eps_'+str(epsilon)+'.pkl'
 
     save_data(DT, DT_filename)
     save_data(theta_example, theta_filename)
