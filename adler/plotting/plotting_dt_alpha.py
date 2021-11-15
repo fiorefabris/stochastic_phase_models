@@ -110,9 +110,10 @@ def plot_theta_alpha(data_folder,save_path_name,params):
         theta_filename = 'theta_example_simulated_dt_'+str(np.round(omega,2))+'_eps_'+str(np.round(epsilon,2))+'.pkl'
         
         print(check_file(theta_filename ,data_folder))
+        print(theta_filename)
         if check_file(theta_filename ,data_folder):
             theta = download_data(data_folder + theta_filename)
-            print(theta,theta_filename)
+            
         else:
             theta = [[] for i in alphas]
         print(theta)
