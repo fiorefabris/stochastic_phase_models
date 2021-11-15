@@ -163,11 +163,10 @@ def plot_simulated_dt_alpha(data_folder,save_path_name,params):
         dt_filename = data_folder + 'simulated_dt_'+str(np.round(omega,2))+'_eps_'+str(np.round(epsilon,2))+'.pkl'
         if check_file('simulated_dt_'+str(np.round(omega,2))+'_eps_'+str(np.round(epsilon,2))+'.pkl',data_folder):
             dt =  download_data(dt_filename)
-            theta = data_folder + 'theta_example_simulated_dt_'+str(np.round(omega,2))+'_eps_'+str(np.round(epsilon,2))+'.pkl'
-            theta = download_data(theta)
         else:
             dt = [[] for i in alphas]
-
+            print("no file")
+            
         scale = 1 #1000 #es por lo que tengo que dividir para llegar a minutos
         mean_dt = [np.mean(i)/scale for i in dt]
         print(mean_dt)
