@@ -63,8 +63,7 @@ def plot_simulated_dt_alpha(data_folder,save_path_name,params):
 
         synth_alphas = np.linspace(1e-10,3,10000) #alphas[1:] 
         aux = [compute_theoretical_dt(omega,epsilon,delta) for delta in synth_alphas]
-        axs[0].plot(synth_alphas,aux,'-',color = colors_eps[k],alpha = 0.8,label = epsilon
-
+        axs[0].plot(synth_alphas,aux,'-',color = colors_eps[k],alpha = 0.8,label = epsilon)
         k = k+1
 
 
