@@ -170,6 +170,7 @@ def plot_simulated_dt_alpha(data_folder,save_path_name,params):
 
         scale = 1 #1000 #es por lo que tengo que dividir para llegar a minutos
         mean_dt = [np.mean(i)/scale for i in dt]
+        print(mean_dt)
         axs[0].plot(alphas,mean_dt,'-o',linewidth = 1,color=colors[k],label = epsilon)
         axs[1].plot(alphas,mean_dt,'-o',linewidth = 1, color=colors[k],label = epsilon)
         
@@ -262,5 +263,5 @@ def plot_theta_alpha(data_folder,save_path_name,params):
                 ax.text(0.7, 1.1, text , ha='center', va='center', transform=ax.transAxes, fontsize=10)
 
         
-    plt.savefig(save_path_name + 'time_series_alpha_'+str(alpha)+'.pdf', format='pdf')
+    plt.savefig(save_path_name + 'time_series_.pdf', format='pdf')
     return(0)
