@@ -188,8 +188,8 @@ def plot_simulated_dt_alpha(data_folder,save_path_name,params):
     axs[1].set_ylabel('mean duration (min)', fontsize=10);
     axs[1].set_xlabel('alpha/omega', fontsize=10)
     
-    axs[0].set_ylim([-1,1000]);axs[0].set_xlim([1,2]); 
-    axs[1].set_ylim([-1,1000]);axs[1].set_xlim([1,2]); 
+    axs[0].set_ylim([-1,100]);axs[0].set_xlim([0.97,2]); 
+    axs[1].set_ylim([-1,100]);axs[1].set_xlim([0.97,2]); 
     
     axs[1].xaxis.set_label_coords(0.5, -0.1);
     axs[1].yaxis.set_label_coords(-0.1, 0.5)
@@ -226,6 +226,7 @@ def plot_theta_alpha(data_folder,save_path_name,params):
         alphas = [a/omega for a in alphas]
         theta_filename = 'theta_example_simulated_dt_'+str(np.round(omega,2))+'_eps_'+str(np.round(epsilon,2))+'.pkl'
         
+        print(check_file(theta_filename ,data_folder))
         if check_file(theta_filename ,data_folder):
             theta = download_data(data_folder + theta_filename)
         else:
