@@ -39,7 +39,7 @@ def plot_simulated_dt_alpha(data_folder,save_path_name,params):
     colors_eps =  sns.color_palette(sns.color_palette("Greys",len(params['epsilon'])))
     k = 0 ; 
        
-    fig, axs = plt.subplots(2, 1, sharex=False, sharey=True, figsize=(8.27, 11.69))
+    fig, axs = plt.subplots(2, 1, sharex=False, sharey=False, figsize=(8.27, 11.69))
     fig.subplots_adjust(bottom=0.15, top=0.9, left=0.15, right=0.8, wspace=0.1, hspace=0.2)
     axs = axs.ravel(); 
   
