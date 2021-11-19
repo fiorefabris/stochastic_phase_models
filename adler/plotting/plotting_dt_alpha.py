@@ -72,7 +72,7 @@ def plot_simulated_dt_alpha(data_folder,save_path_name,params):
     axs[1].set_xlabel('alpha/omega', fontsize=10)
     
     axs[0].set_ylim([-1,100]);axs[0].set_xlim([0.97,2]); 
-    axs[1].set_ylim([-1,100]);axs[1].set_xlim([0.97,2]); 
+    #axs[1].set_ylim([-1,100]);axs[1].set_xlim([0.97,2]); 
     
     axs[1].xaxis.set_label_coords(0.5, -0.1);
     axs[1].yaxis.set_label_coords(-0.1, 0.5)
