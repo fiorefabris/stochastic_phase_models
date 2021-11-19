@@ -73,7 +73,7 @@ def plot_simulated_dt_alpha(data_folder,save_path_name,params):
     axs[1].set_xlabel('alpha/omega', fontsize=10)
     
     axs[0].set_ylim([-1,100]);axs[0].set_xlim([0.97,2]); 
-    #axs[1].set_ylim([-1,100]);axs[1].set_xlim([0.97,2]); 
+    axs[1].set_ylim([-1,100]);axs[1].set_xlim([0.97,2]); 
     
     axs[1].xaxis.set_label_coords(0.5, -0.1);
     axs[1].yaxis.set_label_coords(-0.1, 0.5)
@@ -122,7 +122,7 @@ def plot_theta_alpha(data_folder,save_path_name,params):
             ax = axs[k,l]
             theta_end,theta_beg = get_fixed_points(alphas[l]/omega)
 
-            ax.plot(np.cos(th),np.sin(th),linewidth=2,color=colors[k])
+            ax.plot(np.cos(th),np.sin(th),linewidth=1,color=colors[k])
             ax.plot(np.cos(theta_beg),np.sin(theta_beg),'o',color='red')
             ax.plot(np.cos(theta_end),np.sin(theta_end),'o',color='red')
             ax.set_ylim([-1.05,1.05]); ax.set_xlim([-1.05,1.05])
@@ -145,7 +145,7 @@ def plot_theta_alpha(data_folder,save_path_name,params):
                 silent_ax(ax)
 
             if l == 0 :
-                text = 'eps = ' + str(epsilon)
+                text = 'delta tita = ' + str(epsilon)
                 ax.text(0.7, 1.1, text , ha='center', va='center', transform=ax.transAxes, fontsize=5)
 
         
