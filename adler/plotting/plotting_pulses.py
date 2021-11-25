@@ -226,35 +226,35 @@ def plot_quantifiers_histograms_D(data_folder,save_path_name,tuple_):
                 
             if True:
                 print(len(dt))
-                bins = ax.hist(dt,bins=np.linspace(0,90,106)*1000, density=1,alpha=1,linewidth=1,color = colors[k]); 
+                bins = ax.hist(dt,bins=np.linspace(0,90,53)*1000, density=1,alpha=1,linewidth=1,color = colors[k]); 
                # ax.plot(0.5*(bins[1][1:]+bins[1][:-1]),bins[0],alpha = 1,linewidth=1,color = colors[k] )                
                 x_label = 'dt (min)'
                 tune_plot(ax,x_label,r'probability density $(\times 1000)$',[0,30*1000],1000,[0,0.0003],1000)
                 compute_st_values(ax,dt,bins,1000)   
             
                 ax = plt.subplot(gs_row[0,1])            
-                bins = ax.hist(IPI,bins=np.linspace(0,90,106)*1000, density=1, alpha=1,linewidth=1,color = colors[k]); 
+                bins = ax.hist(IPI,bins=np.linspace(0,90,53)*1000, density=1, alpha=1,linewidth=1,color = colors[k]); 
                # ax.plot(0.5*(bins[1][1:]+bins[1][:-1]),bins[0],alpha = 1,linewidth=1,color = colors[k] )                
                 x_label = 'IPI (min)'
                 tune_plot(ax,x_label,'',[0,40*1000],1000,[0,0.0003],1000)
                 compute_st_values(ax,IPI,bins,1000)            
      
                 ax = plt.subplot(gs_row[0,2])            
-                bins = ax.hist(IPI,bins=np.linspace(0,90,106)*1000, density=1, alpha=1,linewidth=1,color = colors[k]); 
+                bins = ax.hist(IPI,bins=np.linspace(0,90,53)*1000, density=1, alpha=1,linewidth=1,color = colors[k]); 
                 #ax.plot(0.5*(bins[1][1:]+bins[1][:-1]),bins[0],alpha = 1,linewidth=1,color = colors[k] )                
                 ax.set_yscale('log')
                 x_label = 'IPI (min)'
                 tune_plot(ax,x_label,'',[0,40*1000],1000,[0,0.0003],1000)
                 
                 ax = plt.subplot(gs_row[1,1])      
-                bins = ax.hist(dm,bins=np.linspace(0,90,106)*1000, density=1, alpha=1,linewidth=1,color = colors[k]); 
+                bins = ax.hist(dm,bins=np.linspace(0,90,53)*1000, density=1, alpha=1,linewidth=1,color = colors[k]); 
                # ax.plot(0.5*(bins[1][1:]+bins[1][:-1]),bins[0],alpha = 1,linewidth=1,color = colors[k] )                
                 x_label = 'silent intervals (min)'
                 tune_plot(ax,x_label,'',[0,40*1000],1000,[0,0.0003],1000)
                 compute_st_values(ax,dm,bins,1000) 
     
                 ax = plt.subplot(gs_row[1,2])      
-                bins = ax.hist(dm,bins=np.linspace(0,90,106)*1000, density=1, alpha=1,linewidth=1,color = colors[k]); 
+                bins = ax.hist(dm,bins=np.linspace(0,90,53)*1000, density=1, alpha=1,linewidth=1,color = colors[k]); 
                 #ax.plot(0.5*(bins[1][1:]+bins[1][:-1]),bins[0],alpha = 1,linewidth=1,color = colors[k] )   
                 ax.set_yscale('log')
                 x_label = 'silent intervals (min)'
@@ -262,7 +262,7 @@ def plot_quantifiers_histograms_D(data_folder,save_path_name,tuple_):
     
     
                 ax = plt.subplot(gs_row[1,0])
-                bins = ax.hist(joint_duration,bins=np.linspace(0,90,106)*1000, density=1, alpha=1,linewidth=1,color = colors[k]); 
+                bins = ax.hist(joint_duration,bins=np.linspace(0,90,53)*1000, density=1, alpha=1,linewidth=1,color = colors[k]); 
                 #ax.plot(0.5*(bins[1][1:]+bins[1][:-1]),bins[0],alpha = 1,linewidth=1,color = colors[k] )                
                 x_label = 'joint duration (min)'
                 tune_plot(ax,x_label,r'probability density $(\times 1000)$',[0,30*1000],1000,[0,0.0003],1000)
