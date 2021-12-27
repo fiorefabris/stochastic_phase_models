@@ -88,7 +88,7 @@ def f_(epsilon,delta):
     
 def compute_theoretical_omega(epsilon,delta):
     """ Esto multipicado por dos pi y dividido por T_0 te da el omega efectivo"""
-    return -2 / (2*np.pi * np.sqrt(delta**2 - 1)) * np.log(f_(epsilon,delta))ç
+    return -2 / (2*np.pi * np.sqrt(delta**2 - 1)) * np.log(f_(epsilon,delta))
     
 def compute_theoretical_dt(omega,epsilon,delta):
     return -2 / (omega * np.sqrt(delta**2 - 1)) * np.log(f_(epsilon,delta))
