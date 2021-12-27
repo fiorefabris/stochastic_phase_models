@@ -242,10 +242,11 @@ def plot_theta_fixed_alpha(data_folder,save_path_name,params):
         else:
             theta = [[] for i in deltas]
             print(theta)
+        print([theta[i] == theta[j] for i,j in zip(theta[:-1],theta[1:])])
         for l,th in enumerate(theta):
             ax = axs[k,l]
             theta_end,theta_beg = get_fixed_points(deltas[l])
-            print(th,"\n")
+            
             ax.plot(np.cos(th),np.sin(th),linewidth=1,color=colors[k])
             ax.plot(np.cos(theta_beg),np.sin(theta_beg),'o',color='red')
             ax.plot(np.cos(theta_end),np.sin(theta_end),'o',color='red')
