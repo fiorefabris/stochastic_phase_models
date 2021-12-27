@@ -225,7 +225,7 @@ def plot_theta_fixed_alpha(data_folder,save_path_name,params):
     
     colors =  sns.color_palette(sns.color_palette("viridis",len(params['epsilon'])))
     
-    EPS = len(params['epsilon']); ALP = len(params['T_0'])
+    EPS = len(params['epsilon']); ALP = len(params['T0'])
     fig, axs = plt.subplots(EPS,ALP, sharex=False, sharey=True, figsize=(8.27, 11.69))
     fig.subplots_adjust(bottom=0.15, top=0.9, left=0.15, right=0.8, wspace=0.1, hspace=0.2)
     #axs = axs.ravel(); 
