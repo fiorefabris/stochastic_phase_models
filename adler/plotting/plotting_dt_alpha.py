@@ -238,7 +238,6 @@ def plot_theta_fixed_alpha(data_folder,save_path_name,params):
         print(theta_filename)
         if check_file(theta_filename ,data_folder):
             theta = download_data(data_folder + theta_filename)
-            print(theta)
             
         else:
             theta = [[] for i in deltas]
@@ -246,7 +245,7 @@ def plot_theta_fixed_alpha(data_folder,save_path_name,params):
         for l,th in enumerate(theta):
             ax = axs[k,l]
             theta_end,theta_beg = get_fixed_points(deltas[l])
-        
+            print(th,"\n")
             ax.plot(np.cos(th),np.sin(th),linewidth=1,color=colors[k])
             ax.plot(np.cos(theta_beg),np.sin(theta_beg),'o',color='red')
             ax.plot(np.cos(theta_end),np.sin(theta_end),'o',color='red')
