@@ -197,8 +197,8 @@ def plot_simulated_fixed_dt_alpha(data_folder,save_path_name,params):
     axs[1].set_ylabel('mean duration (min)', fontsize=10);
     axs[1].set_xlabel('alpha/omega', fontsize=10)
     
-    axs[0].set_ylim([-1,100]);axs[0].set_xlim([0.97,2]); 
-    axs[1].set_ylim([-1,100]);axs[1].set_xlim([0.97,2]); 
+    axs[0].set_ylim([-1,10]);axs[0].set_xlim([0.97,2]); 
+    axs[1].set_ylim([-1,10]);axs[1].set_xlim([0.97,2]); 
     
     axs[1].xaxis.set_label_coords(0.5, -0.1);
     axs[1].yaxis.set_label_coords(-0.1, 0.5)
@@ -231,7 +231,7 @@ def plot_theta_fixed_alpha(data_folder,save_path_name,params):
     #axs = axs.ravel(); 
   
     #para cada fila
-    for k,((T_0,epsilon),deltas) in enumerate(get_all_combinations_alphas(params)):
+    for k,((T_0,epsilon),deltas) in enumerate(get_all_combinations_fixed_alphas(params)):
         theta_filename = 'theta_example_simulated_fixed_dt_'+str(np.round(T_0,2))+'_eps_'+str(epsilon)+'.pkl'
         
         print(check_file(theta_filename ,data_folder))
