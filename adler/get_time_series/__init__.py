@@ -1,2 +1,2 @@
 from adler.get_time_series.main import compute_time_series
-from adler.get_time_series.get_simulated_dt import get_simulated_dt_mp 
+from adler.get_time_series.get_simulated_dt import get_simulated_dt_mp, get_simulated_dt_fixed_mp

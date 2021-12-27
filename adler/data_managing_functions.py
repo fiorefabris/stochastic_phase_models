@@ -73,3 +73,23 @@ def get_fixed_points(alpha):
         PFE = -np.pi/2 + 2*np.pi
         PFI = -np.pi/2 + 2*np.pi
     return(PFE,PFI)
+    
+
+#%%
+"""
+Functions for the time-duration independent time series
+
+"""
+def cociente(delta):
+    return np.sqrt((delta + 1)/(delta - 1))
+
+def f_(epsilon,delta):
+    return (cociente(delta)-1/np.tan(1/2*(np.arccos(1/delta) + epsilon)))/ (cociente(delta)+1/np.tan(1/2*(np.arccos(1/delta) + epsilon)))
+    
+def compute_theoretical_omega(epsilon,delta):
+    """ Esto multipicado por dos pi y dividido por T_0 te da el omega efectivo"""
+    return -2 / (2*np.pi * np.sqrt(delta**2 - 1)) * np.log(f_(epsilon,delta))ç
+    
+def compute_theoretical_dt(omega,epsilon,delta):
+    return -2 / (omega * np.sqrt(delta**2 - 1)) * np.log(f_(epsilon,delta))
+    
