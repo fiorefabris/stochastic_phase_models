@@ -206,6 +206,7 @@ def get_simulated_dt_fixed(dt,delta,T_0,epsilon):
 
 def get_simulated_dt_fixed_alpha(main_filename,N,dt,p):
     (T_0,epsilon),deltas = p
+    print((T_0,epsilon),deltas)
 
     DT = [] ; theta_example = []
     for delta in deltas:
