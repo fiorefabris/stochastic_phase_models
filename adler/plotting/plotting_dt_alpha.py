@@ -183,8 +183,8 @@ def plot_simulated_fixed_dt_alpha(data_folder,save_path_name,params):
         scale = 1 #1000 #es por lo que tengo que dividir para llegar a minutos
         mean_dt = [np.mean(i)/scale for i in dt]
 
-        axs[0].plot(deltas,mean_dt,'-o',linewidth = 1,color=colors[k],alpha = 0.1,label = epsilon)
-        axs[1].plot(deltas,mean_dt,'-o',linewidth = 1, color=colors[k],alpha = 0.1,label = epsilon)
+        axs[0].plot(deltas,mean_dt,'-o',linewidth = 1,color=colors[k],alpha = 0.6,label = epsilon)
+        axs[1].plot(deltas,mean_dt,'-o',linewidth = 1, color=colors[k],alpha = 0.6,label = epsilon)
 
         #synth_alphas = np.linspace(1e-10,3,10000) #alphas[1:] 
         #aux = [compute_theoretical_dt(omega,epsilon,delta) for delta in synth_alphas]
@@ -247,8 +247,8 @@ def plot_theta_fixed_alpha(data_folder,save_path_name,params):
             theta_end,theta_beg = get_fixed_points(deltas[l])
             
             ax.plot(np.cos(th),np.sin(th),linewidth=1,color=colors[k])
-            ax.plot(np.cos(theta_beg),np.sin(theta_beg),'o',color='red',markersize=0.5)
-            ax.plot(np.cos(theta_end),np.sin(theta_end),'o',color='red',markersize=0.5)
+            ax.plot(np.cos(theta_beg),np.sin(theta_beg),'o',color='red',markersize=1.5)
+            ax.plot(np.cos(theta_end),np.sin(theta_end),'o',color='red',markersize=1.5)
             ax.set_ylim([-1.05,1.05]); ax.set_xlim([-1.05,1.05])
               
             if k == EPS-1 and l == 0 :
