@@ -151,8 +151,7 @@ def get_simulated_dt_fixed(dt,delta,T_0,epsilon):
         - epsilon : float
             delta a partir del punto fijo strengh
         - dt : positive float 
-            time steps of
-        the simulation
+            time steps of the simulation
 
     ------------------------------------------------------------
     OUTPUTS:
@@ -203,15 +202,19 @@ def get_simulated_dt_fixed(dt,delta,T_0,epsilon):
         print('eps : ',epsilon,' DT :', steps*dt)
         return(theta,steps*dt)
 
+#%%
 
 def get_simulated_dt_fixed_alpha(main_filename,N,dt,p):
     (T_0,epsilon),deltas = p
+
     DT = [] ; theta_example = []
     for delta in deltas:
         DT_aux = []
+        
         for i in range(N):
-            theta,dt_aux = get_simulated_dt_fixed(dt,T_0,delta,epsilon)
+            theta,dt_aux = get_simulated_dt_fixed(dt,delta,T_0,epsilon)
             DT_aux.append(dt_aux)
+       
         DT.append(DT_aux)
         theta_example.append(theta[::100])
     
