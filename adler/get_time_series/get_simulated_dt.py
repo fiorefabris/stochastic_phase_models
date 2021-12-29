@@ -219,7 +219,7 @@ def get_simulated_dt_fixed_alpha(main_filename,N,dt,p):
         DT.append(DT_aux)
         theta_example.append(theta[::100])
     
-    
+    print("delta : ", delta, "delta theta : ",epsilon," DT : ",dt)
     DT_filename = main_filename + 'simulated_fixed_dt_'+str(np.round(T_0,2))+'_eps_'+str(epsilon)+'.pkl'
     theta_filename = main_filename +  'theta_example_simulated_fixed_dt_'+str(np.round(T_0,2))+'_eps_'+str(epsilon)+'.pkl'
 
