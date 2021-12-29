@@ -273,5 +273,5 @@ def plot_theta_fixed_alpha(data_folder,save_path_name,params):
                 ax.text(0.7, 1.1, text , ha='center', va='center', transform=ax.transAxes, fontsize=5)
 
         
-    plt.savefig(save_path_name + 'time_series_.pdf', format='pdf')
+    plt.savefig(save_path_name + 'time_series_fixed.pdf', format='pdf')
     return(0)
