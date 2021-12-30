@@ -109,7 +109,7 @@ def plot_theta_alpha(data_folder,save_path_name,params):
             print(theta)
         for l,th in enumerate(theta):
             ax = axs[k,l]
-            theta_end,theta_beg = get_fixed_points(alphas[l]/omega)
+            theta_end,theta_beg = get_fixed_points(alphas[l])
 
             ax.plot(np.cos(th),np.sin(th),linewidth=1,color=colors[k])
             ax.plot(np.cos(theta_beg),np.sin(theta_beg),'o',color='red')
