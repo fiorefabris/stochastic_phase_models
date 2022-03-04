@@ -1,9 +1,19 @@
 import numpy as np
 from adler.data_managing_functions import save_data, get_fixed_points
-from get_time_series.main import all_combinations
 from functools import partial
 import time
 import multiprocessing as mp
+from itertools import product
+
+def all_combinations(params):
+    ''' ES EL MISMO QUE EL MAIN PERO NO SE COMOIMPORTARLO Y ES TARDE! CAMBIAR Y EXPORTAR
+    
+    -----------------
+    INPUT:
+        -params: a dictionary of lists
+    '''
+    return product(*params.values())
+
 
 def check_interval(x,PFE,PFI):
     if x <= PFI:
