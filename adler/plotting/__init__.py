@@ -1,5 +1,5 @@
 import matplotlib
-matplotlib.rcParams['lines.markeredgecolor'] = 'black'
+#matplotlib.rcParams['lines.markeredgecolor'] = 'black' #matplotlib.rcParams.keys()
 matplotlib.rcParams['lines.markeredgewidth'] = 0.0
 matplotlib.rcParams['savefig.transparent'] = True
 matplotlib.rc('pdf', fonttype=42)

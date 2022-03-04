@@ -51,7 +51,7 @@ def get_fixed_points(alpha):
     '''
     get_fixed_points(alpha)
     returns the fixed points for an adler dynamical system. 
-    If the system is oscillatory and not excitable, it returns the point called ghost of less veoloty. 
+    If the system is oscillatory and not excitable, it returns the point called ghost of less velocity. 
     
     Parameters
     ----------
