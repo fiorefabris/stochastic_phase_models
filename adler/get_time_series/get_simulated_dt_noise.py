@@ -100,7 +100,8 @@ def get_cond_prob(init,dt,T,omega,alpha,D):
 #%%
 
 def get_cond_prob_pop(main_filename,dt,T,p):
-    alpha,omega,D = p
+    omega,alpha,D = p
+    print(omega)
     total = 10
     PFE,PFI = get_fixed_points(alpha/omega)
     PFI = PFI - 2* np.pi
@@ -114,7 +115,7 @@ def get_cond_prob_pop(main_filename,dt,T,p):
             test, _ = get_cond_prob(init,dt,T,omega,alpha,D)
             if test == 2:
                 suc = suc+1
-        print(suc/total) #numero que va entre 0 y 1
+       # print(suc/total) #numero que va entre 0 y 1
         cond_prob.append(suc)
     
     cond_prob_filename = main_filename +  'cond_prob_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
