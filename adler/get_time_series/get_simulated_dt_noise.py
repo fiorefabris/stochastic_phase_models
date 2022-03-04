@@ -1,10 +1,9 @@
 import numpy as np
 from adler.data_managing_functions import save_data, get_fixed_points
-from main import all_combinations
+from get_time_series.main import all_combinations
 from functools import partial
 import time
 import multiprocessing as mp
-
 
 def check_interval(x,PFE,PFI):
     if x <= PFI:
