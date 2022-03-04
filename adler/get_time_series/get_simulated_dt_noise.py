@@ -119,9 +119,9 @@ def get_cond_prob_pop(main_filename,dt,T,p):
         cond_prob.append(suc)
     
     cond_prob_filename = main_filename +  'cond_prob_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
-    initial_conditions_filename = main_filename +  'cond_prob_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
+    initial_conditions_filename = main_filename +  'initial_conditionss_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
     save_data(cond_prob, cond_prob_filename)
-    save_data(cond_prob, initial_conditions_filename)
+    save_data(initial_conditions, initial_conditions_filename)
 
 #return(initial_conditions,cond_prob)
 
