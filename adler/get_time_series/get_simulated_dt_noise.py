@@ -102,11 +102,11 @@ def get_cond_prob(init,dt,T,omega,alpha,D):
 def get_cond_prob_pop(main_filename,dt,T,p):
     omega,alpha,D = p
     print(omega)
-    total = 10
+    total = 100000
     PFE,PFI = get_fixed_points(alpha/omega)
     PFI = PFI - 2* np.pi
 
-    initial_conditions = np.linspace(PFI,PFE,10)
+    initial_conditions = np.linspace(PFI,PFE,1000)
     cond_prob = []
 
     for init in initial_conditions:        
@@ -119,7 +119,7 @@ def get_cond_prob_pop(main_filename,dt,T,p):
         cond_prob.append(suc)
     
     cond_prob_filename = main_filename +  'cond_prob_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
-    initial_conditions_filename = main_filename +  'initial_conditionss_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
+    initial_conditions_filename = main_filename +  'initial_conditions_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
     save_data(cond_prob, cond_prob_filename)
     save_data(initial_conditions, initial_conditions_filename)
 

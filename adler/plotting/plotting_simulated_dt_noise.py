@@ -26,7 +26,7 @@ def plot_theta_alpha(data_folder,save_path_name,params):
     for k,(omega,alpha,D) in enumerate(all_combinations(params)):
             
         cond_prob_filename = data_folder +  'cond_prob_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
-        initial_conditions_filename = data_folder +  'initial_conditionss_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
+        initial_conditions_filename = data_folder +  'initial_conditions_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
         cond_prob = download_data(cond_prob_filename)
         initial_conditions = download_data(initial_conditions_filename)
 
