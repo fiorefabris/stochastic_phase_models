@@ -38,7 +38,7 @@ def plot_theta_alpha(data_folder,save_path_name,params):
             ax.plot(initial_conditions,cond_prob,'o', markersize = 2)
             ax.set_ylim([-1,110]); #ax.set_xlim([-1.05,1.05])
               
-        if k == (D_*ALP - D_  - 2):
+        if k == (D_*ALP - D_ ):
             ax.set_ylabel("ocurrences", fontsize=10);
             ax.set_xlabel("initial conditions", fontsize=10)
             ax.xaxis.set_label_coords(0.5, -0.1);
@@ -55,7 +55,7 @@ def plot_theta_alpha(data_folder,save_path_name,params):
         else:
             silent_ax(ax)
 
-        if k % ALP == 0 :
+        if k % D_ == 0 :
             text = r'$\alpha = $' + str(np.round(alpha/omega,4)) 
             ax.text(0.7, 0.8, text , ha='center', va='center', transform=ax.transAxes, fontsize=5)
 
