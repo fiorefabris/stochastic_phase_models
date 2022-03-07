@@ -34,8 +34,8 @@ def plot_theta_alpha(data_folder,save_path_name,params):
             cond_prob = download_data(cond_prob_filename)
             initial_conditions = download_data(initial_conditions_filename)
     
-            ax.plot(initial_conditions,cond_prob,'o', markersize = 1)
             ax.plot(initial_conditions,cond_prob,linewidth=1) #,color=colors[k]
+            ax.plot(initial_conditions,cond_prob,'o', markersize = 2)
             ax.set_ylim([-1,110]); #ax.set_xlim([-1.05,1.05])
               
         if k == (D_*ALP - D_  - 2):
@@ -43,7 +43,7 @@ def plot_theta_alpha(data_folder,save_path_name,params):
             ax.set_xlabel("initial conditions", fontsize=10)
             ax.xaxis.set_label_coords(0.5, -0.1);
             ax.yaxis.set_label_coords(-0.05, 0.5)
-           # set_scale(ax,[-1,1],[-1,1])
+            set_scale(ax,[-np.pi/2,3/2*np.pi],[-0.5,110])
            # ax.set_xticklabels([-1,1]); ax.set_yticklabels([-1,1]); ax.tick_params(labelsize=10) 
 
         if k < D_:
