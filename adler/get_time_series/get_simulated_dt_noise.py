@@ -35,6 +35,9 @@ def check_interval(x,PFE,PFI):
 def get_cond_prob(init,dt,T,omega,alpha,D):
     ''' Simulated data of the Adler phase model with gaussian white noise. 
     CAAAMMMBIIARR
+    
+    
+    en ptincipio en tiempo voy amedir steps
     init entre el PFI (cuadrante -1) y PFE(cuadrante 3)
     
     ------------------------------------------------------------
@@ -95,26 +98,30 @@ def get_cond_prob(init,dt,T,omega,alpha,D):
 
     assert (test == 0) or (test == 2)
     #plt.plot(np.sin(theta))
-    return(test,theta)
+    return(test,theta,i+1)
 
 #%%
 
 def get_cond_prob_pop(main_filename,dt,T,p):
+    """
+    mide en steps solamente los que son success
+    """
     omega,alpha,D = p
     print(omega)
-    total = 100
+    total = 1000
     PFE,PFI = get_fixed_points(alpha/omega)
     PFI = PFI - 2* np.pi
 
-    initial_conditions = np.linspace(PFI,PFE,10)
+    initial_conditions = np.geomspace(PFI,PFE,10)
     cond_prob = []
-
+    steps_plus = []
     for init in initial_conditions:        
         suc = 0
         for j in range(total):
-            test, _ = get_cond_prob(init,dt,T,omega,alpha,D)
+            test, _ , steps = get_cond_prob(init,dt,T,omega,alpha,D)
             if test == 2:
                 suc = suc+1
+                steps_plus.append(steps)
        # print(suc/total) #numero que va entre 0 y 1
         cond_prob.append(suc)
     
@@ -122,6 +129,9 @@ def get_cond_prob_pop(main_filename,dt,T,p):
     initial_conditions_filename = main_filename +  'initial_conditions_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
     save_data(cond_prob, cond_prob_filename)
     save_data(initial_conditions, initial_conditions_filename)
+    step_plus_filename = main_filename +  'step_plus_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
+    save_data(steps_plus, step_plus_filename)
+
 
 #return(initial_conditions,cond_prob)
 
