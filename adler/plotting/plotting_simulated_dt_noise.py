@@ -23,7 +23,7 @@ def plot_theta_alpha(data_folder,save_path_name,params):
     axs = axs.ravel(); 
   
     #para cada fila
-    for k,(omega,alpha,D) in enumerate(all_combinations(params)):
+    for k,(alpha,omega,D) in enumerate(all_combinations(params)):
         
         ax = axs[k]
 
