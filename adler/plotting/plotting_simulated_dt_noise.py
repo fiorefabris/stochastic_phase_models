@@ -45,15 +45,13 @@ def plot_theta_alpha(data_folder,save_path_name,params):
             ax.yaxis.set_label_coords(-0.05, 0.5)
             set_scale(ax,[-np.pi/2,3/2*np.pi],[-0.5,110])
             ax.set_xticklabels([-0.5,110]); ax.set_yticklabels([r'$-\frac{\pi}{2}',r'$\frac{3 \pi}{2}']); ax.tick_params(labelsize=10) 
-
+        else:
+            silent_ax(ax)
+            
         if k < D_:
             text = 'D = ' + str(D)
             ax.text(0.7, 1.1, text , ha='center', va='center', transform=ax.transAxes, fontsize=5)
-            silent_ax(ax)
 
-
-        else:
-            silent_ax(ax)
 
         if k % D_ == 0 :
             text = r'$\alpha = $' + str(np.round(alpha/omega,4)) 
