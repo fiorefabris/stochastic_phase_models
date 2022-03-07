@@ -86,19 +86,19 @@ def plot_first_IV(data_folder,save_path_name,params):
         
         result = []; D_aux = []
        
-       for D in params['D']:                    
-                    print(alpha/omega,omega,D)
-                    cond_prob_filename = data_folder +  'cond_prob_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
-                    #initial_conditions_filename = data_folder +  'initial_conditions_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
+        for D in params['D']:                    
+            print(alpha/omega,omega,D)
+            cond_prob_filename = data_folder +  'cond_prob_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
+        #initial_conditions_filename = data_folder +  'initial_conditions_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
         
-                    if check_file(cond_prob_filename,""):
-                        cond_prob = download_data(cond_prob_filename)
-                        #initial_conditions = download_data(initial_conditions_filename)
-                        result.append(cond_prob[0])
-                        D_aux.append(D)
+            if check_file(cond_prob_filename,""):
+                cond_prob = download_data(cond_prob_filename)
+                #initial_conditions = download_data(initial_conditions_filename)
+                result.append(cond_prob[0])
+                D_aux.append(D)
                         
         #ax.plot(initial_conditions,cond_prob,linewidth=1) #,color=colors[k]
-        ax.plot(D_,result,'o', markersize = 2,color = colors[k],label = str(alpha/omega))
+        ax.plot(D_aux,result,'o', markersize = 2,color = colors[k],label = str(alpha/omega))
             
         #ax.set_ylim([-1,110]); ax.set_xlim([-np.pi/2,3/2*np.pi])
               
