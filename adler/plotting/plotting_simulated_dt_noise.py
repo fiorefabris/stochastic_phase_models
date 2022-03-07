@@ -1,17 +1,21 @@
-#import seaborn as sns
+import seaborn as sns
 import numpy as np
 import matplotlib.pyplot as plt
 from adler.data_managing_functions import download_data, check_file
 from adler.get_time_series.main import all_combinations
 from adler.plotting.plotting_main import set_scale,silent_ax
-import seaborn as sns
+
 #%%
     
 ###############################################################################
-###  plotting
+###  plotting module for conditional first passage time measures
 ###############################################################################  
     
-def plot_theta_alpha(data_folder,save_path_name,params):
+def plot_epsilon_plus(data_folder,save_path_name,params):
+    """ Plotting function for conditional first passage time probability epsilon plus.
+    Each column is a different D value and each row is a different alpha value.
+    
+    """
 
     
     #colors =  sns.color_palette(sns.color_palette("viridis",len(params['alpha'])))
@@ -69,8 +73,11 @@ def plot_theta_alpha(data_folder,save_path_name,params):
 ###  plotting
 ###############################################################################  
     
-def plot_first_IV(data_folder,save_path_name,params):
-
+def plot_epsilon_plus_in_x_minus(data_folder,save_path_name,params):
+    """ Plotting function for conditional first passage time probability epsilon plus evaluated in x minus.
+    x axis are D and alpha.
+    
+    """
     
     
 
@@ -154,7 +161,10 @@ def plot_first_IV(data_folder,save_path_name,params):
 
 #%%
 def plot_t_plus(data_folder,save_path_name,params):
-
+    """ Plotting function for conditional first passage time.
+    Each column is a different D value and each row is a different alpha value.
+    
+    """
     
     #colors =  sns.color_palette(sns.color_palette("viridis",len(params['alpha'])))
     

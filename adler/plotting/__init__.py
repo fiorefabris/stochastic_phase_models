@@ -16,4 +16,4 @@ from adler.plotting.plotting_fft import plot_fft_all, plot_fft
 from adler.plotting.plotting_fpt import plot_FPT_all, plot_FPT
 from adler.plotting.plotting_pulses import  plot_pulses,plot_quantifiers_histograms,plot_activity, plot_consecutiveness
 from adler.plotting.plotting_dt_alpha import plot_simulated_dt_alpha,plot_theta_alpha, plot_simulated_fixed_dt_alpha,plot_theta_fixed_alpha
-from adler.plotting.plotting_simulated_dt_noise import plot_theta_alpha,plot_first_IV
+from adler.plotting.plotting_simulated_dt_noise import plot_epsilon_plus,plot_epsilon_plus_in_x_minus,plot_t_plus

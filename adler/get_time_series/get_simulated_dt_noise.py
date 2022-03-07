@@ -6,7 +6,7 @@ import multiprocessing as mp
 from itertools import product
 
 def all_combinations(params):
-    ''' ES EL MISMO QUE EL MAIN PERO NO SE COMOIMPORTARLO Y ES TARDE! CAMBIAR Y EXPORTAR
+    '''Is the same function as in the main module
     
     -----------------
     INPUT:
@@ -32,28 +32,31 @@ def check_interval(x,PFE,PFI):
 # =============================================================================
 #%%
 
-def get_cond_prob(init,dt,T,omega,alpha,D):
-    ''' Simulated data of the Adler phase model with gaussian white noise. 
-    CAAAMMMBIIARR
+def get_epsilon_plus(init,dt,T,omega,alpha,D):
+    ''' Axilliary function for computing the conditional First PAssage time probability epsilon plus, and
+    measures the conditional first passage time (in steps, no time)
     
     
-    en ptincipio en tiempo voy amedir steps
-    init entre el PFI (cuadrante -1) y PFE(cuadrante 3)
+    The starting point is on the PFI on the -1 cuadrant, 
+    and the ending point PFE is in the 3rd cuadrant.
+    
+    Calcula una trayectoria que empieza en init y termina en PFI (test = 0, unsuccesfull) o PFE (test = 2, succesfull)
     
     ------------------------------------------------------------
     INPUTS:
-        - omega,alpha (real numbers): parameters of the Adler deterministic
-         equation
-        - D (real number): noise strengh
+        - init (real) : initial condition. Is an angle between PFI (cuadrant -1) and PFE (cuadrant 3)
         - dt (positive real number, default dt=0.0001): time steps of
         the simulation
         - T (positive real number > dt, default T = 10000): Total time 
         of the simulation
+        - omega, alpha, D: parameters of the noisy adler equation
 
     ------------------------------------------------------------
     OUTPUTS:
-        - t : time
+    test,theta,i+1
+        - test : si el camino fue satisfactorio (2) o no satisfactorio (0)
         - theta : phase simulated variables
+        - i + 1: total steps of the simulation
 
 '''
 
@@ -102,7 +105,7 @@ def get_cond_prob(init,dt,T,omega,alpha,D):
 
 #%%
 
-def get_cond_prob_pop(main_filename,dt,T,p):
+def get_epsilon_plus_pop(main_filename,dt,T,p):
     """
     mide en steps solamente los que son success
     """
@@ -118,7 +121,7 @@ def get_cond_prob_pop(main_filename,dt,T,p):
     for init in initial_conditions:        
         suc = 0
         for j in range(total):
-            test, _ , steps = get_cond_prob(init,dt,T,omega,alpha,D)
+            test, _ , steps = get_epsilon_plus(init,dt,T,omega,alpha,D)
             if test == 2:
                 suc = suc+1
                 steps_plus.append(steps)
@@ -138,15 +141,15 @@ def get_cond_prob_pop(main_filename,dt,T,p):
 #%%
 
     
-def get_cond_prob_pop_mp(main_filename,dt,T,params,nproc = mp.cpu_count()):
+def get_epsilon_plus_pop_mp(main_filename,dt,T,params,nproc = mp.cpu_count()):
     
     
     t0= time.perf_counter(); print('starting...')
     pool = mp.Pool(processes= nproc)
     
-    get_cond_prob_pop_ = partial(get_cond_prob_pop,main_filename,dt,T)
+    get_epsilon_plus_pop_ = partial(get_epsilon_plus_pop,main_filename,dt,T)
     
-    pool.map(get_cond_prob_pop_,all_combinations(params)) 
+    pool.map(get_epsilon_plus_pop_,all_combinations(params)) 
     pool.close() 
     pool.join()
     t1 = time.perf_counter() - t0
