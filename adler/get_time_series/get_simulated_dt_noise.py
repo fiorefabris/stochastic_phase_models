@@ -71,7 +71,7 @@ def get_epsilon_plus(init,dt,T,omega,alpha,D):
     np.random.seed()
     PFE,PFI = get_fixed_points(alpha/omega)
     theta_past = init
-    assert (theta_past >= -np.pi/2) and (theta_past <= PFE)
+    assert ((theta_past >= -np.pi/2) and (theta_past <= PFE),alpha/omega,PFE,'0000000000000000000000000')
 
 
     
@@ -114,7 +114,7 @@ def get_epsilon_plus_pop(main_filename,dt,T,p):
     total = 1000
     PFE,PFI = get_fixed_points(alpha/omega)
     PFI = PFI - 2* np.pi
-    print(PFI/np.pi*2,PFE/np.pi*2)
+    print(alpha/omega,PFI/np.pi*2,PFE/np.pi*2)
     initial_conditions = np.geomspace(PFI,PFE,10)
     cond_prob = []
     steps_plus = []

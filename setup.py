@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
    name='adler',
-   version='1.221',
+   version='1.222',
    description='module for studying noisy adler statistics',
    author='fiorefabris',
    author_email='fiorefabris@gmail.com.com',
