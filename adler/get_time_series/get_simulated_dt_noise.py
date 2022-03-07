@@ -110,11 +110,11 @@ def get_epsilon_plus_pop(main_filename,dt,T,p):
     mide en steps solamente los que son success
     """
     omega,alpha,D = p
-    print(omega)
+   # print(omega)
     total = 1000
     PFE,PFI = get_fixed_points(alpha/omega)
     PFI = PFI - 2* np.pi
-
+    print(PFI/np.pi*2,PFE/np.pi*2)
     initial_conditions = np.geomspace(PFI,PFE,10)
     cond_prob = []
     steps_plus = []
