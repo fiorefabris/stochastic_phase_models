@@ -18,7 +18,7 @@ def plot_theta_alpha(data_folder,save_path_name,params):
     
     D_ = len(params['D']); ALP = len(params['alpha'])
     
-    fig, axs = plt.subplots(D_,ALP, sharex=False, sharey=True, figsize=(8.27, 11.69))
+    fig, axs = plt.subplots(ALP,D_, sharex=False, sharey=True, figsize=(8.27, 11.69))
     fig.subplots_adjust(bottom=0.15, top=0.9, left=0.15, right=0.8, wspace=0.1, hspace=0.2)
     axs = axs.ravel(); 
   
@@ -47,8 +47,8 @@ def plot_theta_alpha(data_folder,save_path_name,params):
            # ax.set_xticklabels([-1,1]); ax.set_yticklabels([-1,1]); ax.tick_params(labelsize=10) 
 
         if k < D_:
-            text = r'$\alpha = $' + str(np.round(alpha/omega,4)) 
-            ax.text(0.7, 0.8, text , ha='center', va='center', transform=ax.transAxes, fontsize=5)
+            text = 'D = ' + str(D)
+            ax.text(0.7, 1.1, text , ha='center', va='center', transform=ax.transAxes, fontsize=5)
             silent_ax(ax)
 
 
@@ -56,8 +56,9 @@ def plot_theta_alpha(data_folder,save_path_name,params):
             silent_ax(ax)
 
         if k % ALP == 0 :
-            text = 'D = ' + str(D)
-            ax.text(0.7, 1.1, text , ha='center', va='center', transform=ax.transAxes, fontsize=5)
+            text = r'$\alpha = $' + str(np.round(alpha/omega,4)) 
+            ax.text(0.7, 0.8, text , ha='center', va='center', transform=ax.transAxes, fontsize=5)
+
 
         
     plt.savefig(save_path_name + 'plotting.pdf', format='pdf')
