@@ -55,7 +55,7 @@ def plot_theta_alpha(data_folder,save_path_name,params):
         else:
             silent_ax(ax)
 
-        if ALP % k == 0 :
+        if k % ALP == 0 :
             text = 'D = ' + str(D)
             ax.text(0.7, 1.1, text , ha='center', va='center', transform=ax.transAxes, fontsize=5)
 
