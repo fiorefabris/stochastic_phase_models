@@ -34,12 +34,12 @@ def plot_theta_alpha(data_folder,save_path_name,params):
             cond_prob = download_data(cond_prob_filename)
             initial_conditions = download_data(initial_conditions_filename)
     
-    
+            ax.plot(initial_conditions,cond_prob,'o')
             ax.plot(initial_conditions,cond_prob,linewidth=1) #,color=colors[k]
-            ax.set_ylim([-1,100]); #ax.set_xlim([-1.05,1.05])
+            ax.set_ylim([-1,110]); #ax.set_xlim([-1.05,1.05])
               
-        if k == (D_*ALP - D_  ):
-            ax.set_ylabel("frequency over 100000", fontsize=10);
+        if k == (D_*ALP - D_  - 2):
+            ax.set_ylabel("ocurrences", fontsize=10);
             ax.set_xlabel("initial conditions", fontsize=10)
             ax.xaxis.set_label_coords(0.5, -0.1);
             ax.yaxis.set_label_coords(-0.05, 0.5)
