@@ -122,7 +122,7 @@ def get_epsilon_plus_pop(main_filename,dt,T,p):
     """
     omega,alpha,D = p
    # print(omega)
-    total = 1000
+    total = 100
     PFE,PFI = get_fixed_points(alpha/omega)
     PFI = PFI - 2* np.pi
     print(alpha/omega,PFI/np.pi*2,PFE/np.pi*2)
