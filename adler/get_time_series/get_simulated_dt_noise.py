@@ -22,6 +22,15 @@ def check_interval(x,PFE,PFI):
         return 2
     else:
         return 1
+    
+def get_geomspace(PFI,PFE,n):
+    """
+    n : cantidad de elementos que tiene la lista que te devuelve
+    """
+    aux = []
+    for i in np.geomspace(1,PFE-PFI+1,n):
+        aux.append(i-(-PFI+1))
+    return (aux)
 #%%
 # =============================================================================
 # =============================================================================
@@ -71,7 +80,7 @@ def get_epsilon_plus(init,dt,T,omega,alpha,D):
     np.random.seed()
     PFE,PFI = get_fixed_points(alpha/omega)
     theta_past = init
-    assert ((theta_past >= -np.pi/2) and (theta_past <= PFE),alpha/omega,PFE,'0000000000000000000000000')
+    assert (theta_past >= -np.pi/2) and (theta_past <= PFE)
 
 
     
@@ -108,6 +117,8 @@ def get_epsilon_plus(init,dt,T,omega,alpha,D):
 def get_epsilon_plus_pop(main_filename,dt,T,p):
     """
     mide en steps solamente los que son success
+    
+    para cada condicion inicial corre get_epsilon_plus total veces
     """
     omega,alpha,D = p
    # print(omega)
@@ -115,19 +126,24 @@ def get_epsilon_plus_pop(main_filename,dt,T,p):
     PFE,PFI = get_fixed_points(alpha/omega)
     PFI = PFI - 2* np.pi
     print(alpha/omega,PFI/np.pi*2,PFE/np.pi*2)
-    initial_conditions = np.linspace(PFI,PFE,10)
+    initial_conditions = get_geomspace(PFI,PFE,10)
+    
     cond_prob = []
     steps_plus = []
+    
     for init in initial_conditions:        
         suc = 0
+        steps_plus_aux = []
+        
         for j in range(total):
-            test, _ , steps = get_epsilon_plus(init,dt,T,omega,alpha,D)
-            if test == 2:
-                suc = suc+1
-                steps_plus.append(steps)
-       # print(suc/total) #numero que va entre 0 y 1
+                test, _ , steps = get_epsilon_plus(init,dt,T,omega,alpha,D)
+                if test == 2:
+                    suc = suc+1
+                    steps_plus_aux.append(steps)
+           # print(suc/total) #numero que va entre 0 y 1
         cond_prob.append(suc)
-    
+        steps_plus.append(steps_plus_aux)
+        
     cond_prob_filename = main_filename +  'cond_prob_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
     initial_conditions_filename = main_filename +  'initial_conditions_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
     save_data(cond_prob, cond_prob_filename)

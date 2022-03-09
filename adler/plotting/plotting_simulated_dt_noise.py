@@ -5,6 +5,17 @@ from adler.data_managing_functions import download_data, check_file
 from adler.get_time_series.main import all_combinations
 from adler.plotting.plotting_main import set_scale,silent_ax
 
+
+
+def get_mean_value(list_):
+    aux = []
+    for i in list_:
+        if len(i) > 0:
+            aux.append(np.mean(i))
+        else:
+            aux.append(0)
+    assert len(list_) == len(aux)
+    return(aux)
 #%%
     
 ###############################################################################
@@ -187,9 +198,11 @@ def plot_t_plus(data_folder,save_path_name,params):
             initial_conditions = download_data(initial_conditions_filename)
             print("step_plus : ", step_plus)
             print("IC : ", initial_conditions)
-            ax.plot(initial_conditions,step_plus,linewidth=1) #,color=colors[k]
-            ax.plot(initial_conditions,step_plus,'o', markersize = 2)
-            ax.set_ylim([-1,110]); ax.set_xlim([-np.pi/2,3/2*np.pi])
+            
+            ax.plot(initial_conditions,get_mean_value(step_plus),linewidth=1) #,color=colors[k]
+            ax.plot(initial_conditions,get_mean_value(step_plus),'o', markersize = 2)
+            #ax.set_ylim([-1,110]); 
+            ax.set_xlim([-np.pi/2,3/2*np.pi])
               
         if k == (D_*ALP - D_ ):
             ax.set_ylabel("ocurrences", fontsize=10);
@@ -197,8 +210,9 @@ def plot_t_plus(data_folder,save_path_name,params):
             ax.xaxis.set_label_coords(0.5, -0.5);
             ax.yaxis.set_label_coords(-0.4, 0.5)
             #set_scale(ax,[-np.pi/2,3/2*np.pi],[-0.5,110])
-            ax.set_xticks([-np.pi/2,3/2*np.pi]);ax.set_yticks([-1,110])
-            ax.set_yticklabels([-1,110]); ax.set_xticklabels([r'$-\frac{\pi}{2}$',r'$\frac{3 \pi}{2}$']); ax.tick_params(labelsize=10) 
+            ax.set_xticks([-np.pi/2,3/2*np.pi]);#ax.set_yticks([-1,110])
+            #ax.set_yticklabels([-1,110]); 
+            ax.set_xticklabels([r'$-\frac{\pi}{2}$',r'$\frac{3 \pi}{2}$']); ax.tick_params(labelsize=10) 
         else:
             silent_ax(ax)
             
