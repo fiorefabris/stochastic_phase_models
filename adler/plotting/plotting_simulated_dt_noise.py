@@ -40,7 +40,7 @@ def plot_epsilon_plus(data_folder,save_path_name,params):
     
             ax.plot(initial_conditions,cond_prob,linewidth=1) #,color=colors[k]
             ax.plot(initial_conditions,cond_prob,'o', markersize = 2)
-            ax.set_ylim([-1,110]); ax.set_xlim([-np.pi/2,3/2*np.pi])
+            ax.set_ylim([-1,1010]); ax.set_xlim([-np.pi/2,3/2*np.pi])
               
         if k == (D_*ALP - D_ ):
             ax.set_ylabel("ocurrences", fontsize=10);
@@ -49,7 +49,7 @@ def plot_epsilon_plus(data_folder,save_path_name,params):
             ax.yaxis.set_label_coords(-0.4, 0.5)
             #set_scale(ax,[-np.pi/2,3/2*np.pi],[-0.5,110])
             ax.set_xticks([-np.pi/2,3/2*np.pi]);ax.set_yticks([-1,110])
-            ax.set_yticklabels([-1,110]); ax.set_xticklabels([r'$-\frac{\pi}{2}$',r'$\frac{3 \pi}{2}$']); ax.tick_params(labelsize=10) 
+            ax.set_yticklabels([-1,1010]); ax.set_xticklabels([r'$-\frac{\pi}{2}$',r'$\frac{3 \pi}{2}$']); ax.tick_params(labelsize=10) 
         else:
             silent_ax(ax)
             
@@ -140,7 +140,7 @@ def plot_epsilon_plus_in_x_minus(data_folder,save_path_name,params):
                 cond_prob = download_data(cond_prob_filename)
                 #initial_conditions = download_data(initial_conditions_filename)
                 result.append(cond_prob[0])
-                ALP_aux.append(D)
+                ALP_aux.append(alpha)
                         
         #ax.plot(initial_conditions,cond_prob,linewidth=1) #,color=colors[k]
         ax.plot(ALP_aux,result,'o', markersize = 4,color = colors[k],label = str(D))
@@ -185,7 +185,8 @@ def plot_t_plus(data_folder,save_path_name,params):
         if check_file(step_plus_filename,""):
             step_plus = download_data(step_plus_filename)
             initial_conditions = download_data(initial_conditions_filename)
-    
+            print("step_plus : ", step_plus)
+            print("IC : ", initial_conditions)
             ax.plot(initial_conditions,step_plus,linewidth=1) #,color=colors[k]
             ax.plot(initial_conditions,step_plus,'o', markersize = 2)
             ax.set_ylim([-1,110]); ax.set_xlim([-np.pi/2,3/2*np.pi])
