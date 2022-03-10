@@ -19,7 +19,7 @@ def get_mean_value(list_):
 
 def get_nan_values_position(x,list_):
     x_aux = [] 
-    for i,l in enumerate(list):
+    for i,l in enumerate(list_):
         if np.isnan(l):
             x_aux.append(x[i])
     return(x_aux)
