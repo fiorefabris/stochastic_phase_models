@@ -42,8 +42,8 @@ def f(x,omega,alpha,D):
     return(np.exp((-omega/D * x + alpha/D * np.cos(x))))
     
 def epsilon_plus_th(x,omega,alpha,D,PFE,PFI):
-    aux , _ =  integrate.quadrature(f,PFI,x,args = (omega,alpha,D))    
-    N_aux , _ =  integrate.quadrature(f,PFI,PFE,args = (omega,alpha,D)) #no es funcion de x
+    aux , _ =  integrate.quad(f,PFI,x,args = (omega,alpha,D))    
+    N_aux , _ =  integrate.quad(f,PFI,PFE,args = (omega,alpha,D)) #no es funcion de x
     
     if N_aux == np.inf and aux == np.inf:
         #print(' 0000 ' ,N_aux)
@@ -59,7 +59,26 @@ def get_epsilon_plus_th_function(omega,alpha,D):
         N  = epsilon_plus_th(x,omega,alpha,D,PFE,PFI)
         aux.append(N)
     return(np.linspace(PFI,PFE,1000), aux)
-    
+
+###############################################################################
+###  computes the theoretical value of t plus with alpha =0
+###############################################################################    
+
+def exponential(x,omega,D):
+   return( x / omega *  ( 1 + np.exp(- omega * x / D) ) / ( 1 - np.exp(- omega * x / D) ) )
+
+def teo_t_plus(x,omega,D):
+    PFE,PFI = get_fixed_points(0); PFI = PFI - 2* np.pi
+    return ( exponential(PFE - PFI,omega,D) -  exponential(x,omega,D) )
+
+def get_teo_t_plus_pop(omega,D):
+    PFE,PFI = get_fixed_points(0); PFI = PFI - 2* np.pi
+    aux = []
+    for x in  np.linspace(PFI,PFE,100):
+        x = x - PFI
+        res = teo_t_plus(x,omega,D)
+        aux.append(res)
+    return(np.linspace(PFI,PFE,100),aux)
 #%%    
 ###############################################################################
 ###  plotting module for conditional first passage time measures
@@ -95,7 +114,7 @@ def plot_epsilon_plus(data_folder,save_path_name,params):
 
             if alpha >= omega:
                 x,t_e = get_epsilon_plus_th_function(omega,alpha,D)
-                ax.plot(x,[i*100 for i in t_e] ,linewidth=3,color = 'black',alpha = 0.5)
+                ax.plot(x,[i*100 for i in t_e] ,linewidth=3,color = 'black',alpha = 0.2)
     
             ax.plot(initial_conditions,cond_prob,linewidth=1) #,color=colors[k]
             ax.plot(initial_conditions,cond_prob,'o', markersize = 2)
@@ -249,6 +268,11 @@ def plot_t_plus(data_folder,save_path_name,params):
             step_plus = download_data(step_plus_filename)
             initial_conditions = download_data(initial_conditions_filename)
             
+            if alpha == 0:
+                  dt = 0.00001
+                  x,t_plus_th = get_teo_t_plus_pop(omega,D)
+                  ax.plot(x,[t / dt for t in t_plus_th],linewidth=1,color = 'black',alpha = 0.3) 
+                  
             ax.plot(initial_conditions,get_mean_value(step_plus),linewidth=1) #,color=colors[k]
             ax.plot(initial_conditions,get_mean_value(step_plus),'o', markersize = 2) 
             
