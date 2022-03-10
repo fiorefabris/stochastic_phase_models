@@ -93,8 +93,9 @@ def plot_epsilon_plus(data_folder,save_path_name,params):
             cond_prob = download_data(cond_prob_filename)
             initial_conditions = download_data(initial_conditions_filename)
 
-            x,t_e = get_epsilon_plus_th_function(omega,alpha,D)
-            ax.plot(x,[i*100 for i in t_e] ,linewidth=1,color = 'black')
+            if alpha >= omega:
+                x,t_e = get_epsilon_plus_th_function(omega,alpha,D)
+                ax.plot(x,[i*100 for i in t_e] ,linewidth=1,color = 'black')
     
             ax.plot(initial_conditions,cond_prob,linewidth=1) #,color=colors[k]
             ax.plot(initial_conditions,cond_prob,'o', markersize = 2)
