@@ -13,7 +13,7 @@ def get_mean_value(list_):
         if len(i) > 0:
             aux.append(np.mean(i))
         else:
-            aux.append(0)
+            aux.append(np.nan)
     assert len(list_) == len(aux)
     return(aux)
 #%%
