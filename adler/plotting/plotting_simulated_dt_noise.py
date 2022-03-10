@@ -42,8 +42,8 @@ def f(x,omega,alpha,D):
     return(np.exp((-omega/D * x + alpha/D * np.cos(x))))
     
 def epsilon_plus_th(x,omega,alpha,D,PFE,PFI):
-    aux , _ =  integrate.quad(f,PFI,x,args = (omega,alpha,D))    
-    N_aux , _ =  integrate.quad(f,PFI,PFE,args = (omega,alpha,D)) #no es funcion de x
+    aux , _ =  integrate.quadrature(f,PFI,x,args = (omega,alpha,D))    
+    N_aux , _ =  integrate.quadrature(f,PFI,PFE,args = (omega,alpha,D)) #no es funcion de x
     
     if N_aux == np.inf and aux == np.inf:
         #print(' 0000 ' ,N_aux)
@@ -95,7 +95,7 @@ def plot_epsilon_plus(data_folder,save_path_name,params):
 
             if alpha >= omega:
                 x,t_e = get_epsilon_plus_th_function(omega,alpha,D)
-                ax.plot(x,[i*100 for i in t_e] ,linewidth=3,color = 'black')
+                ax.plot(x,[i*100 for i in t_e] ,linewidth=3,color = 'black',alpha = 0.5)
     
             ax.plot(initial_conditions,cond_prob,linewidth=1) #,color=colors[k]
             ax.plot(initial_conditions,cond_prob,'o', markersize = 2)
