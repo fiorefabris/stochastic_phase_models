@@ -1,9 +1,10 @@
 import seaborn as sns
 import numpy as np
 import matplotlib.pyplot as plt
-from adler.data_managing_functions import download_data, check_file
+from adler.data_managing_functions import download_data, check_file,get_fixed_points
 from adler.get_time_series.main import all_combinations
 from adler.plotting.plotting_main import set_scale,silent_ax
+import scipy.integrate as integrate
 
 
 
@@ -32,6 +33,34 @@ def get_zero_position(x,list_):
     return(x_aux)
 #%%
     
+    
+###############################################################################
+###  computes the theoretical value of epsilon plus
+###############################################################################     
+    
+def f(x,omega,alpha,D): 
+    return(np.exp((-omega/D * x + alpha/D * np.cos(x))))
+    
+def epsilon_plus_th(x,omega,alpha,D,PFE,PFI):
+    aux , _ =  integrate.quad(f,PFI,x,args = (omega,alpha,D))    
+    N_aux , _ =  integrate.quad(f,PFI,PFE,args = (omega,alpha,D)) #no es funcion de x
+    
+    if N_aux == np.inf and aux == np.inf:
+        #print(' 0000 ' ,N_aux)
+        return(1)
+    else:
+        return(aux/N_aux)
+
+
+def get_epsilon_plus_th_function(omega,alpha,D):
+    PFE,PFI = get_fixed_points(alpha/omega); PFI = PFI - 2* np.pi
+    aux = []
+    for x in np.linspace(PFI,PFE,1000):
+        N  = epsilon_plus_th(x,omega,alpha,D,PFE,PFI)
+        aux.append(N)
+    return(np.linspace(PFI,PFE,1000), aux)
+    
+#%%    
 ###############################################################################
 ###  plotting module for conditional first passage time measures
 ###############################################################################  
@@ -63,12 +92,17 @@ def plot_epsilon_plus(data_folder,save_path_name,params):
         if check_file(cond_prob_filename,""):
             cond_prob = download_data(cond_prob_filename)
             initial_conditions = download_data(initial_conditions_filename)
+
+            x,t_e = get_epsilon_plus_th_function(omega,alpha,D)
+            ax.plot(x,[i*100 for i in t_e] ,linewidth=1,color = 'black')
     
             ax.plot(initial_conditions,cond_prob,linewidth=1) #,color=colors[k]
             ax.plot(initial_conditions,cond_prob,'o', markersize = 2)
             x = get_zero_position(initial_conditions,cond_prob)
             ax.plot(x,np.zeros(len(x)),'o', markersize = 3,color = 'r') 
             ax.set_ylim([-1,y_lim]); ax.set_xlim([-np.pi/2,3/2*np.pi])
+            
+
               
         if k == (D_*ALP - D_ ):
             ax.set_ylabel("ocurrences", fontsize=10);
