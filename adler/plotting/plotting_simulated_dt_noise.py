@@ -23,6 +23,13 @@ def get_nan_values_position(x,list_):
         if np.isnan(l):
             x_aux.append(x[i])
     return(x_aux)
+
+def get_zero_position(x,list_):
+    x_aux = [] 
+    for i,l in enumerate(list_):
+        if l == 0:
+            x_aux.append(x[i])
+    return(x_aux)
 #%%
     
 ###############################################################################
@@ -59,6 +66,8 @@ def plot_epsilon_plus(data_folder,save_path_name,params):
     
             ax.plot(initial_conditions,cond_prob,linewidth=1) #,color=colors[k]
             ax.plot(initial_conditions,cond_prob,'o', markersize = 2)
+            x = get_zero_position(initial_conditions,cond_prob)
+            ax.plot(x,np.zeros(len(x)),'o', markersize = 3,color = 'r') 
             ax.set_ylim([-1,y_lim]); ax.set_xlim([-np.pi/2,3/2*np.pi])
               
         if k == (D_*ALP - D_ ):
@@ -66,7 +75,7 @@ def plot_epsilon_plus(data_folder,save_path_name,params):
             ax.set_xlabel("initial conditions", fontsize=10)
             ax.xaxis.set_label_coords(0.5, -0.5);
             ax.yaxis.set_label_coords(-0.4, 0.5)
-            set_scale(ax,[-np.pi/2,3/2*np.pi],[-1,y_lim])
+            #set_scale(ax,[-np.pi/2,3/2*np.pi],[-1,y_lim])
             ax.set_xticks([-np.pi/2,3/2*np.pi]);ax.set_yticks([-1,y_lim])
             ax.set_yticklabels([str(-1),str(y_lim)]); ax.set_xticklabels([r'$-\frac{\pi}{2}$',r'$\frac{3 \pi}{2}$']); ax.tick_params(labelsize=10) 
         else:
@@ -209,7 +218,7 @@ def plot_t_plus(data_folder,save_path_name,params):
             ax.plot(initial_conditions,get_mean_value(step_plus),'o', markersize = 2) 
             
             x = get_nan_values_position(initial_conditions,step_plus)            
-            ax.plot(x,np.zeros(len(x)),'o', markersize = 4,color = 'r') 
+            ax.plot(x,np.zeros(len(x)),'o', markersize = 3,color = 'r') 
 
             ax.set_ylim([0,y_lim]); 
             ax.set_xlim([-np.pi/2,3/2*np.pi])
@@ -219,7 +228,7 @@ def plot_t_plus(data_folder,save_path_name,params):
             ax.set_xlabel("initial conditions", fontsize=10)
             ax.xaxis.set_label_coords(0.5, -0.5);
             ax.yaxis.set_label_coords(-0.4, 0.5)
-            set_scale(ax,[-np.pi/2,3/2*np.pi],[0,y_lim])
+            #set_scale(ax,[-np.pi/2,3/2*np.pi],[0,y_lim])
             ax.set_xticks([-np.pi/2,3/2*np.pi]);ax.set_yticks([0,y_lim])
             ax.set_yticklabels([str(0),str(y_lim)]); 
             ax.set_xticklabels([r'$-\frac{\pi}{2}$',r'$\frac{3 \pi}{2}$']); ax.tick_params(labelsize=10) 
