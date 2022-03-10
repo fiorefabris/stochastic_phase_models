@@ -51,16 +51,16 @@ def plot_epsilon_plus(data_folder,save_path_name,params):
     
             ax.plot(initial_conditions,cond_prob,linewidth=1) #,color=colors[k]
             ax.plot(initial_conditions,cond_prob,'o', markersize = 2)
-            ax.set_ylim([-1,1010]); ax.set_xlim([-np.pi/2,3/2*np.pi])
+            ax.set_ylim([-1,110]); ax.set_xlim([-np.pi/2,3/2*np.pi])
               
         if k == (D_*ALP - D_ ):
             ax.set_ylabel("ocurrences", fontsize=10);
             ax.set_xlabel("initial conditions", fontsize=10)
             ax.xaxis.set_label_coords(0.5, -0.5);
             ax.yaxis.set_label_coords(-0.4, 0.5)
-            #set_scale(ax,[-np.pi/2,3/2*np.pi],[-0.5,110])
+            set_scale(ax,[-np.pi/2,3/2*np.pi],[-0.5,110])
             ax.set_xticks([-np.pi/2,3/2*np.pi]);ax.set_yticks([-1,110])
-            ax.set_yticklabels([-1,1010]); ax.set_xticklabels([r'$-\frac{\pi}{2}$',r'$\frac{3 \pi}{2}$']); ax.tick_params(labelsize=10) 
+            ax.set_yticklabels([-1,110]); ax.set_xticklabels([r'$-\frac{\pi}{2}$',r'$\frac{3 \pi}{2}$']); ax.tick_params(labelsize=10) 
         else:
             silent_ax(ax)
             
@@ -201,17 +201,17 @@ def plot_t_plus(data_folder,save_path_name,params):
             
             ax.plot(initial_conditions,get_mean_value(step_plus),linewidth=1) #,color=colors[k]
             ax.plot(initial_conditions,get_mean_value(step_plus),'o', markersize = 2)
-            #ax.set_ylim([-1,110]); 
+            ax.set_ylim([0,2000000]); 
             ax.set_xlim([-np.pi/2,3/2*np.pi])
               
         if k == (D_*ALP - D_ ):
-            ax.set_ylabel("ocurrences", fontsize=10);
+            ax.set_ylabel("steps", fontsize=10);
             ax.set_xlabel("initial conditions", fontsize=10)
             ax.xaxis.set_label_coords(0.5, -0.5);
             ax.yaxis.set_label_coords(-0.4, 0.5)
-            #set_scale(ax,[-np.pi/2,3/2*np.pi],[-0.5,110])
-            ax.set_xticks([-np.pi/2,3/2*np.pi]);#ax.set_yticks([-1,110])
-            #ax.set_yticklabels([-1,110]); 
+            set_scale(ax,[-np.pi/2,3/2*np.pi],[0,2000000])
+            ax.set_xticks([-np.pi/2,3/2*np.pi]);ax.set_yticks([0,2000000])
+            ax.set_yticklabels([0,2000000]); 
             ax.set_xticklabels([r'$-\frac{\pi}{2}$',r'$\frac{3 \pi}{2}$']); ax.tick_params(labelsize=10) 
         else:
             silent_ax(ax)
