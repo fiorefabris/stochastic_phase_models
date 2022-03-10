@@ -185,7 +185,7 @@ def plot_t_plus(data_folder,save_path_name,params):
     """
     
     #colors =  sns.color_palette(sns.color_palette("viridis",len(params['alpha'])))
-    y_lim = 500000
+    y_lim = 5000000
     D_ = len(params['D']); ALP = len(params['alpha'])
     
     fig, axs = plt.subplots(ALP,D_, sharex=False, sharey=True, figsize=(8.27, 11.69))
@@ -208,7 +208,7 @@ def plot_t_plus(data_folder,save_path_name,params):
             ax.plot(initial_conditions,get_mean_value(step_plus),'o', markersize = 2) 
             
             x = get_nan_values_position(initial_conditions,step_plus)            
-            ax.plot(x,np.zeros(len(x)),'o', markersize = 2,color = 'r') 
+            ax.plot(x,np.zeros(len(x)),'o', markersize = 4,color = 'r') 
 
             ax.set_ylim([0,y_lim]); 
             ax.set_xlim([-np.pi/2,3/2*np.pi])
