@@ -271,7 +271,7 @@ def plot_t_plus(data_folder,save_path_name,params):
             if alpha == 0:
                   dt = 0.00001
                   x,t_plus_th = get_teo_t_plus_pop(omega,D)
-                  ax.plot(x,[t / dt for t in t_plus_th],linewidth=1,color = 'black',alpha = 0.3) 
+                  ax.plot(x,[t / dt for t in t_plus_th],linewidth=1,color = 'black',alpha = 0.3) ; print([t / dt for t in t_plus_th])
                   
             ax.plot(initial_conditions,get_mean_value(step_plus),linewidth=1) #,color=colors[k]
             ax.plot(initial_conditions,get_mean_value(step_plus),'o', markersize = 2) 
