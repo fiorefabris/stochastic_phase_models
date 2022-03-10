@@ -95,7 +95,7 @@ def plot_epsilon_plus(data_folder,save_path_name,params):
 
             if alpha >= omega:
                 x,t_e = get_epsilon_plus_th_function(omega,alpha,D)
-                ax.plot(x,[i*100 for i in t_e] ,linewidth=1,color = 'black')
+                ax.plot(x,[i*100 for i in t_e] ,linewidth=3,color = 'black')
     
             ax.plot(initial_conditions,cond_prob,linewidth=1) #,color=colors[k]
             ax.plot(initial_conditions,cond_prob,'o', markersize = 2)
@@ -160,7 +160,7 @@ def plot_epsilon_plus_in_x_minus(data_folder,save_path_name,params):
         result = []; D_aux = []
        
         for D in params['D']:                    
-            print(alpha/omega,omega,D)
+            #print(alpha/omega,omega,D)
             cond_prob_filename = data_folder +  'cond_prob_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
         #initial_conditions_filename = data_folder +  'initial_conditions_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
         
@@ -195,7 +195,7 @@ def plot_epsilon_plus_in_x_minus(data_folder,save_path_name,params):
         result = []; ALP_aux = []
        
         for alpha in params['alpha']:                    
-            print(alpha/omega,omega,D)
+            #print(alpha/omega,omega,D)
             cond_prob_filename = data_folder +  'cond_prob_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
         #initial_conditions_filename = data_folder +  'initial_conditions_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
         
@@ -241,7 +241,7 @@ def plot_t_plus(data_folder,save_path_name,params):
     for k,(omega,alpha,D) in enumerate(all_combinations(params)):
         
         ax = axs[k]
-        print(alpha/omega,omega,D)
+        #print(alpha/omega,omega,D)
         step_plus_filename = data_folder +  'step_plus_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
         initial_conditions_filename = data_folder +  'initial_conditions_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
         
