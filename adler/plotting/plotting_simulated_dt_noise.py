@@ -249,7 +249,7 @@ def plot_t_plus(data_folder,save_path_name,params):
     """
     
     #colors =  sns.color_palette(sns.color_palette("viridis",len(params['alpha'])))
-    y_lim = np.nan #10000000
+    y_lim = 10000000
     D_ = len(params['D']); ALP = len(params['alpha'])
     
     fig, axs = plt.subplots(ALP,D_, sharex=False, sharey=True, figsize=(8.27, 11.69))
@@ -271,7 +271,7 @@ def plot_t_plus(data_folder,save_path_name,params):
             if alpha == 0:
                   dt = 0.00001
                   x,t_plus_th = get_teo_t_plus_pop(omega,D)                         
-                  ax.plot(x,[t / dt for t in t_plus_th],linewidth=1,color = 'black',alpha = 0.3) ; print([t / dt for t in t_plus_th])
+                  ax.plot(x,[t / dt for t in t_plus_th],linewidth=3,color = 'black',alpha = 0.3) ; print([t / dt for t in t_plus_th])
                   
             ax.plot(initial_conditions,get_mean_value(step_plus),linewidth=1) #,color=colors[k]
             ax.plot(initial_conditions,get_mean_value(step_plus),'o', markersize = 2) 
