@@ -59,15 +59,79 @@ def get_epsilon_plus_th_function(omega,alpha,D):
         N  = epsilon_plus_th(x,omega,alpha,D,PFE,PFI)
         aux.append(N)
     return(np.linspace(PFI,PFE,1000), aux)
+    
+    
+###############################################################################
+###  computes the theoretical value of t plus with alpha =!0
+###############################################################################    
+def V(x,omega,alpha):
+    return omega * x - alpha * np.cos(x)
+
+def teo_t_plus_new(x,omega,alpha,D):
+    PFE,PFI = get_fixed_points(alpha/omega); PFI = PFI - 2* np.pi
+    N_aux , _ =  integrate.quad(f,PFI,PFE,args = (omega,alpha,D),limit = 10000000,epsabs = 1.49e-12,epsrel= 1.49e-12) #no es funcion de x    
+    return N_aux/D * (int_1(x,omega,alpha,D,PFE,PFI) + int_2(x,omega,alpha,D,PFE,PFI))
+
+def I1(x,omega,alpha,D,PFE,PFI):
+    return epsilon_plus_th(x,omega,alpha,D,PFE,PFI) * np.exp(V(x,omega,alpha)/D) * (1 -  epsilon_plus_th(x,omega,alpha,D,PFE,PFI))
+
+def I2(x,omega,alpha,D,PFE,PFI):
+    return epsilon_plus_th(x,omega,alpha,D,PFE,PFI)**2 * np.exp(V(x,omega,alpha)/D)
+
+def int_1(x,omega,alpha,D,PFE,PFI):
+    aux , _ = integrate.quad(I1,x,PFE,args = (omega,alpha,D,PFE,PFI),limit = 10000000,epsabs = 1.49e-12,epsrel= 1.49e-12)
+    return aux
+
+def int_2(x,omega,alpha,D,PFE,PFI):
+    aux , _ = integrate.quad(I2,PFI,x,args = (omega,alpha,D,PFE,PFI),limit = 10000000,epsabs = 1.49e-12,epsrel= 1.49e-12)
+    eps_plus = epsilon_plus_th(x,omega,alpha,D,PFE,PFI)
+    return aux * (1/eps_plus - 1)
+
+def teo_t_plus_new_pop(omega,alpha,D):
+    PFE,PFI = PFE,PFI = get_fixed_points(alpha/omega); PFI = PFI - 2* np.pi
+    aux = []
+    for x in  np.linspace(PFI+1e-4,PFE,100):
+        #x = x - PFI
+        res = teo_t_plus_new(x,omega,alpha,D)
+        aux.append(res)
+    return(np.linspace(PFI,PFE,100),aux)
+
+
+def OLD_I1(x,omega,alpha,D,PFE,PFI):
+    return epsilon_plus_th(x,omega,alpha,D,PFE,PFI) * np.exp(V(x,omega,alpha)/D)
+    
+def OLD_I2(x,omega,alpha,D,PFE,PFI):
+    return (epsilon_plus_th(x,omega,alpha,D,PFE,PFI))**2 *np.exp(V(x,omega,alpha)/D)
+
+def OLD_int_1(x,omega,alpha,D,PFE,PFI):
+    N_aux , _ =  integrate.quad(f,PFI,PFE,args = (omega,alpha,D),limit = 10000000,epsabs = 1.49e-15,epsrel= 1.49e-15) #no es funcion de x    
+    aux , _ = integrate.quad(I1,x,PFE,args = (omega,alpha,D,PFE,PFI),limit = 10000000,epsabs = 1.49e-15,epsrel= 1.49e-15)
+    return aux*N_aux/D
+
+def OLD_int_2(x,omega,alpha,D,PFE,PFI):
+    N_aux , _ =  integrate.quad(f,PFI,PFE,args = (omega,alpha,D),limit = 10000000,epsabs = 1.49e-15,epsrel= 1.49e-15) #no es funcion de x    
+    aux , _ = integrate.quad(I2,PFI,PFE,args = (omega,alpha,D,PFE,PFI),limit = 10000000,epsabs = 1.49e-15,epsrel= 1.49e-15)
+    return aux*N_aux/D
+
+def OLD_int_3(x,omega,alpha,D,PFE,PFI):
+    N_aux , _ =  integrate.quad(f,PFI,PFE,args = (omega,alpha,D),limit = 10000000,epsabs = 1.49e-15,epsrel= 1.49e-15) #no es funcion de x    
+    aux , _ = integrate.quad(I2,PFI,x,args = (omega,alpha,D,PFE,PFI),limit = 10000000,epsabs = 1.49e-15,epsrel= 1.49e-15)
+    eps_plus = epsilon_plus_th(x,omega,alpha,D,PFE,PFI)
+    return aux*N_aux/(D*eps_plus) 
+
+def OLD_teo_t_plus_new(x,omega,alpha,D):#esto es nuestro resultado
+    PFE,PFI = get_fixed_points(alpha/omega); PFI = PFI - 2* np.pi
+    return int_1(x,omega,alpha,D,PFE,PFI) - int_2(x,omega,alpha,D,PFE,PFI) + int_3(x,omega,alpha,D,PFE,PFI)
+
 
 ###############################################################################
-###  computes the theoretical value of t plus with alpha =0
+###  computes the theoretical value of t plus with alpha =0 (from book :)
 ###############################################################################    
 
 def exponential(x,omega,D):
    return( x / omega *  ( 1 + np.exp(- omega * x / D) ) / ( 1 - np.exp(- omega * x / D) ) )
 
-def teo_t_plus(x,omega,D):
+def teo_t_plus(x,omega,D):# esto es con alpha = 0
     PFE,PFI = get_fixed_points(0); PFI = PFI - 2* np.pi
     return ( exponential(PFE - PFI,omega,D) -  exponential(x,omega,D) )
 
@@ -268,11 +332,15 @@ def plot_t_plus(data_folder,save_path_name,params):
             step_plus = download_data(step_plus_filename)
             initial_conditions = download_data(initial_conditions_filename)
             
-            if alpha == 0:
-                  dt = 0.00001
-                  x,t_plus_th = get_teo_t_plus_pop(omega,D)                         
-                  ax.plot(x,[t / dt for t in t_plus_th],linewidth=5,color = 'black',alpha = 0.3) ; print([t / dt for t in t_plus_th])
-                  
+           # if alpha == 0:
+           #       dt = 0.00001
+           #       x,t_plus_th = get_teo_t_plus_pop(omega,D)                         
+           #       ax.plot(x,[t / dt for t in t_plus_th],linewidth=5,color = 'black',alpha = 0.3) ; print([t / dt for t in t_plus_th])
+            teo_t_plus_new_pop 
+            dt = 0.00001
+            x,t_plus_th = teo_t_plus_new_pop(omega,alpha,D)                         
+            ax.plot(x,[t / dt for t in t_plus_th],linewidth=1,color = 'black',alpha = 1) ; 
+           
             ax.plot(initial_conditions,get_mean_value(step_plus),linewidth=1) #,color=colors[k]
             ax.plot(initial_conditions,get_mean_value(step_plus),'o', markersize = 2) 
             
