@@ -123,7 +123,17 @@ def OLD_teo_t_plus_new(x,omega,alpha,D):#esto es nuestro resultado
     PFE,PFI = get_fixed_points(alpha/omega); PFI = PFI - 2* np.pi
     return int_1(x,omega,alpha,D,PFE,PFI) - int_2(x,omega,alpha,D,PFE,PFI) + int_3(x,omega,alpha,D,PFE,PFI)
 
+###############################################################################
+###  computes the limit of t plus with xplus -> 0
+###############################################################################    
 
+def I5(x,omega,alpha,D,PFE,PFI):
+    return epsilon_plus_th(x,omega,alpha,D,PFE,PFI) * np.exp(V(x,omega,alpha)/D) * (1 -  epsilon_plus_th(x,omega,alpha,D,PFE,PFI))
+
+def epsilon_plus_x_minus_th(PFI,PFE,omega,alpha,D):
+    N_aux , _ =  integrate.quad(f,PFI,PFE,args = (omega,alpha,D),limit = 10000000,epsabs = 1.49e-12,epsrel= 1.49e-12) #no es funcion de x    
+    aux , _ = integrate.quad(I5,PFI,PFE,args = (omega,alpha,D,PFE,PFI),limit = 10000000,epsabs = 1.49e-12,epsrel= 1.49e-12)
+    return N_aux / D * aux
 ###############################################################################
 ###  computes the theoretical value of t plus with alpha =0 (from book :)
 ###############################################################################    
