@@ -90,7 +90,7 @@ def int_2(x,omega,alpha,D,PFE,PFI):
 def teo_t_plus_new_pop(omega,alpha,D):
     PFE,PFI = PFE,PFI = get_fixed_points(alpha/omega); PFI = PFI - 2* np.pi
     aux = []
-    for x in  np.linspace(PFI+1e-4,PFE,100):
+    for x in  np.linspace(PFI+1e-3,PFE,100):
         #x = x - PFI
         res = teo_t_plus_new(x,omega,alpha,D)
         aux.append(res)
