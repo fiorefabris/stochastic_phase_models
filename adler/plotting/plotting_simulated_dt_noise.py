@@ -168,7 +168,7 @@ def plot_epsilon_plus(data_folder,save_path_name,params):
     #colors =  sns.color_palette(sns.color_palette("viridis",len(params['alpha'])))
     
     D_ = len(params['D']); ALP = len(params['alpha'])
-    y_lim = 110    
+    y_lim = 1100    
     
     fig, axs = plt.subplots(ALP,D_, sharex=False, sharey=True, figsize=(8.27, 11.69))
     fig.subplots_adjust(bottom=0.15, top=0.9, left=0.15, right=0.8, wspace=0.1, hspace=0.2)
@@ -188,7 +188,7 @@ def plot_epsilon_plus(data_folder,save_path_name,params):
 
             if alpha >= omega:
                 x,t_e = get_epsilon_plus_th_function(omega,alpha,D)
-                ax.plot(x,[i*100 for i in t_e] ,linewidth=3,color = 'black',alpha = 0.2)
+                ax.plot(x,[i*1000 for i in t_e] ,linewidth=3,color = 'black',alpha = 0.2)
     
            # ax.plot(initial_conditions,cond_prob,linewidth=1) #,color=colors[k]
             ax.plot(initial_conditions,cond_prob,'o', markersize = 1)
@@ -349,7 +349,8 @@ def plot_t_plus(data_folder,save_path_name,params):
            #       x,t_plus_th = get_teo_t_plus_pop(omega,D)                         
            #       ax.plot(x,[t / dt for t in t_plus_th],linewidth=5,color = 'black',alpha = 0.3) ; print([t / dt for t in t_plus_th])
             dt = 0.00001
-            if alpha != omega:
+            if alpha > omega:
+                print(alpha)
                 x,t_plus_th = teo_t_plus_new_pop(omega,alpha,D)                         
                 ax.plot(x,[t / dt for t in t_plus_th],linewidth=1,color = 'black',alpha = 1) ; 
            
