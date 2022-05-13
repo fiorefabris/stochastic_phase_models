@@ -35,6 +35,42 @@ def download_theta(file_name,data_folder):
     else:
         print(file_name,'filename not available')
         return []
+
+
+def test_points_max(x_j,j,X,W):
+    #evalúa si x_j, contenido en x en el lugar j, 
+    #es mayor o igual a los puntos dentro del entorno W
+    
+    test = True
+    
+    for i in range(1,W+1):
+        #empieza en 1 y se corta en W
+        x_p = X[j+i]
+        x_m = X[j-i]
+        if (x_j >= x_p) and (x_j >= x_m):
+            pass
+        else:
+            test = False
+            break
+    return test
+
+
+def test_points_min(x_j,j,X,W):
+    #evalúa si x_j, contenido en x en el lugar j, 
+    #es menor o igual a los puntos dentro del entorno W
+    
+    test = True
+    
+    for i in range(1,W+1):
+        #empieza en 1 y se corta en W
+        x_p = X[j+i]
+        x_m = X[j-i]
+        if (x_j <= x_p) and (x_j <= x_m):
+            pass
+        else:
+            test = False
+            break
+    return test
 #%%
 # =============================================================================
 # =============================================================================
@@ -55,6 +91,9 @@ def search_extremes(X,TH,W):
     smaller (minima) than these same threshold, multiplied to -1. 
     The extremes have at least W separation. 
     
+    The borders are not included, because we dont have enaugh statistics there.
+    #NO INCLUYO los bordes PORQUE NO TENGO ESTADISTICA DE PICOS AHI
+    
     
     Parameters
     ----------
@@ -73,59 +112,61 @@ def search_extremes(X,TH,W):
     MIN : list
         position of the minima  in X
     '''
-    
 
 
-#NO INCLUYO los bordes PORQUE NO TENGO ESTADISTICA DE PICOS AHI
-    
 ### Initializing variables
     MAX = [0] ; MIN = [0]
     M = 0; m = 0; 
 
     
-    for j, x_j in zip(np.arange(1,len(X)+1),X[1:-1]):
-        #el zip corta en el array mas pequeno
+    for j, x_j in zip(np.arange(W,len(X)-W),X[W:len(X)-W]):
+        #quiero que empiece en W, así puedo compararlo con hasta el índice cero
+        #quiero que termine en len(X)-W-1, asi puedo compararlo hasta el índice -1
+        
         #Maxima 
         if x_j > TH : 
             #si x_j supera el treshold
-            for i in range(1,W):
-                
-                x_p = X[j+1]
-                x_m = X[j-1]
             
-            if (x_j >= x_p) and (x_j >= x_m ) : #Candidato a máximo
-                if M == 0 or (M >=1 and ((j-MAX[M]) > W)) : 
+            if test_points_max(x_j,j,X,W):
+                #si es el maximo en todo su entorno W => candidato a maximo
+                
+                if M == 0 or (M >=1 and ((j-MAX[M]) > W)): 
                     #Si es el primer máximo o tiene una distancia más grande que W con
                     #el maximo anterior, anotalo
-                    M = M + 1 ; MAX.append(j) 
-                else: 
                     
-                    if (x_j < X[MAX[M]]) : 
-                        #reject new maximum
-                        pass 
-                    else: 
-                        # overwrite the old maxima by leaving M unchanged
+                    M = M + 1 ; MAX.append(j) 
+                
+                else: 
+                    # overwrite the old maxima by leaving M unchanged (random)
+                    if  np.random.rand() > 0.5 :
                         MAX[M] = j 
+                    else:
+                        pass
+                    
         #Minima
-        if x_j < (-TH) :
+        elif x_j < (-TH) :
             
-            x_p = X[j+1]
-            x_m = X[j-1]
-        
-            if (x_j <= x_p) and (x_j <= x_m) : #Candidato a mínimo
+            if test_points_min(x_j,j,X,W):
             
                 #Now test for adjacent minimum, and delete the higher one.   
                 if m == 0 or (m >=1 and ((j-MIN[m]) > W)):
-                    
+                
                     m = m + 1; MIN.append(j) 
-    
-                else: #old minimum exists
-                    if x_j > X[MIN[m]] : #reject new minimum
+
+                else: 
+                    # overwrite the old maxima by leaving M unchanged (random)
+                    if  np.random.rand() > 0.5 :
+                        MIN[m] = j 
+                    else:
                         pass
-                    else:  # Overwrite old one by leaving m unchanged
-                        MIN[m] = j
+        else:
+            #no es candidato a maximo ni minimo
+            pass
+        
     MAX.pop(0);MIN.pop(0)
     return(MAX,MIN)
+    
+
     #%%
     
 def filter_extremes_aux(MAX,MIN,X):
@@ -227,8 +268,46 @@ def filter_extremes(MAX,MIN,X):
     MIN = filter_last_minima(MAX,MIN)
     
     assert len(MAX) == len(MIN)
+    assert all([M-m > 0 for M,m in zip(MIN,MAX)])
     return(MAX,MIN)
     
+
+
+#%%
+
+def read_string_max(left_minima,theta_,PFI,m,M):
+    
+    for i, ang in enumerate(theta_[m:M][::-1]): #empieza uno después del maximo
+        test = False                        
+        
+        if ( ang - PFI <= 0 ):
+            left_minima.append(M-i); 
+            test = True
+            break
+        
+        else: 
+            pass
+    return(test,left_minima)
+
+def append_remove_MAX(test,remove_MAX,M_id):
+    #test es True cuando append algo al left_minima
+    if test:
+        pass
+    else:
+        remove_MAX.append(M_id)  
+    return remove_MAX
+
+
+def read_string_min(right_minima,theta_,PFE,m,M):
+    for i, ang in enumerate(theta_[M:m]): #empieza uno después del maximo
+        test = False
+        if ( ang - PFE >= 0 ):
+            right_minima.append(M+i)
+            test = True
+            break
+        else: 
+            pass
+    return(test,right_minima)
 
 
 #%%
@@ -248,9 +327,9 @@ def get_left_minima(MAX,MIN,PFE,PFI,theta):
     MAX : list 
         position of the maxima of X time series
     PFE : float
-        stable fixed point - angular 
+        stable fixed point - angular (4th cuadrant)
     PFI : float
-        unstable fixed point - angular 
+        unstable fixed point - angular (3rd cuadrant)
     theta : list
         amplitude values of the time series given in angles
     
@@ -260,51 +339,80 @@ def get_left_minima(MAX,MIN,PFE,PFI,theta):
     left_minima : list 
         position of the starting point of each pulses 
     '''
+    #recorro del maximo al minimo anterior. Para el seno, eso es 
+    # del cuadrante 1 al cuadrante -1
+    
+    creciente = []
+    assert all([M < m for M,m in zip(MAX,MIN)])
+    PFI = PFI - 2*np.pi ; assert (-np.pi< PFI < 0)
     left_minima = []; remove_MAX = []; 
-    if len(MAX) > 0:
+    
+    
+    if len(MAX) <= 0:
+        print('The trace has no maxima values')
+    
+    else:
        
-        n0 = theta[MAX[0]] // (2*np.pi); #M_ant = None
+        n0 = theta[MAX[0]] // (2*np.pi); 
+        
         for (n,(M_id,M)) in zip(np.arange(n0,len(MAX)+n0),enumerate(MAX)):
+            
             if M_id == 0:
                 m = None 
             else:
-                m = MIN[M_id-1]#este es el minimo que precede al maximo
-            # On the following, ensures to use the correct quadrant
-            while PFI > (theta[M] - n*2*np.pi) : # cota inferior de una función creciente de -n
-                n = n - 1
-            while  (theta[M] - n*2*np.pi) > 5*np.pi/2:
-                n = n + 1
+                m = MIN[M_id-1] #este es el minimo que precede al maximo
+                assert (M-m > 0)
+            
+            
+            #si la fase del mínimo es más chica que la del máximo, decreciente de maximo a minimo
+            if (m is None) or (theta[m] <  theta[M]):              
+                # On the following, ensures to use the correct quadrant
+                # el máximo tiene que estar entre el cuadrante -1 y el 3er cuadrante
                 
-            assert (PFI < (theta[M] - n*2*np.pi) < 5*np.pi/2)                
-            theta_ = theta - n*2*np.pi
-            assert (len(theta_[m:M]) > 0)
-           
-            # searches for the left minima of the maximum M
-            L = len(left_minima)
-            for i, ang in enumerate(theta_[m:M][::-1]): #empieza uno después del maximo
-                if ( ang - PFI <= 0 ):
-                    left_minima.append(M-i); 
-                    break
-                else: 
-                    pass
-            
-            if len(left_minima) - L == 1:
-                pass
+                while PFI > (theta[M] - n*2*np.pi) : 
+                    n = n - 1
+                while  (theta[M] - n*2*np.pi) > np.pi:
+                    n = n + 1
+         
+                theta_ = theta - n*2*np.pi
+                assert (PFI < theta_[M] < np.pi)                
+                assert (len(theta_[m:M]) > 0)
+                
+                
+                # searches for the left minima of the maximum M
+                test,left_minima = read_string_max(left_minima,theta_,PFI,m,M)
+                
+                if (not test) and (PFI == -np.pi/2):
+                    # no llego al PFI porque el minimo está ahi cerquita. Es para el caso oscilatorio
+                    if m is None:
+                        remove_MAX = append_remove_MAX(test,remove_MAX,M_id)
+                    else:
+                        
+                        if M_id <= 1:
+                            m = None
+                        else:
+                            m = MIN[M_id-2]
+                            
+                        test,left_minima = read_string_max(left_minima,theta_,PFI,m,M)
+                        remove_MAX = append_remove_MAX(test,remove_MAX,M_id)
+                else:
+                    remove_MAX = append_remove_MAX(test,remove_MAX,M_id)
             else:
+                #si la fase del mínimo es más grande que la del máximo (theta[m] >  theta[M])
+                #print('creciente de maximo a minimo')
+                creciente.append(MAX[M_id])
                 remove_MAX.append(M_id)   
-            #M_ant = M
-            
+
+
+        #print(creciente/len(MAX))
         MAX = pop_list(MAX,remove_MAX)
-        MIN = pop_list(MIN,remove_MAX)
+        MIN = pop_list(MIN,remove_MAX) #remuevo el minimo anterior al maximo, total despues eso es lo que voy a usar
         if (len(MAX) > 0) : assert (len(left_minima) > 0) 
-    else:
-        print('The trace has no maxima values')
     
     
     assert len(left_minima) == len(MAX), ' left_minima:' + str(left_minima) +' MAX:'+ str(MAX)
-    
-    return(left_minima, MAX, MIN)
-    
+    return(creciente,left_minima, MAX, MIN)
+#%%    
 def get_rigth_minima(left_minima,MAX,MIN,PFE,PFI,theta):
     '''
     get_rigth_minima(MIN,PFE,PFI,theta)
@@ -330,113 +438,78 @@ def get_rigth_minima(left_minima,MAX,MIN,PFE,PFI,theta):
     right_minima : list 
         position of the ending point of each pulses 
     '''
-    right_minima = [];remove_MIN = []
-    if len(MIN) > 0:
-        n0 = theta[MIN[0]] // (2*np.pi)
-        for (n,(m_id,m)) in zip(np.arange(n0,len(MIN)+n0),enumerate(MIN)):
+    #recorro entre el maximo y el proximo minimo
+    #para el seno, esto es del cuadrante 1 al 3.
+
+    decreciente = []
+    assert all([M < m for M,m in zip(MAX,MIN)])
+    right_minima = []; remove_MAX = []; 
+
+
+    if len(MAX) <= 0:
+        print('The trace has no maxima values')
+    else:
+        n0 = theta[MAX[0]] // (2*np.pi);
+    
+        for (n,(M_id,M)) in zip(np.arange(n0,len(MAX)+n0),enumerate(MAX)):
             
-            if m == MIN[-1]:
-                M = None
+            if M == MAX[-1]:
+                m = None 
             else:
-                M = MAX[m_id+1] #este es el maximo que viene después del mínimo            
-            while np.pi/2 > (theta[m] - n*2*np.pi) :
-                n = n - 1
-            while (theta[m] - n*2*np.pi) > PFE :
-                n = n + 1
+                m = MIN[M_id]#este es el minimo que sucede al maximo
+                assert (m-M > 0)
             
-            assert (np.pi/2 < (theta[m] - n*2*np.pi) < PFE)
-            theta_ = theta - n*2*np.pi
-            assert (len(theta_[m:M]) > 0)
+            if (m is None) or (theta[m] >  theta[M]):
+            #si la fase del mínimo es más grande que la del máximo, es creciente de máximo a mínimo
+
+                # esto tiene que estar entre el cuadrante 1 y 3
+                while 0 > (theta[M] - n*2*np.pi) :
+                    n = n - 1
+                while (theta[M] - n*2*np.pi) > PFE :
+                    n = n + 1
+                
+                theta_ = theta - n*2*np.pi
+                assert (0 <  theta_[M] < PFE)
+                assert (len(theta_[M:m]) > 0)
             
-            L = len(right_minima)
-            for i, ang in enumerate(theta_[m:M]): #empieza uno después del maximo
-                #print(ang-PFE)
-                if ( ang - PFE >= 0 ):
-                    right_minima.append(m+i); 
-                    break
-                else: 
-                    pass
-            if len(right_minima) - L == 1:
-                pass
-            else: remove_MIN.append(m_id)
             
-        MAX = pop_list(MAX,remove_MIN)
-        MIN = pop_list(MIN,remove_MIN)
-        left_minima = pop_list(left_minima,remove_MIN)
+                test,right_minima = read_string_min(right_minima,theta_,PFE,m,M)
+                
+                if (not test) and (PFE == 3/2*np.pi):
+                    if m is None:
+                        remove_MAX = append_remove_MAX(test,remove_MAX,M_id)
+                    else:
+                        
+                        if M_id >= len(MAX)-2: #es el  anteúltimo maximo o el último
+                            m = None
+                        else:
+                            m = MIN[M_id+1]
+                            
+                        test,right_minima = read_string_min(right_minima,theta_,PFE,m,M)
+                        remove_MAX = append_remove_MAX(test,remove_MAX,M_id)
+                else:
+                    remove_MAX = append_remove_MAX(test,remove_MAX,M_id)
+
+            
+            else:
+                #si la fase del mínimo es chica grande que la del máximo 
+                decreciente.append(MAX[M_id])
+                remove_MAX.append(M_id)   
+             
+            
+        MAX = pop_list(MAX,remove_MAX)
+        MIN = pop_list(MIN,remove_MAX)
+        left_minima = pop_list(left_minima,remove_MAX)
         if (len(MIN) > 0) : assert (len(right_minima) > 0)
         
-    else: 
-        print('The trace has no maxima values')
-    assert (len(right_minima) == len(MIN)),'right_minima: '+ str(right_minima) + ' MIN:' + str(MIN)
-    
-    return(left_minima,right_minima,MAX,MIN )
-    
 
-    
-#%%
-def filter_maxima_sine(left_minima,right_minima,MAX):
-    ''' filter_maxima_sine(left_minima,right_minima,MAX)
-    Removes the sine maxima that are not in between two minima that define a pulse, 
-    and the minima that do not have a maxima in between the, 
-    
-    Removes the sine maxima that are not in between two minima that define a pulse.
-    Remove the edges of the sine maxima so that they are between the pulse minima, and discard the rest.
-    Remove the case in which two minima do not have a maxima in between, case that can happen if because of noise the system reaches the
-    fixed points but the turn back. 
-    
-    Parameters
-    ----------
-    left_minima: list
-        position of the starting point of each pulses 
-    right_minima : list 
-        position of the ending point of each pulses 
-    MAX : list 
-        position of the maxima of a pulse of a given time series (in genral, sine of theta)
-    
-    Returns
-    -------
-    left_minima: list
-        filtered position of the starting point of each pulses 
-    right_minima : list 
-        filtered position of the ending point of each pulses 
-    MAX : list 
-        filtered position of the maxima of a pulse of a given time series (in genral, sine of theta)
-        
-    '''
-    
-    if len(left_minima) > 0 and len(right_minima) > 0 and len(MAX) > 0:
-        MAX_remove_list_index = []
-        
-        for i,M in enumerate(MAX):
-            if M < left_minima[0]:
-                MAX_remove_list_index.append(i)
-            if M > right_minima[-1]:
-                MAX_remove_list_index.append(i)
-        print('MAX_remove_list_index:', MAX_remove_list_index)
-        
-        #remuev el caso en que nunca tocó el maximo del seno, pero por ruido llego al del coseno
-        NEW_left_minima, NEW_right_minima  = [], []
-    
-        for M in MAX:
-            for l,r in zip(left_minima,right_minima):
-                assert l < r    
-
-                if (l < M) and (r > M):
-                    #hago esto y no los elimino de la lista por si existen minimos compartidos
-                    NEW_left_minima.append(l)
-                    NEW_right_minima.append(r)
-                    break
-                else:
-                    pass
-        
-        return(NEW_left_minima,NEW_right_minima,pop_list(MAX,MAX_remove_list_index))
-    else:
-        return ([],[],[])
+    assert (len(right_minima) == len(MIN)),'right_minima: '+ str(right_minima) + ' MIN:' + str(MIN)   
+    return(decreciente,left_minima,right_minima,MAX,MIN )
 
 
 #%%
     
-def get_pulses(theta,TH,W,PFE,PFI,alpha,D):
+def get_pulses(theta,TH,W,PFE,PFI):
     '''
     get_pulses(theta,TH,W,PFE,PFI,alpha,D)
     Find the pulses of the time series theta for our definition
@@ -484,36 +557,38 @@ def get_pulses(theta,TH,W,PFE,PFI,alpha,D):
 
     t0 = time.time() ; print('start searching for pulses: 5 steps pending')
     
-    MAX_cos,MIN_cos = search_extremes(np.cos(theta),TH,W)
+    MAX,MIN = search_extremes(np.sin(theta),TH,W)
     t1 = time.time() - t0
-    print('step 1/5 finished: cos extremes detected',t1, 'sec')
+    print('finished searching local extremes',t1, 'sec')
     
-    if (len(MAX_cos)>0) and (len(MIN_cos)>0): 
-        MAX_cos, MIN_cos =  filter_extremes(MAX_cos,MIN_cos,np.cos(theta))
+    if (len(MAX)>0) and (len(MIN)>0): 
+        MAX, MIN =  filter_extremes(MAX,MIN,np.sin(theta))
         t2 = time.time() - t1
-        print('step 2/5 finished: 1 minimum between 2 cos maxima',t2, 'sec')
+        print('finished setting 1 minimum between 2 maxima',t2, 'sec')
     
-    if (len(MAX_cos)>0) and (len(MIN_cos)>0): 
-        left_minima, MAX_cos ,MIN_cos = get_left_minima(MAX_cos,MIN_cos,PFE,PFI,theta)
+    if (len(MAX)>0) and (len(MIN)>0): 
+        crec, left_minima, MAX ,MIN = get_left_minima(MAX ,MIN,PFE,PFI,theta)
         t3 = time.time() - t2
-        print('step 3/5 finished: left pulse cos minima detected',t3, 'sec')
+        print('finished detecting left pulse minima ',t3, 'sec')
         
-        left_minima, right_minima, MAX_cos, MIN_cos = get_rigth_minima(left_minima,MAX_cos,MIN_cos,PFE,PFI,theta)
+        dec, left_minima, right_minima,MAX ,MIN = get_rigth_minima(left_minima,MAX ,MIN,PFE,PFI,theta)
         t4 = time.time() - t3
-        print('step 4/5 finished: right pulse cos minima detected',t4, 'sec')
+        print('finished detecting right pulse minima',t4, 'sec')
         
-        print('testing cosine parameters alpha, D: ',alpha,D)
-        test_pulses(left_minima,right_minima,MAX_cos,MIN_cos)
-
-        MAX_sine , MIN_sine = search_extremes(np.sin(theta),TH,W)
-        MAX_sine, MIN_sine =  filter_extremes(MAX_sine,MIN_sine,np.sin(theta))        #en realidad, creo que si pondriamos otros parametros de max/min detection no haria falta hacer este paso en este lugar
-        left_minima,right_minima,MAX_sine =  filter_maxima_sine(left_minima,right_minima,MAX_sine)
-        t5 = time.time() - t4
-        print('step 5/5 finished: sine extremes detected',t5, 'sec')
-        test_pulses_sine(left_minima,right_minima,MAX_sine)
-
+        print(crec,dec)
         
-        return left_minima,right_minima,MAX_sine
+        print('testing parameters...')
+        test_pulses(left_minima,right_minima,MAX)
+
+        #MAX_sine , MIN_sine = search_extremes(np.sin(theta),TH,W)
+        #MAX_sine, MIN_sine =  filter_extremes(MAX_sine,MIN_sine,np.sin(theta))        #en realidad, creo que si pondriamos otros parametros de max/min detection no haria falta hacer este paso en este lugar
+        #left_minima,right_minima,MAX_sine =  filter_maxima_sine(left_minima,right_minima,MAX_sine)
+        #t5 = time.time() - t4
+       # print('step 5/5 finished: sine extremes detected',t5, 'sec')
+        #test_pulses_sine(left_minima,right_minima,MAX_sine)
+#
+        
+        return left_minima,right_minima,MAX
     else:
         print('The trace has no maxima or minima values available')
         return [],[],[]
@@ -580,43 +655,43 @@ def compute_pulse_detection(description_file,data_folder,save_path_name):
 
 
 #%%
-def test_pulses(left_minima,right_minima,MAX,MIN):
-    ''' 
-    test_pulses(left_minima,right_minima,MAX,MIN)
-    testing function for cosine outcome of the pulse detection
-    
-    Tests (1) that every vector has the same length, (2) that allways comes first the starting of the pulse,
-    then the maxima, then the minima, and then the end of the pulse.
-    
-    Parameters
-    ----------
-    left_minima: list
-        position of the starting point of each pulse for our definition
-    right_minima : list 
-        position of the ending point of each pulses for our definition
-    MAX : list 
-        position of the maximum of a pulse of a given time series (in genral, cosine of theta)
-    MIN : list 
-        position of the minimum of a pulse of a given time series (in genral, cosine of theta)   
-    
-    See also
-    ----------
-    - test_pulses_sine(left_minima,right_minima,MAX)
+#def test_pulses_OLD(left_minima,right_minima,MAX,MIN):
+#    ''' 
+#    test_pulses(left_minima,right_minima,MAX,MIN)
+#    testing function for cosine outcome of the pulse detection
+#    
+#    Tests (1) that every vector has the same length, (2) that allways comes first the starting of the pulse,
+#    then the maxima, then the minima, and then the end of the pulse.
+#    
+#    Parameters
+#    ----------
+#    left_minima: list
+#        position of the starting point of each pulse for our definition
+#    right_minima : list 
+#        position of the ending point of each pulses for our definition
+#    MAX : list 
+#        position of the maximum of a pulse of a given time series (in genral, cosine of theta)
+#    MIN : list 
+#        position of the minimum of a pulse of a given time series (in genral, cosine of theta)   
+#    
+#    See also
+#    ----------
+#    - test_pulses_sine(left_minima,right_minima,MAX)
+#
+#    '''
+#    
+#    assert len(MIN) == len(MAX)
+#    assert len(left_minima) == len(MAX), str(len(left_minima))+' is not equal to ' + str(len(MAX))
+#    assert len(right_minima) == len(MAX) , str(len(right_minima))+' is not equal to ' + str(len(MAX))
+#    
+#    #los proximos 3 iguales estan mal, pero los ponemos porque fallan cuando hay mucho ruido
+#    assert all([(i<=j)*1 for (i,j) in zip(left_minima,MAX)]), '----- ' + str([(j-i)*1 for (i,j) in zip(left_minima,MAX)])
+#    assert all([(i<=j)*1 for (i,j) in zip(MAX,MIN)])
+#    assert all([(i<=j)*1 for (i,j) in zip(MIN,right_minima)])
+#    
+#    assert all([(i>=j)*1 for (i,j) in zip(left_minima[1:],right_minima[:-1])]),str([(i-j) for (i,j) in zip(left_minima[1:],right_minima[:-1])]) 
 
-    '''
-    
-    assert len(MIN) == len(MAX)
-    assert len(left_minima) == len(MAX), str(len(left_minima))+' is not equal to ' + str(len(MAX))
-    assert len(right_minima) == len(MAX) , str(len(right_minima))+' is not equal to ' + str(len(MAX))
-    
-    #los proximos 3 iguales estan mal, pero los ponemos porque fallan cuando hay mucho ruido
-    assert all([(i<=j)*1 for (i,j) in zip(left_minima,MAX)]), '----- ' + str([(j-i)*1 for (i,j) in zip(left_minima,MAX)])
-    assert all([(i<=j)*1 for (i,j) in zip(MAX,MIN)])
-    assert all([(i<=j)*1 for (i,j) in zip(MIN,right_minima)])
-    
-    assert all([(i>=j)*1 for (i,j) in zip(left_minima[1:],right_minima[:-1])]),str([(i-j) for (i,j) in zip(left_minima[1:],right_minima[:-1])]) 
-
-def test_pulses_sine(left_minima,right_minima,MAX):
+def test_pulses(left_minima,right_minima,MAX):
     ''' 
     test_pulses(left_minima,right_minima,MAX,MIN)
     testing function for cosine outcome of the pulse detection

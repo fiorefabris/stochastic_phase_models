@@ -151,27 +151,27 @@ def repeat_and_list_all_combinations(params,N=1):
 
 #%%
 
-#def mp_time_evolution_(param):
-#    # Function for calling the main function with a tuple of parameters
-#    time_evolution__ = partial(time_evolution_,dt,T,d)
-#    return time_evolution__(*param)    
+def mp_time_evolution_(param):
+    # Function for calling the main function with a tuple of parameters
+    time_evolution__ = partial(time_evolution_,dt,T,d)
+    return time_evolution__(*param)    
 
 
-#def mp_time_evolution_and_list(main_file_name,dt,T,d,param):
-#    # Function for calling the main function with a tuple of parameters
-#    time_evolution_save(*param,main_file_name,dt,T,d) 
-#    return(0)
-#
-#
-#def time_evolution_save(param,number,order,main_file_name,dt,T,d):
-#    t0= time.perf_counter()
-#    time_evolution__ = partial(time_evolution_,dt,T,d)
-#    theta = time_evolution__(*param) 
-#    file_name =  str(number)+'_'+str(order)+'.pkl'
-#    save_data(theta, main_file_name + file_name)
-#    t1 = time.perf_counter() - t0
-#    print(file_name,t1)
-#    return(0)
+def mp_time_evolution_and_list(main_file_name,dt,T,d,param):
+    # Function for calling the main function with a tuple of parameters
+    time_evolution_save(*param,main_file_name,dt,T,d) 
+    return(0)
+
+
+def time_evolution_save(param,number,order,main_file_name,dt,T,d):
+    t0= time.perf_counter()
+    time_evolution__ = partial(time_evolution_,dt,T,d)
+    theta = time_evolution__(*param) 
+    file_name =  str(number)+'_'+str(order)+'.pkl'
+    save_data(theta, main_file_name + file_name)
+    t1 = time.perf_counter() - t0
+    print(file_name,t1)
+    return(0)
 
 
         

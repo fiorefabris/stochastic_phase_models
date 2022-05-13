@@ -69,7 +69,7 @@ def V(x,omega,alpha):
 
 def teo_t_plus_new(x,omega,alpha,D):
     PFE,PFI = get_fixed_points(alpha/omega); PFI = PFI - 2* np.pi
-    N_aux , _ =  integrate.quad(f,PFI,PFE,args = (omega,alpha,D),limit = 10000000,epsabs = 1.49e-12,epsrel= 1.49e-12) #no es funcion de x    
+    N_aux , _ =  integrate.quad(f,PFI,PFE,args = (omega,alpha,D),limit = 100000,epsabs = 1.49e-10,epsrel= 1.49e-10) #no es funcion de x    
     return N_aux/D * (int_1(x,omega,alpha,D,PFE,PFI) + int_2(x,omega,alpha,D,PFE,PFI))
 
 def I1(x,omega,alpha,D,PFE,PFI):
@@ -79,11 +79,11 @@ def I2(x,omega,alpha,D,PFE,PFI):
     return epsilon_plus_th(x,omega,alpha,D,PFE,PFI)**2 * np.exp(V(x,omega,alpha)/D)
 
 def int_1(x,omega,alpha,D,PFE,PFI):
-    aux , _ = integrate.quad(I1,x,PFE,args = (omega,alpha,D,PFE,PFI),limit = 10000000,epsabs = 1.49e-12,epsrel= 1.49e-12)
+    aux , _ = integrate.quad(I1,x,PFE,args = (omega,alpha,D,PFE,PFI),limit = 100000,epsabs = 1.49e-10,epsrel= 1.49e-10)
     return aux
 
 def int_2(x,omega,alpha,D,PFE,PFI):
-    aux , _ = integrate.quad(I2,PFI,x,args = (omega,alpha,D,PFE,PFI),limit = 10000000,epsabs = 1.49e-12,epsrel= 1.49e-12)
+    aux , _ = integrate.quad(I2,PFI,x,args = (omega,alpha,D,PFE,PFI),limit = 100000,epsabs = 1.49e-10,epsrel= 1.49e-10)
     eps_plus = epsilon_plus_th(x,omega,alpha,D,PFE,PFI)
     return aux * (1/eps_plus - 1)
 
@@ -194,7 +194,8 @@ def plot_epsilon_plus(data_folder,save_path_name,params):
             ax.plot(initial_conditions,cond_prob,'o', markersize = 2)
             x = get_zero_position(initial_conditions,cond_prob)
             ax.plot(x,np.zeros(len(x)),'o', markersize = 3,color = 'r') 
-            ax.set_ylim([-1,y_lim]); ax.set_xlim([-np.pi/2,3/2*np.pi])
+            #ax.set_ylim([-1,y_lim]); 
+            ax.set_xlim([-np.pi/2,3/2*np.pi])
             
 
               
@@ -204,8 +205,8 @@ def plot_epsilon_plus(data_folder,save_path_name,params):
             ax.xaxis.set_label_coords(0.5, -0.5);
             ax.yaxis.set_label_coords(-0.4, 0.5)
             #set_scale(ax,[-np.pi/2,3/2*np.pi],[-1,y_lim])
-            ax.set_xticks([-np.pi/2,3/2*np.pi]);ax.set_yticks([-1,y_lim])
-            ax.set_yticklabels([str(-1),str(y_lim)]); ax.set_xticklabels([r'$-\frac{\pi}{2}$',r'$\frac{3 \pi}{2}$']); ax.tick_params(labelsize=10) 
+            #ax.set_xticks([-np.pi/2,3/2*np.pi]);ax.set_yticks([-1,y_lim])
+            #ax.set_yticklabels([str(-1),str(y_lim)]); ax.set_xticklabels([r'$-\frac{\pi}{2}$',r'$\frac{3 \pi}{2}$']); ax.tick_params(labelsize=10) 
         else:
             silent_ax(ax)
             
@@ -220,7 +221,7 @@ def plot_epsilon_plus(data_folder,save_path_name,params):
 
 
         
-    plt.savefig(save_path_name + 'plotting.pdf', format='pdf')
+    plt.savefig(save_path_name + 'plotting_epsilon_plus.pdf', format='pdf')
     return(0)
 
 #%%
@@ -312,7 +313,7 @@ def plot_epsilon_plus_in_x_minus(data_folder,save_path_name,params):
         
 
         
-    plt.savefig(save_path_name + 'plotting_FIC.pdf', format='pdf')
+    plt.savefig(save_path_name + 'plotting_epsilon_plus_in_x_minus.pdf', format='pdf')
     return(0)
 
 #%%
@@ -346,7 +347,6 @@ def plot_t_plus(data_folder,save_path_name,params):
            #       dt = 0.00001
            #       x,t_plus_th = get_teo_t_plus_pop(omega,D)                         
            #       ax.plot(x,[t / dt for t in t_plus_th],linewidth=5,color = 'black',alpha = 0.3) ; print([t / dt for t in t_plus_th])
-            teo_t_plus_new_pop 
             dt = 0.00001
             x,t_plus_th = teo_t_plus_new_pop(omega,alpha,D)                         
             ax.plot(x,[t / dt for t in t_plus_th],linewidth=1,color = 'black',alpha = 1) ; 

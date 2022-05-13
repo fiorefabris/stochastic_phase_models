@@ -47,16 +47,16 @@ def time(dt,T,d):
     '''
     return(np.linspace(0,T,ceil(int(T/dt)/d)) )
     
-def get_fixed_points(alpha):
+def get_fixed_points(delta):
     '''
-    get_fixed_points(alpha)
+    get_fixed_points(delta)
     returns the fixed points for an adler dynamical system. 
     If the system is oscillatory and not excitable, it returns the point called ghost of less velocity. 
     
     Parameters
     ----------
-    alpha : float
-        parameter of the adler equation. In omega units
+    delta : float
+        parameter of the adler equation (alpha/omega)
     
     Returns
     -------
@@ -65,8 +65,8 @@ def get_fixed_points(alpha):
     PFI : float
         unstable fixed point - angular . On the 4th cuadrant
     '''
-    if alpha >= 1:
-        res = np.arcsin(-1/alpha)
+    if delta >= 1:
+        res = np.arcsin(-1/delta)
         PFE = -res + np.pi  #np.sin(PFE)
         PFI = (2*np.pi + res)  #np.sin(PFI)
     else: 
