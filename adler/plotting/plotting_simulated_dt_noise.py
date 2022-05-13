@@ -349,7 +349,7 @@ def plot_t_plus(data_folder,save_path_name,params):
            #       x,t_plus_th = get_teo_t_plus_pop(omega,D)                         
            #       ax.plot(x,[t / dt for t in t_plus_th],linewidth=5,color = 'black',alpha = 0.3) ; print([t / dt for t in t_plus_th])
             dt = 0.00001
-            if alpha > 1.001 * omega:
+            if alpha > 1.01 * omega:
                 print('delta' , alpha/omega)
                 x,t_plus_th = teo_t_plus_new_pop(omega,alpha,D)                         
                 ax.plot(x,[t / dt for t in t_plus_th],linewidth=1,color = 'black',alpha = 1) ; 
