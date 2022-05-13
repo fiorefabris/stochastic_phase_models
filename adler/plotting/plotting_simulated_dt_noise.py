@@ -178,7 +178,7 @@ def plot_epsilon_plus(data_folder,save_path_name,params):
     for k,(omega,alpha,D) in enumerate(all_combinations(params)):
         
         ax = axs[k]
-        print(alpha/omega,omega,D)
+        #print(alpha/omega,omega,D)
         cond_prob_filename = data_folder +  'cond_prob_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
         initial_conditions_filename = data_folder +  'initial_conditions_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
         
@@ -194,9 +194,9 @@ def plot_epsilon_plus(data_folder,save_path_name,params):
             ax.plot(initial_conditions,cond_prob,'o', markersize = 1)
             x = get_zero_position(initial_conditions,cond_prob)
             ax.plot(x,np.zeros(len(x)),'o', markersize = 3,color = 'r') 
-            #ax.set_ylim([-1,y_lim]); 
+            ax.set_ylim([-1,y_lim]); 
             ax.set_xlim([-np.pi/2,3/2*np.pi])
-            print('ylim',ax.get_ylim())
+#            print('ylim',ax.get_ylim())
             
 
               
@@ -205,9 +205,9 @@ def plot_epsilon_plus(data_folder,save_path_name,params):
             ax.set_xlabel("initial conditions", fontsize=10)
             ax.xaxis.set_label_coords(0.5, -0.5);
             ax.yaxis.set_label_coords(-0.4, 0.5)
-            #set_scale(ax,[-np.pi/2,3/2*np.pi],[-1,y_lim])
-            #ax.set_xticks([-np.pi/2,3/2*np.pi]);ax.set_yticks([-1,y_lim])
-            #ax.set_yticklabels([str(-1),str(y_lim)]); ax.set_xticklabels([r'$-\frac{\pi}{2}$',r'$\frac{3 \pi}{2}$']); ax.tick_params(labelsize=10) 
+            set_scale(ax,[-np.pi/2,3/2*np.pi],[-1,y_lim])
+            ax.set_xticks([-np.pi/2,3/2*np.pi]);ax.set_yticks([-1,y_lim])
+            ax.set_yticklabels([str(-1),str(y_lim)]); ax.set_xticklabels([r'$-\frac{\pi}{2}$',r'$\frac{3 \pi}{2}$']); ax.tick_params(labelsize=10) 
         else:
             silent_ax(ax)
             
@@ -350,7 +350,7 @@ def plot_t_plus(data_folder,save_path_name,params):
            #       ax.plot(x,[t / dt for t in t_plus_th],linewidth=5,color = 'black',alpha = 0.3) ; print([t / dt for t in t_plus_th])
             dt = 0.00001
             if alpha > omega:
-                print(alpha)
+                print('delta' , alpha/omega)
                 x,t_plus_th = teo_t_plus_new_pop(omega,alpha,D)                         
                 ax.plot(x,[t / dt for t in t_plus_th],linewidth=1,color = 'black',alpha = 1) ; 
            
