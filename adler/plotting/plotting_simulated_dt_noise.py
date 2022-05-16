@@ -398,15 +398,18 @@ def plot_t_plus_in_x_minus(data_folder,save_path_name,params):
                 print('delta' , alpha/omega, 'D', D)
                 
                 PFE,PFI = get_fixed_points(alpha/omega); PFI = PFI - 2* np.pi
-                if D>0.1:
-                    th_result.append(epsilon_plus_x_minus_th(PFI,PFE,omega,alpha,D))
+                
 
                 result.append(get_mean_value(step_plus)[0])
                 ALP_aux.append(alpha)
 
         print(result,'th_result: ',th_result);dt = 0.00001
         if check_file(step_plus_filename,""): ax.plot(ALP_aux,result,'o', markersize = 4,color = colors[k],label = str(D))
-        if D > 0.1: ax.plot(ALP_aux,[t / dt for t in th_result], linewidth=1,color = 'black',alpha = 1) 
+        
+        if D > 0.1: 
+            ALP_th_aux = np.arange(params['alpha'][0],params['alpha'][-1],0.0001)
+            th_result.append(epsilon_plus_x_minus_th(PFI,PFE,omega,alpha,D))
+            ax.plot(ALP_aux,[t / dt for t in th_result], linewidth=1,color = colors[k],alpha = 1) 
             
         #ax.set_ylim([-1,110]); ax.set_xlim([-np.pi/2,3/2*np.pi])
               
