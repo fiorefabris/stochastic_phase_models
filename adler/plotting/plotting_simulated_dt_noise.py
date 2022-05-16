@@ -343,7 +343,7 @@ def plot_t_plus(data_folder,save_path_name,params):
             ax.xaxis.set_label_coords(0.5, -0.5);
             ax.yaxis.set_label_coords(-0.4, 0.5)
             #set_scale(ax,[-np.pi/2,3/2*np.pi],[0,y_lim])
-            ax.set_xticks([-np.pi/2,3/2*np.pi]);ax.set_yticks([0,y_lim])
+            ax.set_xticks([-np.pi/2,3/2*np.pi]);#ax.set_yticks([0,y_lim])
             #ax.set_yticklabels([str(0),str(y_lim)]); 
             ax.set_xticklabels([r'$-\frac{\pi}{2}$',r'$\frac{3 \pi}{2}$']); ax.tick_params(labelsize=10) 
         else:
