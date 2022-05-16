@@ -363,3 +363,56 @@ def plot_t_plus(data_folder,save_path_name,params):
         
     plt.savefig(save_path_name + 'plotting_t_plus.pdf', format='pdf')
     return(0)
+#%%
+    
+def plot_t_plus_in_x_minus(data_folder,save_path_name,params):
+    """ Plotting function for conditional first passage time probability epsilon plus evaluated in x minus.
+    x axis are D and alpha.
+    
+    """
+    
+    
+#epsilon_plus_x_minus_th(PFI,PFE,omega,alpha,D):
+    
+    fig, axs = plt.subplots(1,1, sharex=False, sharey=True, figsize=(8.27, 11.69))
+    fig.subplots_adjust(bottom=0.15, top=0.9, left=0.15, right=0.8, wspace=0.1, hspace=0.2)
+    ax = axs; 
+  
+    omega = params['omega'][0]
+    
+########################## D plot #############################################  
+   
+    colors =  sns.color_palette(sns.color_palette("viridis",len(params['D'])))
+
+    for k,D in enumerate(params['D']):
+        
+        result = []; ALP_aux = []; th_result = []
+       
+        
+        for alpha in params['alpha']:                    
+            step_plus_filename = data_folder +  'step_plus_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
+        
+            if check_file(step_plus_filename,""):
+                step_plus = download_data(step_plus_filename)
+                #initial_conditions = download_data(initial_conditions_filename)
+                print('delta' , alpha/omega, 'D', D)
+                
+                PFE,PFI = get_fixed_points(alpha/omega); PFI = PFI - 2* np.pi
+                th_result.append(epsilon_plus_x_minus_th(PFI,PFE,omega,alpha,D))
+
+                result.append(step_plus[0])
+                ALP_aux.append(alpha)
+                        
+        ax.plot(ALP_aux,result,'o', markersize = 1,color = colors[k],label = str(D))
+        ax.plot(ALP_aux,th_result, linewidth=1,color = 'black',alpha = 1) 
+            
+        #ax.set_ylim([-1,110]); ax.set_xlim([-np.pi/2,3/2*np.pi])
+              
+        ax.set_ylabel("ocurrences", fontsize=10);
+        ax.set_xlabel("alpha", fontsize=10)
+        ax.xaxis.set_label_coords(0.5, -0.1);
+        ax.yaxis.set_label_coords(-0.15, 0.5)
+        ax.legend(fontsize=8, ncol=1, framealpha=0, fancybox=True)
+        
+    plt.savefig(save_path_name + 'plotting_epsilon_plus_in_x_minus.pdf', format='pdf')
+    return(0)
