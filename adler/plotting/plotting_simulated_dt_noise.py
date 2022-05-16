@@ -299,7 +299,7 @@ def plot_t_plus(data_folder,save_path_name,params):
     """
     
     #colors =  sns.color_palette(sns.color_palette("viridis",len(params['alpha'])))
-    y_lim = 10000000
+   # y_lim = 10000000
     D_ = len(params['D']); ALP = len(params['alpha'])
     
     fig, axs = plt.subplots(ALP,D_, sharex=False, sharey=True, figsize=(8.27, 11.69))
@@ -326,15 +326,15 @@ def plot_t_plus(data_folder,save_path_name,params):
             if (alpha > 1.01 * omega) and (D > 0.1):
                 print('delta' , alpha/omega, 'D', D)
                 x,t_plus_th = teo_t_plus_new_pop(omega,alpha,D)                         
-                ax.plot(x,[t / dt for t in t_plus_th],linewidth=1,color = 'black',alpha = 1) ; 
+                ax.plot(x,[t / dt for t in t_plus_th],linewidth=3,color = 'black',alpha = 1) ; 
            
-            ax.plot(initial_conditions,get_mean_value(step_plus),linewidth=1) #,color=colors[k]
-            ax.plot(initial_conditions,get_mean_value(step_plus),'o', markersize = 2) 
+            #ax.plot(initial_conditions,get_mean_value(step_plus),linewidth=1) #,color=colors[k]
+            ax.plot(initial_conditions,get_mean_value(step_plus),'o', markersize = 1) 
             
             x = get_nan_values_position(initial_conditions,step_plus)            
             ax.plot(x,np.zeros(len(x)),'o', markersize = 3,color = 'r') 
 
-            ax.set_ylim([0,y_lim]); 
+           # ax.set_ylim([0,y_lim]); 
             ax.set_xlim([-np.pi/2,3/2*np.pi])
               
         if k == (D_*ALP - D_ ):
@@ -344,7 +344,7 @@ def plot_t_plus(data_folder,save_path_name,params):
             ax.yaxis.set_label_coords(-0.4, 0.5)
             #set_scale(ax,[-np.pi/2,3/2*np.pi],[0,y_lim])
             ax.set_xticks([-np.pi/2,3/2*np.pi]);ax.set_yticks([0,y_lim])
-            ax.set_yticklabels([str(0),str(y_lim)]); 
+            #ax.set_yticklabels([str(0),str(y_lim)]); 
             ax.set_xticklabels([r'$-\frac{\pi}{2}$',r'$\frac{3 \pi}{2}$']); ax.tick_params(labelsize=10) 
         else:
             silent_ax(ax)
