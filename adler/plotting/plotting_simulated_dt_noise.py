@@ -330,7 +330,7 @@ def plot_t_plus(data_folder,save_path_name,params):
            
             #ax.plot(initial_conditions,get_mean_value(step_plus),linewidth=1) #,color=colors[k]
             ax.plot(initial_conditions,get_mean_value(step_plus),'o', markersize = 1) 
-             print('ylim',ax.get_ylim())
+            print('ylim',ax.get_ylim())
             
             x = get_nan_values_position(initial_conditions,step_plus)            
             ax.plot(x,np.zeros(len(x)),'o', markersize = 3,color = 'r') 
