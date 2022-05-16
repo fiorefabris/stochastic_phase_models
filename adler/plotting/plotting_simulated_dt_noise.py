@@ -299,7 +299,7 @@ def plot_t_plus(data_folder,save_path_name,params):
     """
     
     #colors =  sns.color_palette(sns.color_palette("viridis",len(params['alpha'])))
-   # y_lim = 10000000
+    y_lim = 2000000
     D_ = len(params['D']); ALP = len(params['alpha'])
     
     fig, axs = plt.subplots(ALP,D_, sharex=False, sharey=True, figsize=(8.27, 11.69))
@@ -335,7 +335,7 @@ def plot_t_plus(data_folder,save_path_name,params):
             x = get_nan_values_position(initial_conditions,step_plus)            
             ax.plot(x,np.zeros(len(x)),'o', markersize = 3,color = 'r') 
 
-           # ax.set_ylim([0,y_lim]); 
+            ax.set_ylim([0,y_lim]); 
             ax.set_xlim([-np.pi/2,3/2*np.pi])
               
         if k == (D_*ALP - D_ ):
@@ -343,9 +343,9 @@ def plot_t_plus(data_folder,save_path_name,params):
             ax.set_xlabel("initial conditions", fontsize=10)
             ax.xaxis.set_label_coords(0.5, -0.5);
             ax.yaxis.set_label_coords(-0.4, 0.5)
-            #set_scale(ax,[-np.pi/2,3/2*np.pi],[0,y_lim])
-            ax.set_xticks([-np.pi/2,3/2*np.pi]);#ax.set_yticks([0,y_lim])
-            #ax.set_yticklabels([str(0),str(y_lim)]); 
+            set_scale(ax,[-np.pi/2,3/2*np.pi],[0,y_lim])
+            ax.set_xticks([-np.pi/2,3/2*np.pi]);ax.set_yticks([0,y_lim])
+            ax.set_yticklabels([str(0),str(y_lim)]); 
             ax.set_xticklabels([r'$-\frac{\pi}{2}$',r'$\frac{3 \pi}{2}$']); ax.tick_params(labelsize=10) 
         else:
             silent_ax(ax)
