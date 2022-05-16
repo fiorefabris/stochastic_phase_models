@@ -404,7 +404,8 @@ def plot_t_plus_in_x_minus(data_folder,save_path_name,params):
         if check_file(step_plus_filename,""): ax.plot(ALP_aux,result,'o', markersize = 4,color = colors[k],label = str(D))
         
         if D > 0.1: 
-            ALP_th_aux = np.arange(params['alpha'][0],params['alpha'][-1],0.0001)
+            print('computing...')
+            ALP_th_aux = np.arange(params['alpha'][0],params['alpha'][-1],0.001)
             for alpha in ALP_th_aux: 
                 PFE,PFI = get_fixed_points(alpha/omega); PFI = PFI - 2* np.pi
                 th_result.append(epsilon_plus_x_minus_th(PFI,PFE,omega,alpha,D))
