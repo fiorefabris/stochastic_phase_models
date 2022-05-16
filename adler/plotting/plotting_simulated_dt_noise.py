@@ -97,32 +97,6 @@ def teo_t_plus_new_pop(omega,alpha,D):
     return(np.linspace(PFI,PFE,100),aux)
 
 
-def OLD_I1(x,omega,alpha,D,PFE,PFI):
-    return epsilon_plus_th(x,omega,alpha,D,PFE,PFI) * np.exp(V(x,omega,alpha)/D)
-    
-def OLD_I2(x,omega,alpha,D,PFE,PFI):
-    return (epsilon_plus_th(x,omega,alpha,D,PFE,PFI))**2 *np.exp(V(x,omega,alpha)/D)
-
-def OLD_int_1(x,omega,alpha,D,PFE,PFI):
-    N_aux , _ =  integrate.quad(f,PFI,PFE,args = (omega,alpha,D),limit = 10000000,epsabs = 1.49e-15,epsrel= 1.49e-15) #no es funcion de x    
-    aux , _ = integrate.quad(I1,x,PFE,args = (omega,alpha,D,PFE,PFI),limit = 10000000,epsabs = 1.49e-15,epsrel= 1.49e-15)
-    return aux*N_aux/D
-
-def OLD_int_2(x,omega,alpha,D,PFE,PFI):
-    N_aux , _ =  integrate.quad(f,PFI,PFE,args = (omega,alpha,D),limit = 10000000,epsabs = 1.49e-15,epsrel= 1.49e-15) #no es funcion de x    
-    aux , _ = integrate.quad(I2,PFI,PFE,args = (omega,alpha,D,PFE,PFI),limit = 10000000,epsabs = 1.49e-15,epsrel= 1.49e-15)
-    return aux*N_aux/D
-
-def OLD_int_3(x,omega,alpha,D,PFE,PFI):
-    N_aux , _ =  integrate.quad(f,PFI,PFE,args = (omega,alpha,D),limit = 10000000,epsabs = 1.49e-15,epsrel= 1.49e-15) #no es funcion de x    
-    aux , _ = integrate.quad(I2,PFI,x,args = (omega,alpha,D,PFE,PFI),limit = 10000000,epsabs = 1.49e-15,epsrel= 1.49e-15)
-    eps_plus = epsilon_plus_th(x,omega,alpha,D,PFE,PFI)
-    return aux*N_aux/(D*eps_plus) 
-
-def OLD_teo_t_plus_new(x,omega,alpha,D):#esto es nuestro resultado
-    PFE,PFI = get_fixed_points(alpha/omega); PFI = PFI - 2* np.pi
-    return int_1(x,omega,alpha,D,PFE,PFI) - int_2(x,omega,alpha,D,PFE,PFI) + int_3(x,omega,alpha,D,PFE,PFI)
-
 ###############################################################################
 ###  computes the limit of t plus with xplus -> 0
 ###############################################################################    
@@ -349,7 +323,7 @@ def plot_t_plus(data_folder,save_path_name,params):
            #       x,t_plus_th = get_teo_t_plus_pop(omega,D)                         
            #       ax.plot(x,[t / dt for t in t_plus_th],linewidth=5,color = 'black',alpha = 0.3) ; print([t / dt for t in t_plus_th])
             dt = 0.00001
-            if (alpha > 1.01 * omega) and (D > 0.01):
+            if (alpha > 1.01 * omega) and (D > 0.1):
                 print('delta' , alpha/omega, 'D', D)
                 x,t_plus_th = teo_t_plus_new_pop(omega,alpha,D)                         
                 ax.plot(x,[t / dt for t in t_plus_th],linewidth=1,color = 'black',alpha = 1) ; 
