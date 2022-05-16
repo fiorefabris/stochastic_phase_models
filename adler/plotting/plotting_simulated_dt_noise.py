@@ -162,7 +162,7 @@ def plot_epsilon_plus(data_folder,save_path_name,params):
 
             if alpha >= omega:
                 x,t_e = get_epsilon_plus_th_function(omega,alpha,D)
-                ax.plot(x,[i*1000 for i in t_e] ,linewidth=3,color = 'black',alpha = 0.2)
+                ax.plot(x,[i*1000 for i in t_e] ,linewidth=1,color = 'black',alpha = 1)
     
            # ax.plot(initial_conditions,cond_prob,linewidth=1) #,color=colors[k]
             ax.plot(initial_conditions,cond_prob,'o', markersize = 1)
@@ -323,13 +323,14 @@ def plot_t_plus(data_folder,save_path_name,params):
            #       x,t_plus_th = get_teo_t_plus_pop(omega,D)                         
            #       ax.plot(x,[t / dt for t in t_plus_th],linewidth=5,color = 'black',alpha = 0.3) ; print([t / dt for t in t_plus_th])
             dt = 0.00001
-            if (alpha > 1.01 * omega) and (D > 0.1):
+            if (alpha > 1 * omega) and (D > 0.1):
                 print('delta' , alpha/omega, 'D', D)
                 x,t_plus_th = teo_t_plus_new_pop(omega,alpha,D)                         
-                ax.plot(x,[t / dt for t in t_plus_th],linewidth=3,color = 'black',alpha = 1) ; 
+                ax.plot(x,[t / dt for t in t_plus_th],linewidth=1,color = 'black',alpha = 1) ; 
            
             #ax.plot(initial_conditions,get_mean_value(step_plus),linewidth=1) #,color=colors[k]
             ax.plot(initial_conditions,get_mean_value(step_plus),'o', markersize = 1) 
+             print('ylim',ax.get_ylim())
             
             x = get_nan_values_position(initial_conditions,step_plus)            
             ax.plot(x,np.zeros(len(x)),'o', markersize = 3,color = 'r') 
