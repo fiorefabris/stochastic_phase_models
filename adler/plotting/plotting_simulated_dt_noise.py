@@ -330,7 +330,7 @@ def plot_t_plus(data_folder,save_path_name,params):
            
             #ax.plot(initial_conditions,get_mean_value(step_plus),linewidth=1) #,color=colors[k]
             ax.plot(initial_conditions,get_mean_value(step_plus),'o', markersize = 1) 
-            print('ylim',ax.get_ylim())
+            #print('ylim',ax.get_ylim())
             
             x = get_nan_values_position(initial_conditions,step_plus)            
             ax.plot(x,np.zeros(len(x)),'o', markersize = 3,color = 'r') 
@@ -374,9 +374,9 @@ def plot_t_plus_in_x_minus(data_folder,save_path_name,params):
     
 #epsilon_plus_x_minus_th(PFI,PFE,omega,alpha,D):
     
-    fig, axs = plt.subplots(1,1, sharex=False, sharey=True, figsize=(8.27, 11.69))
+    fig, axs = plt.subplots(2,2, sharex=False, sharey=True, figsize=(8.27, 11.69))
     fig.subplots_adjust(bottom=0.15, top=0.9, left=0.15, right=0.8, wspace=0.1, hspace=0.2)
-    ax = axs; 
+    ax = axs[0,0]; 
   
     omega = params['omega'][0]
     
