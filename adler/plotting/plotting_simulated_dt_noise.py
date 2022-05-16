@@ -402,8 +402,9 @@ def plot_t_plus_in_x_minus(data_folder,save_path_name,params):
 
                 result.append(step_plus[0])
                 ALP_aux.append(alpha)
-                        
-        ax.plot(ALP_aux,result,'o', markersize = 1,color = colors[k],label = str(D))
+
+        print(result,th_result)
+        if check_file(step_plus_filename,""): ax.plot(ALP_aux,result,'o', markersize = 1,color = colors[k],label = str(D))
         ax.plot(ALP_aux,th_result, linewidth=1,color = 'black',alpha = 1) 
             
         #ax.set_ylim([-1,110]); ax.set_xlim([-np.pi/2,3/2*np.pi])
