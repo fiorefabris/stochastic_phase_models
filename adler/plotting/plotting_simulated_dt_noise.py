@@ -394,7 +394,7 @@ def plot_t_plus_in_x_minus(data_folder,save_path_name,params):
                 print('delta' , alpha/omega, 'D', D)
 
                 result.append(np.nanmean(get_mean_value(step_plus)[0:11]))
-                ALP_aux.append(alpha)
+                ALP_aux.append(alpha/omega)
             else:
                 print(alpha/omega,D)
 
@@ -407,13 +407,13 @@ def plot_t_plus_in_x_minus(data_folder,save_path_name,params):
             for alpha in ALP_th_aux: 
                 PFE,PFI = get_fixed_points(alpha/omega); PFI = PFI - 2* np.pi
                 th_result.append(epsilon_plus_x_minus_th(PFI,PFE,omega,alpha,D))
-            ax.plot(ALP_th_aux,[t / dt for t in th_result], linewidth=1,color = colors[k],alpha = 1) 
+            ax.plot([alpha/omega for alpha in ALP_th_aux] ,[t / dt for t in th_result], linewidth=1,color = colors[k],alpha = 1) 
             
         #ax.set_ylim([-1,110]); 
         ax.set_xlim([1,2])
               
         ax.set_ylabel("ocurrences", fontsize=10);
-        ax.set_xlabel("alpha", fontsize=10)
+        ax.set_xlabel("delta", fontsize=10)
         ax.xaxis.set_label_coords(0.5, -0.1);
         ax.yaxis.set_label_coords(-0.15, 0.5)
         ax.legend(fontsize=8, ncol=1, framealpha=0, fancybox=True)
