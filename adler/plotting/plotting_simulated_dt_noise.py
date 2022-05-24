@@ -229,7 +229,6 @@ def plot_epsilon_plus_in_x_minus(data_folder,save_path_name,params):
         result = []; D_aux = []
        
         for D in params['D']:                    
-            #print(alpha/omega,omega,D)
             cond_prob_filename = data_folder +  'cond_prob_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
         #initial_conditions_filename = data_folder +  'initial_conditions_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
         
@@ -370,10 +369,7 @@ def plot_t_plus_in_x_minus(data_folder,save_path_name,params):
     x axis are D and alpha.
     
     """
-    
-    
-#epsilon_plus_x_minus_th(PFI,PFE,omega,alpha,D):
-    
+        
     fig, axs = plt.subplots(2,2, sharex=False, sharey=True, figsize=(8.27, 11.69))
     fig.subplots_adjust(bottom=0.15, top=0.9, left=0.15, right=0.8, wspace=0.1, hspace=0.2)
     ax = axs[0,0]; 
@@ -397,11 +393,11 @@ def plot_t_plus_in_x_minus(data_folder,save_path_name,params):
                 #initial_conditions = download_data(initial_conditions_filename)
                 print('delta' , alpha/omega, 'D', D)
 
-                result.append(get_mean_value(step_plus)[0])
+                result.append(get_mean_value(step_plus)[0:11])
                 ALP_aux.append(alpha)
 
         print(result,'th_result: ',th_result);dt = 0.00001
-        if check_file(step_plus_filename,""): ax.plot(ALP_aux,result,'-o', markersize = 4,color = colors[k],label = str(D))
+        if check_file(step_plus_filename,""): ax.plot(ALP_aux,result,'-o', markersize = 2,linewidth=1,color = colors[k],label = str(D))
         
         if D > 0.1: 
             print('computing...')
