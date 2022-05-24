@@ -393,7 +393,7 @@ def plot_t_plus_in_x_minus(data_folder,save_path_name,params):
                 #initial_conditions = download_data(initial_conditions_filename)
                 print('delta' , alpha/omega, 'D', D)
 
-                result.append(get_mean_value(step_plus)[0:11])
+                result.append(np.mean(get_mean_value(step_plus)[0:11]))
                 ALP_aux.append(alpha)
 
         print(result,'th_result: ',th_result);dt = 0.00001
