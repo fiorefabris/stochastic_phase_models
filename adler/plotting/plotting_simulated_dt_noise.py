@@ -399,7 +399,7 @@ def plot_t_plus_in_x_minus(data_folder,save_path_name,params):
                 print(alpha/omega,D)
 
         dt = 0.00001
-        if check_file(step_plus_filename,""): ax.plot(ALP_aux,result, marker='^', markersize = 1,color = colors[k],label = str(D))
+        if check_file(step_plus_filename,""): ax.plot(ALP_aux,result,'^', markersize = 1,color = colors[k],label = str(D))
         
         if D > 0.1: 
             print('computing...')
