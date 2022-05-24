@@ -399,7 +399,7 @@ def plot_t_plus_in_x_minus(data_folder,save_path_name,params):
                 print(alpha/omega,D)
 
         dt = 0.00001
-        if check_file(step_plus_filename,""): ax.plot(ALP_aux,result,linestyle='--', marker='o', markersize = 2,linewidth=1,color = colors[k],label = str(D))
+        if check_file(step_plus_filename,""): ax.plot(ALP_aux,result, marker='^', markersize = 1,linewidth=1,color = colors[k],label = str(D))
         
         if D > 0.1: 
             print('computing...')
@@ -409,7 +409,8 @@ def plot_t_plus_in_x_minus(data_folder,save_path_name,params):
                 th_result.append(epsilon_plus_x_minus_th(PFI,PFE,omega,alpha,D))
             ax.plot(ALP_th_aux,[t / dt for t in th_result], linewidth=1,color = colors[k],alpha = 1) 
             
-        #ax.set_ylim([-1,110]); ax.set_xlim([-np.pi/2,3/2*np.pi])
+        #ax.set_ylim([-1,110]); 
+        ax.set_xlim([1,2])
               
         ax.set_ylabel("ocurrences", fontsize=10);
         ax.set_xlabel("alpha", fontsize=10)
