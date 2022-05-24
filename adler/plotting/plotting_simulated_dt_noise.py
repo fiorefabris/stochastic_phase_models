@@ -393,11 +393,13 @@ def plot_t_plus_in_x_minus(data_folder,save_path_name,params):
                 #initial_conditions = download_data(initial_conditions_filename)
                 print('delta' , alpha/omega, 'D', D)
 
-                result.append(np.mean(get_mean_value(step_plus)[0:11]))
+                result.append(np.nanmean(get_mean_value(step_plus)[0:11]))
                 ALP_aux.append(alpha)
+            else:
+                print(alpha/omega,D)
 
-        print(result,'th_result: ',th_result);dt = 0.00001
-        if check_file(step_plus_filename,""): ax.plot(ALP_aux,result,'-o', markersize = 2,linewidth=1,color = colors[k],label = str(D))
+        dt = 0.00001
+        if check_file(step_plus_filename,""): ax.plot(ALP_aux,result,linestyle='--', marker='o', markersize = 2,linewidth=1,color = colors[k],label = str(D))
         
         if D > 0.1: 
             print('computing...')
