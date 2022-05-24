@@ -334,7 +334,8 @@ def fpt(t,theta):
             
     '''
     FPT_index = []; 
-    init= theta[0]; FPT_index.append(0)
+    init= 3/2*np.pi #theta[0]; como la ts empieza con un valor aleatrio entre 0 y dos pi, seguro que este numero esta despues
+    #FPT_index.append(0) descarto este indice porque el primero siempre mide cualquier cosa porque no se en que angulo empieza la ts y no me inetresa saberlo porque tengo  muchos datos (iujuu)
     for j,value in enumerate(theta):
         if value-init >= 2*np.pi:
             FPT_index.append(j)

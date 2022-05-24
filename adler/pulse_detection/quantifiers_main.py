@@ -24,6 +24,11 @@ def test_pulses_quantifiers(dt,IPI,dm,joint_duration,MAX):
     assert len(dt) == len(MAX)
     
     assert all([(i + j == k)*1 for (i,j,k) in zip(dm,joint_duration,IPI)]), 'dm:'+str(dm) + ' joint_duration: ' + str(joint_duration) + ' IPI: '+str(IPI)
+    
+    assert all([i > 0 for i in dm])
+    assert all([i > 0 for i in dt])
+    assert all([i > 0 for i in IPI])
+    assert all([i > 0 for i in joint_duration])
 
 
 def get_pulses_quantifiers(left_minima,right_minima,MAX):
@@ -31,11 +36,13 @@ def get_pulses_quantifiers(left_minima,right_minima,MAX):
     ''' Falta descripcion'''
     IPI = []; dt = []; dm = []; joint_duration = []
     
+    #pulse duration
     for left,right in zip(left_minima,right_minima):
         assert (right-left >= 0), 'left_minima: ' +str(left_minima) + ' right_minima : '+str(right_minima)
         dt.append(right - left)
-        
+    
     for M1,M2 in zip(MAX[:-1],MAX[1:]):
+        # interpulse interval
         assert (M2-M1 >= 0)
         IPI.append(M2-M1)
         
@@ -46,15 +53,18 @@ def get_pulses_quantifiers(left_minima,right_minima,MAX):
         #lo que está pasando es que el maximo de la derecha es tambien un minimo (el left)
         # eso lo vimos como list(filter(lambda x: (x > M1 and x < M2), left_minima))
         
+        #joint duration
         assert ((right_filter-M1) + (M2 -left_filter) <= M2-M1), str(M1)+ ' --- ' + str(M2) + ' --- ' + str(left_filter) + ' --- '+str(right_filter)
         assert ((right_filter-M1) + (M2 -left_filter) > 0)
         joint_duration.append((right_filter-M1) + (M2 -left_filter)) 
     
     assert all([(i<j)*1 for (i,j) in zip(left_minima,right_minima)])  
     assert all([(i>=j)*1 for (i,j) in zip(left_minima[1:],right_minima[:-1])]) 
+    
     for right,left in zip(right_minima[:-1],left_minima[1:]):
+        
+        #silent interval
         assert (left - right >= 0),str(left) + ' ' +str(right)+'left_minima: ' +str(left_minima) + ' right_minima : '+str(right_minima)
-
         dm.append(left - right)
     
     test_pulses_quantifiers(dt,IPI,dm,joint_duration,MAX)
@@ -75,19 +85,17 @@ def get_pulses_quantifiers_(data_folder,save_path_name,tuple_):
         
         print('running pulses quantifiers computation alpha, D : ',alpha,D)      
         
-        MAX = download_data(data_folder + 'max_xf_'+file_name) 
-        #MIN = download_data(data_folder + 'min_xf_'+ file_name) 
+        MAX = download_data(data_folder + 'max_'+file_name) 
         left_minima = download_data(data_folder + 'left_minima_'+ file_name) 
         right_minima = download_data(data_folder + 'right_minima_'+ file_name) 
-        test_pulses_sine(left_minima,right_minima,MAX)
         
         dt,IPI,dm,joint_duration = get_pulses_quantifiers(left_minima,right_minima,MAX)
         
         print('Ready! Saving files --- alpha, d : ',alpha,D)      
-        save_data(dt,save_path_name+'dt_xf_'+file_name)
-        save_data(IPI,save_path_name+'IPI_xf_'+file_name)
-        save_data(dm,save_path_name+'dm_xf_'+file_name)
-        save_data(joint_duration,save_path_name+'joint_duration_xf_'+file_name)
+        save_data(dt,save_path_name+'dt_'+file_name)
+        save_data(IPI,save_path_name+'IPI_'+file_name)
+        save_data(dm,save_path_name+'dm_'+file_name)
+        save_data(joint_duration,save_path_name+'joint_duration_'+file_name)
         print(alpha,D,'pulses quantifiers computation finished :)')
     else:
         print(file_name,'maxima file not available')

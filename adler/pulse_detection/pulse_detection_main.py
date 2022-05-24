@@ -388,10 +388,10 @@ def get_left_minima(MAX,MIN,PFE,PFI,theta):
                         remove_MAX = append_remove_MAX(test,remove_MAX,M_id)
                     else:
                         
-                        if M_id <= 1:
+                        if M_id <= 0: #si es el primer maximo 
                             m = None
                         else:
-                            m = MIN[M_id-2]
+                            m = MAX[M_id-1] #maximo anterior
                             
                         test,left_minima = read_string_max(left_minima,theta_,PFI,m,M)
                         remove_MAX = append_remove_MAX(test,remove_MAX,M_id)
@@ -445,7 +445,6 @@ def get_rigth_minima(left_minima,MAX,MIN,PFE,PFI,theta):
     assert all([M < m for M,m in zip(MAX,MIN)])
     right_minima = []; remove_MAX = []; 
 
-
     if len(MAX) <= 0:
         print('The trace has no maxima values')
     else:
@@ -480,10 +479,10 @@ def get_rigth_minima(left_minima,MAX,MIN,PFE,PFI,theta):
                         remove_MAX = append_remove_MAX(test,remove_MAX,M_id)
                     else:
                         
-                        if M_id >= len(MAX)-2: #es el  anteúltimo maximo o el último
+                        if M_id >= len(MAX)-1: #es el último máximo
                             m = None
                         else:
-                            m = MIN[M_id+1]
+                            m = MAX[M_id+1]
                             
                         test,right_minima = read_string_min(right_minima,theta_,PFE,m,M)
                         remove_MAX = append_remove_MAX(test,remove_MAX,M_id)
@@ -575,7 +574,7 @@ def get_pulses(theta,TH,W,PFE,PFI):
         t4 = time.time() - t3
         print('finished detecting right pulse minima',t4, 'sec')
         
-        print(crec,dec)
+        #print(crec,dec)
         
         print('testing parameters...')
         test_pulses(left_minima,right_minima,MAX)
@@ -606,7 +605,7 @@ def main_pulse_detection(theta,alpha,omega,D,save_path_name,file_name):
         
         if (len(MAX)>0): #and (len(MIN)>0): 
             print('saving pulse detection results')
-            save_data(MAX,save_path_name+'max_xf_'+file_name)
+            save_data(MAX,save_path_name+'max_'+file_name)
             save_data(left_minima,save_path_name+'left_minima_'+file_name)
             save_data(right_minima,save_path_name+'right_minima_'+file_name)
             print(file_name,'saving finished')
