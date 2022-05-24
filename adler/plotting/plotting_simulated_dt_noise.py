@@ -410,7 +410,7 @@ def plot_t_plus_in_x_minus(data_folder,save_path_name,params):
             ax.plot([alpha/omega for alpha in ALP_th_aux] ,[t / dt for t in th_result], linewidth=1,color = colors[k],alpha = 1) 
             
         #ax.set_ylim([-1,110]); 
-        ax.set_xlim([1,2])
+        ax.set_xlim([0.9,2.1])
               
         ax.set_ylabel("ocurrences", fontsize=10);
         ax.set_xlabel("delta", fontsize=10)
