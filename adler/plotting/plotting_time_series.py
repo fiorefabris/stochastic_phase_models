@@ -278,8 +278,9 @@ def plot_time_series_square(dt,beg,T,d,N,Delta,description_file,data_folder,save
                 ax.xaxis.set_label_coords(0.5, -0.1);
                 ax.yaxis.set_label_coords(-0.05, 0.5)
             
-            set_scale(ax, [0,T], [-1,1])
-            ax.set_xticklabels([0,T])
+            set_scale(ax,[beg,T], [0,2])
+            ax.set_xticklabels([beg,T])
+            ax.set_yticklabels([0,2])
             ax.tick_params(labelsize=20)
 
 
