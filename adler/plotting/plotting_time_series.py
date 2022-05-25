@@ -225,7 +225,7 @@ def plot_time_series_square(dt,T,d,N,Delta,description_file,data_folder,save_pat
 ###############################################################################
 ### Plotting parameters
 ###############################################################################    
-    xlim = [-5,T+5] ; ylim = [-0.1,2.1] ;         
+    xlim = [-5,T+5] ; ylim = [-0.02,2.02] ;         
     Cols = len(ref.groupby(['D'])) ;
     Rows = len(ref.groupby(['alpha'])) ; 
     colors =  sns.color_palette(sns.color_palette("viridis",Cols*1))
@@ -265,7 +265,7 @@ def plot_time_series_square(dt,T,d,N,Delta,description_file,data_folder,save_pat
                 ax.text(1.05, 0.9, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
             if col == 0:
                 text = 'delta = ' + str(delta)
-                ax.text(1.05, 0.9, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
+                ax.text(0.05, 0.9, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
 
             ax.set_ylim(ylim);
             ax.set_xlim(xlim)
