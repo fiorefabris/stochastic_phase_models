@@ -181,7 +181,7 @@ def plot_time_series_alpha(data_folder,save_path_name,dt,T,d,N,delta,tuple_):
     
 
 #%%
-def plot_time_series_square(dt,T,d,N,Delta,description_file,data_folder,save_path_name):
+def plot_time_series_square(dt,beg,T,d,N,Delta,description_file,data_folder,save_path_name):
     '''
     plot_time_series_alpha(data_folder,save_path_name,dt,T,d,delta,tuple_)
     Auxiliary funtion for parallelizong the time Series plotting function.
@@ -194,6 +194,7 @@ def plot_time_series_square(dt,T,d,N,Delta,description_file,data_folder,save_pat
         path in where the first passage time statistics is going to be saved.
     dt : float
         time resolution of the time series. 
+    beg: principio de la TS. en tiempo
     T : float
         total time lenght of the time series. Is the interval you want to plot, starting from zero.
     d : integer
@@ -225,7 +226,7 @@ def plot_time_series_square(dt,T,d,N,Delta,description_file,data_folder,save_pat
 ###############################################################################
 ### Plotting parameters
 ###############################################################################    
-    xlim = [-5,T+5] ; ylim = [-0.02,2.02] ;         
+    xlim = [-5+beg,T+5] ; ylim = [-0.02,2.02] ;         
     Cols = len(ref.groupby(['D'])) ;
     Rows = len(ref.groupby(['alpha'])) ; 
     colors =  sns.color_palette(sns.color_palette("viridis",Cols*1))
@@ -253,9 +254,10 @@ def plot_time_series_square(dt,T,d,N,Delta,description_file,data_folder,save_pat
             if check_file(file_name,data_folder):            
                 
                 theta = download_data(data_folder + file_name) 
-                t = time(dt,T,d)
+                t = time(dt,T+beg,d)
                 end = len(t)
-                ax.plot(t[:end:Delta],1+np.sin(theta)[:end:Delta],linewidth=2,color=colors[col])
+                beg_ = beg/dt
+                ax.plot(t[beg_:end:Delta],1+np.sin(theta)[beg_:end:Delta],linewidth=2,color=colors[col])
             
             ###############################################
             #### Plotting
