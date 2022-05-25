@@ -594,13 +594,13 @@ def get_pulses(theta,TH,W,PFE,PFI):
 
 
 
-def main_pulse_detection(theta,alpha,omega,D,save_path_name,file_name):
+def main_pulse_detection(theta,delta,omega,D,save_path_name,file_name):
     # calcula y guarda los pulsos de theta en el archivoPONER NOMBRES
     if len(theta) != 0:
-        print('running pulse detection',alpha,D)      
+        print('running pulse detection',delta,D)      
         TH = 0.90;W = 100
-        PFE , PFI = get_fixed_points(alpha)
-        left_minima,right_minima,MAX = get_pulses(theta,TH,W,PFE,PFI,alpha,D)
+        PFE , PFI = get_fixed_points(delta)
+        left_minima,right_minima,MAX = get_pulses(theta,TH,W,PFE,PFI)
         print('pulse detection ended')
         
         if (len(MAX)>0): #and (len(MIN)>0): 
@@ -622,7 +622,7 @@ def main_pulse_detection_(data_folder,save_path_name,tuple_,overwrite_flag = Tru
 
     (i,D,order),row = tuple_[0],tuple_[1]
     omega =  row.omega.unique()[0]
-    alpha = np.round(i/omega,4)  
+    delta = np.round(i/omega,4)  
     file_name =  str(int(row.number))+'_'+str(int(order))+'.pkl'
     
     if check_file(file_name,data_folder):   
@@ -632,7 +632,7 @@ def main_pulse_detection_(data_folder,save_path_name,tuple_,overwrite_flag = Tru
         else:
             print('file name:',file_name)
             theta = download_theta(file_name,data_folder)
-            main_pulse_detection(theta,alpha,omega,D,save_path_name,file_name)
+            main_pulse_detection(theta,delta,omega,D,save_path_name,file_name)
     else:
         print('ERROR: file not available',file_name)
     return(1)
