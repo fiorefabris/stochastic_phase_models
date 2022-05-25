@@ -13,7 +13,7 @@ from adler.plotting.plotting_main import set_scale
 ### Time series plotting module
 ###############################################################################
 
-def plot_time_series(dt,T,d,N,delta,description_file,data_folder,save_path_name):
+def plot_time_series(dt,T,d,N,Delta,description_file,data_folder,save_path_name):
     '''
     plot_time_series(description_file,data_folder,save_path_name)
     Auxiliary funtion for parallelizing the time Series plotting function.
@@ -255,7 +255,7 @@ def plot_time_series_square(dt,T,d,N,delta,description_file,data_folder,save_pat
                 theta = download_data(data_folder + file_name) 
                 t = time(dt,T,d)
                 end = len(t)
-                ax.plot(t[:end:delta],1+np.sin(theta)[:end:delta],linewidth=2,color=colors[row])
+                ax.plot(t[:end:Delta],1+np.sin(theta)[:end:Delta],linewidth=2,color=colors[row])
             
             ###############################################
             #### Plotting
