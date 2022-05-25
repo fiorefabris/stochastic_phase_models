@@ -256,7 +256,7 @@ def plot_time_series_square(dt,beg,T,d,N,Delta,description_file,data_folder,save
                 theta = download_data(data_folder + file_name) 
                 t = time(dt,T+beg,d)
                 end = len(t)
-                beg_ = beg/dt
+                beg_ = int(beg/(dt*d))
                 ax.plot(t[beg_:end:Delta],1+np.sin(theta)[beg_:end:Delta],linewidth=2,color=colors[col])
             
             ###############################################
@@ -264,10 +264,10 @@ def plot_time_series_square(dt,beg,T,d,N,Delta,description_file,data_folder,save
             ################################################
             if row == 0:
                 text = 'D = ' + str(np.round(D,5))
-                ax.text(1.05, 0.9, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
+                ax.text(0.9, 1.05, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
             if col == 0:
                 text = 'delta = ' + str(delta)
-                ax.text(0.05, 0.9, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
+                ax.text(-0.05, 0.9, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
 
             ax.set_ylim(ylim);
             ax.set_xlim(xlim)
