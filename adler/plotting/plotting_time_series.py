@@ -13,7 +13,7 @@ from adler.plotting.plotting_main import set_scale
 ### Time series plotting module
 ###############################################################################
 
-def plot_time_series(dt,T,d,N,Delta,description_file,data_folder,save_path_name):
+def plot_time_series(dt,T,d,N,delta,description_file,data_folder,save_path_name):
     '''
     plot_time_series(description_file,data_folder,save_path_name)
     Auxiliary funtion for parallelizing the time Series plotting function.
@@ -181,7 +181,7 @@ def plot_time_series_alpha(data_folder,save_path_name,dt,T,d,N,delta,tuple_):
     
 
 #%%
-def plot_time_series_square(dt,T,d,N,delta,description_file,data_folder,save_path_name):
+def plot_time_series_square(dt,T,d,N,Delta,description_file,data_folder,save_path_name):
     '''
     plot_time_series_alpha(data_folder,save_path_name,dt,T,d,delta,tuple_)
     Auxiliary funtion for parallelizong the time Series plotting function.
@@ -200,7 +200,7 @@ def plot_time_series_square(dt,T,d,N,delta,description_file,data_folder,save_pat
         the decimation factor of the experiment (i.e. how often do you save your time series in dt units).
     N : int 
         number of repetitions of the time series with same parameters.
-    delta : integer
+    Delta : integer
         time series plotting resolution (i.e. how often do you want to plot your time series in datapoint units)
 
     tuple : iterator
