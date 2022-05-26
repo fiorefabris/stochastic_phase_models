@@ -247,7 +247,7 @@ def compute_st_values(ax,samples,bins,scale,fs = 6):
     else:
         mode = (bins[1][np.argmax(bins[0])] + bins[1][np.argmax(bins[0])+1])/2 ; 
         mode = 'mode: '+str(np.round(mode/scale,2))+' min \n'
-        ax.text(1, 0.8, mode, ha='right', va='center', transform=ax.transAxes, fontsize=fs) 
+        ax.text(1, 0.75, mode, ha='right', va='center', transform=ax.transAxes, fontsize=fs) 
         ax.text(1, 0.9,r'$Q$: '+str(np.round(np.quantile(samples,0.25)/scale,2))+' ; '+str(np.round(np.quantile(samples,0.5)/scale,2))+' ; '
                 +str(np.round(np.quantile(samples,0.75)/scale,2)) , ha='right', va='center', transform=ax.transAxes, fontsize=fs)
         ax.text(1, 0.7, 'total data: ' + str(len(samples)), ha='right', va='center', transform=ax.transAxes, fontsize=fs) 
@@ -468,7 +468,7 @@ def plot_dt_square(dt,d,description_file,data_folder,save_path_name):
             if (row == Rows-1) and (col == 0): 
                 ax.set_ylabel('dt (min)', fontsize=30);
                 ax.set_xlabel('probability density (1/min)', fontsize=30)
-                ax.xaxis.set_label_coords(0.5, -0.15);
+                ax.xaxis.set_label_coords(0.5, -0.2);
                 ax.yaxis.set_label_coords(-0.1, 0.5)
             
             # download data
