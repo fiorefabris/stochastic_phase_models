@@ -14,8 +14,8 @@ from adler.plotting.plotting_main import set_scale
 ###############################################################################
 ### Function for paralelizing the pulses plotting 
 ###############################################################################
-def mask_arr(end,arr):
-    return ([i for i in arr if i  < end])
+def mask_arr(beg,end,arr):
+    return (np.array([i for i in arr if (i  < end and i >= beg)]))
     
 
 def plot_pulses(description_file,data_folder_ts,data_folder_pulses,save_path_name,dt,T,d,N):#delta 
@@ -122,6 +122,100 @@ def plot_pulses_alpha_sine(data_folder_ts,data_folder_pulses,save_path_name,dt,T
 
     plt.savefig(save_path_name + 'pulses_alpha_'+str(alpha)+'.pdf', format='pdf')
     return(0)
+
+def plot_pulses_square(dt,beg,T,d,N,Delta,description_file,data_folder,data_folder_pulses,save_path_name):
+    '''
+    
+    '''
+
+######## Getting data information
+    ref = pd.read_excel(description_file,sheet_name='File_references')
+    ref.set_index('Unnamed: 0',inplace=True);
+        
+###############################################################################
+### Plotting parameters
+###############################################################################    
+    xlim = [-5+beg,T+5] ; ylim = [-0.02,2.02] ;         
+    Cols = len(ref.groupby(['D'])) ;
+    Rows = len(ref.groupby(['alpha'])) ; 
+    colors =  sns.color_palette(sns.color_palette("viridis",Cols*1))
+    colors =  colors[::1]
+###############################################################################
+### Figure
+###############################################################################    
+
+
+    fig, axs = plt.subplots(Rows, Cols, sharex=True, sharey=True, figsize=(8.27*5, 11.69*2))
+    fig.subplots_adjust(bottom=0.15, top=0.9, left=0.1, right=0.99, wspace=0.1, hspace=0.1)
+    #text = r'$\omega = \frac{2\pi}{7 min}$' +' ~ ' + r'$\alpha = $' +str(alpha) + r'$ \frac{2\pi}{7 min}$' 
+    #axs[0].text(0,1.5, text, ha='center', va='center', transform=axs[0].transAxes, fontsize=35)
+    
+    for col,(D,col_) in  enumerate(ref.groupby(['D'])):
+        for row, (alpha,row_)  in  enumerate(col_.groupby(['alpha'])):
+            delta= np.round(alpha/col_.omega.unique()[0],4)  
+        
+            order = int(row_.order); number = int(row_.number)
+            file_name =  str(number)+'_'+str(order)+'.pkl'
+            file_name_max = 'max_xf_'+file_name
+            ax = axs[row,col]; ax.grid(False);
+            
+        
+            ################################################
+            #### download data
+            ################################################
+            if check_file(file_name,data_folder):            
+                
+                theta = download_data(data_folder + file_name) 
+                t = time(dt,T+beg,d)
+                end = len(t)
+                beg_ = int(beg/(dt*d))
+                ax.plot(t[beg_:end:Delta],1+np.sin(theta)[beg_:end:Delta],linewidth=2,color=colors[col])
+            
+            if check_file(file_name_max,data_folder_pulses):            
+                
+                
+                MAX          = mask_arr(beg_,end, download_data(data_folder_pulses + file_name_max))
+                left_minima  = mask_arr(beg_,end, download_data(data_folder_pulses + 'left_minima_'+ file_name) )
+                right_minima = mask_arr(beg_,end, download_data(data_folder_pulses + 'right_minima_'+ file_name) )
+                
+                ax.plot(t[MAX],(1+ np.sin(theta))[MAX],'o',color = 'red',markersize = 8)
+                ax.plot(t[left_minima],(1+ np.sin(theta))[left_minima],'<',color = 'black',markersize = 8)
+                ax.plot(t[right_minima],(1+ np.sin(theta))[right_minima],'>',color='black',markersize = 8)
+
+
+            
+            ###############################################
+            #### Plotting
+            ################################################
+            if row == 0:
+                text = 'D = ' + str(np.round(D,5))
+                ax.text(0.9, 1.05, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
+            if col == 0:
+                text = 'delta = ' + str(delta)
+                ax.text(-0.2, 0.9, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
+
+            ax.set_ylim(ylim);
+            ax.set_xlim(xlim)
+            
+            if (row == Rows-1) and (col == 0): 
+                ax.set_ylabel(r'$1 + \sin(\theta)$', fontsize=30);
+                ax.set_xlabel('time', fontsize=30)
+                ax.xaxis.set_label_coords(0.5, -0.1);
+                ax.yaxis.set_label_coords(-0.05, 0.5)
+            
+            set_scale(ax,[beg,T], [0,2])
+            ax.set_xticklabels([beg,T])
+            ax.set_yticklabels([0,2])
+            ax.tick_params(labelsize=20)
+
+
+#    for m in range((Cols*Rows - (k+1))):
+#        fig.delaxes(axs[-m-1])
+
+
+    plt.savefig(save_path_name + 'pulses_square.pdf', format='pdf')
+    return(0)
+
 
 #%%
 # =============================================================================
