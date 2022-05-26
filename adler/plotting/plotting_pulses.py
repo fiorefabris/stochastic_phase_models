@@ -450,7 +450,7 @@ def plot_dt_square(dt,d,description_file,data_folder,save_path_name):
 ### Figure
 ###############################################################################    
 
-    fig, axs = plt.subplots(Rows, Cols, sharex=True, sharey=True, figsize=(8.27*5, 11.69*2))
+    fig, axs = plt.subplots(Rows, Cols, sharex=False, sharey=False, figsize=(8.27*5, 11.69*2))
     fig.subplots_adjust(bottom=0.15, top=0.9, left=0.1, right=0.99, wspace=0.1, hspace=0.1)
 
     
@@ -458,6 +458,13 @@ def plot_dt_square(dt,d,description_file,data_folder,save_path_name):
         for row, (alpha,row_)  in  enumerate(col_.groupby(['alpha'])):
             delta= np.round(alpha/col_.omega.unique()[0],4)  
             ax = axs[row,col]; ax.grid(False);
+
+            if row == 0:
+                text = 'D = ' + str(np.round(D,5))
+                ax.text(0.9, 1.05, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
+            if col == 0:
+                text = 'delta = ' + str(delta)
+                ax.text(-0.2, 0.9, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
             
             # download data
             DT,IPI,joint_duration,dm = download_quantifiers(row_,data_folder,dt,d)
@@ -467,13 +474,8 @@ def plot_dt_square(dt,d,description_file,data_folder,save_path_name):
                 bins = ax.hist(DT,bins=100, density=1,alpha=1,linewidth=1,color = colors[col]); 
                 #tune_plot(ax,'dt (min)','probability density',[0,30*1000],1000,[0,0.0003],1000)
                 compute_st_values(ax,DT,bins,1)   
-                
-                if row == 0:
-                    text = 'D = ' + str(np.round(D,5))
-                    ax.text(0.9, 1.05, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
-                if col == 0:
-                    text = 'delta = ' + str(delta)
-                    ax.text(-0.2, 0.9, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
+            else:
+                print(delta,D,"no data")
 
 
     plt.savefig(save_path_name + 'dt_hist_square.pdf', format='pdf')
