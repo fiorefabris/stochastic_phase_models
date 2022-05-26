@@ -221,7 +221,7 @@ def plot_FPT_square(dt,T,d,description_file,data_folder,save_path_name):
 ###############################################################################    
 
     fig, axs = plt.subplots(Rows, Cols, sharex=True, sharey=True, figsize=(8.27, 11.69))
-    fig.subplots_adjust(bottom=0.15, top=0.9, left=0.1, right=0.99, wspace=0.1, hspace=0.2)
+    fig.subplots_adjust(bottom=0.15, top=0.9, left=0.1, right=0.99, wspace=0.3, hspace=0.3)
 
     
     for col,(D,col_) in  enumerate(ref.groupby(['D'])):
@@ -242,10 +242,10 @@ def plot_FPT_square(dt,T,d,description_file,data_folder,save_path_name):
         
                 if len(FPT) > 0:
                         mode_FPT = (bins[1][np.argmax(bins[0])] + bins[1][np.argmax(bins[0])+1])/2 ; mode_FPT = 'mode: '+str(np.round(mode_FPT,2))+' min \n'
-                        ax.text(1, 0.50, mode_FPT, ha='right', va='center', transform=ax.transAxes, fontsize=7) 
-                        ax.text(1, 0.8,r'$Q$: '+str(np.round(np.quantile(FPT,0.25),2))+' ; '+str(np.round(np.quantile(FPT,0.5),2))+' ; '
+                        ax.text(1, 0.8, mode_FPT, ha='right', va='center', transform=ax.transAxes, fontsize=7) 
+                        ax.text(1, 0.9,r'$Q$: '+str(np.round(np.quantile(FPT,0.25),2))+' ; '+str(np.round(np.quantile(FPT,0.5),2))+' ; '
                                       +str(np.round(np.quantile(FPT,0.75),2)) , ha='right', va='center', transform=ax.transAxes, fontsize=7)
-                        ax.text(1, 0.3, 'total data: ' + str(len(FPT)), ha='right', va='center', transform=ax.transAxes, fontsize=7) 
+                        ax.text(1, 0.7, 'total data: ' + str(len(FPT)), ha='right', va='center', transform=ax.transAxes, fontsize=7) 
                 else:
                     print(delta,D,'empty')
             
@@ -257,17 +257,17 @@ def plot_FPT_square(dt,T,d,description_file,data_folder,save_path_name):
             
             if row == 0:
                 text = 'D = ' + str(np.round(D,5))
-                ax.text(0.9, 1.05, text , ha='center', va='center', transform=ax.transAxes, fontsize=10)
+                ax.text(0.8, 1.05, text , ha='center', va='center', transform=ax.transAxes, fontsize=10)
             if col == 0:
                 text = 'delta = ' + str(delta)
-                ax.text(-0.2, 0.9, text , ha='center', va='center', transform=ax.transAxes, fontsize=10)
+                ax.text(-0.25, 0.9, text , ha='center', va='center', transform=ax.transAxes, fontsize=10)
 
 #    xticks = np.arange(0,200,14); ax.set_xticks(xticks)
 #    ax.set_xticklabels(xticks, fontsize=15);
             if (row == Rows-1) and (col == 0): 
                 ax.set_ylabel('density', fontsize=10);
                 ax.set_xlabel('first passage time (mins)', fontsize=10)
-                ax.xaxis.set_label_coords(0.5, -0.1);
+                ax.xaxis.set_label_coords(0.5,  0);
                 ax.yaxis.set_label_coords(-0.05, 0.5)
 
     
