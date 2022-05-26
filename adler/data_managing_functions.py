@@ -77,7 +77,7 @@ def get_fixed_points(delta):
 
 #%%
 """
-Functions for the time-duration independent time series
+Functions for the time-duration independent time series (no noise)
 
 """
 def cociente(delta):
