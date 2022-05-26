@@ -15,7 +15,10 @@ from adler.plotting.plotting_main import set_scale
 ### Function for paralelizing the pulses plotting 
 ###############################################################################
 def mask_arr(beg,end,arr):
-    return (np.array([i for i in arr if (i  < end and i >= beg)]))
+    return (np.array([i-beg for i in arr if (i  < end and i >= beg)]))
+
+def mask_arr_old(end,arr):
+    return (np.array([i for i in arr if i  < end ]))
     
 
 def plot_pulses(description_file,data_folder_ts,data_folder_pulses,save_path_name,dt,T,d,N):#delta 
@@ -176,6 +179,7 @@ def plot_pulses_square(dt,beg,T,d,N,Delta,description_file,data_folder,data_fold
                 MAX          = mask_arr(beg_,end, download_data(data_folder_pulses + 'max_'+file_name))
                 left_minima  = mask_arr(beg_,end, download_data(data_folder_pulses + 'left_minima_'+ file_name) )
                 right_minima = mask_arr(beg_,end, download_data(data_folder_pulses + 'right_minima_'+ file_name) )
+                print(MAX,t)
                 
                 ax.plot(t[MAX],(1+ np.sin(theta))[MAX],'o',color = 'red',markersize = 8)
                 ax.plot(t[left_minima],(1+ np.sin(theta))[left_minima],'<',color = 'black',markersize = 8)
