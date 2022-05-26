@@ -477,10 +477,17 @@ def plot_dt_square(dt,d,description_file,data_folder,save_path_name):
             if len(DT) > 0:
                     
                 bins = ax.hist(DT,bins=np.linspace(0,20,42),density=True,alpha=1,linewidth=1,color = colors[col]); 
-                tune_plot(ax,'dt (min)','probability density (1/min)',[0,20],1,[0,0.4],1,30,20)
+                #tune_plot(ax,'dt (min)','probability density (1/min)',[0,20],1,[0,0.4],1,30,20)
                 compute_st_values(ax,DT,bins,1,20)   
             else:
                 print(delta,D,"no data")
+            
+            ax.set_ylim([0,0.5]);
+            ax.set_xlim([0,20])
+            set_scale(ax,[0,20], [0,0.5])
+            ax.set_xticklabels([0,5,10,15,20])
+            ax.set_yticklabels([0,0.5])
+            ax.tick_params(labelsize=20)
 
 
     plt.savefig(save_path_name + 'dt_hist_square.pdf', format='pdf')
