@@ -78,12 +78,12 @@ def get_pulses_quantifiers_(data_folder,save_path_name,tuple_):
 
     (i,D,order),row = tuple_[0],tuple_[1]
     omega =  row.omega.unique()[0]
-    alpha = np.round(i/omega,4)  
+    delta = np.round(i/omega,4)  
     file_name =  str(int(row.number))+'_'+str(int(order))+'.pkl'
     
-    if (check_file('max_xf_'+file_name,data_folder)):
+    if (check_file('max_'+file_name,data_folder)):
         
-        print('running pulses quantifiers computation alpha, D : ',alpha,D)      
+        print('running pulses quantifiers computation delta, D : ',delta,D)      
         
         MAX = download_data(data_folder + 'max_'+file_name) 
         left_minima = download_data(data_folder + 'left_minima_'+ file_name) 
@@ -91,12 +91,12 @@ def get_pulses_quantifiers_(data_folder,save_path_name,tuple_):
         
         dt,IPI,dm,joint_duration = get_pulses_quantifiers(left_minima,right_minima,MAX)
         
-        print('Ready! Saving files --- alpha, d : ',alpha,D)      
+        print('Ready! Saving files --- delta, d : ',delta,D)      
         save_data(dt,save_path_name+'dt_'+file_name)
         save_data(IPI,save_path_name+'IPI_'+file_name)
         save_data(dm,save_path_name+'dm_'+file_name)
         save_data(joint_duration,save_path_name+'joint_duration_'+file_name)
-        print(alpha,D,'pulses quantifiers computation finished :)')
+        print(delta,D,'pulses quantifiers computation finished :)')
     else:
         print(file_name,'maxima file not available')
 
