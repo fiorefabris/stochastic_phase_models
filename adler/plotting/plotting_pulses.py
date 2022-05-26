@@ -229,8 +229,8 @@ def tune_plot(ax,x_label,y_label,xlim,xscale,ylim,yscale,axlabel_fs = 10,ticklab
     ''' Esto es una funcion auxiliar para plotear. La idea es escribir una vez
     el tamano de las labels, las escalas y esas cosas'''
     
-    ax.set_xlabel(x_label, fontsize=axlabel_fs);
-    ax.set_ylabel(y_label, fontsize=axlabel_fs);
+    #ax.set_xlabel(x_label, fontsize=axlabel_fs);
+    #ax.set_ylabel(y_label, fontsize=axlabel_fs);
     ax.set_xlim(xlim)
     ax.set_xticklabels([np.round(item/xscale,3) for item in ax.get_xticks()],fontsize=ticklabel_fs)
     ax.set_ylim(ylim)
@@ -450,7 +450,7 @@ def plot_dt_square(dt,d,description_file,data_folder,save_path_name):
 ### Figure
 ###############################################################################    
 
-    fig, axs = plt.subplots(Rows, Cols, sharex=False, sharey=False, figsize=(8.27*5, 11.69*2))
+    fig, axs = plt.subplots(Rows, Cols, sharex=True, sharey=True, figsize=(8.27*5, 11.69*2))
     fig.subplots_adjust(bottom=0.15, top=0.9, left=0.1, right=0.99, wspace=0.1, hspace=0.1)
 
     
@@ -465,14 +465,19 @@ def plot_dt_square(dt,d,description_file,data_folder,save_path_name):
             if col == 0:
                 text = 'delta = ' + str(delta)
                 ax.text(-0.2, 0.9, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
+            if (row == Rows-1) and (col == 0): 
+                ax.set_ylabel('dt (min)', fontsize=30);
+                ax.set_xlabel('probability density (1/min)', fontsize=30)
+                ax.xaxis.set_label_coords(0.5, -0.1);
+                ax.yaxis.set_label_coords(-0.05, 0.5)
             
             # download data
             DT,IPI,joint_duration,dm = download_quantifiers(row_,data_folder,dt,d)
   
             if len(DT) > 0:
                     
-                bins = ax.hist(DT,bins=np.linspace(0,20,21),density=True,alpha=1,linewidth=1,color = colors[col]); 
-                #tune_plot(ax,'dt (min)','probability density',[0,30*1000],1000,[0,0.0003],1000)
+                bins = ax.hist(DT,bins=np.linspace(0,20,42),density=True,alpha=1,linewidth=1,color = colors[col]); 
+                tune_plot(ax,'dt (min)','probability density (1/min)',[0,20],1,[0,0.3],1,30,10)
                 compute_st_values(ax,DT,bins,1)   
             else:
                 print(delta,D,"no data")
