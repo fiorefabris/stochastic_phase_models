@@ -34,7 +34,8 @@ def test_pulses_quantifiers(dt,IPI,dm,joint_duration,MAX):
 
 def get_pulses_quantifiers(left_minima,right_minima,MAX):
     
-    ''' Falta descripcion'''
+    ''' Falta descripcion
+    calcula a los quantifiers en indices'''
     IPI = []; dt = []; dm = []; joint_duration = []
     
     #pulse duration
@@ -50,9 +51,6 @@ def get_pulses_quantifiers(left_minima,right_minima,MAX):
         right_filter = list(filter(lambda x: (x >= M1 and x<=M2), right_minima))[0]
         left_filter = list(filter(lambda x: (x <= M2 and x>=M1), left_minima))[-1]
         
-        ##### PROBLEMA
-        #lo que está pasando es que el maximo de la derecha es tambien un minimo (el left)
-        # eso lo vimos como list(filter(lambda x: (x > M1 and x < M2), left_minima))
         
         #joint duration
         assert ((right_filter-M1) + (M2 -left_filter) <= M2-M1), str(M1)+ ' --- ' + str(M2) + ' --- ' + str(left_filter) + ' --- '+str(right_filter)

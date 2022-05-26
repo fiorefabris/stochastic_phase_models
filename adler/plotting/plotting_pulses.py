@@ -405,6 +405,79 @@ def plot_quantifiers_histograms_D(data_folder,save_path_name,tuple_):
             fig.subplots_adjust(bottom=0.1, top=0.9, left=0.1, right=0.8, wspace=0.07, hspace=0.07)
             fig.savefig(save_path_name + 'histograms_alpha_'+str(alpha)+'D_'+str(D)+'.pdf', format='pdf')
             plt.close()
+            
+            
+#%%
+def points_to_time(arr,dt,d):
+    return[i*dt*d for i in arr]
+
+def download_quantifiers(row_,data_folder,dt,d):
+    dt = []; IPI = []; joint_duration = []; dm = []
+    for (order,row) in row_.groupby(['order']):
+    #para cada ensayo
+        number = int(row.number)
+        file_name =  str(number)+'_'+str(order)+'.pkl'
+
+        if (check_file('dt_'+file_name,data_folder)):        
+        
+            dt = dt + download_data(data_folder+'dt_'+file_name)
+            IPI = IPI + download_data(data_folder+'IPI_'+file_name)
+            dm = dm + download_data(data_folder+'dm_'+file_name)
+            joint_duration = joint_duration + download_data(data_folder+'joint_duration_'+file_name)
+        else:
+            pass
+    return(points_to_time(dt,dt,d),points_to_time(IPI,dt,d),points_to_time(joint_duration,dt,d),points_to_time(dm,dt,d))
+#%%
+def plot_dt_square(dt,d,description_file,data_folder,save_path_name):
+    '''
+   plottea la grid de dt
+
+    '''
+
+######## Getting data information
+    ref = pd.read_excel(description_file,sheet_name='File_references')
+    ref.set_index('Unnamed: 0',inplace=True);
+        
+###############################################################################
+### Plotting parameters
+###############################################################################    
+    #xlim = [-5+beg,T+5] ; ylim = [-0.02,2.02] ;         
+    Cols = len(ref.groupby(['D'])) ;
+    Rows = len(ref.groupby(['alpha'])) ; 
+    colors =  sns.color_palette(sns.color_palette("viridis",Cols*1))
+    colors =  colors[::1]
+###############################################################################
+### Figure
+###############################################################################    
+
+    fig, axs = plt.subplots(Rows, Cols, sharex=True, sharey=True, figsize=(8.27*5, 11.69*2))
+    fig.subplots_adjust(bottom=0.15, top=0.9, left=0.1, right=0.99, wspace=0.1, hspace=0.1)
+
+    
+    for col,(D,col_) in  enumerate(ref.groupby(['D'])):
+        for row, (alpha,row_)  in  enumerate(col_.groupby(['alpha'])):
+            delta= np.round(alpha/col_.omega.unique()[0],4)  
+            ax = axs[row,col]; ax.grid(False);
+            
+            # download data
+            dt,IPI,joint_duration,dm = download_quantifiers(row_,data_folder,dt,d)
+  
+        if len(dt) > 0:
+                
+            bins = ax.hist(dt,bins=1000, density=1,alpha=1,linewidth=1,color = colors[col]); 
+            #tune_plot(ax,'dt (min)','probability density',[0,30*1000],1000,[0,0.0003],1000)
+            compute_st_values(ax,dt,bins,1)   
+            
+            if row == 0:
+                text = 'D = ' + str(np.round(D,5))
+                ax.text(0.9, 1.05, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
+            if col == 0:
+                text = 'delta = ' + str(delta)
+                ax.text(-0.2, 0.9, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
+
+
+    plt.savefig(save_path_name + 'dt_hist_square.pdf', format='pdf')
+    return(0)
 #%%
 
 # =============================================================================
