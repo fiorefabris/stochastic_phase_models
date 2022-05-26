@@ -409,7 +409,7 @@ def plot_quantifiers_histograms_D(data_folder,save_path_name,tuple_):
             
 #%%
 def points_to_time(arr,dt,d):
-    return[i*dt*d for i in arr]
+    return np.array(arr)*dt*d #[i*dt*d for i in arr]
 
 def download_quantifiers(row_,data_folder,dt,d):
     dt = []; IPI = []; joint_duration = []; dm = []
