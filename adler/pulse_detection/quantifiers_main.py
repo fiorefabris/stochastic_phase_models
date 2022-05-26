@@ -25,8 +25,8 @@ def test_pulses_quantifiers(dt,IPI,dm,joint_duration,MAX):
     
     assert all([(i + j == k)*1 for (i,j,k) in zip(dm,joint_duration,IPI)]), 'dm:'+str(dm) + ' joint_duration: ' + str(joint_duration) + ' IPI: '+str(IPI)
     
-    print(dm)
-    assert all([i > 0 for i in dm])
+    
+    assert all([i >= 0 for i in dm]),dm
     assert all([i > 0 for i in dt])
     assert all([i > 0 for i in IPI])
     assert all([i > 0 for i in joint_duration])
