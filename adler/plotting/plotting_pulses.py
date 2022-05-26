@@ -179,12 +179,11 @@ def plot_pulses_square(dt,beg,T,d,N,Delta,description_file,data_folder,data_fold
                 MAX          = mask_arr(beg_,end, download_data(data_folder_pulses + 'max_'+file_name))
                 left_minima  = mask_arr(beg_,end, download_data(data_folder_pulses + 'left_minima_'+ file_name) )
                 right_minima = mask_arr(beg_,end, download_data(data_folder_pulses + 'right_minima_'+ file_name) )
-                print(MAX,t)
                 
                 if len(MAX) > 0:
-                    ax.plot(t[MAX],(1+ np.sin(theta))[MAX],'o',color = 'red',markersize = 8)
-                    ax.plot(t[left_minima],(1+ np.sin(theta))[left_minima],'<',color = 'black',markersize = 8)
-                    ax.plot(t[right_minima],(1+ np.sin(theta))[right_minima],'>',color='black',markersize = 8)
+                    ax.plot(t[beg_:end][MAX],(1+ np.sin(theta))[beg_:end][MAX],'o',color = 'red',markersize = 8)
+                    ax.plot(t[beg_:end][left_minima],(1+ np.sin(theta))[beg_:end][left_minima],'<',color = 'black',markersize = 8)
+                    ax.plot(t[beg_:end][right_minima],(1+ np.sin(theta))[beg_:end][right_minima],'>',color='black',markersize = 8)
 
 
             
