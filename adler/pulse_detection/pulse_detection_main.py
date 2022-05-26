@@ -610,9 +610,9 @@ def main_pulse_detection(theta,delta,omega,D,save_path_name,file_name):
             save_data(right_minima,save_path_name+'right_minima_'+file_name)
             print(file_name,'saving finished')
         else:
-            print(alpha,D,'no pulses on this condition -> not saving')      
+            print(delta,D,'no pulses on this condition -> not saving')      
     else:
-        print('ERROR: theta with length zero',omega,alpha,D)
+        print('ERROR: theta with length zero',omega,delta,D)
     return(0)
 
 
