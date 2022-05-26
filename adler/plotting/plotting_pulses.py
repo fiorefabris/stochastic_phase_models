@@ -138,7 +138,7 @@ def plot_pulses_square(dt,beg,T,d,N,Delta,description_file,data_folder,data_fold
 ###############################################################################
 ### Plotting parameters
 ###############################################################################    
-    xlim = [-5+beg,T+5] ; ylim = [-0.02,2.02] ;         
+    xlim = [-5+beg,T+5] ; ylim = [-0.05,2.05] ;         
     Cols = len(ref.groupby(['D'])) ;
     Rows = len(ref.groupby(['alpha'])) ; 
     colors =  sns.color_palette(sns.color_palette("viridis",Cols*1))
@@ -181,7 +181,7 @@ def plot_pulses_square(dt,beg,T,d,N,Delta,description_file,data_folder,data_fold
                 right_minima = mask_arr(beg_,end, download_data(data_folder_pulses + 'right_minima_'+ file_name) )
                 
                 if len(MAX) > 0:
-                    ax.plot(t[beg_:end][MAX],(1+ np.sin(theta))[beg_:end][MAX],'o',color = 'red',markersize = 8)
+                    ax.plot(t[beg_:end][MAX],(1+ np.sin(theta))[beg_:end][MAX],'o',color = 'blue',markersize = 8)
                     ax.plot(t[beg_:end][left_minima],(1+ np.sin(theta))[beg_:end][left_minima],'<',color = 'black',markersize = 8)
                     ax.plot(t[beg_:end][right_minima],(1+ np.sin(theta))[beg_:end][right_minima],'>',color='black',markersize = 8)
 
