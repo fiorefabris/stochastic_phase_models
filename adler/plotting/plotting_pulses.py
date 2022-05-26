@@ -170,7 +170,7 @@ def plot_pulses_square(dt,beg,T,d,N,Delta,description_file,data_folder,data_fold
                 beg_ = int(beg/(dt*d))
                 ax.plot(t[beg_:end:Delta],1+np.sin(theta)[beg_:end:Delta],linewidth=2,color=colors[col])
             
-            if check_file(file_name_max,data_folder_pulses):            
+            if check_file('max_'+file_name,data_folder_pulses):            
                 
                 
                 MAX          = mask_arr(beg_,end, download_data(data_folder_pulses + 'max_'+file_name))
