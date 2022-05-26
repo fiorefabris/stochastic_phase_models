@@ -548,11 +548,11 @@ def plot_ipi_square(dt,d,description_file,data_folder,save_path_name):
             else:
                 print(delta,D,"no data")
             
-            ax.set_ylim([0,0.5]);
+            ax.set_ylim([0,0.3]);
             ax.set_xlim([0,40])
-            set_scale(ax,[0,10,20,30,40], [0,0.5])
+            set_scale(ax,[0,10,20,30,40], [0,0.3])
             ax.set_xticklabels([0,10,20,30,40])
-            ax.set_yticklabels([0,0.5])
+            ax.set_yticklabels([0,0.3])
             ax.tick_params(labelsize=20)
 
 
@@ -614,11 +614,11 @@ def plot_dm_square(dt,d,description_file,data_folder,save_path_name):
             else:
                 print(delta,D,"no data")
             
-            ax.set_ylim([0,0.5]);
-            ax.set_xlim([0,40])
-            set_scale(ax,[0,10,20,30,40], [0,0.5])
-            ax.set_xticklabels([0,10,20,30,40])
-            ax.set_yticklabels([0,0.5])
+            ax.set_ylim([0,0.4]);
+            ax.set_xlim([0,30])
+            set_scale(ax,[0,10,20,30], [0,0.4])
+            ax.set_xticklabels([0,10,20,30])
+            ax.set_yticklabels([0,0.4])
             ax.tick_params(labelsize=20)
 
 
