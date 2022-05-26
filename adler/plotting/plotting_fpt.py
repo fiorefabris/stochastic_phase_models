@@ -257,17 +257,17 @@ def plot_FPT_square(dt,T,d,description_file,data_folder,save_path_name):
             
             if row == 0:
                 text = 'D = ' + str(np.round(D,5))
-                ax.text(0.8, 1.05, text , ha='center', va='center', transform=ax.transAxes, fontsize=10)
+                ax.text(0.8, 1.05, text , ha='center', va='center', transform=ax.transAxes, fontsize=7)
             if col == 0:
                 text = 'delta = ' + str(delta)
-                ax.text(-0.25, 0.9, text , ha='center', va='center', transform=ax.transAxes, fontsize=10)
+                ax.text(-0.25, 0.9, text , ha='center', va='center', transform=ax.transAxes, fontsize=7)
 
 #    xticks = np.arange(0,200,14); ax.set_xticks(xticks)
 #    ax.set_xticklabels(xticks, fontsize=15);
             if (row == Rows-1) and (col == 0): 
-                ax.set_ylabel('density', fontsize=10);
-                ax.set_xlabel('first passage time (mins)', fontsize=10)
-                ax.xaxis.set_label_coords(0.5,  0);
+                ax.set_ylabel('density', fontsize=7)
+                ax.set_xlabel('first passage time (mins)', fontsize=7)
+                ax.xaxis.set_label_coords(0.5,  -0.2);
                 ax.yaxis.set_label_coords(-0.05, 0.5)
 
     
