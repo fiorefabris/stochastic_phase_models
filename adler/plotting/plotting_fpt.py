@@ -237,7 +237,7 @@ def plot_FPT_square(dt,T,d,description_file,data_folder,save_path_name):
             ################################################
             if check_file(file_name,data_folder):        
             
-                FPT = download_data(save_path_name+'FPT_'+str(omega)+'_'+str(alpha)+'_'+str(D)+'.pkl')
+                FPT = download_data(save_path_name+file_name)
                 bins = ax.hist(FPT,bins=100,range=(0,200) , density=1, alpha=0.8,linewidth=0,color=colors[col]); 
         
                 if len(FPT) > 0:
