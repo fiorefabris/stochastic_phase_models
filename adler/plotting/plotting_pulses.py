@@ -412,7 +412,7 @@ def points_to_time(arr,dt,d):
     return np.array(arr)*dt*d #[i*dt*d for i in arr]
 
 def download_quantifiers(row_,data_folder,dt,d):
-    dt = []; IPI = []; joint_duration = []; dm = []
+    DT = []; IPI = []; joint_duration = []; dm = []
     for (order,row) in row_.groupby(['order']):
     #para cada ensayo
         number = int(row.number)
@@ -420,13 +420,13 @@ def download_quantifiers(row_,data_folder,dt,d):
 
         if (check_file('dt_'+file_name,data_folder)):        
         
-            dt = dt + download_data(data_folder+'dt_'+file_name)
+            DT = DT + download_data(data_folder+'dt_'+file_name)
             IPI = IPI + download_data(data_folder+'IPI_'+file_name)
             dm = dm + download_data(data_folder+'dm_'+file_name)
             joint_duration = joint_duration + download_data(data_folder+'joint_duration_'+file_name)
         else:
             pass
-    return(points_to_time(dt,dt,d),points_to_time(IPI,dt,d),points_to_time(joint_duration,dt,d),points_to_time(dm,dt,d))
+    return(points_to_time(DT,dt,d),points_to_time(IPI,dt,d),points_to_time(joint_duration,dt,d),points_to_time(dm,dt,d))
 #%%
 def plot_dt_square(dt,d,description_file,data_folder,save_path_name):
     '''
@@ -460,11 +460,11 @@ def plot_dt_square(dt,d,description_file,data_folder,save_path_name):
             ax = axs[row,col]; ax.grid(False);
             
             # download data
-            dt,IPI,joint_duration,dm = download_quantifiers(row_,data_folder,dt,d)
+            DT,IPI,joint_duration,dm = download_quantifiers(row_,data_folder,dt,d)
   
-        if len(dt) > 0:
+        if len(DT) > 0:
                 
-            bins = ax.hist(dt,bins=1000, density=1,alpha=1,linewidth=1,color = colors[col]); 
+            bins = ax.hist(DT,bins=1000, density=1,alpha=1,linewidth=1,color = colors[col]); 
             #tune_plot(ax,'dt (min)','probability density',[0,30*1000],1000,[0,0.0003],1000)
             compute_st_values(ax,dt,bins,1)   
             
