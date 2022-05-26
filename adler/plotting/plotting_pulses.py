@@ -433,7 +433,7 @@ def plot_dt_square(dt,d,description_file,data_folder,save_path_name):
    plottea la grid de dt
 
     '''
-
+    plt.close('all')
 ######## Getting data information
     ref = pd.read_excel(description_file,sheet_name='File_references')
     ref.set_index('Unnamed: 0',inplace=True);
@@ -477,6 +477,7 @@ def plot_dt_square(dt,d,description_file,data_folder,save_path_name):
 
 
     plt.savefig(save_path_name + 'dt_hist_square.pdf', format='pdf')
+    plt.close()
     return(0)
 #%%
 
