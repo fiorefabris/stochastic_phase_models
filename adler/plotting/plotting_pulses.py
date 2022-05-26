@@ -464,7 +464,7 @@ def plot_dt_square(dt,d,description_file,data_folder,save_path_name):
   
         if len(DT) > 0:
                 
-            bins = ax.hist(DT,bins=1000, density=1,alpha=1,linewidth=1,color = colors[col]); 
+            bins = ax.hist(DT,bins=100, density=1,alpha=1,linewidth=1,color = colors[col]); 
             #tune_plot(ax,'dt (min)','probability density',[0,30*1000],1000,[0,0.0003],1000)
             compute_st_values(ax,DT,bins,1)   
             
