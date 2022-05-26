@@ -156,7 +156,6 @@ def plot_pulses_square(dt,beg,T,d,N,Delta,description_file,data_folder,data_fold
         
             order = int(row_.order); number = int(row_.number)
             file_name =  str(number)+'_'+str(order)+'.pkl'
-            file_name_max = 'max_xf_'+file_name
             ax = axs[row,col]; ax.grid(False);
             
         
@@ -174,7 +173,7 @@ def plot_pulses_square(dt,beg,T,d,N,Delta,description_file,data_folder,data_fold
             if check_file(file_name_max,data_folder_pulses):            
                 
                 
-                MAX          = mask_arr(beg_,end, download_data(data_folder_pulses + file_name_max))
+                MAX          = mask_arr(beg_,end, download_data(data_folder_pulses + 'max_'+file_name))
                 left_minima  = mask_arr(beg_,end, download_data(data_folder_pulses + 'left_minima_'+ file_name) )
                 right_minima = mask_arr(beg_,end, download_data(data_folder_pulses + 'right_minima_'+ file_name) )
                 
