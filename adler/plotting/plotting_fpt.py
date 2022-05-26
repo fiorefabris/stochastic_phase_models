@@ -242,7 +242,7 @@ def plot_FPT_square(dt,T,d,description_file,data_folder,save_path_name):
         
                 if len(FPT) > 0:
                         mode_FPT = (bins[1][np.argmax(bins[0])] + bins[1][np.argmax(bins[0])+1])/2 ; mode_FPT = 'mode: '+str(np.round(mode_FPT,2))+' min \n'
-                        ax.text(1, 0.8, mode_FPT, ha='right', va='center', transform=ax.transAxes, fontsize=7) 
+                        ax.text(1, 0.75, mode_FPT, ha='right', va='center', transform=ax.transAxes, fontsize=7) 
                         ax.text(1, 0.9,r'$Q$: '+str(np.round(np.quantile(FPT,0.25),2))+' ; '+str(np.round(np.quantile(FPT,0.5),2))+' ; '
                                       +str(np.round(np.quantile(FPT,0.75),2)) , ha='right', va='center', transform=ax.transAxes, fontsize=7)
                         ax.text(1, 0.7, 'total data: ' + str(len(FPT)), ha='right', va='center', transform=ax.transAxes, fontsize=7) 
@@ -253,7 +253,7 @@ def plot_FPT_square(dt,T,d,description_file,data_folder,save_path_name):
             ax.set_ylim(ylim);
             #ax.set_xticks(xticks);
             ax.set_yticks(ylim)
-            ax.tick_params(labelsize=10)
+            ax.tick_params(labelsize=7)
             
             if row == 0:
                 text = 'D = ' + str(np.round(D,5))
