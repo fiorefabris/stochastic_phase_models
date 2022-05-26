@@ -468,8 +468,8 @@ def plot_dt_square(dt,d,description_file,data_folder,save_path_name):
             if (row == Rows-1) and (col == 0): 
                 ax.set_ylabel('dt (min)', fontsize=30);
                 ax.set_xlabel('probability density (1/min)', fontsize=30)
-                ax.xaxis.set_label_coords(0.5, -0.1);
-                ax.yaxis.set_label_coords(-0.05, 0.5)
+                ax.xaxis.set_label_coords(0.5, -0.15);
+                ax.yaxis.set_label_coords(-0.1, 0.5)
             
             # download data
             DT,IPI,joint_duration,dm = download_quantifiers(row_,data_folder,dt,d)
@@ -477,8 +477,8 @@ def plot_dt_square(dt,d,description_file,data_folder,save_path_name):
             if len(DT) > 0:
                     
                 bins = ax.hist(DT,bins=np.linspace(0,20,42),density=True,alpha=1,linewidth=1,color = colors[col]); 
-                tune_plot(ax,'dt (min)','probability density (1/min)',[0,20],1,[0,0.3],1,30,10)
-                compute_st_values(ax,DT,bins,1)   
+                tune_plot(ax,'dt (min)','probability density (1/min)',[0,20],1,[0,0.4],1,30,20)
+                compute_st_values(ax,DT,bins,1,20)   
             else:
                 print(delta,D,"no data")
 
