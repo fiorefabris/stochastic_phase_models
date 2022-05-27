@@ -386,7 +386,7 @@ def fpt_statistics(dt,T,d,data_folder,row):
     FPT = []
     for ix,data in row.iterrows():
         order = int(data.order); number = int(data.number)
-        file_name =  str(number)+'_'+str(order)+'_NNH.pkl'
+        file_name =  str(number)+'_'+str(order)+'.pkl'
         if file_name in list_data_folder:
             print(file_name,' available')
             if check_file(file_name,data_folder):

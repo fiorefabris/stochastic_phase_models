@@ -248,7 +248,7 @@ def plot_time_series_square(dt,beg,T,d,N,Delta,description_file,data_folder,save
                 if 'alpha' in ref.keys() : delta= np.round(alpha/col_.omega.unique()[0],4)  
                 if 'delta' in ref.keys() : delta = alpha
                 order = int(row_.order); number = int(row_.number)
-                file_name =  str(number)+'_'+str(order)+'_NNH.pkl'
+                file_name =  str(number)+'_'+str(order)+'.pkl'
                 ax = axs[row,col]; ax.grid(False);
                 
                 ################################################
