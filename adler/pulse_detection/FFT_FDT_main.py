@@ -386,7 +386,7 @@ def fpt_statistics(dt,T,d,data_folder,row):
     FPT = []
     for ix,data in row.iterrows():
         order = int(data.order); number = int(data.number)
-        file_name =  str(number)+'_'+str(order)+'.pkl'
+        file_name =  str(number)+'_'+str(order)+'_NNH.pkl'
         if file_name in list_data_folder:
             print(file_name,' available')
             if check_file(file_name,data_folder):
@@ -413,7 +413,9 @@ def compute_FPT_aux(save_path_name,data_folder,dt,d,T,tuple_):
     *** FALTA COMPLETAR ESTA DESCRIPCION***
     '''
     (i,D),row = tuple_[0],tuple_[1]
-    omega =  row.omega.unique()[0]
+    if 'omega' in row.keys() : omega =  row.omega.unique()[0]
+    if 'T0' in row.keys() : omega =  row.omega.unique()[0]
+
     if 'alpha' in row.keys() : delta = np.round(i/omega,4)      
     if 'delta' in row.keys() : delta = i      
 
