@@ -414,11 +414,12 @@ def compute_FPT_aux(save_path_name,data_folder,dt,d,T,tuple_):
     '''
     (i,D),row = tuple_[0],tuple_[1]
     omega =  row.omega.unique()[0]
-    alpha = np.round(i/omega,4)      
+    if 'alpha' in row.keys() : delta = np.round(i/omega,4)      
+    if 'delta' in row.keys() : delta = i      
 
     FPT = fpt_statistics(dt,T,d,data_folder,row)
-    save_data(FPT,save_path_name+'FPT_'+str(omega)+'_'+str(alpha)+'_'+str(D)+'.pkl')
-    print(alpha,D)
+    save_data(FPT,save_path_name+'FPT_'+str(omega)+'_'+str(delta)+'_'+str(D)+'.pkl')
+    print(delta,D)
     return(0)
 
 def compute_FPT(description_file,save_path_name,dt,T,d,data_folder):
@@ -456,7 +457,8 @@ def compute_FPT(description_file,save_path_name,dt,T,d,data_folder):
     ref = pd.read_excel(description_file,sheet_name= 'File_references')
     ref.set_index('Unnamed: 0',inplace=True);
     pool = mp.Pool(processes= ceil(mp.cpu_count()/4))
-    tuple_ = ref.groupby(['alpha','D'])
+    if 'alpha' in ref.keys() :tuple_ = ref.groupby(['alpha','D'])
+    if 'delta' in ref.keys() :tuple_ = ref.groupby(['delta','D'])
 
     compute_FPT_aux_ = partial(compute_FPT_aux,save_path_name,data_folder,dt,d,T)
     pool.map(compute_FPT_aux_,tuple_)

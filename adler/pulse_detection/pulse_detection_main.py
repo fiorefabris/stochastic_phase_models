@@ -622,7 +622,8 @@ def main_pulse_detection_(data_folder,save_path_name,tuple_,overwrite_flag = Tru
 
     (i,D,order),row = tuple_[0],tuple_[1]
     omega =  row.omega.unique()[0]
-    delta = np.round(i/omega,4)  
+    if 'alpha' in row.keys(): delta = np.round(i/omega,4)  
+    if 'delta' in row.keys(): delta = i  
     file_name =  str(int(row.number))+'_'+str(int(order))+'.pkl'
     
     if check_file(file_name,data_folder):   
@@ -644,7 +645,8 @@ def compute_pulse_detection(description_file,data_folder,save_path_name):
     ref.set_index('Unnamed: 0',inplace=True);
     pool = mp.Pool(processes= ceil(mp.cpu_count()))
     
-    tuple_ = ref.groupby(['alpha','D','order'])
+    if 'alpha' in ref.keys() : tuple_ = ref.groupby(['alpha','D','order'])
+    if 'delta' in ref.keys() : tuple_ = ref.groupby(['delta','D','order'])
     main_pulse_detection__ = partial(main_pulse_detection_,data_folder,save_path_name)
     pool.map(main_pulse_detection__,tuple_)
     pool.close()

@@ -228,7 +228,8 @@ def plot_time_series_square(dt,beg,T,d,N,Delta,description_file,data_folder,save
 ###############################################################################    
     xlim = [-5+beg,T+5] ; ylim = [-0.02,2.02] ;         
     Cols = len(ref.groupby(['D'])) ;
-    Rows = len(ref.groupby(['alpha'])) ; 
+    if 'alpha' in ref.keys() : Rows = len(ref.groupby(['alpha'])) ; 
+    if 'delta' in ref.keys() : Rows = len(ref.groupby(['delta'])) ; 
     colors =  sns.color_palette(sns.color_palette("viridis",Cols*1))
     colors =  colors[::1]
 ###############################################################################
@@ -241,9 +242,11 @@ def plot_time_series_square(dt,beg,T,d,N,Delta,description_file,data_folder,save
     #axs[0].text(0,1.5, text, ha='center', va='center', transform=axs[0].transAxes, fontsize=35)
     
     for col,(D,col_) in  enumerate(ref.groupby(['D'])):
-        for row, (alpha,row_)  in  enumerate(col_.groupby(['alpha'])):
-            delta= np.round(alpha/col_.omega.unique()[0],4)  
-        
+        if 'alpha' in ref.keys() : iterator = col_.groupby(['alpha'])
+        if 'delta' in ref.keys() : iterator = col_.groupby(['delta'])
+        for row, (alpha,row_)  in  enumerate(iterator):
+            if 'alpha' in ref.keys() : delta= np.round(alpha/col_.omega.unique()[0],4)  
+            if 'delta' in ref.keys() : delta = alpha
             order = int(row_.order); number = int(row_.number)
             file_name =  str(number)+'_'+str(order)+'.pkl'
             ax = axs[row,col]; ax.grid(False);
