@@ -414,7 +414,7 @@ def compute_FPT_aux(save_path_name,data_folder,dt,d,T,tuple_):
     '''
     (i,D),row = tuple_[0],tuple_[1]
     if 'omega' in row.keys() : omega =  row.omega.unique()[0]
-    if 'T0' in row.keys() : omega =  row.omega.unique()[0]
+    if 'T0' in row.keys() : omega =  row.T0.unique()[0]
 
     if 'alpha' in row.keys() : delta = np.round(i/omega,4)      
     if 'delta' in row.keys() : delta = i      
