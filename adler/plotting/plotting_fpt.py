@@ -245,7 +245,7 @@ def plot_FPT_square(dt,T,d,description_file,data_folder,save_path_name):
             
                 FPT = download_data(data_folder+file_name)
                 bins = ax.hist(FPT,bins=100,range=(0,200) , density=1, alpha=0.8,linewidth=0,color=colors[col]); 
-        
+                print(FPT)
                 if len(FPT) > 0:
                         mode_FPT = (bins[1][np.argmax(bins[0])] + bins[1][np.argmax(bins[0])+1])/2 ; mode_FPT = 'mode: '+str(np.round(mode_FPT,2))+' min \n'
                         ax.text(1, 0.75, mode_FPT, ha='right', va='center', transform=ax.transAxes, fontsize=7) 
@@ -280,7 +280,7 @@ def plot_FPT_square(dt,T,d,description_file,data_folder,save_path_name):
     #for m in range(Cols*Rows - k):
         #fig.delaxes(axs[-m-1])
     
-    
+    print(save_path_name)
     plt.savefig(save_path_name + 'FPT_square.pdf', format='pdf')
 
     return(0)
