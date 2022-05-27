@@ -225,11 +225,17 @@ def plot_FPT_square(dt,T,d,description_file,data_folder,save_path_name):
 
     
     for col,(D,col_) in  enumerate(ref.groupby(['D'])):
-        for row, (alpha,row_)  in  enumerate(col_.groupby(['alpha'])):
-            delta= np.round(alpha/col_.omega.unique()[0],4)  
-            
+        if 'alpha' in ref.keys() : iterator = col_.groupby(['alpha'])
+        if 'delta' in ref.keys() : iterator = col_.groupby(['delta'])
+        for row, (alpha,row_)  in  enumerate(iterator):
+            if 'omega' in row.keys() : omega = col_.omega.unique()[0]
+            if 'T0' in row.keys() : omega = col_.T0.unique()[0]
 
-            file_name = 'FPT_'+str(col_.omega.unique()[0])+'_'+str(delta)+'_'+str(D)+'.pkl'
+            if 'alpha' in row.keys() :delta= np.round(alpha/omega,4)  
+            if 'delta' in row.keys() :delta= alpha
+
+
+            file_name = 'FPT_'+str(omega)+'_'+str(delta)+'_'+str(D)+'.pkl'
             ax = axs[row,col]; ax.grid(False);
             
             ################################################
