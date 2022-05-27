@@ -245,6 +245,7 @@ def plot_time_series_square(dt,beg,T,d,N,Delta,description_file,data_folder,save
         if 'alpha' in ref.keys() : iterator = col_.groupby(['alpha'])
         if 'delta' in ref.keys() : iterator = col_.groupby(['delta'])
         for row, (alpha,row_)  in  enumerate(iterator):
+            print(row_)
             if 'alpha' in ref.keys() : delta= np.round(alpha/col_.omega.unique()[0],4)  
             if 'delta' in ref.keys() : delta = alpha
             order = int(row_.order); number = int(row_.number)
