@@ -292,5 +292,5 @@ def plot_time_series_square(dt,beg,T,d,N,Delta,description_file,data_folder,save
     #        fig.delaxes(axs[-m-1])
     
     
-        plt.savefig(save_path_name + 'time_series_square_'+str(t0)+'.pdf', format='pdf')
+        plt.savefig(save_path_name + 'time_series_square_'+str(T0)+'.pdf', format='pdf')
     return(0)
