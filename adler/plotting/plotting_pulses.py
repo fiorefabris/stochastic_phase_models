@@ -691,6 +691,74 @@ def plot_joint_duration_square(dt,d,description_file,data_folder,save_path_name)
     plt.savefig(save_path_name + 'joint_duration_hist_square.pdf', format='pdf')
     plt.close()
     return(0)
+
+
+#%%
+    #for plotting 2d plots
+def create_df(ref,data_folder,dt,d):
+    ''' creates dataframes where 2d alpha are indexes and D are columns'''
+    omega = ref.omega.unique()[0]
+    Cols = ref.D.unique()
+    Rows = ref.alpha.unique()
+    mean_dt_matrix,mean_ipi_matrix,mean_fpt_matrix = [],[],[] 
+    
+    for alpha,row_ in ref.groupby(['alpha']):
+        aux_dt,aux_ipi,aux_fpt = [],[],[]    
+        
+        for D,col_ in row_.groupby(['D']):
+            DT,IPI,_,_ = download_quantifiers(col_,data_folder,dt,d)
+            aux_dt.append(np.mean(DT));aux_ipi.append(np.mean(IPI))
+            fpt_file_name = 'FPT_'+str(omega)+'_'+str(alpha/omega)+'_'+str(D)+'.pkl'
+            FPT = download_data(data_folder+fpt_file_name)
+            aux_fpt.append(np.mean(FPT))
+        mean_dt_matrix.append(aux_dt);mean_ipi_matrix.append(aux_ipi),mean_fpt_matrix.append(aux_fpt)
+    return (pd.DataFrame(mean_dt_matrix,columns = Cols,index = Rows),pd.DataFrame(mean_ipi_matrix,columns = Cols,index = Rows),pd.DataFrame(mean_fpt_matrix,columns = Cols,index = Rows))
+
+
+
+def plot_2d_quantifiers(dt,d,description_file,data_folder,save_path_name):
+######## Getting data information
+    plt.rcdefaults();
+    ref = pd.read_excel(description_file,sheet_name='File_references')
+    ref.set_index('Unnamed: 0',inplace=True);
+    
+    mean = [1,2] #dt,IPI
+    sigma = [1,2]
+    exp_index = [0,1,1] #dt,ipi,ipi
+    name = ['dt','IPI','FPT']
+    for omega,ref_ in  ref.groupby(['omega']):
+
+###############################################################################
+### Figure
+###############################################################################    
+
+        fig, axs = plt.subplots(2, 2, sharex=True, sharey=True, figsize=(8.27, 11.69))
+        fig.subplots_adjust(bottom=0.15, top=0.9, left=0.1, right=0.99, wspace=0.3, hspace=0.3)        #df_dt,df_ipi,df_fpt =  create_df(ref,data_folder,dt,d)
+        
+        df_dt,df_ipi,df_fpt = create_df(ref_,data_folder,dt,d)
+        
+        for i,df in enumerate([df_dt,df_ipi,df_fpt]):
+
+            mean_ ,sigma_= mean[exp_index[i]],sigma[exp_index[i]]
+            mask = ((mean_- sigma_ < df) & (df < mean_+sigma_)) #.replace(False,np.nan)
+            
+
+            axs[1,1].imshow(mask,origin='lower',alpha=1,cmap='Greys',interpolation='none')
+            axs[1,1].imshow(df,origin='lower',alpha = 0.7)
+
+            im = axs[0,1].imshow(df,origin='lower',alpha = 1)
+            cbar_ax = fig.add_axes([0.85, 0.15, 0.05, 0.7])
+            fig.colorbar(im, cax=cbar_ax)
+            
+            for ax in [axs[0,1],axs[1,1]]:
+                ax.tick_params(axis='both', direction='out')
+                ax.set_xticks(range(len(df.columns)))
+                ax.set_xticklabels(df.columns)
+                ax.set_yticks(range(len(df.index)))
+                ax.set_yticklabels(df.index)
+                
+            plt.savefig(save_path_name + str(omega)+'_'+name[i]+'_2dplot.pdf', format='pdf')
+                
 #%%
 
 # =============================================================================
