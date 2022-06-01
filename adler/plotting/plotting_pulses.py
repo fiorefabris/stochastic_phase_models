@@ -708,7 +708,7 @@ def create_df(ref,data_folder,dt,d):
         for D,col_ in row_.groupby(['D']):
             DT,IPI,_,_ = download_quantifiers(col_,data_folder,dt,d)
             aux_dt.append(np.mean(DT));aux_ipi.append(np.mean(IPI))
-            fpt_file_name = 'FPT_'+str(omega)+'_'+str(alpha/omega)+'_'+str(D)+'.pkl'
+            fpt_file_name = 'FPT_'+str(omega)+'_'+str(np.round(alpha/omega,4) )+'_'+str(D)+'.pkl'
             if check_file(fpt_file_name,data_folder) :
                 FPT = download_data(data_folder+fpt_file_name)
             else:
