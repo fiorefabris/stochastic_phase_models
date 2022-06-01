@@ -745,7 +745,7 @@ def plot_2d_quantifiers(dt,d,description_file,data_folder,save_path_name):
             fig, axs = plt.subplots(2, 2, sharex=True, sharey=True, figsize=(8.27, 11.69))
             fig.subplots_adjust(bottom=0.15, top=0.9, left=0.1, right=0.99, wspace=0.3, hspace=0.3)        #df_dt,df_ipi,df_fpt =  create_df(ref,data_folder,dt,d)
  
-            
+            print(df)
             mean_ ,sigma_= mean[exp_index[i]],sigma[exp_index[i]]
             mask = ((mean_- sigma_ < df) & (df < mean_+sigma_)) #.replace(False,np.nan)
             
@@ -753,7 +753,7 @@ def plot_2d_quantifiers(dt,d,description_file,data_folder,save_path_name):
             axs[1,1].imshow(mask,origin='lower',alpha=1,cmap='Greys',interpolation='none')
             axs[1,1].imshow(df,origin='lower',alpha = 0.7,vmin=vmin[exp_index[i]],vmax=vmax[exp_index[i]])
 
-            im = axs[1,0].imshow(df,origin='lower',alpha = 1)
+            im = axs[1,0].imshow(df,origin='lower',alpha = 1,vmin=vmin[exp_index[i]],vmax=vmax[exp_index[i]])
             #cbar_ax = fig.add_axes([0.85, 0.15, 0.05, 0.7])
             #fig.colorbar(im, cax=cbar_ax)
             cbar = plt.colorbar(im)
@@ -763,7 +763,7 @@ def plot_2d_quantifiers(dt,d,description_file,data_folder,save_path_name):
                 ax.set_xticks(range(0,len(df.columns),10))
                 ax.set_xticklabels(df.columns[::10])
                 ax.set_yticks(range(0,len(df.columns),10))
-                ax.set_yticklabels([y/omega for y in df.index[::10]])
+                ax.set_yticklabels([np.round(y/omega,2) for y in df.index[::10]])
                 
             plt.savefig(save_path_name + str(omega)+'_'+name[i]+'_2dplot.pdf', format='pdf')
                 
