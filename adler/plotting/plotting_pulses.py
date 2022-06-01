@@ -722,8 +722,8 @@ def plot_2d_quantifiers(dt,d,description_file,data_folder,save_path_name):
     ref = pd.read_excel(description_file,sheet_name='File_references')
     ref.set_index('Unnamed: 0',inplace=True);
     
-    mean = [1,2] #dt,IPI
-    sigma = [1,2]
+    mean = [6,7] #dt,IPI
+    sigma = [1,1]
     exp_index = [0,1,1] #dt,ipi,ipi
     name = ['dt','IPI','FPT']
     for omega,ref_ in  ref.groupby(['omega']):
