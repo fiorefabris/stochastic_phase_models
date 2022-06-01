@@ -712,7 +712,7 @@ def create_df(ref,data_folder,dt,d):
             if check_file(fpt_file_name,data_folder) :
                 FPT = download_data(data_folder+fpt_file_name)
             else:
-                FPT = [np.nan]
+                FPT = []
             aux_fpt.append(np.mean(FPT))
         mean_dt_matrix.append(aux_dt);mean_ipi_matrix.append(aux_ipi),mean_fpt_matrix.append(aux_fpt)
     return (pd.DataFrame(mean_dt_matrix,columns = Cols,index = Rows),pd.DataFrame(mean_ipi_matrix,columns = Cols,index = Rows),pd.DataFrame(mean_fpt_matrix,columns = Cols,index = Rows))
