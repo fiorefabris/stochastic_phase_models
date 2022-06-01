@@ -735,13 +735,15 @@ def plot_2d_quantifiers(dt,d,description_file,data_folder,save_path_name):
 ### Figure
 ###############################################################################    
 
-        fig, axs = plt.subplots(2, 2, sharex=True, sharey=True, figsize=(8.27, 11.69))
-        fig.subplots_adjust(bottom=0.15, top=0.9, left=0.1, right=0.99, wspace=0.3, hspace=0.3)        #df_dt,df_ipi,df_fpt =  create_df(ref,data_folder,dt,d)
-        
+       
         df_dt,df_ipi,df_fpt = create_df(ref_,data_folder,dt,d)
         
         for i,df in enumerate([df_dt,df_ipi,df_fpt]):
-
+            plt.close()
+            fig, axs = plt.subplots(2, 2, sharex=True, sharey=True, figsize=(8.27, 11.69))
+            fig.subplots_adjust(bottom=0.15, top=0.9, left=0.1, right=0.99, wspace=0.3, hspace=0.3)        #df_dt,df_ipi,df_fpt =  create_df(ref,data_folder,dt,d)
+ 
+            
             mean_ ,sigma_= mean[exp_index[i]],sigma[exp_index[i]]
             mask = ((mean_- sigma_ < df) & (df < mean_+sigma_)) #.replace(False,np.nan)
             
