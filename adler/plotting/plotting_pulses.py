@@ -727,7 +727,7 @@ def plot_2d_quantifiers(dt,d,description_file,data_folder,save_path_name):
     
     mean = [6,7] #dt,IPI
     sigma = [1,1]
-    vmin = [5,5]
+    vmin = [1,5]
     vmax=[15,30]
     exp_index = [0,1,1] #dt,ipi,ipi
     name = ['dt','IPI','FPT']
@@ -749,11 +749,12 @@ def plot_2d_quantifiers(dt,d,description_file,data_folder,save_path_name):
             mean_ ,sigma_= mean[exp_index[i]],sigma[exp_index[i]]
             mask = ((mean_- sigma_ < df) & (df < mean_+sigma_)) #.replace(False,np.nan)
             
-
+            
             axs[1,1].imshow(mask,origin='lower',alpha=1,cmap='Greys',interpolation='none')
-            axs[1,1].imshow(df,origin='lower',alpha = 0.4,vmin=vmin[exp_index[i]],vmax=vmax[exp_index[i]],cmap="viridis_r")
+            axs[1,1].imshow(df,origin='lower',alpha = 0.3,vmin=vmin[exp_index[i]],vmax=vmax[exp_index[i]],cmap="viridis_r")
 
             im = axs[1,0].imshow(df,origin='lower',alpha = 1,vmin=vmin[exp_index[i]],vmax=vmax[exp_index[i]],cmap="viridis_r")
+            axs[1,0].axhline(1,linestyle='dashed',color='black')
             #cbar_ax = fig.add_axes([0.85, 0.15, 0.05, 0.7])
             #fig.colorbar(im, cax=cbar_ax)
             cbar = plt.colorbar(im)
