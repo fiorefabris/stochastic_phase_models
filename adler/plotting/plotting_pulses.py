@@ -751,14 +751,14 @@ def plot_2d_quantifiers(dt,d,description_file,data_folder,save_path_name):
             
 
             axs[1,1].imshow(mask,origin='lower',alpha=1,cmap='Greys',interpolation='none',cmap="viridis_r")
-            axs[1,1].imshow(df,origin='lower',alpha = 0.4,vmin=vmin[exp_index[i]],vmax=vmax[exp_index[i]])
+            axs[1,1].imshow(df,origin='lower',alpha = 0.4,vmin=vmin[exp_index[i]],vmax=vmax[exp_index[i]],cmap="viridis_r")
 
-            im = axs[1,0].imshow(df,origin='lower',alpha = 1,vmin=vmin[exp_index[i]],vmax=vmax[exp_index[i]],cmap="viridis_r")
+            im = axs[1,0].imshow(df,origin='lower',alpha = 1,vmin=vmin[exp_index[i]],vmax=vmax[exp_index[i]])
             #cbar_ax = fig.add_axes([0.85, 0.15, 0.05, 0.7])
             #fig.colorbar(im, cax=cbar_ax)
             cbar = plt.colorbar(im)
             
-            for ax in [axs[0,1],axs[1,1]]:
+            for ax in [axs[1,0],axs[1,1]]:
                 ax.tick_params(axis='both', direction='out')
                 ax.set_xticks(range(0,len(df.columns),10))
                 ax.set_xticklabels(df.columns[::10])
