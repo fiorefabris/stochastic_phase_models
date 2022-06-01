@@ -750,10 +750,10 @@ def plot_2d_quantifiers(dt,d,description_file,data_folder,save_path_name):
             mask = ((mean_- sigma_ < df) & (df < mean_+sigma_)) #.replace(False,np.nan)
             
 
-            axs[1,1].imshow(mask,origin='lower',alpha=1,cmap='Greys',interpolation='none')
-            axs[1,1].imshow(df,origin='lower',alpha = 0.7,vmin=vmin[exp_index[i]],vmax=vmax[exp_index[i]])
+            axs[1,1].imshow(mask,origin='lower',alpha=1,cmap='Greys',interpolation='none',cmap="viridis_r")
+            axs[1,1].imshow(df,origin='lower',alpha = 0.4,vmin=vmin[exp_index[i]],vmax=vmax[exp_index[i]])
 
-            im = axs[1,0].imshow(df,origin='lower',alpha = 1,vmin=vmin[exp_index[i]],vmax=vmax[exp_index[i]])
+            im = axs[1,0].imshow(df,origin='lower',alpha = 1,vmin=vmin[exp_index[i]],vmax=vmax[exp_index[i]],cmap="viridis_r")
             #cbar_ax = fig.add_axes([0.85, 0.15, 0.05, 0.7])
             #fig.colorbar(im, cax=cbar_ax)
             cbar = plt.colorbar(im)
@@ -762,6 +762,9 @@ def plot_2d_quantifiers(dt,d,description_file,data_folder,save_path_name):
                 ax.tick_params(axis='both', direction='out')
                 ax.set_xticks(range(0,len(df.columns),10))
                 ax.set_xticklabels(df.columns[::10])
+                
+                ax.set_xlabel('D', fontsize=10)
+                ax.set_ylabel('delta', fontsize=1.)
                 ax.set_yticks(range(0,len(df.columns),10))
                 ax.set_yticklabels([np.round(y/omega,2) for y in df.index[::10]])
                 
