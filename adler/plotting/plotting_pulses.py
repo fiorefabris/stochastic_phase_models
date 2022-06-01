@@ -728,7 +728,7 @@ def plot_2d_quantifiers(dt,d,description_file,data_folder,save_path_name):
     mean = [6,7] #dt,IPI
     sigma = [1,1]
     vmin = [5,5]
-    vmax=[20,1000]
+    vmax=[15,30]
     exp_index = [0,1,1] #dt,ipi,ipi
     name = ['dt','IPI','FPT']
     for omega,ref_ in  ref.groupby(['omega']):
