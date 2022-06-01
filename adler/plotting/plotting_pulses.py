@@ -727,7 +727,7 @@ def plot_2d_quantifiers(dt,d,description_file,data_folder,save_path_name):
     
     mean = [6,7] #dt,IPI
     sigma = [1,1]
-    vmin = [1,4]
+    vmin = [1,6]
     vmax=[10,20]
     exp_index = [0,1,1] #dt,ipi,ipi
     name = ['dt','IPI','FPT']
@@ -752,6 +752,7 @@ def plot_2d_quantifiers(dt,d,description_file,data_folder,save_path_name):
             
             axs[1,1].imshow(mask,origin='lower',alpha=1,cmap='Greys',interpolation='none')
             axs[1,1].imshow(df,origin='lower',alpha = 0.3,vmin=vmin[exp_index[i]],vmax=vmax[exp_index[i]],cmap="viridis_r")
+            axs[1,1].axhline(len(df.index)//2,linestyle='dashed',color='black')
 
             im = axs[1,0].imshow(df,origin='lower',alpha = 1,vmin=vmin[exp_index[i]],vmax=vmax[exp_index[i]],cmap="viridis_r")
             axs[1,0].axhline(len(df.index)//2,linestyle='dashed',color='black')
