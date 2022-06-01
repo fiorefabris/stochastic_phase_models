@@ -727,8 +727,8 @@ def plot_2d_quantifiers(dt,d,description_file,data_folder,save_path_name):
     
     mean = [6,7] #dt,IPI
     sigma = [1,1]
-    vmin = [1,5]
-    vmax=[15,30]
+    vmin = [1,1]
+    vmax=[10,20]
     exp_index = [0,1,1] #dt,ipi,ipi
     name = ['dt','IPI','FPT']
     for omega,ref_ in  ref.groupby(['omega']):
@@ -765,7 +765,7 @@ def plot_2d_quantifiers(dt,d,description_file,data_folder,save_path_name):
                 ax.set_xticklabels(df.columns[::10])
                 
                 ax.set_xlabel('D', fontsize=10)
-                ax.set_ylabel('delta', fontsize=1.)
+                ax.set_ylabel('delta', fontsize=10)
                 ax.set_yticks(range(0,len(df.columns),10))
                 ax.set_yticklabels([np.round(y/omega,2) for y in df.index[::10]])
                 
