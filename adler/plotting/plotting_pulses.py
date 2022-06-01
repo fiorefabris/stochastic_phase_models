@@ -749,16 +749,16 @@ def plot_2d_quantifiers(dt,d,description_file,data_folder,save_path_name):
             axs[1,1].imshow(mask,origin='lower',alpha=1,cmap='Greys',interpolation='none')
             axs[1,1].imshow(df,origin='lower',alpha = 0.7)
 
-            im = axs[0,1].imshow(df,origin='lower',alpha = 1)
-            cbar_ax = fig.add_axes([0.85, 0.15, 0.05, 0.7])
-            fig.colorbar(im, cax=cbar_ax)
+            im = axs[1,0].imshow(df,origin='lower',alpha = 1)
+            #cbar_ax = fig.add_axes([0.85, 0.15, 0.05, 0.7])
+            #fig.colorbar(im, cax=cbar_ax)
             
             for ax in [axs[0,1],axs[1,1]]:
                 ax.tick_params(axis='both', direction='out')
-                ax.set_xticks(range(len(df.columns)))
-                ax.set_xticklabels(df.columns)
-                ax.set_yticks(range(len(df.index)))
-                ax.set_yticklabels(df.index)
+                ax.set_xticks(range(0,len(df.columns),10))
+                ax.set_xticklabels(df.columns[::10])
+                ax.set_yticks(range(0,len(df.columns),10))
+                ax.set_yticklabels(df.index[::10])
                 
             plt.savefig(save_path_name + str(omega)+'_'+name[i]+'_2dplot.pdf', format='pdf')
                 
