@@ -727,6 +727,8 @@ def plot_2d_quantifiers(dt,d,description_file,data_folder,save_path_name):
     
     mean = [6,7] #dt,IPI
     sigma = [1,1]
+    vmin = [5,5]
+    vmax=[20,1000]
     exp_index = [0,1,1] #dt,ipi,ipi
     name = ['dt','IPI','FPT']
     for omega,ref_ in  ref.groupby(['omega']):
@@ -749,7 +751,7 @@ def plot_2d_quantifiers(dt,d,description_file,data_folder,save_path_name):
             
 
             axs[1,1].imshow(mask,origin='lower',alpha=1,cmap='Greys',interpolation='none')
-            axs[1,1].imshow(df,origin='lower',alpha = 0.7)
+            axs[1,1].imshow(df,origin='lower',alpha = 0.7,vmin=vmin[exp_index[i]],vmax=vmax[exp_index[i]])
 
             im = axs[1,0].imshow(df,origin='lower',alpha = 1)
             #cbar_ax = fig.add_axes([0.85, 0.15, 0.05, 0.7])
