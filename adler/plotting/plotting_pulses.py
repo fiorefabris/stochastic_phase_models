@@ -731,8 +731,8 @@ def plot_2d_quantifiers(dt,T,d,description_file,data_folder,save_path_name):
     ref = pd.read_excel(description_file,sheet_name='File_references')
     ref.set_index('Unnamed: 0',inplace=True);
     
-    mean = [6,7] #dt,IPI
-    sigma = [1,1]
+    q_m = [6,8] #dt,IPI
+    q_M = [8.33,18.67]
     vmin = [1,6]
     vmax=[10,20]
     exp_index = [0,1,1] #dt,ipi,ipi
@@ -752,8 +752,8 @@ def plot_2d_quantifiers(dt,T,d,description_file,data_folder,save_path_name):
             fig.subplots_adjust(bottom=0.15, top=0.9, left=0.1, right=0.99, wspace=0.3, hspace=0.3)        #df_dt,df_ipi,df_fpt =  create_df(ref,data_folder,dt,d)
  
             print(df)
-            mean_ ,sigma_= mean[exp_index[i]],sigma[exp_index[i]]
-            mask = ((mean_- sigma_ < df) & (df < mean_+sigma_)) #.replace(False,np.nan)
+            q_m_ ,q_M_= q_m[exp_index[i]],q_M[exp_index[i]]
+            mask = (q_m_ <= df) & (df <= q_M_)) #.replace(False,np.nan)
             
             
             axs[1,1].imshow(mask,origin='lower',alpha=1,cmap='Greys',interpolation='none')
@@ -950,7 +950,7 @@ def plot_2d_mean_activity(dt,T,d,description_file,data_folder,save_path_name):
         fig.subplots_adjust(bottom=0.15, top=0.9, left=0.1, right=0.99, wspace=0.3, hspace=0.3)        #df_dt,df_ipi,df_fpt =  create_df(ref,data_folder,dt,d)
  
         print(df)
-        mask = ((mean_- sigma_ < df) & (df < mean_+sigma_)) #.replace(False,np.nan)
+        mask = ((mean_- sigma_ <= df) & (df <= mean_+sigma_)) #.replace(False,np.nan)
         
         
         axs[1,1].imshow(mask,origin='lower',alpha=1,cmap='Greys',interpolation='none')
