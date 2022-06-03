@@ -717,7 +717,7 @@ def create_df(ref,data_folder,dt,T,d):
             aux_fpt.append(np.mean(FPT))
             
             activity,_,_ = load_activity(col_,data_folder,dt,T,d); 
-            assert ((np.mean(activity) <= 100) or (len(activity == 0)),(alpha,D,activity)
+            assert ((np.mean(activity) <= 100) or (len(activity) == 0),(alpha,D,activity)
             if len(activity) > 0: aux_act.append(np.mean(activity))
             else:aux_act.append(0)
         mean_dt_matrix.append(aux_dt);mean_ipi_matrix.append(aux_ipi),mean_fpt_matrix.append(aux_fpt),mean_act_matrix.append(aux_act)
