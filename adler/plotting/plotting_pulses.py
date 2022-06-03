@@ -949,7 +949,7 @@ def plot_2d_mean_activity(dt,T,d,description_file,data_folder,save_path_name):
         fig, axs = plt.subplots(2, 2, sharex=True, sharey=True, figsize=(8.27, 11.69))
         fig.subplots_adjust(bottom=0.15, top=0.9, left=0.1, right=0.99, wspace=0.3, hspace=0.3)        #df_dt,df_ipi,df_fpt =  create_df(ref,data_folder,dt,d)
  
-
+        print(df)
         mask = ((mean_- sigma_ < df) & (df < mean_+sigma_)) #.replace(False,np.nan)
         
         
