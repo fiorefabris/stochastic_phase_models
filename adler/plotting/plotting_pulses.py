@@ -753,7 +753,7 @@ def plot_2d_quantifiers(dt,T,d,description_file,data_folder,save_path_name):
  
             print(df)
             q_m_ ,q_M_= q_m[exp_index[i]],q_M[exp_index[i]]
-            mask = (q_m_ <= df) & (df <= q_M_)) #.replace(False,np.nan)
+            mask = ((q_m_ <= df) & (df <= q_M_)) #.replace(False,np.nan)
             
             
             axs[1,1].imshow(mask,origin='lower',alpha=1,cmap='Greys',interpolation='none')
