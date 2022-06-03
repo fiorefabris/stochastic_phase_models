@@ -695,31 +695,35 @@ def plot_joint_duration_square(dt,d,description_file,data_folder,save_path_name)
 
 #%%
     #for plotting 2d plots
-def create_df(ref,data_folder,dt,d):
+def create_df(ref,data_folder,dt,T,d):
     ''' creates dataframes where 2d alpha are indexes and D are columns'''
     omega = ref.omega.unique()[0]
     Cols = ref.D.unique()
     Rows = ref.alpha.unique()
-    mean_dt_matrix,mean_ipi_matrix,mean_fpt_matrix = [],[],[] 
+    mean_dt_matrix,mean_ipi_matrix,mean_fpt_matrix,mean_act_matrix = [],[],[],[]
     
     for alpha,row_ in ref.groupby(['alpha']):
-        aux_dt,aux_ipi,aux_fpt = [],[],[]    
+        aux_dt,aux_ipi,aux_fpt,aux_act = [],[],[],[]    
         
         for D,col_ in row_.groupby(['D']):
             DT,IPI,_,_ = download_quantifiers(col_,data_folder,dt,d)
             aux_dt.append(np.mean(DT));aux_ipi.append(np.mean(IPI))
+            
             fpt_file_name = 'FPT_'+str(omega)+'_'+str(np.round(alpha/omega,4) )+'_'+str(D)+'.pkl'
             if check_file(fpt_file_name,data_folder) :
                 FPT = download_data(data_folder+fpt_file_name)
             else:
                 FPT = []
             aux_fpt.append(np.mean(FPT))
-        mean_dt_matrix.append(aux_dt);mean_ipi_matrix.append(aux_ipi),mean_fpt_matrix.append(aux_fpt)
-    return (pd.DataFrame(mean_dt_matrix,columns = Cols,index = Rows),pd.DataFrame(mean_ipi_matrix,columns = Cols,index = Rows),pd.DataFrame(mean_fpt_matrix,columns = Cols,index = Rows))
+            
+            activity,_,_ = load_activity(row_,data_folder,dt,T,d)
+            aux_act.append(np.mean(activity))
+        mean_dt_matrix.append(aux_dt);mean_ipi_matrix.append(aux_ipi),mean_fpt_matrix.append(aux_fpt),mean_act_matrix(aux_act)
+    return (pd.DataFrame(mean_dt_matrix,columns = Cols,index = Rows),pd.DataFrame(mean_ipi_matrix,columns = Cols,index = Rows),pd.DataFrame(mean_fpt_matrix,columns = Cols,index = Rows)),pd.DataFrame(mean_ipi_matrix,columns = Cols,index = Rows)
 
 
 
-def plot_2d_quantifiers(dt,d,description_file,data_folder,save_path_name):
+def plot_2d_quantifiers(dt,T,d,description_file,data_folder,save_path_name):
 ######## Getting data information
     plt.rcdefaults();
     ref = pd.read_excel(description_file,sheet_name='File_references')
@@ -738,7 +742,7 @@ def plot_2d_quantifiers(dt,d,description_file,data_folder,save_path_name):
 ###############################################################################    
 
        
-        df_dt,df_ipi,df_fpt = create_df(ref_,data_folder,dt,d)
+        df_dt,df_ipi,df_fpt,_ = create_df(ref_,data_folder,dt,T,d)
         
         for i,df in enumerate([df_dt,df_ipi,df_fpt]):
             plt.close()
@@ -793,9 +797,9 @@ def load_activity(row_,data_folder,dt,T,d):
         number      = int(row.number)
         file_name   =  str(number)+'_'+str(order)+'.pkl'
         
-        if (check_file('dt_xf_'+file_name,data_folder)):        
+        if (check_file('dt_'+file_name,data_folder)):        
             
-            duration_cell   = download_data(data_folder+'dt_xf_'+file_name)     
+            duration_cell   = download_data(data_folder+'dt_'+file_name)     
             n_cell = n_cell + 1
             activity = activity + [sum(duration_cell) / len(time(dt,T,d)) *  100]
             
@@ -919,6 +923,56 @@ def plot_activity_D(dt,T,d,data_folder,save_path_name,tuple_):
 
     plt.savefig(save_path_name+'bxp_activity_'+str(alpha)+'.pdf', format='pdf')
 
+#%%
+    
+def plot_2d_mean_activity(dt,d,description_file,data_folder,save_path_name):
+######## Getting data information
+    plt.rcdefaults();
+    ref = pd.read_excel(description_file,sheet_name='File_references')
+    ref.set_index('Unnamed: 0',inplace=True);
+    
+    mean_ = 1 #dt,IPI
+    sigma_ = 1
+    vmin = None
+    vmax=None
+    
+    for omega,ref_ in  ref.groupby(['omega']):
+
+###############################################################################
+### Figure
+###############################################################################    
+
+       
+        df = create_df(ref_,data_folder,dt,d)
+        
+        fig, axs = plt.subplots(2, 2, sharex=True, sharey=True, figsize=(8.27, 11.69))
+        fig.subplots_adjust(bottom=0.15, top=0.9, left=0.1, right=0.99, wspace=0.3, hspace=0.3)        #df_dt,df_ipi,df_fpt =  create_df(ref,data_folder,dt,d)
+ 
+
+        mask = ((mean_- sigma_ < df) & (df < mean_+sigma_)) #.replace(False,np.nan)
+        
+        
+        axs[1,1].imshow(mask,origin='lower',alpha=1,cmap='Greys',interpolation='none')
+        axs[1,1].imshow(df,origin='lower',alpha = 0.3,vmin=vmin,vmax=vmax,cmap="viridis_r")
+        axs[1,1].axhline(len(df.index)//2,linestyle='dashed',color='black')
+
+        im = axs[1,0].imshow(df,origin='lower',alpha = 1,vmin=vmin,vmax=vmax,cmap="viridis_r")
+        axs[1,0].axhline(len(df.index)//2,linestyle='dashed',color='black')
+        #cbar_ax = fig.add_axes([0.85, 0.15, 0.05, 0.7])
+        #fig.colorbar(im, cax=cbar_ax)
+        cbar = plt.colorbar(im)
+        
+        for ax in [axs[1,0],axs[1,1]]:
+            ax.tick_params(axis='both', direction='out')
+            ax.set_xticks(range(0,len(df.columns),10))
+            ax.set_xticklabels(df.columns[::10])
+            
+            ax.set_xlabel('D', fontsize=10)
+            ax.set_ylabel('delta', fontsize=10)
+            ax.set_yticks(range(0,len(df.index),10))
+            ax.set_yticklabels([np.round(y/omega,2) for y in df.index[::10]])
+                
+            plt.savefig(save_path_name + str(omega)+'_mactivity_2dplot.pdf', format='pdf')
 #%%
 
 # =============================================================================
