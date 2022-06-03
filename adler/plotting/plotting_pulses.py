@@ -925,14 +925,14 @@ def plot_activity_D(dt,T,d,data_folder,save_path_name,tuple_):
 
 #%%
     
-def plot_2d_mean_activity(dt,d,description_file,data_folder,save_path_name):
+def plot_2d_mean_activity(dt,T,d,description_file,data_folder,save_path_name):
 ######## Getting data information
     plt.rcdefaults();
     ref = pd.read_excel(description_file,sheet_name='File_references')
     ref.set_index('Unnamed: 0',inplace=True);
     
-    mean_ = 1 #dt,IPI
-    sigma_ = 1
+    mean_ = 32 #dt,IPI
+    sigma_ = 3
     vmin = None
     vmax=None
     
@@ -943,7 +943,7 @@ def plot_2d_mean_activity(dt,d,description_file,data_folder,save_path_name):
 ###############################################################################    
 
        
-        df = create_df(ref_,data_folder,dt,d)
+        _,_,_,df = create_df(ref_,data_folder,dt,T,d)
         
         fig, axs = plt.subplots(2, 2, sharex=True, sharey=True, figsize=(8.27, 11.69))
         fig.subplots_adjust(bottom=0.15, top=0.9, left=0.1, right=0.99, wspace=0.3, hspace=0.3)        #df_dt,df_ipi,df_fpt =  create_df(ref,data_folder,dt,d)
