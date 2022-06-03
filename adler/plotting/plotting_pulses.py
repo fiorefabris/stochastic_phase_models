@@ -718,7 +718,7 @@ def create_df(ref,data_folder,dt,T,d):
             
             activity,_,_ = load_activity(col_,data_folder,dt,T,d)
             aux_act.append(np.mean(activity))
-        mean_dt_matrix.append(aux_dt);mean_ipi_matrix.append(aux_ipi),mean_fpt_matrix.append(aux_fpt),mean_act_matrix(aux_act)
+        mean_dt_matrix.append(aux_dt);mean_ipi_matrix.append(aux_ipi),mean_fpt_matrix.append(aux_fpt),mean_act_matrix.append(aux_act)
     return (pd.DataFrame(mean_dt_matrix,columns = Cols,index = Rows),pd.DataFrame(mean_ipi_matrix,columns = Cols,index = Rows),pd.DataFrame(mean_fpt_matrix,columns = Cols,index = Rows)),pd.DataFrame(mean_ipi_matrix,columns = Cols,index = Rows)
 
 
