@@ -716,7 +716,7 @@ def create_df(ref,data_folder,dt,T,d):
                 FPT = []
             aux_fpt.append(np.mean(FPT))
             
-            activity,_,_ = load_activity(col_,data_folder,dt,T,d)
+            activity,_,_ = load_activity(col_,data_folder,dt,T,d); print(activity,'\n',np.mean(activity))
             if len(activity) > 0: aux_act.append(np.mean(activity))
             else:aux_act.append(0)
         mean_dt_matrix.append(aux_dt);mean_ipi_matrix.append(aux_ipi),mean_fpt_matrix.append(aux_fpt),mean_act_matrix.append(aux_act)
@@ -945,7 +945,6 @@ def plot_2d_mean_activity(dt,T,d,description_file,data_folder,save_path_name):
 
        
         _,_,_,df = create_df(ref_,data_folder,dt,T,d)
-        print(df)
         fig, axs = plt.subplots(2, 2, sharex=True, sharey=True, figsize=(8.27, 11.69))
         fig.subplots_adjust(bottom=0.15, top=0.9, left=0.1, right=0.99, wspace=0.3, hspace=0.3)        #df_dt,df_ipi,df_fpt =  create_df(ref,data_folder,dt,d)
  
