@@ -343,3 +343,129 @@ def time_evolution_save_NNH(param,number,order,main_file_name,dt,T,d):
     t1 = time.perf_counter() - t0
     print(file_name,t1)
     return(0)
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+#%%
+# =============================================================================
+# =============================================================================
+# =============================================================================
+# Module for computing the time series with colored noise in alpha
+# =============================================================================
+# =============================================================================
+# =============================================================================
+    
+    
+# Time evolution funtion 
+def time_evolution_ou(dt,T,d,omega,alpha0,sigma,tau):
+    ''' Simulated data of the Adler phase model with colopr noise in alpha. 
+    
+    ------------------------------------------------------------
+    INPUTS:
+
+    ------------------------------------------------------------
+    OUTPUTS:
+        - t : time
+        - theta : phase simulated variables
+
+'''
+
+    n     = int(T/dt) # total number of steps
+    
+    #variables
+    theta = np.zeros(ceil(n/d))
+     
+
+    #### Initial conditions ############################
+    ####################################################
+    np.random.seed()
+    theta_past = np.random.uniform(0,2)*np.pi
+    alpha_past = alpha0
+    
+    #### Time evolution ################################
+    ####################################################
+
+    for i in range(n-1):
+        theta_present,alpha_present = get_theta_present(theta_past,alpha_past,omega,alpha0,sigma,tau,dt)
+        if i % d == 0:
+            theta[i // d] = theta_past
+                    
+        theta_past = theta_present
+        alpha_past = alpha_present
+
+
+    return(theta)
+    
+
+def get_ou_process(alpha_past, alpha0,sigma,tau,dt):
+    u = np.sqrt(-2* np.log(np.random.uniform(0,1))) * np.cos(2*np.pi*np.random.uniform(0,1))
+    k = dt/tau * (alpha0 - alpha_past)
+    l = np.sqrt(dt) * (np.sqrt(2/tau)*sigma) * u 
+
+    alpha_present= alpha_past + dt/(2*tau) *((alpha0 - alpha_past) + (alpha0-(alpha_past + k + l))) + np.sqrt(dt) * u * (np.sqrt(2/tau)*sigma)
+    return alpha_present
+
+def get_theta_present(theta_past,alpha_past,omega,alpha0,sigma,tau,dt):
+    alpha_present = get_ou_process(alpha_past, alpha0,sigma,tau,dt) 
+    k = dt * omega
+    l = (dt* alpha_past) * np.sin(theta_past)
+    theta_present = theta_past + dt * omega +  (dt* alpha_past)/2 * (np.sin(theta_past) + np.sin(theta_past+k+l))
+    return(theta_present,alpha_present)
+    
+#%%
+def compute_time_series_ou(save_path_name_description,save_path_name_data,params,dt,T,d,N):
+    # =============================================================================
+    # Generates the description
+    # =============================================================================
+    
+    #save_path_name_file_name = '/home/fiore/running_25_10_2021/coding/description.xlsx'
+    get_file_references(params,N,save_path_name_description)
+    
+    # =============================================================================
+    #   Generates the trazes  
+    # =============================================================================
+    
+    #save_path_name = '/home/fiore/running_25_10_2021/data/'
+    explore_param_space_time_evolution_ou(params, save_path_name_data,dt,T,d,N)
+
+
+def explore_param_space_time_evolution_ou(params, main_file_name,dt,T,d,N=1, nproc = mp.cpu_count()):
+    ''' hhh
+    '''
+    t0= time.perf_counter(); print('starting...')
+    pool = mp.Pool(processes= nproc)
+    mp_time_evolution_and_list_ = partial(mp_time_evolution_and_list_ou, main_file_name,dt,T,d)
+    pool.map(mp_time_evolution_and_list_,repeat_and_list_all_combinations(params,N) ) 
+    pool.close() 
+    pool.join()
+    t1 = time.perf_counter() - t0
+    print("time elapsed: ", t1)
+    return(0)
+
+
+def mp_time_evolution_and_list_ou(main_file_name,dt,T,d,param):
+    # Function for calling the main function with a tuple of parameters
+    time_evolution_save_ou(*param,main_file_name,dt,T,d) 
+    return(0)
+
+
+def time_evolution_save_ou(param,number,order,main_file_name,dt,T,d):
+    t0= time.perf_counter()
+    time_evolution__ = partial(time_evolution_ou,dt,T,d)
+    theta = time_evolution__(*param) 
+    file_name =  str(number)+'_'+str(order)+'.pkl'
+    save_data(theta, main_file_name + file_name)
+    t1 = time.perf_counter() - t0
+    print(file_name,t1)
+    return(0)
