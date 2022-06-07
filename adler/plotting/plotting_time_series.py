@@ -394,6 +394,7 @@ def plot_time_series_square_ou(dt,beg,T,d,N,Delta,description_file,data_folder,s
                 ax.set_xticklabels([beg,T])
                 ax.set_yticklabels([0,2])
                 ax.tick_params(labelsize=20)
+                print(alpha)
     
     
         
