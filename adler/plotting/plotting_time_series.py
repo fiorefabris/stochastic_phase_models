@@ -340,7 +340,6 @@ def plot_time_series_square_ou(dt,beg,T,d,N,Delta,description_file,data_folder,s
     ### Plotting parameters
     ###############################################################################    
     xlim = [-5+beg,T+5] ; ylim = [-0.02,2.02] ;         
-    Cols = len(ref.groupby(['D'])) ;
     for alpha,ref_ in ref.groupby(['alpha0']):
         if alpha in [i*2*np.pi/7 for i in [0,1,2]]:
             
