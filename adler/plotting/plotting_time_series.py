@@ -334,13 +334,13 @@ def plot_time_series_square_ou(dt,beg,T,d,N,Delta,description_file,data_folder,s
     '''
 
 ######## Getting data information
-    ref = pd.read_excel(description_file,sheet_name='File_references')
-    ref.set_index('Unnamed: 0',inplace=True);
+    ref_ = pd.read_excel(description_file,sheet_name='File_references')
+    ref_.set_index('Unnamed: 0',inplace=True);
     ###############################################################################
     ### Plotting parameters
     ###############################################################################    
     xlim = [-5+beg,T+5] ; ylim = [-0.02,2.02] ;         
-    for alpha,ref_ in ref.groupby(['alpha0']):
+    for alpha,ref in ref_.groupby(['alpha0']):
         
         Rows = len(ref.groupby(['tau'])) ; 
         Cols = len(ref.groupby(['sigma'])) ; 
