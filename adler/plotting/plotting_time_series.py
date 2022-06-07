@@ -357,7 +357,7 @@ def plot_time_series_square_ou(dt,beg,T,d,N,Delta,description_file,data_folder,s
             for col,(sigma,col_) in  enumerate(ref.groupby(['sigma'])):
                 for row, (tau,row_)  in  enumerate(col_.groupby(['tau'])):
                     delta= np.round(alpha/col_.omega.unique()[0],4)  
-                    order = int(row_.order); number = int(row_.number)
+                    order = int(row_.order.values[0]); number = int(row_.number.values[0])
                     file_name =  str(number)+'_'+str(order)+'.pkl'
                     ax = axs[row,col]; ax.grid(False);
                     
