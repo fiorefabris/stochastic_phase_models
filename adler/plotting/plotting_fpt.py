@@ -284,3 +284,87 @@ def plot_FPT_square(dt,T,d,description_file,data_folder,save_path_name):
     plt.savefig(save_path_name + 'FPT_square.pdf', format='pdf')
 
     return(0)
+    
+#%%#%%
+def plot_FPT_square_ou(dt,T,d,description_file,data_folder,save_path_name):
+    '''
+    FPT plotting function
+    '''
+######## Getting data information
+    plt.rcdefaults();
+    ref_ = pd.read_excel(description_file,sheet_name='File_references')
+    ref_.set_index('Unnamed: 0',inplace=True);
+        
+###############################################################################
+### Plotting parameters
+###############################################################################    
+    for alpha,ref in ref_.groupby(['alpha0']):
+        
+        Rows = len(ref.groupby(['tau'])) ; 
+        Cols = len(ref.groupby(['sigma'])) ; 
+        colors =  sns.color_palette(sns.color_palette("viridis",Cols*1))
+        colors =  colors[::1]
+
+        ylim = [0,0.15] ; #xlim = [0,5] 
+        xlim = [0,100] ; 
+    
+    ###############################################################################
+    ### Figure
+    ###############################################################################    
+    
+        fig, axs = plt.subplots(Rows, Cols, sharex=True, sharey=True, figsize=(8.27, 11.69))
+        fig.subplots_adjust(bottom=0.15, top=0.9, left=0.1, right=0.99, wspace=0.3, hspace=0.3)
+    
+        
+        for col,(sigma,col_) in  enumerate(ref.groupby(['sigma'])):
+            for row, (tau,row_)  in  enumerate(col_.groupby(['tau'])):
+                delta= np.round(alpha/col_.omega.unique()[0],4)  
+                file_name = 'FPT_'+str(col_.omega.unique()[0])+'_'+str(delta)+'_'+str(sigma)+'_'+str(tau)+'.pkl'   
+                ax = axs[row,col]; ax.grid(False);
+                
+                ################################################
+                #### download data
+                ################################################
+                if check_file(file_name,data_folder):        
+                
+                    FPT = download_data(data_folder+file_name)
+                    bins = ax.hist(FPT,bins=100,range=(0,200) , density=1, alpha=0.8,linewidth=0,color=colors[col]); 
+                    print(FPT)
+                    if len(FPT) > 0:
+                        mode_FPT = (bins[1][np.argmax(bins[0])] + bins[1][np.argmax(bins[0])+1])/2 ; mode_FPT = 'mode: '+str(np.round(mode_FPT,2))+' min \n'
+                        ax.text(1, 0.75, mode_FPT, ha='right', va='center', transform=ax.transAxes, fontsize=7) 
+                        ax.text(1, 0.9,r'$Q$: '+str(np.round(np.quantile(FPT,0.25),2))+' ; '+str(np.round(np.quantile(FPT,0.5),2))+' ; '
+                                    +str(np.round(np.quantile(FPT,0.75),2)) , ha='right', va='center', transform=ax.transAxes, fontsize=7)
+                        ax.text(1, 0.7, 'total data: ' + str(len(FPT)), ha='right', va='center', transform=ax.transAxes, fontsize=7) 
+                    else:
+                        print(delta,sigma,tau,"no data")
+                
+                ax.set_xlim(xlim);
+                ax.set_ylim(ylim);
+                #ax.set_xticks(xticks);
+                ax.set_yticks(ylim)
+                ax.tick_params(labelsize=7)
+                
+                if row == 0:
+                    text = 'sigma = ' + str(np.round(sigma,5))
+                    ax.text(0.9, 1.05, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
+                if col == 0:
+                    text = 'tau = ' + str(np.round(tau,5))
+                    ax.text(-0.2, 0.9, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
+     
+    #    xticks = np.arange(0,200,14); ax.set_xticks(xticks)
+    #    ax.set_xticklabels(xticks, fontsize=15);
+                if (row == Rows-1) and (col == 0): 
+                    ax.set_ylabel('density', fontsize=7)
+                    ax.set_xlabel('first passage time (mins)', fontsize=7)
+                    ax.xaxis.set_label_coords(0.5,  -0.2);
+                    ax.yaxis.set_label_coords(-0.05, 0.5)
+    
+        
+        #for m in range(Cols*Rows - k):
+            #fig.delaxes(axs[-m-1])
+        
+        print(save_path_name)
+        plt.savefig(save_path_name + 'FPT_square_ou_'+str(delta)+'.pdf', format='pdf')
+
+    return(0)
