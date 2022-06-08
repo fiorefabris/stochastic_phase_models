@@ -412,16 +412,32 @@ def compute_FPT_aux(save_path_name,data_folder,dt,d,T,tuple_):
     
     *** FALTA COMPLETAR ESTA DESCRIPCION***
     '''
-    (i,D),row = tuple_[0],tuple_[1]
-    if 'omega' in row.keys() : omega =  row.omega.unique()[0]
-    if 'T0' in row.keys() : omega =  row.T0.unique()[0]
 
-    if 'alpha' in row.keys() : delta = np.round(i/omega,4)      
-    if 'delta' in row.keys() : delta = i      
+
+    if 'alpha' in tuple_[1].keys(): 
+        (i,D),row = tuple_[0],tuple_[1]
+        
+        if 'omega' in row.keys() : omega =  row.omega.unique()[0]
+        if 'T0' in row.keys() : omega =  row.T0.unique()[0]
+        delta = np.round(i/omega,4) 
+        file_name = 'FPT_'+str(omega)+'_'+str(delta)+'_'+str(D)+'.pkl'
+        
+    elif 'delta' in tuple_[1].keys() : 
+        (delta,D),row = tuple_[0],tuple_[1]
+        if 'omega' in row.keys() : omega =  row.omega.unique()[0]
+        if 'T0' in row.keys() : omega =  row.T0.unique()[0]
+        file_name = 'FPT_'+str(omega)+'_'+str(delta)+'_'+str(D)+'.pkl'
+
+    elif 'alpha0' in tuple_[1].keys():
+        (i,sigma,tau),row = tuple_[0],tuple_[1]
+        omega =  row.omega.unique()[0]
+        delta = np.round(i/omega,4)   
+        file_name = 'FPT_'+str(omega)+'_'+str(delta)+'_'+str(sigma)+'_'+str(tau)+'.pkl'
+
+
 
     FPT = fpt_statistics(dt,T,d,data_folder,row)
-    save_data(FPT,save_path_name+'FPT_'+str(omega)+'_'+str(delta)+'_'+str(D)+'.pkl')
-    print(delta,D)
+    save_data(FPT,save_path_name+file_name)
     return(0)
 
 def compute_FPT(description_file,save_path_name,dt,T,d,data_folder):
@@ -461,6 +477,8 @@ def compute_FPT(description_file,save_path_name,dt,T,d,data_folder):
     pool = mp.Pool(processes= ceil(mp.cpu_count()/4))
     if 'alpha' in ref.keys() :tuple_ = ref.groupby(['alpha','D'])
     if 'delta' in ref.keys() :tuple_ = ref.groupby(['delta','D'])
+    if 'alpha0' in ref.keys(): tuple_ = ref.groupby(['alpha0', 'sigma', 'tau'])
+
 
     compute_FPT_aux_ = partial(compute_FPT_aux,save_path_name,data_folder,dt,d,T)
     pool.map(compute_FPT_aux_,tuple_)

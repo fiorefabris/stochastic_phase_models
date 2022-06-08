@@ -76,13 +76,13 @@ def get_pulses_quantifiers_(data_folder,save_path_name,tuple_):
     '''
 
     if 'alpha' in tuple_[1].columns:
-        (i,D,order),row = tuple_[0],tuple_[1]
+        (i,_,order),row = tuple_[0],tuple_[1]
         omega =  row.omega.unique()[0]
         delta = np.round(i/omega,4)  
         file_name =  str(int(row.number))+'_'+str(int(order))+'.pkl'
     
     elif 'alpha0' in tuple_[1].columns:
-        (i,sigma,tau,order),row = tuple_[0],tuple_[1]
+        (i,_,_,order),row = tuple_[0],tuple_[1]
         omega =  row.omega.unique()[0]
         delta = np.round(i/omega,4)  
         file_name =  str(int(row.number.values[0]))+'_'+str(int(order))+'.pkl'
