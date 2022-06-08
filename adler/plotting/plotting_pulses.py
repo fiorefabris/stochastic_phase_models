@@ -287,10 +287,10 @@ def plot_pulses_square_ou(dt,beg,T,d,N,Delta,description_file,data_folder,data_f
                 #### Plotting
                 ################################################
                 if row == 0:
-                    text = 'D = ' + str(np.round(D,5))
+                    text = 'sigma = ' + str(np.round(sigma,5))
                     ax.text(0.9, 1.05, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
                 if col == 0:
-                    text = 'delta = ' + str(delta)
+                    text = 'tau = ' + str(np.round(tau,5))
                     ax.text(-0.2, 0.9, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
     
                 ax.set_ylim(ylim);
