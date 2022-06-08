@@ -594,10 +594,10 @@ def get_pulses(theta,TH,W,PFE,PFI):
 
 
 
-def main_pulse_detection(theta,delta,omega,D,save_path_name,file_name):
+def main_pulse_detection(theta,delta,omega,save_path_name,file_name):
     # calcula y guarda los pulsos de theta en el archivoPONER NOMBRES
     if len(theta) != 0:
-        print('running pulse detection',delta,D)      
+        print('running pulse detection',delta)      
         TH = 0.90;W = 100
         PFE , PFI = get_fixed_points(delta)
         left_minima,right_minima,MAX = get_pulses(theta,TH,W,PFE,PFI)
@@ -610,21 +610,29 @@ def main_pulse_detection(theta,delta,omega,D,save_path_name,file_name):
             save_data(right_minima,save_path_name+'right_minima_'+file_name)
             print(file_name,'saving finished')
         else:
-            print(delta,D,'no pulses on this condition -> not saving')      
+            print(delta,'no pulses on this condition -> not saving')      
     else:
-        print('ERROR: theta with length zero',omega,delta,D)
+        print('ERROR: theta with length zero',omega,delta)
     return(0)
 
 
     
 def main_pulse_detection_(data_folder,save_path_name,tuple_,overwrite_flag = True):
    #ES UNA funcion auxiliar para paralelizar
+   #definir delta es lo importante
 
-    (i,D,order),row = tuple_[0],tuple_[1]
-    omega =  row.omega.unique()[0]
-    if 'alpha' in row.keys(): delta = np.round(i/omega,4)  
-    if 'delta' in row.keys(): delta = i  
-    file_name =  str(int(row.number))+'_'+str(int(order))+'.pkl'
+    if 'alpha0' in tuple_[1].columns:
+        (i,_,_,order),row = tuple_[0],tuple_[1]
+        omega =  row.omega.unique()[0]
+        delta = np.round(i/omega,4)  
+        file_name =  str(int(row.number.values[0]))+'_'+str(int(order))+'.pkl'
+    
+    else:
+        (i,_,order),row = tuple_[0],tuple_[1]
+        omega =  row.omega.unique()[0]
+        if 'alpha' in row.keys(): delta = np.round(i/omega,4)  
+        if 'delta' in row.keys(): delta = i  
+        file_name =  str(int(row.number))+'_'+str(int(order))+'.pkl'
     
     if check_file(file_name,data_folder):   
         if check_file('right_minima_'+file_name,data_folder) and (not overwrite_flag):
@@ -633,7 +641,7 @@ def main_pulse_detection_(data_folder,save_path_name,tuple_,overwrite_flag = Tru
         else:
             print('file name:',file_name)
             theta = download_theta(file_name,data_folder)
-            main_pulse_detection(theta,delta,omega,D,save_path_name,file_name)
+            main_pulse_detection(theta,delta,omega,save_path_name,file_name)
     else:
         print('ERROR: file not available',file_name)
     return(1)
@@ -647,6 +655,7 @@ def compute_pulse_detection(description_file,data_folder,save_path_name):
     
     if 'alpha' in ref.keys() : tuple_ = ref.groupby(['alpha','D','order'])
     if 'delta' in ref.keys() : tuple_ = ref.groupby(['delta','D','order'])
+    if 'alpha0' in ref.keys(): tuple_ = ref.groupby(['alpha0', 'sigma', 'tau','order'])
     main_pulse_detection__ = partial(main_pulse_detection_,data_folder,save_path_name)
     pool.map(main_pulse_detection__,tuple_)
     pool.close()

@@ -103,7 +103,7 @@ def get_pulses_quantifiers_(data_folder,save_path_name,tuple_):
         save_data(IPI,save_path_name+'IPI_'+file_name)
         save_data(dm,save_path_name+'dm_'+file_name)
         save_data(joint_duration,save_path_name+'joint_duration_'+file_name)
-        print(delta,D,'pulses quantifiers computation finished :)')
+        print('pulses quantifiers computation finished :)')
     else:
         print(file_name,'maxima file not available')
 
