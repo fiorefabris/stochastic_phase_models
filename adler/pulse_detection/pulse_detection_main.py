@@ -600,11 +600,12 @@ def main_pulse_detection(theta,delta,omega,save_path_name,file_name):
         print('running pulse detection',delta)      
         TH = 0.90;W = 100
         PFE , PFI = get_fixed_points(delta)
+        print(theta[0:100],TH,W,PFE,PFI)
         left_minima,right_minima,MAX = get_pulses(theta,TH,W,PFE,PFI)
         print('pulse detection ended')
         
         if (len(MAX)>0): #and (len(MIN)>0): 
-            print('saving pulse detection results')
+            print('saving pulse detection results MAX:',MAX)
             save_data(MAX,save_path_name+'max_'+file_name)
             save_data(left_minima,save_path_name+'left_minima_'+file_name)
             save_data(right_minima,save_path_name+'right_minima_'+file_name)
