@@ -278,8 +278,8 @@ def plot_pulses_square_ou(dt,beg,T,d,N,Delta,description_file,data_folder,data_f
                     
                     if len(MAX) > 0:
                         ax.plot(t[beg_:end][MAX],(1+ np.sin(theta))[beg_:end][MAX],'o',color = 'blue',markersize = 8)
-                        if left_minima: ax.plot(t[beg_:end][left_minima],(1+ np.sin(theta))[beg_:end][left_minima],'<',color = 'black',markersize = 8)
-                        if right_minima: ax.plot(t[beg_:end][right_minima],(1+ np.sin(theta))[beg_:end][right_minima],'>',color='black',markersize = 8)
+                        if left_minima.size >0: ax.plot(t[beg_:end][left_minima],(1+ np.sin(theta))[beg_:end][left_minima],'<',color = 'black',markersize = 8)
+                        if right_minima.size >0: ax.plot(t[beg_:end][right_minima],(1+ np.sin(theta))[beg_:end][right_minima],'>',color='black',markersize = 8)
     
     
                 
