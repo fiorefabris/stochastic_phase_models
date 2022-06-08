@@ -509,7 +509,7 @@ def download_quantifiers(row_,data_folder,dt,d):
     DT = []; IPI = []; joint_duration = []; dm = []
     for (order,row) in row_.groupby(['order']):
     #para cada ensayo
-        number = int(row.number)
+        number = int(row.number.values[0])
         file_name =  str(number)+'_'+str(order)+'.pkl'
 
         if (check_file('dt_'+file_name,data_folder)):        
@@ -785,7 +785,275 @@ def plot_joint_duration_square(dt,d,description_file,data_folder,save_path_name)
     plt.savefig(save_path_name + 'joint_duration_hist_square.pdf', format='pdf')
     plt.close()
     return(0)
+#%%
+def plot_dt_square_ou(dt,d,description_file,data_folder,save_path_name):
+    '''
+   plottea la grid de dt
 
+    '''
+    plt.close('all')
+######## Getting data information
+    ref_ = pd.read_excel(description_file,sheet_name='File_references')
+    ref_.set_index('Unnamed: 0',inplace=True);
+        
+###############################################################################
+### Plotting parameters
+###############################################################################    
+    for alpha,ref in ref_.groupby(['alpha0']):
+        
+        Rows = len(ref.groupby(['tau'])) ; 
+        Cols = len(ref.groupby(['sigma'])) ; 
+        colors =  sns.color_palette(sns.color_palette("viridis",Cols*1))
+        colors =  colors[::1]
+###############################################################################
+### Figure
+###############################################################################    
+
+        fig, axs = plt.subplots(Rows, Cols, sharex=True, sharey=True, figsize=(8.27*5, 11.69*2))
+        fig.subplots_adjust(bottom=0.15, top=0.9, left=0.1, right=0.99, wspace=0.1, hspace=0.1)
+    
+        
+        for col,(sigma,col_) in  enumerate(ref.groupby(['sigma'])):
+            for row, (tau,row_)  in  enumerate(col_.groupby(['tau'])):
+                delta= np.round(alpha/col_.omega.unique()[0],4)  
+                ax = axs[row,col]; ax.grid(False);
+    
+                if row == 0:
+                    text = 'sigma = ' + str(np.round(sigma,5))
+                    ax.text(0.9, 1.05, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
+                if col == 0:
+                    text = 'tau = ' + str(np.round(tau,5))
+                    ax.text(-0.2, 0.9, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
+                if (row == Rows-1) and (col == 0): 
+                    ax.set_ylabel('dt (min)', fontsize=30);
+                    ax.set_xlabel('probability density (1/min)', fontsize=30)
+                    ax.xaxis.set_label_coords(0.5, -0.2);
+                    ax.yaxis.set_label_coords(-0.1, 0.5)
+                
+                # download data
+                DT,IPI,joint_duration,dm = download_quantifiers(row_,data_folder,dt,d)
+      
+                if len(DT) > 0:
+                        
+                    bins = ax.hist(DT,bins=np.linspace(0,20,42),density=True,alpha=1,linewidth=1,color = colors[col]); 
+                    #tune_plot(ax,'dt (min)','probability density (1/min)',[0,20],1,[0,0.4],1,30,20)
+                    compute_st_values(ax,DT,bins,1,20)   
+                else:
+                    print(delta,sigma,tau,"no data")
+                
+                ax.set_ylim([0,0.5]);
+                ax.set_xlim([0,20])
+                set_scale(ax,[0,5,10,15,20], [0,0.5])
+                ax.set_xticklabels([0,5,10,15,20])
+                ax.set_yticklabels([0,0.5])
+                ax.tick_params(labelsize=20)
+    
+    
+        plt.savefig(save_path_name + 'dt_hist_square_ou_'+str(delta)+'.pdf', format='pdf')
+        plt.close()
+    return(0)
+    
+def plot_ipi_square_ou(dt,d,description_file,data_folder,save_path_name):
+    '''
+   plottea la grid de dt
+
+    '''
+    plt.close('all')
+######## Getting data information
+    ref_ = pd.read_excel(description_file,sheet_name='File_references')
+    ref_.set_index('Unnamed: 0',inplace=True);
+        
+###############################################################################
+### Plotting parameters
+###############################################################################    
+    for alpha,ref in ref_.groupby(['alpha0']):
+        
+        Rows = len(ref.groupby(['tau'])) ; 
+        Cols = len(ref.groupby(['sigma'])) ; 
+        colors =  sns.color_palette(sns.color_palette("viridis",Cols*1))
+        colors =  colors[::1]
+###############################################################################
+### Figure
+###############################################################################    
+
+        fig, axs = plt.subplots(Rows, Cols, sharex=True, sharey=True, figsize=(8.27*5, 11.69*2))
+        fig.subplots_adjust(bottom=0.15, top=0.9, left=0.1, right=0.99, wspace=0.1, hspace=0.1)
+    
+        
+        for col,(sigma,col_) in  enumerate(ref.groupby(['sigma'])):
+            for row, (tau,row_)  in  enumerate(col_.groupby(['tau'])):
+                delta= np.round(alpha/col_.omega.unique()[0],4)  
+                ax = axs[row,col]; ax.grid(False);
+    
+                if row == 0:
+                    text = 'sigma = ' + str(np.round(sigma,5))
+                    ax.text(0.9, 1.05, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
+                if col == 0:
+                    text = 'tau = ' + str(np.round(tau,5))
+                    ax.text(-0.2, 0.9, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
+
+                if (row == Rows-1) and (col == 0): 
+                    ax.set_ylabel('IPI (min)', fontsize=30);
+                    ax.set_xlabel('probability density (1/min)', fontsize=30)
+                    ax.xaxis.set_label_coords(0.5, -0.2);
+                    ax.yaxis.set_label_coords(-0.1, 0.5)
+                
+                # download data
+                DT,IPI,joint_duration,dm = download_quantifiers(row_,data_folder,dt,d)
+      
+                if len(DT) > 0:
+                        
+                    bins = ax.hist(IPI,bins=np.linspace(0,40,84),density=True,alpha=1,linewidth=1,color = colors[col]); 
+                    #tune_plot(ax,'dt (min)','probability density (1/min)',[0,20],1,[0,0.4],1,30,20)
+                    compute_st_values(ax,IPI,bins,1,20)   
+                else:
+                    print(delta,sigma,tau,"no data")
+                
+                ax.set_ylim([0,0.2]);
+                ax.set_xlim([0,40])
+                set_scale(ax,[0,10,20,30,40], [0,0.2])
+                ax.set_xticklabels([0,10,20,30,40])
+                ax.set_yticklabels([0,0.2])
+                ax.tick_params(labelsize=20)
+    
+    
+        plt.savefig(save_path_name + 'IPI_hist_square_ou_'+str(delta)+'.pdf', format='pdf')
+        plt.close()
+    return(0)
+
+def plot_dm_square_ou(dt,d,description_file,data_folder,save_path_name):
+    '''
+   plottea la grid de dt
+
+    '''
+    plt.close('all')
+######## Getting data information
+    ref_ = pd.read_excel(description_file,sheet_name='File_references')
+    ref_.set_index('Unnamed: 0',inplace=True);
+        
+###############################################################################
+### Plotting parameters
+    for alpha,ref in ref_.groupby(['alpha0']):
+        
+        Rows = len(ref.groupby(['tau'])) ; 
+        Cols = len(ref.groupby(['sigma'])) ; 
+        colors =  sns.color_palette(sns.color_palette("viridis",Cols*1))
+        colors =  colors[::1]
+###############################################################################
+### Figure
+###############################################################################    
+
+        fig, axs = plt.subplots(Rows, Cols, sharex=True, sharey=True, figsize=(8.27*5, 11.69*2))
+        fig.subplots_adjust(bottom=0.15, top=0.9, left=0.1, right=0.99, wspace=0.1, hspace=0.1)
+    
+        
+        for col,(sigma,col_) in  enumerate(ref.groupby(['sigma'])):
+            for row, (tau,row_)  in  enumerate(col_.groupby(['tau'])):
+
+                delta= np.round(alpha/col_.omega.unique()[0],4)  
+                ax = axs[row,col]; ax.grid(False);
+    
+                if row == 0:
+                    text = 'sigma = ' + str(np.round(sigma,5))
+                    ax.text(0.9, 1.05, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
+                if col == 0:
+                    text = 'tau = ' + str(np.round(tau,5))
+                    ax.text(-0.2, 0.9, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
+                if (row == Rows-1) and (col == 0): 
+                    ax.set_ylabel('dm (min)', fontsize=30);
+                    ax.set_xlabel('probability density (1/min)', fontsize=30)
+                    ax.xaxis.set_label_coords(0.5, -0.2);
+                    ax.yaxis.set_label_coords(-0.1, 0.5)
+                
+                # download data
+                DT,IPI,joint_duration,dm = download_quantifiers(row_,data_folder,dt,d)
+      
+                if len(DT) > 0:
+                        
+                    bins = ax.hist(dm,bins=np.linspace(0,40,84),density=True,alpha=1,linewidth=1,color = colors[col]); 
+                    #tune_plot(ax,'dt (min)','probability density (1/min)',[0,20],1,[0,0.4],1,30,20)
+                    compute_st_values(ax,dm,bins,1,20)   
+                else:
+                    print(delta,sigma,tau,"no data")
+                
+                ax.set_ylim([0,0.4]);
+                ax.set_xlim([0,30])
+                set_scale(ax,[0,10,20,30], [0,0.4])
+                ax.set_xticklabels([0,10,20,30])
+                ax.set_yticklabels([0,0.4])
+                ax.tick_params(labelsize=20)
+    
+    
+        plt.savefig(save_path_name + 'dm_hist_square_ou_'+str(delta)+'.pdf', format='pdf')
+        plt.close()
+    return(0)
+
+def plot_joint_duration_square_ou(dt,d,description_file,data_folder,save_path_name):
+    '''
+   plottea la grid de dt
+
+    '''
+    plt.close('all')
+######## Getting data information
+    ref_ = pd.read_excel(description_file,sheet_name='File_references')
+    ref_.set_index('Unnamed: 0',inplace=True);
+        
+###############################################################################
+### Plotting parameters
+###############################################################################    
+    for alpha,ref in ref_.groupby(['alpha0']):
+        
+        Rows = len(ref.groupby(['tau'])) ; 
+        Cols = len(ref.groupby(['sigma'])) ; 
+        colors =  sns.color_palette(sns.color_palette("viridis",Cols*1))
+        colors =  colors[::1]
+####################################################
+### Figure
+###############################################################################    
+
+        fig, axs = plt.subplots(Rows, Cols, sharex=True, sharey=True, figsize=(8.27*5, 11.69*2))
+        fig.subplots_adjust(bottom=0.15, top=0.9, left=0.1, right=0.99, wspace=0.1, hspace=0.1)
+    
+        
+        for col,(sigma,col_) in  enumerate(ref.groupby(['sigma'])):
+            for row, (tau,row_)  in  enumerate(col_.groupby(['tau'])):
+                delta= np.round(alpha/col_.omega.unique()[0],4)  
+                ax = axs[row,col]; ax.grid(False);
+    
+                if row == 0:
+                    text = 'sigma = ' + str(np.round(sigma,5))
+                    ax.text(0.9, 1.05, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
+                if col == 0:
+                    text = 'tau = ' + str(np.round(tau,5))
+                    ax.text(-0.2, 0.9, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
+                if (row == Rows-1) and (col == 0): 
+                    ax.set_ylabel('joint duration (min)', fontsize=30);
+                    ax.set_xlabel('probability density (1/min)', fontsize=30)
+                    ax.xaxis.set_label_coords(0.5, -0.2);
+                    ax.yaxis.set_label_coords(-0.1, 0.5)
+                
+                # download data
+                DT,IPI,joint_duration,dm = download_quantifiers(row_,data_folder,dt,d)
+      
+                if len(DT) > 0:
+                        
+                    bins = ax.hist(joint_duration,bins=np.linspace(0,20,42),density=True,alpha=1,linewidth=1,color = colors[col]); 
+                    #tune_plot(ax,'dt (min)','probability density (1/min)',[0,20],1,[0,0.4],1,30,20)
+                    compute_st_values(ax,joint_duration,bins,1,20)   
+                else:
+                    print(delta,sigma,tau,"no data")
+                
+                ax.set_ylim([0,0.5]);
+                ax.set_xlim([0,20])
+                set_scale(ax,[0,5,10,15,20], [0,0.5])
+                ax.set_xticklabels([0,5,10,15,20])
+                ax.set_yticklabels([0,0.5])
+                ax.tick_params(labelsize=20)
+    
+    
+        plt.savefig(save_path_name + 'joint_duration_hist_square_ou_'+str(delta)+'.pdf', format='pdf')
+        plt.close()
+    return(0)
 
 #%%
     #for plotting 2d plots
