@@ -446,7 +446,7 @@ def plot_time_series_square_dist(dt,beg,T,d,N,Delta,description_file,data_folder
                     t = time(dt,T+beg,d)
                     end = len(t)
                     beg_ = int(beg/(dt*d))
-                    print(len(t[beg_:end:Delta]),len(1+np.sin(theta)[beg_:end:Delta]))
+                    print(t[beg_:end:Delta])
                     ax.plot(t[beg_:end:Delta],1+np.sin(theta)[beg_:end:Delta],linewidth=2,color=colors[color_ix])
                     
                 ax.set_ylim(ylim);
