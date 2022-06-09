@@ -431,7 +431,7 @@ def plot_time_series_square_dist(dt,beg,T,d,N,Delta,description_file,data_folder
             if ix < len(axs):
                 ax = axs[ix]
                 delta= np.round(alpha/ref_.omega.unique()[0],4)  
-                print(delta)
+                print(delta,D)
             
                 order = int(df_.order); number = int(df_.number)
                 file_name =  str(number)+'_'+str(order)+'.pkl'
@@ -447,7 +447,7 @@ def plot_time_series_square_dist(dt,beg,T,d,N,Delta,description_file,data_folder
                     end = len(t)
                     beg_ = int(beg/(dt*d))
                     assert len(t) == len(theta), (len(t),len(theta))
-                    print(len(t[beg_:end:Delta]),print(1+np.sin(theta)[beg_:end:Delta]))
+                    print(len(t[beg_:end:Delta]),len(1+np.sin(theta)[beg_:end:Delta]))
                     ax.plot(t[beg_:end:Delta],1+np.sin(theta)[beg_:end:Delta],linewidth=2,color=colors[color_ix])
                     
                 ax.set_ylim(ylim);
