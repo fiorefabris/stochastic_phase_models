@@ -400,3 +400,76 @@ def plot_time_series_square_ou(dt,beg,T,d,N,Delta,description_file,data_folder,s
         
         plt.savefig(save_path_name + 'time_series_square_ou_'+str(delta)+'.pdf', format='pdf')
     return(0)
+
+#%%
+def plot_time_series_square_dist(dt,beg,T,d,N,Delta,description_file,data_folder,save_path_name):
+    '''
+    
+    '''
+
+######## Getting data information
+    ref = pd.read_excel(description_file,sheet_name='File_references')
+    ref.set_index('Unnamed: 0',inplace=True);
+    plot_n = len(ref.groupby(['D']))
+###############################################################################
+### Plotting parameters
+###############################################################################    
+    xlim = [-5+beg,T+5] ; ylim = [-0.05,2.05] ;         
+    colors =  sns.color_palette(sns.color_palette("viridis",plot_n*1))
+    colors =  colors[::1]
+###############################################################################
+### Figure
+###############################################################################    
+
+    for color_ix,(D,ref_) in enumerate(ref.groupby(['D'])):
+
+        fig, axs = plt.subplots(6, 6, sharex=True, sharey=True, figsize=(8.27*5, 11.69*2))
+        fig.subplots_adjust(bottom=0.15, top=0.9, left=0.1, right=0.99, wspace=0.1, hspace=0.1)
+        axs = axs.ravel(); 
+        
+        for ix, (alpha,df_)  in  enumerate(ref_.groupby(['alpha'])):
+            if ix < len(axs):
+                ax = axs[ix]
+                delta= np.round(alpha/ref_.omega.unique()[0],4)  
+            
+                order = int(df_.order); number = int(df_.number)
+                file_name =  str(number)+'_'+str(order)+'.pkl'
+                
+            
+                ################################################
+                #### download data
+                ################################################
+                if check_file(file_name,data_folder):            
+                    
+                    theta = download_data(data_folder + file_name) 
+                    t = time(dt,T+beg,d)
+                    end = len(t)
+                    beg_ = int(beg/(dt*d))
+                    ax.plot(t[beg_:end:Delta],1+np.sin(theta)[beg_:end:Delta],linewidth=2,color=colors[color_ix])
+                    
+                ax.set_ylim(ylim);
+                ax.set_xlim(xlim)
+                
+                ###############################################
+                #### Plotting
+                ################################################
+                text = 'delta = ' + str(np.round(delta,5))
+                ax.text(0.9, 0.9, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
+                
+                if (ix == len(ax)-6):
+                    ax.set_ylabel(r'$1 + \sin(\theta)$', fontsize=30);
+                    ax.set_xlabel('time (min)', fontsize=30)
+                    ax.xaxis.set_label_coords(0.5, -0.1);
+                    ax.yaxis.set_label_coords(-0.05, 0.5)
+                
+                set_scale(ax,[beg,T], [0,2])
+                ax.set_xticklabels([beg,T])
+                ax.set_yticklabels([0,2])
+                ax.tick_params(labelsize=20)
+    
+
+    
+        plt.savefig(save_path_name + 'time_series_dist_D'+ str(D)+'.pdf', format='pdf')
+        return(0)
+
+#%%

@@ -312,8 +312,6 @@ def plot_pulses_square_ou(dt,beg,T,d,N,Delta,description_file,data_folder,data_f
         plt.savefig(save_path_name + 'pulses_square_ou_'+str(delta)+'.pdf', format='pdf')
     return(0)
 
-
-
 #%%
 # =============================================================================
 #     pulses quantifiers plotting block

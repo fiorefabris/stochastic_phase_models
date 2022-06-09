@@ -152,10 +152,10 @@ def repeat_and_list_all_combinations(params,N=1):
 
 #%%
 
-def mp_time_evolution_(param):
-    # Function for calling the main function with a tuple of parameters
-    time_evolution__ = partial(time_evolution_,dt,T,d)
-    return time_evolution__(*param)    
+#def mp_time_evolution_(param):
+#    # Function for calling the main function with a tuple of parameters
+#    time_evolution__ = partial(time_evolution_,dt,T,d)
+#    return time_evolution__(*param)    
 
 
 def mp_time_evolution_and_list(main_file_name,dt,T,d,param):
