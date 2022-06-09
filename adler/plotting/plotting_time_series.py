@@ -366,9 +366,9 @@ def plot_time_series_square_ou(dt,beg,T,d,N,Delta,description_file,data_folder,s
                 if check_file(file_name,data_folder):            
                     
                     theta = download_data(data_folder + file_name) 
-                    t = time(dt,T+beg,d)
-                    end = len(t)
-                    beg_ = int(beg/(dt*d))
+                    t = time(dt,T,d)
+                    end = len(t) #end is ix
+                    beg_ = int(beg/(dt*d)) # beg_is ix
                     ax.plot(t[beg_:end:Delta],1+np.sin(theta)[beg_:end:Delta],linewidth=2,color=colors[col])
                 
                 ###############################################
