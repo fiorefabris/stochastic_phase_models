@@ -423,7 +423,7 @@ def plot_time_series_square_dist(dt,beg,T,d,N,Delta,description_file,data_folder
 
     for color_ix,(D,ref_) in enumerate(ref.groupby(['D'])):
 
-        fig, axs = plt.subplots(6, 6, sharex=True, sharey=True, figsize=(8.27*5, 11.69*2))
+        fig, axs = plt.subplots(10, 7, sharex=True, sharey=True, figsize=(8.27*5, 11.69*2))
         fig.subplots_adjust(bottom=0.15, top=0.9, left=0.1, right=0.99, wspace=0.1, hspace=0.1)
         axs = axs.ravel(); 
         
@@ -454,7 +454,7 @@ def plot_time_series_square_dist(dt,beg,T,d,N,Delta,description_file,data_folder
                 ###############################################
                 #### Plotting
                 ################################################
-                text = 'delta = ' + str(np.round(delta,5))
+                text = str(np.round(delta,5))
                 ax.text(0.9, 0.9, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
                 
                 if (ix == len(axs)-6):
