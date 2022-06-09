@@ -431,6 +431,7 @@ def plot_time_series_square_dist(dt,beg,T,d,N,Delta,description_file,data_folder
             if ix < len(axs):
                 ax = axs[ix]
                 delta= np.round(alpha/ref_.omega.unique()[0],4)  
+                print(delta)
             
                 order = int(df_.order); number = int(df_.number)
                 file_name =  str(number)+'_'+str(order)+'.pkl'
@@ -470,6 +471,6 @@ def plot_time_series_square_dist(dt,beg,T,d,N,Delta,description_file,data_folder
 
     
         plt.savefig(save_path_name + 'time_series_dist_D'+ str(D)+'.pdf', format='pdf')
-        return(0)
+    return(0)
 
 #%%
