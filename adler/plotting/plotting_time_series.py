@@ -456,7 +456,7 @@ def plot_time_series_square_dist(dt,beg,T,d,N,Delta,description_file,data_folder
                 text = 'delta = ' + str(np.round(delta,5))
                 ax.text(0.9, 0.9, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
                 
-                if (ix == len(ax)-6):
+                if (ix == len(axs)-6):
                     ax.set_ylabel(r'$1 + \sin(\theta)$', fontsize=30);
                     ax.set_xlabel('time (min)', fontsize=30)
                     ax.xaxis.set_label_coords(0.5, -0.1);
