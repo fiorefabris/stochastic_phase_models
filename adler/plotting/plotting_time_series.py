@@ -367,8 +367,10 @@ def plot_time_series_square_ou(dt,beg,T,d,N,Delta,description_file,data_folder,s
                     
                     theta = download_data(data_folder + file_name) 
                     t = time(dt,T,d)
+                    assert len(t) == len(theta), (len(t),len(theta))
                     end = len(t) #end is ix
                     beg_ = int(beg/(dt*d)) # beg_is ix
+                    print(len(t[beg_:end:Delta]),print(1+np.sin(theta)[beg_:end:Delta]))
                     ax.plot(t[beg_:end:Delta],1+np.sin(theta)[beg_:end:Delta],linewidth=2,color=colors[col])
                 
                 ###############################################
