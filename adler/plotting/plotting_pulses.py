@@ -1373,7 +1373,7 @@ def plot_2d_superposition(dt,T,d,description_file,data_folder,save_path_name):
         for i,mask in enumerate(masks):
             axs[1,1].imshow(mask,origin='lower',alpha=0.5,cmap=cmaps[i],interpolation='none')
         
-        axs[1,0].axhline(len(df_dt.index)//2,linestyle='dashed',color='black')
+        axs[1,1].axhline(len(df_dt.index)//2,linestyle='dashed',color='black')
           
             
         for ax in [axs[1,0],axs[1,1]]:
