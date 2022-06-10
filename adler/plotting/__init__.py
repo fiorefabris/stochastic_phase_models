@@ -22,6 +22,6 @@ from adler.plotting.plotting_pulses import  plot_dt_square,plot_ipi_square,plot_
 from adler.plotting.plotting_pulses import  plot_pulses_square_ou, plot_dt_square_ou,plot_ipi_square_ou,plot_dm_square_ou,plot_joint_duration_square_ou
 
 
-from adler.plotting.plotting_pulses import plot_2d_quantifiers,plot_2d_mean_activity
+from adler.plotting.plotting_pulses import plot_2d_quantifiers,plot_2d_mean_activity,plot_2d_superposition
 from adler.plotting.plotting_dt_alpha import plot_simulated_dt_alpha,plot_theta_alpha, plot_simulated_fixed_dt_alpha,plot_theta_fixed_alpha
 from adler.plotting.plotting_simulated_dt_noise import plot_epsilon_plus,plot_epsilon_plus_in_x_minus,plot_t_plus,plot_t_plus_in_x_minus

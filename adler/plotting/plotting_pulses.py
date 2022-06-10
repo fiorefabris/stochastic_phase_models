@@ -1334,8 +1334,62 @@ def plot_2d_mean_activity(dt,T,d,description_file,data_folder,save_path_name):
             ax.set_yticklabels([np.round(y/omega,2) for y in df.index[::10]])
                 
             plt.savefig(save_path_name + str(omega)+'_mactivity_2dplot.pdf', format='pdf')
-#%%
+#%% superposition plotting
+            
+def plot_2d_superposition(dt,T,d,description_file,data_folder,save_path_name):
+######## Getting data information
+    plt.rcdefaults(); plt.close()
 
+    ref = pd.read_excel(description_file,sheet_name='File_references')
+    ref.set_index('Unnamed: 0',inplace=True);
+    
+    dt_quart = [6,8.33]; IPI_quart = [8,18.67];mean_activity_sigma = [32-3,32+3] #mean, sigma
+    quartiles = [dt_quart,IPI_quart,IPI_quart,mean_activity_sigma] 
+    #vmin = [1,6,6,0]; vmax=[10,20,20,100]
+    
+         
+    #name = ['dt','IPI','FPT','mActivity']; 
+    cmaps = ['Reds','Greens','Greens', 'Blues']
+    
+    for omega,ref_ in  ref.groupby(['omega']):
+
+###############################################################################
+### data
+###############################################################################    
+
+        df_dt,df_ipi,df_fpt,df_activity= create_df(ref_,data_folder,dt,T,d)
+        masks = []
+        for i,df in enumerate([df_dt,df_ipi,df_fpt,df_activity]):
+ 
+            q_m ,q_M= quartiles[i]
+            masks.append(((q_m <= df) & (df <= q_M)))
+            
+###############################################################################
+### figure
+###############################################################################   
+        fig, axs = plt.subplots(2, 2, sharex=True, sharey=True, figsize=(8.27, 11.69))
+        fig.subplots_adjust(bottom=0.15, top=0.9, left=0.1, right=0.99, wspace=0.3, hspace=0.3)        
+
+        for i,mask in enumerate(masks):
+            axs[1,1].imshow(mask,origin='lower',alpha=1,cmap=cmaps[i],interpolation='none')
+        
+        axs[1,0].axhline(len(df_dt.index)//2,linestyle='dashed',color='black')
+          
+            
+        for ax in [axs[1,0],axs[1,1]]:
+            ax.tick_params(axis='both', direction='out')
+            ax.set_xticks(range(0,len(df.columns),10))
+            ax.set_xticklabels(df.columns[::10])
+            
+            ax.set_xlabel('D', fontsize=10)
+            ax.set_ylabel('delta', fontsize=10)
+            ax.set_yticks(range(0,len(df.index),10))
+            ax.set_yticklabels([np.round(y/omega,2) for y in df.index[::10]])
+                
+        plt.savefig(save_path_name + str(omega)+'_2dsuperposition.pdf', format='pdf')
+
+
+#%%
 # =============================================================================
 #     consecutiveness plot 
 # =============================================================================     
