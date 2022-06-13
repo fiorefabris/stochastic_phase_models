@@ -73,7 +73,8 @@ def get_fixed_points(delta):
         PFE = -np.pi/2 + 2*np.pi
         PFI = -np.pi/2 + 2*np.pi
     return(PFE,PFI)
-    
+
+
 
 #%%
 """
