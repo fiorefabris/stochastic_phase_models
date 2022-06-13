@@ -42,7 +42,7 @@ def get_consecutive_trial(data_folder,save_folder,tuple_):
         number      = int(row.number)
         file_name   =  str(number)+'_'+str(order)+'.pkl'
             
-        if (check_file('min_'+file_name,data_folder)):       
+        if (check_file('max_'+file_name,data_folder)):       
             consecutive_trial_st_ = consecutive_trial_st(number,order,data_folder)
             isolated_pulses, consecutive_trial = consecutive_trial_st_.get_consecutive_trains_of_pulses()#
                                     
@@ -62,14 +62,12 @@ class consecutive_trial_st:
     def __init__(self,number,order,data_folder):
         file_name   =  str(number)+'_'+str(order)+'.pkl'
         self.joint_duration = download_data(data_folder+'joint_duration_'+file_name)
-        self.min = download_data(data_folder+'min_'+file_name)
         self.max = download_data(data_folder+'max_'+file_name)
         self.IPI = download_data(data_folder+'IPI_'+file_name)
         self.dm = download_data(data_folder+'dm_'+file_name)
 
         assert len(self.joint_duration) == len(self.IPI)
         assert len(self.joint_duration) == len(self.dm)
-        assert len(self.max) == len(self.min)
         
     def is_consecutive_trial(self):
         '''
