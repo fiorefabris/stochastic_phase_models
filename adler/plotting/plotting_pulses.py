@@ -1373,13 +1373,11 @@ def plot_2d_superposition(dt,T,d,description_file,data_folder,save_path_name):
         #save masks
         
         with pd.ExcelWriter("masks.xlsx") as writer:  
-
-
-        (masks[0] & masks[2] & masks[3]).to_excel(writer,sheet_name='superposition')
-        (masks[0]).to_excel(writer,sheet_name='duration')
-        (masks[1]).to_excel(writer,sheet_name='IPI')
-        (masks[2]).to_excel(writer,sheet_name='FPT')
-        (masks[3]).to_excel(writer,sheet_name='mean activity')
+            (masks[0] & masks[2] & masks[3]).to_excel(writer,sheet_name='superposition')
+            (masks[0]).to_excel(writer,sheet_name='duration')
+            (masks[1]).to_excel(writer,sheet_name='IPI')
+            (masks[2]).to_excel(writer,sheet_name='FPT')
+            (masks[3]).to_excel(writer,sheet_name='mean activity')
 
         
         for i,mask in enumerate(masks):
