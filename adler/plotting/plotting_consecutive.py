@@ -42,9 +42,8 @@ def load_consecutive_statistics(dataset,data_folder):
         
 #%%
 def plot_consecutiveness_(data_folder,save_folder,tuple_):
-   
-    (alpha,D,number),dataset = tuple_[0],tuple_[1]
-    omega =  dataset.omega.unique()[0]
+    print(tuple_)
+    (omega,alpha,D,number),dataset = tuple_[0],tuple_[1]
     delta = np.round(alpha/omega,4)  
     mean_trains_cons,std_trains_cons,total_pulses,isolated_pulses = load_consecutive_statistics(dataset,data_folder)
 
@@ -107,7 +106,7 @@ def plot_consecutiveness(description_file,data_folder,save_folder):
     ref.set_index('Unnamed: 0',inplace=True);
     pool = mp.Pool(processes= ceil(mp.cpu_count()))
     
-    tuple_ = ref.groupby(['alpha','D','number'])
+    tuple_ = ref.groupby(['omega', 'alpha','D','number'])
     plot_consecutiveness__ = partial(plot_consecutiveness_,data_folder,save_folder)
     pool.map(plot_consecutiveness__,tuple_)
     pool.close()
