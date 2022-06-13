@@ -1369,7 +1369,15 @@ def plot_2d_superposition(dt,T,d,description_file,data_folder,save_path_name):
 ###############################################################################   
         fig, axs = plt.subplots(2, 2, sharex=True, sharey=True, figsize=(8.27, 11.69))
         fig.subplots_adjust(bottom=0.15, top=0.9, left=0.1, right=0.99, wspace=0.3, hspace=0.3)        
+        
+        #save masks
+        (masks[0] & masks[2] & masks[3]).to_excel("masks.xlsx",sheet_name='superposition')
+        (masks[0]).to_excel("masks.xlsx",sheet_name='duration')
+        (masks[1]).to_excel("masks.xlsx",sheet_name='IPI')
+        (masks[2]).to_excel("masks.xlsx",sheet_name='FPT')
+        (masks[3]).to_excel("masks.xlsx",sheet_name='mean activity')
 
+        
         for i,mask in enumerate(masks):
             axs[1,1].imshow(mask,origin='lower',alpha=0.3,cmap=cmaps[i],interpolation='none')
         
