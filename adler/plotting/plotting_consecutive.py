@@ -42,10 +42,10 @@ def load_consecutive_statistics(dataset,data_folder):
         
 #%%
 def plot_consecutiveness_(data_folder,save_folder,tuple_):
-    print(tuple_)
+
     (omega,alpha,D,number),dataset = tuple_[0],tuple_[1]
     delta = np.round(alpha/omega,4)  
-    mean_trains_cons,std_trains_cons,total_pulses,isolated_pulses = load_consecutive_statistics(dataset,data_folder)
+    (mean_trains_cons,std_trains_cons),total_pulses,isolated_pulses = load_consecutive_statistics(dataset,data_folder)
 
     colors = ['r','g', 'b']
     fig = plt.figure(constrained_layout=False, figsize=(8.27, 11.692))
