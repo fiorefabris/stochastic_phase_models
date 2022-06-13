@@ -1379,7 +1379,17 @@ def plot_2d_superposition(dt,T,d,description_file,data_folder,save_path_name):
             (masks[2]).to_excel(writer,sheet_name='FPT')
             (masks[3]).to_excel(writer,sheet_name='mean activity')
 
-        
+            # Get the xlsxwriter workbook and worksheet objects.
+            workbook  = writer.book
+            worksheet = writer.sheets['duration']
+            # Get the dimensions of the dataframe.
+            (max_row, max_col) = masks[0].shape
+            # Apply a conditional format to the required cell range.
+            worksheet.conditional_format(1, max_col, max_row, max_col,
+                             {'type': '3_color_scale'})
+            # Close the Pandas Excel writer and output the Excel file.
+            writer.save()
+            
         for i,mask in enumerate(masks):
             axs[1,1].imshow(mask,origin='lower',alpha=0.3,cmap=cmaps[i],interpolation='none')
         
