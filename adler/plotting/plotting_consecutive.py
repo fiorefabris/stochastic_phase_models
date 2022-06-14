@@ -6,7 +6,9 @@ from math import ceil
 import multiprocessing as mp
 from functools import partial 
 
-from adler.data_managing_functions import download_data
+from adler.data_managing_functions import download_data,check_file,time
+from adler.plotting.plotting_main import set_scale
+
 
 
 def mean_consecutive_value(trials):
@@ -97,7 +99,7 @@ def plot_consecutiveness_(data_folder,save_folder,tuple_):
 
     plt.savefig(save_folder+ 'consecutiveness_'+str(delta)+'_'+str(D)+'.pdf', format='pdf')
     
-def plot_consecutiveness(description_file,data_folder,save_folder):
+def plot_consecutiveness(dt,beg,T,d,N,Delta,description_file,data_folder,save_folder):
     '''
     data folder: donde están los cc
     '''
@@ -109,6 +111,73 @@ def plot_consecutiveness(description_file,data_folder,save_folder):
     tuple_ = ref.groupby(['omega', 'alpha','D','number'])
     plot_consecutiveness__ = partial(plot_consecutiveness_,data_folder,save_folder)
     pool.map(plot_consecutiveness__,tuple_)
+    
+    plot_time_series_square_dataset_ = partial(plot_time_series_square_dataset,dt,beg,T,d,N,Delta,data_folder,save_folder)
+    pool.map(plot_time_series_square_dataset_,tuple_)
+    
     pool.close()
     pool.join()
     return (2)
+
+
+def plot_time_series_square_dataset(dt,beg,T,d,N,Delta,data_folder,save_path_name,tuple_):
+    '''
+    
+    '''
+    (omega,alpha,D,number),dataset = tuple_[0],tuple_[1]
+    delta = np.round(alpha/omega,4)  
+###############################################################################
+### Plotting parameters
+###############################################################################    
+    xlim = [-5+beg,T+5] ; ylim = [-0.05,2.05] ;         
+
+###############################################################################
+### Figure
+###############################################################################    
+
+    fig, axs = plt.subplots(10, 7, sharex=True, sharey=True, figsize=(8.27*5, 11.69*2))
+    fig.subplots_adjust(bottom=0.15, top=0.9, left=0.1, right=0.99, wspace=0.1, hspace=0.1)
+    axs = axs.ravel(); 
+        
+    for ix, (order,data)  in  enumerate(dataset.groupby(['order'])):
+        if ix < len(axs):
+            ax = axs[ix]
+            print(delta,D)
+            
+            ################################################
+            #### download data
+            ################################################
+            file_name =  str(number)+'_'+str(order)+'.pkl'
+            if check_file(file_name,data_folder):            
+                    
+                theta = download_data(data_folder + file_name) 
+                t = time(dt,T,d)
+                end = len(t)
+                beg_ = int(beg/(dt*d))
+                assert len(t) == len(theta), (len(t),len(theta))
+                
+                ax.plot(t[beg_:end:Delta],1+np.sin(theta)[beg_:end:Delta],linewidth=2)
+                ax.set_ylim(ylim);
+                ax.set_xlim(xlim)
+                
+                ###############################################
+                #### Plotting
+                ################################################
+                text = str(ix)
+                ax.text(0.9, 0.9, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
+                
+                if (ix == len(axs)-6):
+                    ax.set_ylabel(r'$1 + \sin(\theta)$', fontsize=30);
+                    ax.set_xlabel('time (min)', fontsize=30)
+                    ax.xaxis.set_label_coords(0.5, -0.1);
+                    ax.yaxis.set_label_coords(-0.05, 0.5)
+                
+                set_scale(ax,[beg,T], [0,2])
+                ax.set_xticklabels([beg,T])
+                ax.set_yticklabels([0,2])
+                ax.tick_params(labelsize=20)
+    
+
+    
+    plt.savefig(save_path_name + 'time_series'+str(delta)+'_'+str(D)+'.pdf', format='pdf')
+    return(0)
