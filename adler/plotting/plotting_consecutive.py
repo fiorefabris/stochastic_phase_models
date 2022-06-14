@@ -86,12 +86,12 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,tuple_):
     else:
         print(delta,D,"no data")
     
-    ax1.set_ylim([0,0.5]);
-    ax1.set_xlim([0,20])
-    set_scale(ax1,[0,5,10,15,20], [0,0.5])
-    ax1.set_xticklabels([0,5,10,15,20])
-    ax1.set_yticklabels([0,0.5])
-    ax1.tick_params(labelsize=15)
+    #ax1.set_ylim([0,0.5]);
+    #ax1.set_xlim([0,20])
+    #set_scale(ax1,[0,5,10,15,20], [0,0.5])
+    #ax1.set_xticklabels([0,5,10,15,20])
+    #ax1.set_yticklabels([0,0.5])
+    #ax1.tick_params(labelsize=10)
     
     ax2 = plt.subplot(gs_main[0,1])
     if len(DT) > 0:
@@ -106,7 +106,7 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,tuple_):
     set_scale(ax2,[0,10,20,30,40], [0,0.2])
     ax2.set_xticklabels([0,10,20,30,40])
     ax2.set_yticklabels([0,0.2])
-    ax2.tick_params(labelsize=15)
+    ax2.tick_params(labelsize=10)
 
 
 # =============================================================================
