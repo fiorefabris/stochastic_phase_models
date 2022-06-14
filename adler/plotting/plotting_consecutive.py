@@ -7,7 +7,7 @@ import multiprocessing as mp
 from functools import partial 
 
 from adler.data_managing_functions import download_data,check_file,time
-from adler.plotting.plotting_main import set_scale,mask_arr,load_activity,compute_st_values
+from adler.plotting.plotting_main import set_scale,mask_arr,load_activity,compute_st_values,download_quantifiers
 
 
 
@@ -75,7 +75,7 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,tuple_):
 #     quantifiers hist plot
 # =============================================================================
     
-    DT,IPI,joint_duration,dm = download_quantifiers(row_,data_folder,dt,d)
+    DT,IPI,joint_duration,dm = download_quantifiers(dataset,data_folder,dt,d)
     
     ax1 = plt.subplot(gs_main[0,0])
     if len(DT) > 0:
