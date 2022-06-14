@@ -2,49 +2,7 @@
 # =============================================================================
 #     activity plot blocking
 # =============================================================================     
-def plot_activity(dt,T,d,data_folder,save_path_name,tuple_):
 
-    ax1 = plt.subplot(gs_col0[k])
-    ax2 = plt.subplot(gs_col1[k]);
-
-    (omega,alpha,D,number),dataset = tuple_[0],tuple_[1]
-    delta = np.round(alpha/omega,4)  
-
-    
-  
-    activity,silent,n_cell = load_activity(dataset,data_folder,dt,T,d)
-    
-    #population activity
-    if len(activity) > 0:
-        p1 = ax1.bar(np.arange(1 ,n_cell + 1),silent,width=1,color='darkgray',alpha=0.5,linewidth=0.0)
-        p2 = ax1.bar(np.arange(1 ,n_cell + 1),activity,bottom=silent,width=1,alpha=0.8,linewidth=0.0)
-        
-    ax1.set_xlim([0,n_cell]);ax1.set_ylim([0,100])
-    ax1.set_xlabel( ' trazas ',fontsize=8); 
-    ax1.set_xticks([1,n_cell + 1])
-    ax1.set_yticks([0,50,100])
-    ax1.tick_params(labelsize=6,direction='out', pad=1,length=2)
-    ax1.xaxis.set_label_coords(0.5,-0.06)
-    
-    #mean activity
-    plt.rc('axes.spines', top=False, bottom=True, left=True, right=False); 
-    
-    
-    if len(activity) > 0:
-        p1 = ax2.barh(np.arange(n_cell),width = np.mean(silent),xerr=np.std(silent),left =0,color='darkgray',alpha=0.5,linewidth=0.0,height=0.6)
-        p2 = ax2.barh(np.arange(n_cell),width = np.mean(activity),left=np.mean(silent),xerr = np.std(activity),color=colors[k],alpha=0.8,linewidth=0.0,height=0.6)
-
-    ax2.set_xticks([0,50,100])
-    ax2.set_ylim([0,100])
-    ax2.set_yticks([1,n_cell + 1])
-    ax2.tick_params(labelsize=6,direction='out', pad=1,length=2)
-    ax2.invert_yaxis()
-    
-    
-    ax1.set_ylabel('fraction of cell track' ,fontsize=8); 
-    ax2.set_xlabel('fraction of cell track' ,fontsize=8); 
-
-    plt.savefig(save_path_name+'activity_'+str(number)+'.pdf', format='pdf')
 
 def plot_activity(dt,T,d,description_file,data_folder,save_path_name):
     '''
