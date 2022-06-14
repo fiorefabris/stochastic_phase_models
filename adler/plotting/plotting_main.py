@@ -109,3 +109,38 @@ def load_activity(row_,data_folder,dt,T,d):
 #%%
 def mask_arr(beg,end,arr):
     return (np.array([i-beg for i in arr if (i  < end and i >= beg)]))
+#%%
+def tune_plot(ax,x_label,y_label,xlim,xscale,ylim,yscale,axlabel_fs = 10,ticklabel_fs = 8):
+    ''' Esto es una funcion auxiliar para plotear. La idea es escribir una vez
+    el tamano de las labels, las escalas y esas cosas'''
+    
+    #ax.set_xlabel(x_label, fontsize=axlabel_fs);
+    #ax.set_ylabel(y_label, fontsize=axlabel_fs);
+    ax.set_xlim(xlim)
+    ax.set_xticklabels([np.round(item/xscale,3) for item in ax.get_xticks()],fontsize=ticklabel_fs)
+    ax.set_ylim(ylim)
+    ax.set_yticklabels([np.round(item*yscale,3) for item in ax.get_yticks()],fontsize=ticklabel_fs)
+
+def compute_st_values(ax,samples,bins,scale,fs = 6):
+    ''' Esto esuna función auxiliar paraplotear.
+    computa la moda de samples usando bins, y los cuartiles de samples usando samples. 
+    samples es el dataset que queres estudiar, y bins es el histograma que estas graficando.
+    scale es por loque tengo que dividir samples para llegar a minutos. fs es el fontsize del texto. '''           
+    
+    if len(samples) <= 0:
+        pass
+    else:
+        mode = (bins[1][np.argmax(bins[0])] + bins[1][np.argmax(bins[0])+1])/2 ; 
+        mode = 'mode: '+str(np.round(mode/scale,2))+' min \n'
+        ax.text(1, 0.75, mode, ha='right', va='center', transform=ax.transAxes, fontsize=fs) 
+        ax.text(1, 0.9,r'$Q$: '+str(np.round(np.quantile(samples,0.25)/scale,2))+' ; '+str(np.round(np.quantile(samples,0.5)/scale,2))+' ; '
+                +str(np.round(np.quantile(samples,0.75)/scale,2)) , ha='right', va='center', transform=ax.transAxes, fontsize=fs)
+        ax.text(1, 0.7, 'total data: ' + str(len(samples)), ha='right', va='center', transform=ax.transAxes, fontsize=fs) 
+    
+    #chequeamos que no haya numeros raros
+        if True:
+            neg = sum([1 for i in samples if i < bins[1][0]]) 
+            pos =  sum([1 for i in samples if i > bins[1][-1]])
+            text_borders = '< lower bound :'+str(neg) + '\n > upper bound :'+str(pos)
+            print(text_borders)
+            #ax.text(1, 0.75, text_borders, ha='right', va='center', transform=ax.transAxes, fontsize=fs) 

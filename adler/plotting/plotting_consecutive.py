@@ -7,7 +7,7 @@ import multiprocessing as mp
 from functools import partial 
 
 from adler.data_managing_functions import download_data,check_file,time
-from adler.plotting.plotting_main import set_scale,mask_arr,load_activity
+from adler.plotting.plotting_main import set_scale,mask_arr,load_activity,compute_st_values
 
 
 
@@ -65,41 +65,80 @@ def plot_consecutiveness_activity(dt,beg,T,d,N,Delta,description_file,data_folde
     return (2)
 
 def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,tuple_):
-
     
+    
+    fig = plt.figure(constrained_layout=False, figsize=(8.27, 11.692))
+    gs_main = gridspec.GridSpec(nrows=3, ncols=2, figure=fig); gs_main.update(left=0.1, right=0.9, bottom=0.1, top=0.90, hspace=0.3,wspace=0.3)
+    (omega,alpha,D,number),dataset = tuple_[0],tuple_[1]
+    delta = np.round(alpha/omega,4)  
+# =============================================================================
+#     quantifiers hist plot
+# =============================================================================
+    
+    DT,IPI,joint_duration,dm = download_quantifiers(row_,data_folder,dt,d)
+    
+    ax1 = plt.subplot(gs_main[0,0])
+    if len(DT) > 0:
+            
+        bins = ax1.hist(DT,bins=np.linspace(0,20,42),density=True,alpha=1,linewidth=1); 
+        #tune_plot(ax,'dt (min)','probability density (1/min)',[0,20],1,[0,0.4],1,30,20)
+        compute_st_values(ax1,DT,bins,1,20)   
+    else:
+        print(delta,D,"no data")
+    
+    ax1.set_ylim([0,0.5]);
+    ax1.set_xlim([0,20])
+    set_scale(ax1,[0,5,10,15,20], [0,0.5])
+    ax1.set_xticklabels([0,5,10,15,20])
+    ax1.set_yticklabels([0,0.5])
+    ax1.tick_params(labelsize=20)
+    
+    ax2 = plt.subplot(gs_main[0,1])
+    if len(DT) > 0:
+        bins = ax2.hist(IPI,bins=np.linspace(0,40,84),density=True,alpha=1,linewidth=1); 
+        #tune_plot(ax,'dt (min)','probability density (1/min)',[0,20],1,[0,0.4],1,30,20)
+        compute_st_values(ax2,IPI,bins,1,20)   
+    else:
+        print(delta,D,"no data")
+    
+    ax2.set_ylim([0,0.2]);
+    ax2.set_xlim([0,40])
+    set_scale(ax2,[0,10,20,30,40], [0,0.2])
+    ax2.set_xticklabels([0,10,20,30,40])
+    ax2.set_yticklabels([0,0.2])
+    ax2.tick_params(labelsize=20)
+
+
 # =============================================================================
 #     consecutiveness plot
 # =============================================================================
-    (omega,alpha,D,number),dataset = tuple_[0],tuple_[1]
-    delta = np.round(alpha/omega,4)  
+
     (mean_trains_cons,std_trains_cons),total_pulses,isolated_pulses = load_consecutive_statistics(dataset,data_folder)
 
     colors = ['r','g', 'b']
-    fig = plt.figure(constrained_layout=False, figsize=(8.27, 11.692))
-    gs_main = gridspec.GridSpec(nrows=2, ncols=2, figure=fig); gs_main.update(left=0.1, right=0.9, bottom=0.1, top=0.90, hspace=0.3,wspace=0.3)
 
-    ax3 = plt.subplot(gs_main[1,0])
+    ax5 = plt.subplot(gs_main[2,0])
      
-    ax3.plot(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons, linewidth=0.5, marker = "." , markersize=7, alpha=1)
-    ax3.fill_between(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons-std_trains_cons,mean_trains_cons+std_trains_cons,alpha = 0.2)
+    ax5.plot(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons, linewidth=0.5, marker = "." , markersize=7, alpha=1)
+    ax5.fill_between(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons-std_trains_cons,mean_trains_cons+std_trains_cons,alpha = 0.2)
    
     #X_lim = [0,50]
-    #ax3.set_xlim(X_lim);
-    ax3.set_yscale('log')
-    #ax3.set_ylim(YC_lim)
-    ax3.set_ylabel('counts',fontsize=10); ax3.set_xlabel('length of sequence of \n consecutive pulses',fontsize=10)
-    ax3.xaxis.set_label_coords(0.5, -0.08);ax3.yaxis.set_label_coords(-0.2,0.5);
+    #ax5.set_xlim(X_lim);
+    ax5.set_yscale('log')
+    #ax5.set_ylim(YC_lim)
+    ax5.set_ylabel('counts',fontsize=10); ax5.set_xlabel('length of sequence of \n consecutive pulses',fontsize=10)
+    ax5.xaxis.set_label_coords(0.5, -0.08);ax5.yaxis.set_label_coords(-0.2,0.5);
     #ax3.set_xticks([0,3,6,9,12,15])        
 
 # =============================================================================
 #     consecutiveness boxplot
 # =============================================================================
     
-    ax4 = plt.subplot(gs_main[1,1])
+    ax6 = plt.subplot(gs_main[2,2])
     arr = [total_pulses,isolated_pulses,[t-i for t,i in zip(total_pulses,isolated_pulses)]]
     
     X1 = [np.ones(len(arr[i]))*(i+1) for i in range(0,len(arr))]
-    bp1 = ax4.boxplot(arr,vert=True,whis=[5, 95],patch_artist=True,showmeans=False,meanline=True,showfliers=False )
+    bp1 = ax6.boxplot(arr,vert=True,whis=[5, 95],patch_artist=True,showmeans=False,meanline=True,showfliers=False )
 
     for i,box_ in enumerate(bp1['boxes']):
          box_.set( color=colors[i], linewidth=0.0,facecolor=colors[i],alpha = 0.1)# change outline color
@@ -114,53 +153,53 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,tuple_):
     
     for i in range(len(X1)):
         xA = np.random.normal(0, 0.1, len(arr[i])), 
-        ax4.scatter(xA+X1[i],arr[i], alpha=1,s = 1.5,color='black',edgecolors='black',linewidths=0.0)
+        ax6.scatter(xA+X1[i],arr[i], alpha=1,s = 1.5,color='black',edgecolors='black',linewidths=0.0)
 
-    ax4.tick_params(axis='x', labelsize=8,length=2); 
-    ax4.tick_params(axis='y', labelsize=8,length=2)
-    ax4.set_xlabel('total,isolated,consecutive',fontsize=8)
-    ax4.set_ylabel('counts',fontsize=8)
-    #ax4.set_ylim([-1,200])
-    ax4.xaxis.set_label_coords(0.5, -0.12);ax4.yaxis.set_label_coords(-0.05,0.5)
-    ax4.tick_params(labelsize=6,direction='out', pad=1,length=2)
+    ax6.tick_params(axis='x', labelsize=8,length=2); 
+    ax6.tick_params(axis='y', labelsize=8,length=2)
+    ax6.set_xlabel('total,isolated,consecutive',fontsize=8)
+    ax6.set_ylabel('counts',fontsize=8)
+    #ax6.set_ylim([-1,200])
+    ax6.xaxis.set_label_coords(0.5, -0.12);ax6.yaxis.set_label_coords(-0.05,0.5)
+    ax6.tick_params(labelsize=6,direction='out', pad=1,length=2)
 
 
 # =============================================================================
 #     activity population and mean plot
 # =============================================================================
-    ax1 = plt.subplot(gs_main[0,0]); plt.rc('axes.spines', top=False, bottom=True, left=True, right=False); 
+    ax3 = plt.subplot(gs_main[1,0]); plt.rc('axes.spines', top=False, bottom=True, left=True, right=False); 
     
     activity,silent,n_cell = load_activity(dataset,data_folder,dt,T,d)
     
     #population activity
     if len(activity) > 0:
-        p1 = ax1.bar(np.arange(1 ,n_cell + 1),silent,width=1,color='darkgray',alpha=0.5,linewidth=0.0)
-        p2 = ax1.bar(np.arange(1 ,n_cell + 1),activity,bottom=silent,width=1,alpha=0.8,linewidth=0.0)
+        p1 = ax3.bar(np.arange(1 ,n_cell + 1),silent,width=1,color='darkgray',alpha=0.5,linewidth=0.0)
+        p2 = ax3.bar(np.arange(1 ,n_cell + 1),activity,bottom=silent,width=1,alpha=0.8,linewidth=0.0)
         
-    ax1.set_xlim([0,n_cell]);ax1.set_ylim([0,100])
-    ax1.set_xlabel( ' trazas ',fontsize=8); 
-    ax1.set_xticks([1,n_cell + 1])
-    ax1.set_yticks([0,50,100])
-    ax1.tick_params(labelsize=6,direction='out', pad=1,length=2)
-    ax1.xaxis.set_label_coords(0.5,-0.06)
+    ax3.set_xlim([0,n_cell]);ax1.set_ylim([0,100])
+    ax3.set_xlabel( ' trazas ',fontsize=8); 
+    ax3.set_xticks([1,n_cell + 1])
+    ax3.set_yticks([0,50,100])
+    ax3.tick_params(labelsize=6,direction='out', pad=1,length=2)
+    ax3.xaxis.set_label_coords(0.5,-0.06)
     
     #mean activity
-    ax2 = plt.subplot(gs_main[0,1]); plt.rc('axes.spines', top=False, bottom=True, left=True, right=False); 
+    ax4 = plt.subplot(gs_main[1,1]); plt.rc('axes.spines', top=False, bottom=True, left=True, right=False); 
     
     
     if len(activity) > 0:
-        p1 = ax2.barh(1,width = np.mean(silent),xerr=np.std(silent),left =0,color='darkgray',alpha=0.5,linewidth=0.0,height=0.6)
-        p2 = ax2.barh(1,width = np.mean(activity),left=np.mean(silent),xerr = np.std(activity),alpha=0.8,linewidth=0.0,height=0.6)
+        p1 = ax4.barh(1,width = np.mean(silent),xerr=np.std(silent),left =0,color='darkgray',alpha=0.5,linewidth=0.0,height=0.6)
+        p2 = ax4.barh(1,width = np.mean(activity),left=np.mean(silent),xerr = np.std(activity),alpha=0.8,linewidth=0.0,height=0.6)
 
-    ax2.set_xticks([0,50,100])
-    ax2.set_xlim([0,100])
-    #ax2.set_yticks([1,n_cell + 1])
-    ax2.tick_params(labelsize=6,direction='out', pad=1,length=2)
-    ax2.invert_yaxis()
+    ax4.set_xticks([0,50,100])
+    ax4.set_xlim([0,100])
+    #ax4.set_yticks([1,n_cell + 1])
+    ax4.tick_params(labelsize=6,direction='out', pad=1,length=2)
+    ax4.invert_yaxis()
     
     
-    ax1.set_ylabel('fraction of cell track' ,fontsize=8); 
-    ax2.set_xlabel('fraction of cell track' ,fontsize=8); 
+    ax3.set_ylabel('fraction of cell track' ,fontsize=8); 
+    ax4.set_xlabel('fraction of cell track' ,fontsize=8); 
 
     plt.savefig(save_folder+ 'consecutiveness_activity_'+str(delta)+'_'+str(D)+'.pdf', format='pdf')
     
