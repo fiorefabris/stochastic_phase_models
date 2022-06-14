@@ -1,5 +1,4 @@
 import matplotlib
-import adler.plotting.test_experimental_values
 
 #matplotlib.rcParams['lines.markeredgecolor'] = 'black' #matplotlib.rcParams.keys()
 matplotlib.rcParams['lines.markeredgewidth'] = 0.0
@@ -26,7 +25,7 @@ from adler.plotting.plotting_pulses import  plot_pulses_square_ou, plot_dt_squar
 #plot_pulses,plot_activity, plot_consecutiveness, plot_2d_mean_activity,plot_quantifiers_histograms
 
 from adler.plotting.plotting_pulses import plot_2d_quantifiers,plot_2d_superposition
-#from adler.plotting.plotting_consecutive import plot_consecutiveness_activity
+from adler.plotting.plotting_consecutive import plot_consecutiveness_activity
 
 from adler.plotting.plotting_dt_alpha import plot_simulated_dt_alpha,plot_theta_alpha, plot_simulated_fixed_dt_alpha,plot_theta_fixed_alpha
 from adler.plotting.plotting_simulated_dt_noise import plot_epsilon_plus,plot_epsilon_plus_in_x_minus,plot_t_plus,plot_t_plus_in_x_minus
