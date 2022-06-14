@@ -6,8 +6,8 @@ from math import ceil
 import multiprocessing as mp
 from functools import partial 
 
-from adler.data_managing_functions import download_data,check_file,time, load_activity
-from adler.plotting.plotting_main import set_scale,mask_arr
+from adler.data_managing_functions import download_data,check_file,time
+from adler.plotting.plotting_main import set_scale,mask_arr,load_activity
 
 
 
