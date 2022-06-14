@@ -134,7 +134,7 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,tuple_):
 #     consecutiveness boxplot
 # =============================================================================
     
-    ax6 = plt.subplot(gs_main[2,2])
+    ax6 = plt.subplot(gs_main[2,1])
     arr = [total_pulses,isolated_pulses,[t-i for t,i in zip(total_pulses,isolated_pulses)]]
     
     X1 = [np.ones(len(arr[i]))*(i+1) for i in range(0,len(arr))]
