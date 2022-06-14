@@ -82,7 +82,7 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,tuple_):
             
         bins = ax1.hist(DT,bins=np.linspace(0,20,42),density=True,alpha=1,linewidth=1); 
         #tune_plot(ax,'dt (min)','probability density (1/min)',[0,20],1,[0,0.4],1,30,20)
-        compute_st_values(ax1,DT,bins,1,20)   
+        compute_st_values(ax1,DT,bins,1,10)   
     else:
         print(delta,D,"no data")
     
@@ -91,13 +91,13 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,tuple_):
     set_scale(ax1,[0,5,10,15,20], [0,0.5])
     ax1.set_xticklabels([0,5,10,15,20])
     ax1.set_yticklabels([0,0.5])
-    ax1.tick_params(labelsize=20)
+    ax1.tick_params(labelsize=15)
     
     ax2 = plt.subplot(gs_main[0,1])
     if len(DT) > 0:
         bins = ax2.hist(IPI,bins=np.linspace(0,40,84),density=True,alpha=1,linewidth=1); 
         #tune_plot(ax,'dt (min)','probability density (1/min)',[0,20],1,[0,0.4],1,30,20)
-        compute_st_values(ax2,IPI,bins,1,20)   
+        compute_st_values(ax2,IPI,bins,1,10)   
     else:
         print(delta,D,"no data")
     
@@ -106,7 +106,7 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,tuple_):
     set_scale(ax2,[0,10,20,30,40], [0,0.2])
     ax2.set_xticklabels([0,10,20,30,40])
     ax2.set_yticklabels([0,0.2])
-    ax2.tick_params(labelsize=20)
+    ax2.tick_params(labelsize=15)
 
 
 # =============================================================================
@@ -176,7 +176,7 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,tuple_):
         p1 = ax3.bar(np.arange(1 ,n_cell + 1),silent,width=1,color='darkgray',alpha=0.5,linewidth=0.0)
         p2 = ax3.bar(np.arange(1 ,n_cell + 1),activity,bottom=silent,width=1,alpha=0.8,linewidth=0.0)
         
-    ax3.set_xlim([0,n_cell]);ax1.set_ylim([0,100])
+    ax3.set_xlim([0,n_cell]);ax3.set_ylim([0,100])
     ax3.set_xlabel( ' trazas ',fontsize=8); 
     ax3.set_xticks([1,n_cell + 1])
     ax3.set_yticks([0,50,100])
