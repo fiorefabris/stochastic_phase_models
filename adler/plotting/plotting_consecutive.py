@@ -7,7 +7,7 @@ import multiprocessing as mp
 from functools import partial 
 
 from adler.data_managing_functions import download_data,check_file,time
-from adler.plotting.plotting_main import set_scale
+from adler.plotting.plotting_main import set_scale,mask_arr
 
 
 
@@ -157,25 +157,38 @@ def plot_time_series_square_dataset(dt,beg,T,d,N,Delta,data_folder,save_path_nam
                 assert len(t) == len(theta), (len(t),len(theta))
                 
                 ax.plot(t[beg_:end:Delta],1+np.sin(theta)[beg_:end:Delta],linewidth=2)
-                ax.set_ylim(ylim);
-                ax.set_xlim(xlim)
+            
+            if check_file('max_'+file_name,data_folder):            
+                    
+                MAX          = mask_arr(beg_,end, download_data(data_folder + 'max_'+file_name))
+                left_minima  = mask_arr(beg_,end, download_data(data_folder + 'left_minima_'+ file_name) )
+                right_minima = mask_arr(beg_,end, download_data(data_folder + 'right_minima_'+ file_name) )
                 
-                ###############################################
-                #### Plotting
-                ################################################
-                text = str(ix)
-                ax.text(0.9, 0.9, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
-                
-                if (ix == len(axs)-6):
-                    ax.set_ylabel(r'$1 + \sin(\theta)$', fontsize=30);
-                    ax.set_xlabel('time (min)', fontsize=30)
-                    ax.xaxis.set_label_coords(0.5, -0.1);
-                    ax.yaxis.set_label_coords(-0.05, 0.5)
-                
-                set_scale(ax,[beg,T], [0,2])
-                ax.set_xticklabels([beg,T])
-                ax.set_yticklabels([0,2])
-                ax.tick_params(labelsize=20)
+                if len(MAX) > 0:
+                    ax.plot(t[beg_:end][MAX],(1+ np.sin(theta))[beg_:end][MAX],'o',color = 'blue',markersize = 8)
+                    ax.plot(t[beg_:end][left_minima],(1+ np.sin(theta))[beg_:end][left_minima],'<',color = 'black',markersize = 8)
+                    ax.plot(t[beg_:end][right_minima],(1+ np.sin(theta))[beg_:end][right_minima],'>',color='black',markersize = 8)
+
+
+            ax.set_ylim(ylim);
+            ax.set_xlim(xlim)
+            
+            ###############################################
+            #### Plotting
+            ################################################
+            text = str(ix)
+            ax.text(0.9, 0.9, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
+            
+            if (ix == len(axs)-6):
+                ax.set_ylabel(r'$1 + \sin(\theta)$', fontsize=30);
+                ax.set_xlabel('time (min)', fontsize=30)
+                ax.xaxis.set_label_coords(0.5, -0.1);
+                ax.yaxis.set_label_coords(-0.05, 0.5)
+            
+            set_scale(ax,[beg,T], [0,2])
+            ax.set_xticklabels([beg,T])
+            ax.set_yticklabels([0,2])
+            ax.tick_params(labelsize=20)
     
 
     

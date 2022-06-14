@@ -4,11 +4,10 @@ import pandas as pd
 import seaborn as sns
 
 from adler.data_managing_functions import download_data,check_file,time
-from adler.plotting.plotting_main import set_scale,create_df,download_quantifiers
+from adler.plotting.plotting_main import set_scale,create_df,download_quantifiers,mask_arr
 
 
-def mask_arr(beg,end,arr):
-    return (np.array([i-beg for i in arr if (i  < end and i >= beg)]))
+
 
 #%%
 # =============================================================================

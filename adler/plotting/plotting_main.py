@@ -106,4 +106,6 @@ def load_activity(row_,data_folder,dt,T,d):
 
     return activity,silent,n_cell
     
-
+#%%
+def mask_arr(beg,end,arr):
+    return (np.array([i-beg for i in arr if (i  < end and i >= beg)]))
