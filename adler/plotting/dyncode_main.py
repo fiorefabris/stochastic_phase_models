@@ -2,7 +2,9 @@ from adler.plotting.dyncode_suorces import load_file,consecutive_cumulative,cons
 import numpy as np
 #import os
 import pickle
-import importlib
+#import importlib
+import pkg_resources
+
 
 #green =  sns.color_palette(sns.dark_palette("#2ecc71",30,reverse=False))[15]
 #colors =  [green,sns.color_palette()[1],sns.color_palette()[3]]
@@ -13,7 +15,8 @@ def get_conc_data():
     #this_dir, this_filename = os.path.split(__file__)
     #DATA_PATH = os.path.join(this_dir, "conc_data_suorce.pkl")
     #return load_file(DATA_PATH)
-    conc_data = pickle.load(importlib.resources.open_binary("adler.plotting", "conc_data_suorce.pkl"))
+    #conc_data = pickle.load(importlib.resources.open_binary("adler.plotting", "conc_data_suorce.pkl"))
+    conc_data = pickle.load(pkg_resources.resource_stream("adler.plotting", "conc_data_suorce.pkl"))
     return conc_data
 
 def get_consecutive_data_dyncode():
