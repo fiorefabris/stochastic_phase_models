@@ -5,10 +5,11 @@ import pandas as pd
 from math import ceil
 import multiprocessing as mp
 from functools import partial 
+import seaborn as sns
 
 from adler.data_managing_functions import download_data,check_file,time
 from adler.plotting.plotting_main import set_scale,mask_arr,load_activity,compute_st_values,download_quantifiers
-
+from adler.plotting.dyncode_data.dyncode_main import get_consecutive_data_dyncode,get_exp_N_total_isolated_consecutive,get_activity_data_dyncode
 
 
 def mean_consecutive_value(trials):
@@ -112,7 +113,7 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,tuple_):
 # =============================================================================
 #     consecutiveness plot
 # =============================================================================
-
+    green =  sns.color_palette(sns.dark_palette("#2ecc71",30,reverse=False))[15]
     (mean_trains_cons,std_trains_cons),total_pulses,isolated_pulses = load_consecutive_statistics(dataset,data_folder)
 
     colors = ['r','g', 'b']
@@ -121,7 +122,8 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,tuple_):
      
     ax5.plot(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons, linewidth=0.5, marker = "." , markersize=7, alpha=1)
     ax5.fill_between(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons-std_trains_cons,mean_trains_cons+std_trains_cons,alpha = 0.2)
-   
+    ax5.plot(get_consecutive_data_dyncode(),linewidth=0.5, marker = "." , markersize=7, alpha=1,color = green)
+
     #X_lim = [0,50]
     #ax5.set_xlim(X_lim);
     ax5.set_yscale('log')
@@ -135,7 +137,15 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,tuple_):
 # =============================================================================
     
     ax6 = plt.subplot(gs_main[2,1])
-    arr = [total_pulses,isolated_pulses,[t-i for t,i in zip(total_pulses,isolated_pulses)]]
+    
+    total_N,isolated_N,consecutive_N = get_exp_N_total_isolated_consecutive() 
+    total_pulses_normed = [i/total_N for i in total_pulses]
+    isolated_pulses_normed = [i/isolated_N for i in isolated_pulses]
+    consecutive_pulses = [t-i for t,i in zip(total_pulses,isolated_pulses)]
+    consecutive_pulses_normed = [i/consecutive_N for i in consecutive_pulses]
+    
+    arr = [total_pulses_normed,isolated_pulses_normed,consecutive_pulses_normed]
+    
     
     X1 = [np.ones(len(arr[i]))*(i+1) for i in range(0,len(arr))]
     bp1 = ax6.boxplot(arr,vert=True,whis=[5, 95],patch_artist=True,showmeans=False,meanline=True,showfliers=False )
@@ -162,6 +172,8 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,tuple_):
     #ax6.set_ylim([-1,200])
     ax6.xaxis.set_label_coords(0.5, -0.12);ax6.yaxis.set_label_coords(-0.05,0.5)
     ax6.tick_params(labelsize=6,direction='out', pad=1,length=2)
+    ax6.set_xticklabels([' total' ,'isolated','consecutive'],rotation = 0)
+    ax6.axhline(y = 1,color = green,linewidth=0.5,linestyle = 'dashed')
 
 
 # =============================================================================
@@ -175,6 +187,8 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,tuple_):
     if len(activity) > 0:
         p1 = ax3.bar(np.arange(1 ,n_cell + 1),silent,width=1,color='darkgray',alpha=0.5,linewidth=0.0)
         p2 = ax3.bar(np.arange(1 ,n_cell + 1),activity,bottom=silent,width=1,alpha=0.8,linewidth=0.0)
+        x , y , silent_experiment = get_activity_data_dyncode()
+        p3 = ax3.bar(x,y,bottom=silent_experiment,width=0.8,alpha=0.3,linewidth=0.0,color = green)
         
     ax3.set_xlim([0,n_cell]);ax3.set_ylim([0,100])
     ax3.set_xlabel( ' trazas ',fontsize=8); 
