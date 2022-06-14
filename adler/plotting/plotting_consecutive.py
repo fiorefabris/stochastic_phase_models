@@ -150,7 +150,7 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,tuple_):
     
     if len(activity) > 0:
         p1 = ax2.barh(np.arange(n_cell),width = np.mean(silent),xerr=np.std(silent),left =0,color='darkgray',alpha=0.5,linewidth=0.0,height=0.6)
-        p2 = ax2.barh(np.arange(n_cell),width = np.mean(activity),left=np.mean(silent),xerr = np.std(activity),color=colors[k],alpha=0.8,linewidth=0.0,height=0.6)
+        p2 = ax2.barh(np.arange(n_cell),width = np.mean(activity),left=np.mean(silent),xerr = np.std(activity),alpha=0.8,linewidth=0.0,height=0.6)
 
     ax2.set_xticks([0,50,100])
     ax2.set_ylim([0,100])
