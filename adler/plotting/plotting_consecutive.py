@@ -128,24 +128,24 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,tuple_):
 # =============================================================================
 #     activity population and mean plot
 # =============================================================================
-    ax2 = plt.subplot(gs_main[0,1]); plt.rc('axes.spines', top=False, bottom=True, left=True, right=False); 
+    ax1 = plt.subplot(gs_main[0,0]); plt.rc('axes.spines', top=False, bottom=True, left=True, right=False); 
     
     activity,silent,n_cell = load_activity(dataset,data_folder,dt,T,d)
     
     #population activity
     if len(activity) > 0:
-        p1 = ax2.bar(np.arange(1 ,n_cell + 1),silent,width=1,color='darkgray',alpha=0.5,linewidth=0.0)
-        p2 = ax2.bar(np.arange(1 ,n_cell + 1),activity,bottom=silent,width=1,alpha=0.8,linewidth=0.0)
+        p1 = ax1.bar(np.arange(1 ,n_cell + 1),silent,width=1,color='darkgray',alpha=0.5,linewidth=0.0)
+        p2 = ax1.bar(np.arange(1 ,n_cell + 1),activity,bottom=silent,width=1,alpha=0.8,linewidth=0.0)
         
-    ax2.set_xlim([0,n_cell]);ax2.set_ylim([0,100])
-    ax2.set_xlabel( ' trazas ',fontsize=8); 
-    ax2.set_xticks([1,n_cell + 1])
-    ax2.set_yticks([0,50,100])
-    ax2.tick_params(labelsize=6,direction='out', pad=1,length=2)
-    ax2.xaxis.set_label_coords(0.5,-0.06)
+    ax1.set_xlim([0,n_cell]);ax1.set_ylim([0,100])
+    ax1.set_xlabel( ' trazas ',fontsize=8); 
+    ax1.set_xticks([1,n_cell + 1])
+    ax1.set_yticks([0,50,100])
+    ax1.tick_params(labelsize=6,direction='out', pad=1,length=2)
+    ax1.xaxis.set_label_coords(0.5,-0.06)
     
     #mean activity
-    ax1 = plt.subplot(gs_main[0,0]); plt.rc('axes.spines', top=False, bottom=True, left=True, right=False); 
+    ax2 = plt.subplot(gs_main[0,1]); plt.rc('axes.spines', top=False, bottom=True, left=True, right=False); 
     
     
     if len(activity) > 0:
