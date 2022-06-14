@@ -9,7 +9,7 @@ import seaborn as sns
 
 from adler.data_managing_functions import download_data,check_file,time
 from adler.plotting.plotting_main import set_scale,mask_arr,load_activity,compute_st_values,download_quantifiers
-from adler.plotting.dyncode_data.dyncode_main import get_consecutive_data_dyncode,get_exp_N_total_isolated_consecutive,get_activity_data_dyncode
+from adler.dyncode_data.dyncode_main import get_consecutive_data_dyncode,get_exp_N_total_isolated_consecutive,get_activity_data_dyncode
 
 
 def mean_consecutive_value(trials):

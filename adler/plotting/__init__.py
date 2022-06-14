@@ -1,5 +1,4 @@
 import matplotlib
-import adler.plotting.dyncode_data
 
 #matplotlib.rcParams['lines.markeredgecolor'] = 'black' #matplotlib.rcParams.keys()
 matplotlib.rcParams['lines.markeredgewidth'] = 0.0
