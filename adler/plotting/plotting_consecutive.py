@@ -122,7 +122,8 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
      
     ax5.plot(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons, linewidth=0.5, marker = "." , markersize=7, alpha=1)
     ax5.fill_between(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons-std_trains_cons,mean_trains_cons+std_trains_cons,alpha = 0.2)
-    ax5.plot(get_consecutive_data_dyncode(dyncode_filename),linewidth=0.5, marker = "." , markersize=7, alpha=1,color = green)
+    x,y = get_consecutive_data_dyncode(dyncode_filename)
+    ax5.plot(x,y,linewidth=0.5, marker = "." , markersize=7, alpha=1,color = green)
 
     #X_lim = [0,50]
     #ax5.set_xlim(X_lim);
@@ -145,7 +146,7 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
     consecutive_pulses_normed = [i/consecutive_N for i in consecutive_pulses]
     
     arr = [total_pulses_normed,isolated_pulses_normed,consecutive_pulses_normed]
-    
+    print(total_pulses_normed,total_pulses,total_N)
     
     X1 = [np.ones(len(arr[i]))*(i+1) for i in range(0,len(arr))]
     bp1 = ax6.boxplot(arr,vert=True,whis=[5, 95],patch_artist=True,showmeans=False,meanline=True,showfliers=False )
