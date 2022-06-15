@@ -55,7 +55,7 @@ def plot_consecutiveness_activity(dt,beg,T,d,N,Delta,description_file,data_folde
     pool = mp.Pool(processes= ceil(mp.cpu_count()))
     
     tuple_ = ref.groupby(['omega', 'alpha','D','number'])
-    plot_consecutiveness_activity__ = partial(plot_consecutiveness_activity_,dt,T,d,data_folder,save_folder)
+    plot_consecutiveness_activity__ = partial(plot_consecutiveness_activity_,dt,T,d,data_folder,save_folder,dyncode_filename)
     pool.map(plot_consecutiveness_activity__,tuple_)
     
     plot_time_series_square_dataset_ = partial(plot_time_series_square_dataset,dt,beg,T,d,N,Delta,data_folder,save_folder,dyncode_filename)
