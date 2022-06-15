@@ -64,7 +64,7 @@ def load_consecutive_statistics(dataset,data_folder):
             
                 consecutive_pulses = consecutive_trial[0]-isolated_pulses
                 consecutive_pulses_dataset.append(consecutive_pulses)
-                print(isolated_pulses,consecutive_trial[0])
+
         return get_mean_value_place(consecutive_trains_dataset,True),total_pulses_dataset,isolated_pulses_dataset,consecutive_pulses_dataset
 
 
@@ -190,7 +190,7 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
 # =============================================================================
     green =  sns.color_palette(sns.dark_palette("#2ecc71",30,reverse=False))[15]
     (mean_trains_cons,std_trains_cons),total_pulses,isolated_pulses,consecutive_pulses = load_consecutive_statistics_realizations(dataset,save_data_arr)
-
+    print(total_pulses,isolated_pulses,consecutive_pulses)
     colors = ['r','g', 'b']
 
     ax5 = plt.subplot(gs_main[2,0])
@@ -221,7 +221,7 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
 
     total_pulses_normed = [i/total_N for i in total_pulses]
     isolated_pulses_normed = [i/isolated_N for i in isolated_pulses]
-    #consecutive_pulses_normed = [i/consecutive_N for i in consecutive_pulses]
+    consecutive_pulses_normed = [i/consecutive_N for i in consecutive_pulses]
     print(consecutive_N,consecutive_pulses)
     
     arr = [total_pulses_normed,isolated_pulses_normed,consecutive_pulses_normed]
