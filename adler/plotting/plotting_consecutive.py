@@ -364,7 +364,7 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
     DT,IPI,joint_duration,dm = [],[],[],[]
     for (alpha,number),dataset in ref_.groupby(['alpha','number']):
         DT_aux,IPI_aux,joint_duration_aux,dm_aux = download_quantifiers(dataset,data_folder,dt,d)
-        DT.append(DT_aux);IPI.append(IPI_aux);joint_duration.append(joint_duration_aux);dm.append(dm_aux)
+        DT= DT + DT_aux;IPI = IPI_aux; joint_duration = joint_duration + joint_duration_aux ;dm = dm  + dm_aux
     
     ax1 = plt.subplot(gs_main[0,0])
     if len(DT) > 0:
@@ -404,7 +404,7 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
     green =  sns.color_palette(sns.dark_palette("#2ecc71",30,reverse=False))[15]
     
                                                 
-    mean_trains_cons,std_trains_cons,total_pulses,isolated_pulses = load_consecutive_statistics_dist(ref_,data_folder)
+    (mean_trains_cons,std_trains_cons),total_pulses,isolated_pulses = load_consecutive_statistics_dist(ref_,data_folder)
     colors = ['r','g', 'b']
 
     ax5 = plt.subplot(gs_main[2,0])
