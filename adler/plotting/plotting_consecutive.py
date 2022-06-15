@@ -140,10 +140,10 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
     ax6 = plt.subplot(gs_main[2,1])
     
     total_N,isolated_N,consecutive_N = get_exp_N_total_isolated_consecutive(dyncode_filename) 
-    total_pulses_normed = [i/total_N for i in total_pulses]
-    isolated_pulses_normed = [i/isolated_N for i in isolated_pulses]
+    total_pulses_normed = sum([i/total_N for i in total_pulses])
+    isolated_pulses_normed = sum([i/isolated_N for i in isolated_pulses])
     consecutive_pulses = [t-i for t,i in zip(total_pulses,isolated_pulses)]
-    consecutive_pulses_normed = [i/consecutive_N for i in consecutive_pulses]
+    consecutive_pulses_normed = sum([i/consecutive_N for i in consecutive_pulses])
     
     arr = [total_pulses_normed,isolated_pulses_normed,consecutive_pulses_normed]
     print(total_pulses_normed,total_pulses,total_N)
