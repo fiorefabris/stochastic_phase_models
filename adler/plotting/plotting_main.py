@@ -105,6 +105,32 @@ def load_activity(row_,data_folder,dt,T,d):
     silent = np.ones(len(activity)) * 100 - activity
 
     return activity,silent,n_cell
+
+def load_activity_dist(row_,data_folder,dt,T,d):
+    '''
+    load_activity(row_,dt,T,d). Calcula la activity para cada D y alpha una dist.
+    
+    row_: DataFrame
+        variable que viene del excel. Es el grupo de filas del excel de descripción,
+        con un sólo D, pero con todos los trials (number y order diferentes). 
+    '''    
+
+    activity = []; n_cell = 0    
+    for (number,order),row in row_.groupby(['number','order']):
+        
+        file_name   =  str(number)+'_'+str(order)+'.pkl'
+        
+        if (check_file('dt_'+file_name,data_folder)):        
+            
+            duration_cell   = download_data(data_folder+'dt_'+file_name)     
+            n_cell = n_cell + 1
+            activity = activity + [sum(duration_cell) / len(time(dt,T,d)) *  100]
+            
+    activity = np.sort(activity)[::-1] #orden descendente
+    silent = np.ones(len(activity)) * 100 - activity
+
+    return activity,silent,n_cell
+    
     
 #%%
 def mask_arr(beg,end,arr):
