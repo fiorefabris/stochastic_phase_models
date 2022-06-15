@@ -129,7 +129,7 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
     #ax5.set_xlim(X_lim);
     ax5.set_yscale('log')
     #ax5.set_ylim(YC_lim)
-    ax5.set_ylabel('counts',fontsize=10); ax5.set_xlabel('length of sequence of \n consecutive pulses',fontsize=10)
+    ax5.set_ylabel('counts x trace',fontsize=10); ax5.set_xlabel('length of sequence of \n consecutive pulses',fontsize=10)
     ax5.xaxis.set_label_coords(0.5, -0.08);ax5.yaxis.set_label_coords(-0.2,0.5);
     #ax3.set_xticks([0,3,6,9,12,15])        
 
