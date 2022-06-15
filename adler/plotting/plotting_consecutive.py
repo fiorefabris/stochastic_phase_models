@@ -64,7 +64,7 @@ def load_consecutive_statistics(dataset,data_folder):
             
                 consecutive_pulses = consecutive_trial[0]-isolated_pulses
                 consecutive_pulses_dataset.append(consecutive_pulses)
-        
+                print(isolated_pulses,consecutive_trial[0])
         return get_mean_value_place(consecutive_trains_dataset,True),total_pulses_dataset,isolated_pulses_dataset,consecutive_pulses_dataset
 
 
