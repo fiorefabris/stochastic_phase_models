@@ -45,7 +45,7 @@ def load_consecutive_statistics(dataset,data_folder):
         
 #%%
         
-def plot_consecutiveness_activity(dt,beg,T,d,N,Delta,description_file,data_folder,save_folder):
+def plot_consecutiveness_activity(dt,beg,T,d,N,Delta,description_file,data_folder,save_folder,dyncode_filename):
     '''
     data folder: donde están los cc
     '''
@@ -58,14 +58,14 @@ def plot_consecutiveness_activity(dt,beg,T,d,N,Delta,description_file,data_folde
     plot_consecutiveness_activity__ = partial(plot_consecutiveness_activity_,dt,T,d,data_folder,save_folder)
     pool.map(plot_consecutiveness_activity__,tuple_)
     
-    plot_time_series_square_dataset_ = partial(plot_time_series_square_dataset,dt,beg,T,d,N,Delta,data_folder,save_folder)
+    plot_time_series_square_dataset_ = partial(plot_time_series_square_dataset,dt,beg,T,d,N,Delta,data_folder,save_folder,dyncode_filename)
     pool.map(plot_time_series_square_dataset_,tuple_)
     
     pool.close()
     pool.join()
     return (2)
 
-def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,tuple_):
+def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filename,tuple_):
     
     
     fig = plt.figure(constrained_layout=False, figsize=(8.27, 11.692))
@@ -122,7 +122,7 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,tuple_):
      
     ax5.plot(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons, linewidth=0.5, marker = "." , markersize=7, alpha=1)
     ax5.fill_between(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons-std_trains_cons,mean_trains_cons+std_trains_cons,alpha = 0.2)
-    ax5.plot(get_consecutive_data_dyncode(),linewidth=0.5, marker = "." , markersize=7, alpha=1,color = green)
+    ax5.plot(get_consecutive_data_dyncode(dyncode_filename),linewidth=0.5, marker = "." , markersize=7, alpha=1,color = green)
 
     #X_lim = [0,50]
     #ax5.set_xlim(X_lim);
@@ -138,7 +138,7 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,tuple_):
     
     ax6 = plt.subplot(gs_main[2,1])
     
-    total_N,isolated_N,consecutive_N = get_exp_N_total_isolated_consecutive() 
+    total_N,isolated_N,consecutive_N = get_exp_N_total_isolated_consecutive(dyncode_filename) 
     total_pulses_normed = [i/total_N for i in total_pulses]
     isolated_pulses_normed = [i/isolated_N for i in isolated_pulses]
     consecutive_pulses = [t-i for t,i in zip(total_pulses,isolated_pulses)]
@@ -187,7 +187,7 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,tuple_):
     if len(activity) > 0:
         p1 = ax3.bar(np.arange(1 ,n_cell + 1),silent,width=1,color='darkgray',alpha=0.5,linewidth=0.0)
         p2 = ax3.bar(np.arange(1 ,n_cell + 1),activity,bottom=silent,width=1,alpha=0.8,linewidth=0.0)
-        x , y , silent_experiment = get_activity_data_dyncode()
+        x , y , silent_experiment = get_activity_data_dyncode(dyncode_filename)
         p3 = ax3.bar(x,y,bottom=silent_experiment,width=0.8,alpha=0.3,linewidth=0.0,color = green)
         
     ax3.set_xlim([0,n_cell]);ax3.set_ylim([0,100])
