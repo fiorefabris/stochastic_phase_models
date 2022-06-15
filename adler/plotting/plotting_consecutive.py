@@ -371,7 +371,7 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
             
         bins = ax1.hist(DT,bins=np.linspace(0,20,42),density=True,alpha=1,linewidth=1); 
         #tune_plot(ax,'dt (min)','probability density (1/min)',[0,20],1,[0,0.4],1,30,20)
-        compute_st_values(ax1,DT,bins,1,10)   
+        #compute_st_values(ax1,DT,bins,1,10)   
     else:
         pass
     
