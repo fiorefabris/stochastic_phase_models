@@ -11,37 +11,92 @@ from adler.data_managing_functions import download_data,check_file,time
 from adler.plotting.plotting_main import set_scale,mask_arr,load_activity,compute_st_values,download_quantifiers,load_activity_dist
 from adler.plotting.dyncode_main import get_consecutive_data_dyncode,get_exp_N_total_isolated_consecutive,get_activity_data_dyncode
 
-
-def mean_consecutive_value(trials):
-    '''
-    agarra una lista de trials de consecutives y te los devuelve en mean y std
-    '''
-    if len(trials) > 0:
-        arr_aux = []
-        for j in range(np.max([len(i) for i in trials])):
-            arr_aux.append([i[j] for i in trials if len(i) > j])
-        return (np.array([np.mean(k) for k in arr_aux]),np.array([np.std(k) for k in arr_aux]))
+def get_mean_value_place(trials,no_std = False):
+    arr_aux = []
+    for j in range(np.max([len(i) for i in trials])):
+        aux = []
+       
+        for i in trials:
+            if len(i) > j : 
+                aux.append(i[j])
+            else:
+                aux.append(0)
+            
+        arr_aux.append(aux)
+    if no_std:
+        return np.array([np.mean(k) for k in arr_aux])
     else:
-        return ([],[])
+        return(np.array([np.mean(k) for k in arr_aux]),np.array([np.std(k) for k in arr_aux]))
 
+
+def load_consecutive_statistics_realizations(dataset,save_data_arr):
+    mean_trains_cons_trials,total_pulses_trials,isolated_pulses_trials,consecutive_pulses_trials = [],[],[],[]
+    
+    for data_folder in save_data_arr:
+        mean_trains_cons,total_pulses,isolated_pulses,consecutive_pulses = load_consecutive_statistics(dataset,data_folder)
+        
+        mean_trains_cons_trials.append(mean_trains_cons)
+        total_pulses_trials.append(total_pulses)
+        isolated_pulses_trials.append(isolated_pulses)
+        consecutive_pulses_trials.append(consecutive_pulses)
+        
+    return get_mean_value_place(mean_trains_cons_trials,False),total_pulses_trials,isolated_pulses_trials,consecutive_pulses_trials
 
 
 def load_consecutive_statistics(dataset,data_folder):
         ''' le pasas un experimento  y te devuelve la estadistica de pulsos cons'''
         isolated_pulses_dataset = []
         total_pulses_dataset = []
+        consecutive_pulses_dataset = []
         consecutive_trains_dataset = []
         
         for (order,row) in dataset.groupby(['order']):
             number      = int(row.number)
             file_name   =  str(number)+'_'+str(order)+'.pkl'
-            isolated_pulses_dataset.append(download_data(data_folder+'i_'+file_name))
+            isolated_pulses = download_data(data_folder+'i_'+file_name)
+            isolated_pulses_dataset.append(isolated_pulses)
             
             consecutive_trial = download_data(data_folder+'c_'+file_name)
             consecutive_trains_dataset.append(consecutive_trial)
             total_pulses_dataset.append(consecutive_trial[0])
+            
+            consecutive_pulses = [t-i for t,i in zip(consecutive_trial[0],isolated_pulses)]
+            consecutive_pulses_dataset.append(consecutive_pulses)
         
-        return (mean_consecutive_value(consecutive_trains_dataset),total_pulses_dataset,isolated_pulses_dataset)
+        return get_mean_value_place(consecutive_trains_dataset,True),total_pulses_dataset,isolated_pulses_dataset,consecutive_pulses_dataset
+
+
+
+#def mean_consecutive_value(trials):
+#    '''
+#    agarra una lista de trials de consecutives y te los devuelve en mean y std
+#    '''
+#    if len(trials) > 0:
+#        arr_aux = []
+#        for j in range(np.max([len(i) for i in trials])):
+#            arr_aux.append([i[j] for i in trials if len(i) > j])
+#        return (np.array([np.mean(k) for k in arr_aux]),np.array([np.std(k) for k in arr_aux]))
+#    else:
+#        return ([],[])
+
+
+
+#def load_consecutive_statistics(dataset,data_folder):
+#        ''' le pasas un experimento  y te devuelve la estadistica de pulsos cons'''
+#        isolated_pulses_dataset = []
+#        total_pulses_dataset = []
+#        consecutive_trains_dataset = []
+#        
+#        for (order,row) in dataset.groupby(['order']):
+#            number      = int(row.number)
+#            file_name   =  str(number)+'_'+str(order)+'.pkl'
+#            isolated_pulses_dataset.append(download_data(data_folder+'i_'+file_name))
+#            
+#            consecutive_trial = download_data(data_folder+'c_'+file_name)
+#            consecutive_trains_dataset.append(consecutive_trial)
+#            total_pulses_dataset.append(consecutive_trial[0])
+#        
+#        return (mean_consecutive_value(consecutive_trains_dataset),total_pulses_dataset,isolated_pulses_dataset)
 
 
 def load_consecutive_statistics_dist(dataset,data_folder):
@@ -63,7 +118,7 @@ def load_consecutive_statistics_dist(dataset,data_folder):
         return (mean_consecutive_value(consecutive_trains_dataset),total_pulses_dataset,isolated_pulses_dataset)    
 #%%
         
-def plot_consecutiveness_activity(dt,beg,T,d,N,Delta,description_file,data_folder,save_folder,dyncode_filename):
+def plot_consecutiveness_activity(dt,beg,T,d,N,Delta,description_file,data_folder,save_folder,dyncode_filename,save_data_arr):
     '''
     data folder: donde están los cc
     '''
@@ -73,7 +128,7 @@ def plot_consecutiveness_activity(dt,beg,T,d,N,Delta,description_file,data_folde
     pool = mp.Pool(processes= ceil(mp.cpu_count()))
     
     tuple_ = ref.groupby(['omega', 'alpha','D','number'])
-    plot_consecutiveness_activity__ = partial(plot_consecutiveness_activity_,dt,T,d,data_folder,save_folder,dyncode_filename)
+    plot_consecutiveness_activity__ = partial(plot_consecutiveness_activity_,dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr)
     pool.map(plot_consecutiveness_activity__,tuple_)
     
     plot_time_series_square_dataset_ = partial(plot_time_series_square_dataset,dt,beg,T,d,N,Delta,data_folder,save_folder)
@@ -83,7 +138,7 @@ def plot_consecutiveness_activity(dt,beg,T,d,N,Delta,description_file,data_folde
     pool.join()
     return (2)
 
-def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filename,tuple_):
+def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,tuple_):
     
     
     fig = plt.figure(constrained_layout=False, figsize=(8.27, 11.692))
@@ -132,7 +187,7 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
 #     consecutiveness plot
 # =============================================================================
     green =  sns.color_palette(sns.dark_palette("#2ecc71",30,reverse=False))[15]
-    (mean_trains_cons,std_trains_cons),total_pulses,isolated_pulses = load_consecutive_statistics(dataset,data_folder)
+    (mean_trains_cons,std_trains_cons),total_pulses,isolated_pulses,consecutive_pulses = load_consecutive_statistics_realizations(dataset,save_data_arr)
 
     colors = ['r','g', 'b']
 
@@ -159,43 +214,44 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
 
 #hay que hacer varios trials para tener este plot
     
-#    total_N,isolated_N,consecutive_N = get_exp_N_total_isolated_consecutive(dyncode_filename) 
-#    total_pulses_normed = [i/total_N for i in total_pulses]
-#    isolated_pulses_normed = [i/isolated_N for i in isolated_pulses]
-#    consecutive_pulses = [t-i for t,i in zip(total_pulses,isolated_pulses)]
-#    consecutive_pulses_normed = [i/consecutive_N for i in consecutive_pulses]
-#    
-#    arr = [total_pulses_normed,isolated_pulses_normed,consecutive_pulses_normed]
-#    print(total_pulses_normed,total_pulses,total_N)
-#    
-#    X1 = [np.ones(len(arr[i]))*(i+1) for i in range(0,len(arr))]
-#    bp1 = ax6.boxplot(arr,vert=True,whis=[5, 95],patch_artist=True,showmeans=False,meanline=True,showfliers=False )
-#
-#    for i,box_ in enumerate(bp1['boxes']):
-#         box_.set( color=colors[i], linewidth=0.0,facecolor=colors[i],alpha = 0.1)# change outline color
-#    for i,whisker in enumerate(bp1['whiskers']):
-#        whisker.set(color=colors[i//2],linestyle = '-', linewidth=1,alpha=0.3)
-#    for i,cap in enumerate(bp1['caps']):
-#        cap.set(color=colors[i//2],linestyle = '-', linewidth=1,alpha=0.3)## change color and linewidth of the caps
-#    for i,median in enumerate(bp1['medians']):
-#        median.set(color=colors[i],linestyle = '-', linewidth=1.5)## change color and linewidth of the medians
-#    for i,flyer in enumerate(bp1['fliers']):
-#        flyer.set(markeredgecolor='black')## change color and linewidth of the medians
-#    
-#    for i in range(len(X1)):
-#        xA = np.random.normal(0, 0.1, len(arr[i])), 
-#        ax6.scatter(xA+X1[i],arr[i], alpha=1,s = 1.5,color='black',edgecolors='black',linewidths=0.0)
-
     total_N,isolated_N,consecutive_N = get_exp_N_total_isolated_consecutive(dyncode_filename) 
-    total_pulses_normed = sum([i/total_N for i in total_pulses])
-    isolated_pulses_normed = sum([i/isolated_N for i in isolated_pulses])
-    consecutive_pulses = [t-i for t,i in zip(total_pulses,isolated_pulses)]
-    consecutive_pulses_normed = sum([i/consecutive_N for i in consecutive_pulses])
+    
+
+    total_pulses_normed = [i/total_N for i in total_pulses]
+    isolated_pulses_normed = [i/isolated_N for i in isolated_pulses]
+    consecutive_pulses_normed = [i/consecutive_N for i in consecutive_pulses]
     
     arr = [total_pulses_normed,isolated_pulses_normed,consecutive_pulses_normed]
     print(total_pulses_normed,total_pulses,total_N)
     
-    ax6.plot([1,2,3],arr,' o ')
+    X1 = [np.ones(len(arr[i]))*(i+1) for i in range(0,len(arr))]
+    bp1 = ax6.boxplot(arr,vert=True,whis=[5, 95],patch_artist=True,showmeans=False,meanline=True,showfliers=False )
+
+    for i,box_ in enumerate(bp1['boxes']):
+         box_.set( color=colors[i], linewidth=0.0,facecolor=colors[i],alpha = 0.1)# change outline color
+    for i,whisker in enumerate(bp1['whiskers']):
+        whisker.set(color=colors[i//2],linestyle = '-', linewidth=1,alpha=0.3)
+    for i,cap in enumerate(bp1['caps']):
+        cap.set(color=colors[i//2],linestyle = '-', linewidth=1,alpha=0.3)## change color and linewidth of the caps
+    for i,median in enumerate(bp1['medians']):
+        median.set(color=colors[i],linestyle = '-', linewidth=1.5)## change color and linewidth of the medians
+    for i,flyer in enumerate(bp1['fliers']):
+        flyer.set(markeredgecolor='black')## change color and linewidth of the medians
+    
+    for i in range(len(X1)):
+        xA = np.random.normal(0, 0.1, len(arr[i])), 
+        ax6.scatter(xA+X1[i],arr[i], alpha=1,s = 1.5,color='black',edgecolors='black',linewidths=0.0)
+
+#    total_N,isolated_N,consecutive_N = get_exp_N_total_isolated_consecutive(dyncode_filename) 
+#    total_pulses_normed = sum([i/total_N for i in total_pulses])
+#    isolated_pulses_normed = sum([i/isolated_N for i in isolated_pulses])
+#    consecutive_pulses = [t-i for t,i in zip(total_pulses,isolated_pulses)]
+#    consecutive_pulses_normed = sum([i/consecutive_N for i in consecutive_pulses])
+#    
+#    arr = [total_pulses_normed,isolated_pulses_normed,consecutive_pulses_normed]
+#    print(total_pulses_normed,total_pulses,total_N)
+    
+#    ax6.plot([1,2,3],arr,' o ')
     ax6.tick_params(axis='x', labelsize=8,length=2); 
     ax6.tick_params(axis='y', labelsize=8,length=2)
     ax6.set_xlabel('total,isolated,consecutive',fontsize=8)
@@ -235,6 +291,7 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
     if len(activity) > 0:
         p1 = ax4.barh(1,width = np.mean(silent),xerr=np.std(silent),left =0,color='darkgray',alpha=0.5,linewidth=0.0,height=0.6)
         p2 = ax4.barh(1,width = np.mean(activity),left=np.mean(silent),xerr = np.std(activity),alpha=0.8,linewidth=0.0,height=0.6)
+        p3 = ax4.barh(1,width = np.mean(x),left=np.mean(silent_experiment),alpha=0.8,linewidth=0.0,height=0.6,color = green)
 
     ax4.set_xticks([0,50,100])
     ax4.set_xlim([0,100])
