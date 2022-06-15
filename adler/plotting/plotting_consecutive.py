@@ -138,34 +138,46 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
 # =============================================================================
     
     ax6 = plt.subplot(gs_main[2,1])
+
+#hay que hacer varios trials para tener este plot
     
+#    total_N,isolated_N,consecutive_N = get_exp_N_total_isolated_consecutive(dyncode_filename) 
+#    total_pulses_normed = [i/total_N for i in total_pulses]
+#    isolated_pulses_normed = [i/isolated_N for i in isolated_pulses]
+#    consecutive_pulses = [t-i for t,i in zip(total_pulses,isolated_pulses)]
+#    consecutive_pulses_normed = [i/consecutive_N for i in consecutive_pulses]
+#    
+#    arr = [total_pulses_normed,isolated_pulses_normed,consecutive_pulses_normed]
+#    print(total_pulses_normed,total_pulses,total_N)
+#    
+#    X1 = [np.ones(len(arr[i]))*(i+1) for i in range(0,len(arr))]
+#    bp1 = ax6.boxplot(arr,vert=True,whis=[5, 95],patch_artist=True,showmeans=False,meanline=True,showfliers=False )
+#
+#    for i,box_ in enumerate(bp1['boxes']):
+#         box_.set( color=colors[i], linewidth=0.0,facecolor=colors[i],alpha = 0.1)# change outline color
+#    for i,whisker in enumerate(bp1['whiskers']):
+#        whisker.set(color=colors[i//2],linestyle = '-', linewidth=1,alpha=0.3)
+#    for i,cap in enumerate(bp1['caps']):
+#        cap.set(color=colors[i//2],linestyle = '-', linewidth=1,alpha=0.3)## change color and linewidth of the caps
+#    for i,median in enumerate(bp1['medians']):
+#        median.set(color=colors[i],linestyle = '-', linewidth=1.5)## change color and linewidth of the medians
+#    for i,flyer in enumerate(bp1['fliers']):
+#        flyer.set(markeredgecolor='black')## change color and linewidth of the medians
+#    
+#    for i in range(len(X1)):
+#        xA = np.random.normal(0, 0.1, len(arr[i])), 
+#        ax6.scatter(xA+X1[i],arr[i], alpha=1,s = 1.5,color='black',edgecolors='black',linewidths=0.0)
+
     total_N,isolated_N,consecutive_N = get_exp_N_total_isolated_consecutive(dyncode_filename) 
-    total_pulses_normed = [sum([i/total_N for i in total_pulses])]
-    isolated_pulses_normed = [sum([i/isolated_N for i in isolated_pulses])]
+    total_pulses_normed = sum([i/total_N for i in total_pulses])
+    isolated_pulses_normed = sum([i/isolated_N for i in isolated_pulses])
     consecutive_pulses = [t-i for t,i in zip(total_pulses,isolated_pulses)]
-    consecutive_pulses_normed = [sum([i/consecutive_N for i in consecutive_pulses])]
+    consecutive_pulses_normed = sum([i/consecutive_N for i in consecutive_pulses])
     
     arr = [total_pulses_normed,isolated_pulses_normed,consecutive_pulses_normed]
     print(total_pulses_normed,total_pulses,total_N)
     
-    X1 = [np.ones(len(arr[i]))*(i+1) for i in range(0,len(arr))]
-    bp1 = ax6.boxplot(arr,vert=True,whis=[5, 95],patch_artist=True,showmeans=False,meanline=True,showfliers=False )
-
-    for i,box_ in enumerate(bp1['boxes']):
-         box_.set( color=colors[i], linewidth=0.0,facecolor=colors[i],alpha = 0.1)# change outline color
-    for i,whisker in enumerate(bp1['whiskers']):
-        whisker.set(color=colors[i//2],linestyle = '-', linewidth=1,alpha=0.3)
-    for i,cap in enumerate(bp1['caps']):
-        cap.set(color=colors[i//2],linestyle = '-', linewidth=1,alpha=0.3)## change color and linewidth of the caps
-    for i,median in enumerate(bp1['medians']):
-        median.set(color=colors[i],linestyle = '-', linewidth=1.5)## change color and linewidth of the medians
-    for i,flyer in enumerate(bp1['fliers']):
-        flyer.set(markeredgecolor='black')## change color and linewidth of the medians
-    
-    for i in range(len(X1)):
-        xA = np.random.normal(0, 0.1, len(arr[i])), 
-        ax6.scatter(xA+X1[i],arr[i], alpha=1,s = 1.5,color='black',edgecolors='black',linewidths=0.0)
-
+    ax6.plot([1,2,3],arr,' o ')
     ax6.tick_params(axis='x', labelsize=8,length=2); 
     ax6.tick_params(axis='y', labelsize=8,length=2)
     ax6.set_xlabel('total,isolated,consecutive',fontsize=8)
