@@ -51,19 +51,20 @@ def load_consecutive_statistics(dataset,data_folder):
         consecutive_trains_dataset = []
         
         for (order,row) in dataset.groupby(['order']):
-            number      = int(row.number)
-            file_name   =  str(number)+'_'+str(order)+'.pkl'
-            
-            if (check_file('i_'+file_name,data_folder)): 
-                isolated_pulses = download_data(data_folder+'i_'+file_name)
-                isolated_pulses_dataset.append(isolated_pulses)
-            
-                consecutive_trial = download_data(data_folder+'c_'+file_name)
-                consecutive_trains_dataset.append(consecutive_trial)
-                total_pulses_dataset.append(consecutive_trial[0])
-            
-                consecutive_pulses = consecutive_trial[0]-isolated_pulses
-                consecutive_pulses_dataset.append(consecutive_pulses)
+            if order < 69:
+                number      = int(row.number)
+                file_name   =  str(number)+'_'+str(order)+'.pkl'
+                
+                if (check_file('i_'+file_name,data_folder)): 
+                    isolated_pulses = download_data(data_folder+'i_'+file_name)
+                    isolated_pulses_dataset.append(isolated_pulses)
+                
+                    consecutive_trial = download_data(data_folder+'c_'+file_name)
+                    consecutive_trains_dataset.append(consecutive_trial)
+                    total_pulses_dataset.append(consecutive_trial[0])
+                
+                    consecutive_pulses = consecutive_trial[0]-isolated_pulses
+                    consecutive_pulses_dataset.append(consecutive_pulses)
         return get_mean_value_place(consecutive_trains_dataset,True),sum(total_pulses_dataset),sum(isolated_pulses_dataset),sum(consecutive_pulses_dataset)
 
 # =============================================================================
@@ -146,7 +147,7 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
     
     ax1 = plt.subplot(gs_main[0,0])
     if len(DT) > 0:
-            
+        ax1.axvspan(6, 8.33, color='y', alpha=0.5, lw=0)
         bins = ax1.hist(DT,bins=np.linspace(0,20,42),density=True,alpha=1,linewidth=1); 
         #tune_plot(ax,'dt (min)','probability density (1/min)',[0,20],1,[0,0.4],1,30,20)
         compute_st_values(ax1,DT,bins,1,10)   
@@ -162,6 +163,7 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
     
     ax2 = plt.subplot(gs_main[0,1])
     if len(DT) > 0:
+        ax2.axvspan(8, 18.67, color='y', alpha=0.5, lw=0)
         bins = ax2.hist(IPI,bins=np.linspace(0,40,84),density=True,alpha=1,linewidth=1); 
         #tune_plot(ax,'dt (min)','probability density (1/min)',[0,20],1,[0,0.4],1,30,20)
         compute_st_values(ax2,IPI,bins,1,10)   
@@ -181,7 +183,7 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
 # =============================================================================
     green =  sns.color_palette(sns.dark_palette("#2ecc71",30,reverse=False))[15]
     (mean_trains_cons,std_trains_cons),total_pulses,isolated_pulses,consecutive_pulses = load_consecutive_statistics_realizations(dataset,save_data_arr)
-    colors = ['r','g', 'b']
+    colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728']
 
     ax5 = plt.subplot(gs_main[2,0])
      
