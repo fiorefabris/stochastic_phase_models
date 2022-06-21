@@ -108,6 +108,7 @@ def load_consecutive_statistics_dist(dataset,data_folder):
             
                 consecutive_pulses = consecutive_trial[0]-isolated_pulses
                 consecutive_pulses_dataset.append(consecutive_pulses)
+        print('len total_pulses_dataset' , len(total_pulses_dataset))
         return get_mean_value_place(consecutive_trains_dataset,True),sum(total_pulses_dataset),sum(isolated_pulses_dataset),sum(consecutive_pulses_dataset)
 
 
