@@ -1,3 +1,53 @@
+Esto es old para el plot de los histogramas y activity y todo eso
+
+#def mean_consecutive_value(trials):
+#    '''
+#    agarra una lista de trials de consecutives y te los devuelve en mean y std
+#    '''
+#    if len(trials) > 0:
+#        arr_aux = []
+#        for j in range(np.max([len(i) for i in trials])):
+#            arr_aux.append([i[j] for i in trials if len(i) > j])
+#        return (np.array([np.mean(k) for k in arr_aux]),np.array([np.std(k) for k in arr_aux]))
+#    else:
+#        return ([],[])
+
+
+
+#def load_consecutive_statistics(dataset,data_folder):
+#        ''' le pasas un experimento  y te devuelve la estadistica de pulsos cons'''
+#        isolated_pulses_dataset = []
+#        total_pulses_dataset = []
+#        consecutive_trains_dataset = []
+#        
+#        for (order,row) in dataset.groupby(['order']):
+#            number      = int(row.number)
+#            file_name   =  str(number)+'_'+str(order)+'.pkl'
+#            isolated_pulses_dataset.append(download_data(data_folder+'i_'+file_name))
+#            
+#            consecutive_trial = download_data(data_folder+'c_'+file_name)
+#            consecutive_trains_dataset.append(consecutive_trial)
+#            total_pulses_dataset.append(consecutive_trial[0])
+#        
+#        return (mean_consecutive_value(consecutive_trains_dataset),total_pulses_dataset,isolated_pulses_dataset)
+
+#def load_consecutive_statistics_dist(dataset,data_folder):
+#        ''' le pasas un experimento  y te devuelve la estadistica de pulsos cons 
+#        Con distinto number! y order puede ser (osea distintas alphas)'''
+#        isolated_pulses_dataset = []
+#        total_pulses_dataset = []
+#        consecutive_trains_dataset = []
+#        
+#        for (number,order),row in dataset.groupby(['number','order']):
+#            
+#            file_name   =  str(number)+'_'+str(order)+'.pkl'
+#            isolated_pulses_dataset.append(download_data(data_folder+'i_'+file_name))
+#            
+#            consecutive_trial = download_data(data_folder+'c_'+file_name)
+#            consecutive_trains_dataset.append(consecutive_trial)
+#            total_pulses_dataset.append(consecutive_trial[0])
+#        
+#        return (mean_consecutive_value(consecutive_trains_dataset),total_pulses_dataset,isolated_pulses_dataset)    
 #%%
 # =============================================================================
 #     activity plot blocking
