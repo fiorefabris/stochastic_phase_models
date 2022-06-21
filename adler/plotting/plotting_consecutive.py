@@ -518,7 +518,7 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
     ax6.tick_params(axis='y', labelsize=8,length=2)
     ax6.set_xlabel('total,isolated,consecutive',fontsize=8)
     ax6.set_ylabel('counts',fontsize=8)
-    ax6.set_ylim([0.9,2.5])
+#    ax6.set_ylim([0.9,2.5])
     ax6.xaxis.set_label_coords(0.5, -0.12);ax6.yaxis.set_label_coords(-0.05,0.5)
     ax6.tick_params(labelsize=6,direction='out', pad=1,length=2)
     ax6.set_xticklabels([' total' ,'isolated','consecutive'],rotation = 0)
