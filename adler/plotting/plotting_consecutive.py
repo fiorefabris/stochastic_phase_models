@@ -422,7 +422,7 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
     ax1 = plt.subplot(gs_main[0,0])
     if len(DT) > 0:
         ax1.axvspan(6, 8.33, color='y', alpha=0.5, lw=0)
-        bins = ax1.hist(DT,bins=np.linspace(0,20,42),density=True,alpha=1,linewidth=1); 
+        bins = ax1.hist(DT,bins=np.linspace(0,20,21),density=True,alpha=1,linewidth=1); 
         #tune_plot(ax,'dt (min)','probability density (1/min)',[0,20],1,[0,0.4],1,30,20)
         compute_st_values(ax1,DT,bins,1,10)
     else:
@@ -439,7 +439,7 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
     ax2 = plt.subplot(gs_main[0,1])
     if len(DT) > 0:
         ax2.axvspan(8, 18.67, color='y', alpha=0.5, lw=0)
-        bins = ax2.hist(IPI,bins=np.linspace(0,40,84),density=True,alpha=1,linewidth=1); 
+        bins = ax2.hist(IPI,bins=np.linspace(0,40,42),density=True,alpha=1,linewidth=1); 
         #tune_plot(ax,'dt (min)','probability density (1/min)',[0,20],1,[0,0.4],1,30,20)
         compute_st_values(ax2,IPI,bins,1,10)   
     else:
@@ -518,7 +518,7 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
     ax6.tick_params(axis='y', labelsize=8,length=2)
     ax6.set_xlabel('total,isolated,consecutive',fontsize=8)
     ax6.set_ylabel('counts',fontsize=8)
-    #ax6.set_ylim([-1,200])
+    ax6.set_ylim([0.9,2.5])
     ax6.xaxis.set_label_coords(0.5, -0.12);ax6.yaxis.set_label_coords(-0.05,0.5)
     ax6.tick_params(labelsize=6,direction='out', pad=1,length=2)
     ax6.set_xticklabels([' total' ,'isolated','consecutive'],rotation = 0)
