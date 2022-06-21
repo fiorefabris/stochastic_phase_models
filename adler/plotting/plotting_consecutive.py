@@ -458,7 +458,7 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
 #     consecutiveness plot
 # =============================================================================
     green =  sns.color_palette(sns.dark_palette("#2ecc71",30,reverse=False))[15]
-    (mean_trains_cons,std_trains_cons),total_pulses,isolated_pulses,consecutive_pulses = load_consecutive_statistics_realizations_dist(dataset,save_data_arr)
+    (mean_trains_cons,std_trains_cons),total_pulses,isolated_pulses,consecutive_pulses = load_consecutive_statistics_realizations_dist(ref_,save_data_arr)
     colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728']
 
 
