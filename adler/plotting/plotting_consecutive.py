@@ -65,6 +65,7 @@ def load_consecutive_statistics(dataset,data_folder):
                 
                     consecutive_pulses = consecutive_trial[0]-isolated_pulses
                     consecutive_pulses_dataset.append(consecutive_pulses)
+        print('len consecutive_trains_dataset' , len(consecutive_trains_dataset))
         return get_mean_value_place(consecutive_trains_dataset,True),sum(total_pulses_dataset),sum(isolated_pulses_dataset),sum(consecutive_pulses_dataset)
 
 # =============================================================================
@@ -94,7 +95,7 @@ def load_consecutive_statistics_dist(dataset,data_folder):
         consecutive_pulses_dataset = []
         consecutive_trains_dataset = []
         
-        for (number,order),row in ref_.groupby(['number','order']):
+        for (number,order),row in dataset.groupby(['number','order']):
             file_name   =  str(number)+'_'+str(order)+'.pkl'
             
             if (check_file('i_'+file_name,data_folder)): 
@@ -217,7 +218,7 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
     print(consecutive_N,consecutive_pulses)
     
     arr = [total_pulses_normed,isolated_pulses_normed,consecutive_pulses_normed]
-    print(total_pulses_normed,total_pulses,total_N)
+    print('len total pulses normed' , len(total_pulses_normed))
     
     X1 = [np.ones(len(arr[i]))*(i+1) for i in range(0,len(arr))]
     bp1 = ax6.boxplot(arr,vert=True,whis=[5, 95],patch_artist=True,showmeans=False,meanline=True,showfliers=False )
