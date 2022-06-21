@@ -87,7 +87,7 @@ def load_consecutive_statistics_realizations_dist(dataset,save_data_arr):
     return get_mean_value_place(mean_trains_cons_trials,False),total_pulses_trials,isolated_pulses_trials,consecutive_pulses_trials
 
 
-def load_consecutive_statistics_dist(dataset,data_folder):
+def load_consecutive_statistics_dist(ref_,data_folder):
         ''' le pasas un experimento  y te devuelve la estadistica de pulsos cons
         Con distinto number! y order puede ser (osea distintas alphas)'''
         isolated_pulses_dataset = []
@@ -95,7 +95,7 @@ def load_consecutive_statistics_dist(dataset,data_folder):
         consecutive_pulses_dataset = []
         consecutive_trains_dataset = []
         
-        for (number,order),row in dataset.groupby(['number','order']):
+        for (number,order),row in ref_.groupby(['number','order']):
             file_name   =  str(number)+'_'+str(order)+'.pkl'
             
             if (check_file('i_'+file_name,data_folder)): 
@@ -519,7 +519,7 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
     ax6.tick_params(axis='y', labelsize=8,length=2)
     ax6.set_xlabel('total,isolated,consecutive',fontsize=8)
     ax6.set_ylabel('counts',fontsize=8)
-#    ax6.set_ylim([0.9,2.5])
+    ax6.set_ylim([0.9,2.5])
     ax6.xaxis.set_label_coords(0.5, -0.12);ax6.yaxis.set_label_coords(-0.05,0.5)
     ax6.tick_params(labelsize=6,direction='out', pad=1,length=2)
     ax6.set_xticklabels([' total' ,'isolated','consecutive'],rotation = 0)
