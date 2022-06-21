@@ -171,11 +171,11 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
     else:
         print(delta,D,"no data")
     
-    ax2.set_ylim([0,0.2]);
+    ax2.set_ylim([0,0.1]);
     ax2.set_xlim([0,40])
-    set_scale(ax2,[0,10,20,30,40], [0,0.2])
+    set_scale(ax2,[0,10,20,30,40], [0,0.1])
     ax2.set_xticklabels([0,10,20,30,40])
-    ax2.set_yticklabels([0,0.2])
+    ax2.set_yticklabels([0,0.1])
     ax2.tick_params(labelsize=10)
 
 
@@ -445,11 +445,11 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
     else:
         pass
     
-    ax2.set_ylim([0,0.2]);
+    ax2.set_ylim([0,0.1]);
     ax2.set_xlim([0,40])
-    set_scale(ax2,[0,10,20,30,40], [0,0.2])
+    set_scale(ax2,[0,10,20,30,40], [0,0.1])
     ax2.set_xticklabels([0,10,20,30,40])
-    ax2.set_yticklabels([0,0.2])
+    ax2.set_yticklabels([0,0.1])
     ax2.tick_params(labelsize=10)
 
 
