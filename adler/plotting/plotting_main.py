@@ -65,7 +65,7 @@ def create_df(ref,data_folder,dt,T,d):
         for D,col_ in row_.groupby(['D']):
             DT,IPI,_,_ = download_quantifiers(col_,data_folder,dt,d)
            
-            aux_dt.append(np.median(DT));aux_ipi.median(np.median(IPI))
+            aux_dt.append(np.median(DT));aux_ipi.append(np.median(IPI))
             aux_pulses.append(np.len(DT)/T)
              
             fpt_file_name = 'FPT_'+str(omega)+'_'+str(np.round(alpha/omega,4) )+'_'+str(D)+'.pkl'
