@@ -66,7 +66,7 @@ def create_df(ref,data_folder,dt,T,d):
             DT,IPI,_,_ = download_quantifiers(col_,data_folder,dt,d)
            
             aux_dt.append(np.median(DT));aux_ipi.append(np.median(IPI))
-            aux_pulses.append(np.len(DT)/T)
+            aux_pulses.append(len(DT)/T)
              
             fpt_file_name = 'FPT_'+str(omega)+'_'+str(np.round(alpha/omega,4) )+'_'+str(D)+'.pkl'
             if check_file(fpt_file_name,data_folder) :
