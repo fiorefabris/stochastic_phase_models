@@ -36,7 +36,7 @@ def points_to_time(arr,dt,d):
 def download_quantifiers(row_,data_folder,dt,d):
     DT = []; IPI = []; joint_duration = []; dm = []
     for (order,row) in row_.groupby(['order']):
-    #para cada ensayo
+    #para cada ensayo con todos los mismos parámetros
         number = int(row.number.values[0])
         file_name =  str(number)+'_'+str(order)+'.pkl'
 
@@ -51,33 +51,37 @@ def download_quantifiers(row_,data_folder,dt,d):
     return(points_to_time(DT,dt,d),points_to_time(IPI,dt,d),points_to_time(joint_duration,dt,d),points_to_time(dm,dt,d))
     
         #for plotting 2d plots
+
 def create_df(ref,data_folder,dt,T,d):
     ''' creates dataframes where 2d alpha are indexes and D are columns'''
     omega = ref.omega.unique()[0]
     Cols = ref.D.unique()
     Rows = ref.alpha.unique()
-    mean_dt_matrix,mean_ipi_matrix,mean_fpt_matrix,mean_act_matrix = [],[],[],[]
+    mean_dt_matrix,mean_ipi_matrix,mean_fpt_matrix,mean_pulses_matrix = [],[],[],[]
     
     for alpha,row_ in ref.groupby(['alpha']):
-        aux_dt,aux_ipi,aux_fpt,aux_act = [],[],[],[]    
+        aux_dt,aux_ipi,aux_fpt,aux_pulses = [],[],[],[]    
         
         for D,col_ in row_.groupby(['D']):
             DT,IPI,_,_ = download_quantifiers(col_,data_folder,dt,d)
-            aux_dt.append(np.mean(DT));aux_ipi.append(np.mean(IPI))
-            
+           
+            aux_dt.append(np.median(DT));aux_ipi.median(np.median(IPI))
+            aux_pulses.append(np.len(DT)/T)
+             
             fpt_file_name = 'FPT_'+str(omega)+'_'+str(np.round(alpha/omega,4) )+'_'+str(D)+'.pkl'
             if check_file(fpt_file_name,data_folder) :
                 FPT = download_data(data_folder+fpt_file_name)
             else:
                 FPT = []
-            aux_fpt.append(np.mean(FPT))
+            aux_fpt.append(np.median(FPT))
             
-            activity,_,_ = load_activity(col_,data_folder,dt,T,d); 
-            assert ((np.mean(activity) <= 100) or (len(activity) == 0)),(alpha,D,activity)
-            if len(activity) > 0: aux_act.append(np.mean(activity))
-            else:aux_act.append(0)
-        mean_dt_matrix.append(aux_dt);mean_ipi_matrix.append(aux_ipi),mean_fpt_matrix.append(aux_fpt),mean_act_matrix.append(aux_act)
-    return (pd.DataFrame(mean_dt_matrix,columns = Cols,index = Rows),pd.DataFrame(mean_ipi_matrix,columns = Cols,index = Rows),pd.DataFrame(mean_fpt_matrix,columns = Cols,index = Rows),pd.DataFrame(mean_act_matrix,columns = Cols,index = Rows))
+            #activity,_,_ = load_activity(col_,data_folder,dt,T,d); 
+           
+            #assert ((np.mean(activity) <= 100) or (len(activity) == 0)),(alpha,D,activity)
+           # if len(activity) > 0: aux_act.append(np.mean(activity))
+           # else:aux_act.append(0)
+        mean_dt_matrix.append(aux_dt);mean_ipi_matrix.append(aux_ipi),mean_fpt_matrix.append(aux_fpt),mean_pulses_matrix.append(aux_pulses)
+    return (pd.DataFrame(mean_dt_matrix,columns = Cols,index = Rows),pd.DataFrame(mean_ipi_matrix,columns = Cols,index = Rows),pd.DataFrame(mean_fpt_matrix,columns = Cols,index = Rows),pd.DataFrame(mean_pulses_matrix,columns = Cols,index = Rows))
 
 
 def load_activity(row_,data_folder,dt,T,d):

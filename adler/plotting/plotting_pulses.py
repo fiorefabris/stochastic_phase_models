@@ -754,7 +754,7 @@ def plot_2d_quantifiers(dt,T,d,description_file,data_folder,save_path_name):
     vmM_dt = [1,10];vmM_IPI = [6,20]; vmM_activity = [0,100]
     v_values = [vmM_dt,vmM_IPI,vmM_IPI,vmM_activity]    
     
-    name = ['dt','IPI','FPT','mactivity']
+    name = ['dt','IPI','FPT','PulseRate']
 
 
     
@@ -765,9 +765,9 @@ def plot_2d_quantifiers(dt,T,d,description_file,data_folder,save_path_name):
 ###############################################################################    
 
        
-        df_dt,df_ipi,df_fpt,df_activity = create_df(ref_,data_folder,dt,T,d)
+        df_dt,df_ipi,df_fpt,df_pulses = create_df(ref_,data_folder,dt,T,d)
         
-        for i,df in enumerate([df_dt,df_ipi,df_fpt,df_activity]):
+        for i,df in enumerate([df_dt,df_ipi,df_fpt,df_pulses]):
             plt.close()
             fig, axs = plt.subplots(2, 2, sharex=True, sharey=True, figsize=(8.27, 11.69))
             fig.subplots_adjust(bottom=0.15, top=0.9, left=0.1, right=0.99, wspace=0.3, hspace=0.3)        #df_dt,df_ipi,df_fpt =  create_df(ref,data_folder,dt,d)
