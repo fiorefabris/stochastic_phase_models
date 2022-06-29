@@ -751,7 +751,7 @@ def plot_2d_quantifiers(dt,T,d,description_file,data_folder,save_path_name):
     dt_quart = [6,8.33]; IPI_quart = [8,18.67];mean_activity_sigma = [32-.675*3,32+.675*3] #mean, sigma
     quartiles = [dt_quart,IPI_quart,IPI_quart,mean_activity_sigma] 
     
-    vmM_dt = [2,10];vmM_IPI = [8,20]; vmM_activity = [0,1]
+    vmM_dt = [0,10];vmM_IPI = [5,20]; vmM_activity = [0,0.2]
     v_values = [vmM_dt,vmM_IPI,vmM_IPI,vmM_activity]    
     
     name = ['dt','IPI','FPT','PulseRate']
