@@ -742,13 +742,13 @@ def plot_joint_duration_square_ou(dt,d,description_file,data_folder,save_path_na
 
 #%%
 
-def plot_2d_quantifiers(dt,T,d,dyncode_file_name,description_file,data_folder,save_path_name):
+def plot_2d_quantifiers(dt,T,d,description_file,data_folder,save_path_name):
 ######## Getting data information
     plt.rcdefaults();
     ref = pd.read_excel(description_file,sheet_name='File_references')
     ref.set_index('Unnamed: 0',inplace=True);
     
-    dt_quart = [6,8.33]; IPI_quart = [8,18.67];pulse_rate_quart = list(get_dyncode_pulse_rate_st(dyncode_file_name)) #mean, sigma
+    dt_quart = [6,8.33]; IPI_quart = [8,18.67];pulse_rate_quart = [0.0067, 0.02]#list(get_dyncode_pulse_rate_st(dyncode_file_name)) #mean, sigma
     quartiles = [dt_quart,IPI_quart,IPI_quart,pulse_rate_quart] 
     
     vmM_dt = [1,10];vmM_IPI = [1,25]; vmM_pulse_rate = [0,0.16]
@@ -802,14 +802,14 @@ def plot_2d_quantifiers(dt,T,d,dyncode_file_name,description_file,data_folder,sa
 
 #%% superposition plotting
             
-def plot_2d_superposition(dt,T,d,dyncode_file_name,description_file,data_folder,save_path_name):
+def plot_2d_superposition(dt,T,d,description_file,data_folder,save_path_name):
 ######## Getting data information
     plt.rcdefaults(); plt.close()
 
     ref = pd.read_excel(description_file,sheet_name='File_references')
     ref.set_index('Unnamed: 0',inplace=True);
     
-    dt_quart = [6,8.33]; IPI_quart = [8,18.67];pulse_rate_quart = list(get_dyncode_pulse_rate_st(dyncode_file_name)) #mean, sigma
+    dt_quart = [6,8.33]; IPI_quart = [8,18.67];pulse_rate_quart = [0.0067, 0.02]#list(get_dyncode_pulse_rate_st(dyncode_file_name)) #mean, sigma
     quartiles = [dt_quart,IPI_quart,pulse_rate_quart] 
     #name = ['dt','FPT','PulseRate']
     
