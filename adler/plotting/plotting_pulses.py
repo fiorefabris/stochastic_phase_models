@@ -5,7 +5,7 @@ import seaborn as sns
 
 from adler.data_managing_functions import download_data,check_file,time
 from adler.plotting.plotting_main import set_scale,create_df,download_quantifiers,mask_arr,tune_plot, compute_st_values
-
+from adler.plotting.dyncode_main import get_dyncode_pulse_rate_st
 
 
 
@@ -742,17 +742,17 @@ def plot_joint_duration_square_ou(dt,d,description_file,data_folder,save_path_na
 
 #%%
 
-def plot_2d_quantifiers(dt,T,d,description_file,data_folder,save_path_name):
+def plot_2d_quantifiers(dt,T,d,dyncode_file_name,description_file,data_folder,save_path_name):
 ######## Getting data information
     plt.rcdefaults();
     ref = pd.read_excel(description_file,sheet_name='File_references')
     ref.set_index('Unnamed: 0',inplace=True);
     
-    dt_quart = [6,8.33]; IPI_quart = [8,18.67];mean_activity_sigma = [32-.675*3,32+.675*3] #mean, sigma
-    quartiles = [dt_quart,IPI_quart,IPI_quart,mean_activity_sigma] 
+    dt_quart = [6,8.33]; IPI_quart = [8,18.67];pulse_rate_quart = list(get_dyncode_pulse_rate_st(dyncode_file_name)) #mean, sigma
+    quartiles = [dt_quart,IPI_quart,IPI_quart,pulse_rate_quart] 
     
-    vmM_dt = [1,10];vmM_IPI = [4,30]; vmM_activity = [0,0.15]
-    v_values = [vmM_dt,vmM_IPI,vmM_IPI,vmM_activity]    
+    vmM_dt = [1,10];vmM_IPI = [1,25]; vmM_pulse_rate = [0,0.16]
+    v_values = [vmM_dt,vmM_IPI,vmM_IPI,vmM_pulse_rate]    
     
     name = ['dt','IPI','FPT','PulseRate']
 
@@ -802,20 +802,21 @@ def plot_2d_quantifiers(dt,T,d,description_file,data_folder,save_path_name):
 
 #%% superposition plotting
             
-def plot_2d_superposition(dt,T,d,description_file,data_folder,save_path_name):
+def plot_2d_superposition(dt,T,d,dyncode_file_name,description_file,data_folder,save_path_name):
 ######## Getting data information
     plt.rcdefaults(); plt.close()
 
     ref = pd.read_excel(description_file,sheet_name='File_references')
     ref.set_index('Unnamed: 0',inplace=True);
     
-    dt_quart = [6,8.33]; IPI_quart = [8,18.67];mean_activity_sigma = [32-.675*3,32+.675*3] #mean, sigma
-    quartiles = [dt_quart,IPI_quart,IPI_quart,mean_activity_sigma] 
-    #vmin = [1,6,6,0]; vmax=[10,20,20,100]
+    dt_quart = [6,8.33]; IPI_quart = [8,18.67];pulse_rate_quart = list(get_dyncode_pulse_rate_st(dyncode_file_name)) #mean, sigma
+    quartiles = [dt_quart,IPI_quart,pulse_rate_quart] 
+    #name = ['dt','FPT','PulseRate']
+    
     
          
     #name = ['dt','IPI','FPT','mActivity']; 
-    cmaps = ['Reds','Greens','Greens', 'Blues']
+    cmaps = ['Reds','Greens', 'Blues']
     
     for omega,ref_ in  ref.groupby(['omega']):
 
@@ -823,9 +824,9 @@ def plot_2d_superposition(dt,T,d,description_file,data_folder,save_path_name):
 ### data
 ###############################################################################    
 
-        df_dt,df_ipi,df_fpt,df_activity= create_df(ref_,data_folder,dt,T,d)
+        df_dt,_,df_fpt,df_activity= create_df(ref_,data_folder,dt,T,d)
         masks = []
-        for i,df in enumerate([df_dt,df_ipi,df_fpt,df_activity]):
+        for i,df in enumerate([df_dt,df_fpt,df_activity]):
  
             q_m ,q_M= quartiles[i]
             masks.append(((q_m <= df) & (df <= q_M)))
@@ -839,11 +840,11 @@ def plot_2d_superposition(dt,T,d,description_file,data_folder,save_path_name):
         #save masks
         
         with pd.ExcelWriter("masks.xlsx") as writer:  
-            (masks[0] & masks[2] & masks[3]).to_excel(writer,sheet_name='superposition')
+            (masks[0] & masks[1] & masks[2]).to_excel(writer,sheet_name='superposition')
             (masks[0]).to_excel(writer,sheet_name='duration')
-            (masks[1]).to_excel(writer,sheet_name='IPI')
-            (masks[2]).to_excel(writer,sheet_name='FPT')
-            (masks[3]).to_excel(writer,sheet_name='mean activity')
+           # (masks[1]).to_excel(writer,sheet_name='IPI')
+            (masks[1]).to_excel(writer,sheet_name='FPT')
+            (masks[2]).to_excel(writer,sheet_name='mean activity')
             
         for i,mask in enumerate(masks):
             axs[1,1].imshow(mask,origin='lower',alpha=0.3,cmap=cmaps[i],interpolation='none')

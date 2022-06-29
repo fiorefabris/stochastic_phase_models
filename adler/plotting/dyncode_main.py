@@ -41,4 +41,11 @@ def get_exp_N_total_isolated_consecutive(dyncode_file_name):
     total_N = sum(consecutive_non_cumulative_obj.get_number_of_pulses())
     return total_N,isolated_N,consecutive_N
     
-
+def get_dyncode_pulse_rate_st(dyncode_file_name):
+    '''esto es para los dos d plots'''
+    df = get_conc_data(dyncode_file_name)['an_WT_ESL']
+    pulse_density = []
+    for cell,data in df.groupby(level="cell"):
+        pulse_density.append(data.amp_peaks.count() / len(data.FRAME))
+        np.median(pulse_density)
+    return np.percentile(pulse_density,25), np.percentile(pulse_density,75)
