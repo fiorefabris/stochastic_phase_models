@@ -751,7 +751,7 @@ def plot_2d_quantifiers(dt,T,d,description_file,data_folder,save_path_name):
     dt_quart = [6,8.33]; IPI_quart = [8,18.67];pulse_rate_quart = [0.0067, 0.02]#list(get_dyncode_pulse_rate_st(dyncode_file_name)) #mean, sigma
     quartiles = [dt_quart,IPI_quart,IPI_quart,pulse_rate_quart] 
     
-    vmM_dt = [1,10];vmM_IPI = [1,25]; vmM_pulse_rate = [0,0.16]
+    vmM_dt = [1,10];vmM_IPI = [5,25]; vmM_pulse_rate = [0,0.16]
     v_values = [vmM_dt,vmM_IPI,vmM_IPI,vmM_pulse_rate]    
     
     name = ['dt','IPI','FPT','PulseRate']
