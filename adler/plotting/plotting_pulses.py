@@ -904,7 +904,7 @@ def plot_activity_square_dist(dt,d,T,mean_delta,sigma_delta,it_params_descr_data
         ref = pd.read_excel(description_file,sheet_name='File_references')
         ref.set_index('Unnamed: 0',inplace=True);
         
-        for j,ref_ in enumerate(ref.groupby(['D'])):
+        for j,(D,ref_) in enumerate(ref.groupby(['D'])):
             ax_counter = i*2+j
             ax = axs[ax_counter]
             activity,silent,n_cell = load_activity_dist(ref_,data_folder,dt,T,d)
@@ -922,7 +922,7 @@ def plot_activity_square_dist(dt,d,T,mean_delta,sigma_delta,it_params_descr_data
             
     
             if i//Cols == 0:
-                text = ' mean delta: ' + str(id_[i][0]) + '\n D = ' + str(ref_.D.unique())
+                text = ' mean delta: ' + str(id_[i][0]) + '\n D = ' + str(D)
                 ax.text(-0.1, 0.5, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
     
             if i < Cols:
