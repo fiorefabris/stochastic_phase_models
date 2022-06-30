@@ -874,7 +874,7 @@ def plot_activity_square_dist(dt,d,T,mean_delta,sigma_delta,it_params_descr_data
     
 
     '''
-   plottea la grid de activity. funciona solo para dos valores de D
+   plottea la grid de activity. funciona solo para D_N valores de D
 
     '''
     plt.close('all')
@@ -883,10 +883,10 @@ def plot_activity_square_dist(dt,d,T,mean_delta,sigma_delta,it_params_descr_data
 ###############################################################################
 ### Plotting parameters
 ###############################################################################    
-    
+    D_N = 2
     id_ = list(product(mean_delta,sigma_delta))
     Cols = len(sigma_delta) ;
-    Rows = len(mean_delta) *2; 
+    Rows = len(mean_delta) * D_N; 
     colors =  sns.color_palette(sns.color_palette("viridis",Cols*1))
     colors =  colors[::1]
     green =  sns.color_palette(sns.dark_palette("#2ecc71",30,reverse=False))[15]
@@ -897,15 +897,17 @@ def plot_activity_square_dist(dt,d,T,mean_delta,sigma_delta,it_params_descr_data
 
     fig, axs = plt.subplots(Rows, Cols, sharex=True, sharey=True, figsize=(8.27*5, 11.69*2))
     fig.subplots_adjust(bottom=0.15, top=0.9, left=0.1, right=0.99, wspace=0.1, hspace=0.1)
-    axs = axs.ravel()
+    #axs = axs.ravel()
     
     for i,(_,description_file,data_folder) in enumerate(it_params_descr_data):
-        
+        col_ix = i % len(mean_delta) 
         ref = pd.read_excel(description_file,sheet_name='File_references')
         ref.set_index('Unnamed: 0',inplace=True);
         
         for j,(D,ref_) in enumerate(ref.groupby(['D'])):
-            ax_counter = i*2+j
+           #ax_counter = i*2+j
+            row_ix = j+ i % len(sigma_delta) * D_N 
+            ax = axs[,j]
             ax = axs[ax_counter]
             activity,silent,n_cell = load_activity_dist(ref_,data_folder,dt,T,d)
 
@@ -921,27 +923,27 @@ def plot_activity_square_dist(dt,d,T,mean_delta,sigma_delta,it_params_descr_data
     
             
     
-            if ax_counter%Cols == 0:
+            if col_ix == 0: #ax_counter%Cols == 0:
                 text = ' mean delta: ' + str(id_[i][0]) + '\n D = ' + str(D)
-                ax.text(-0.1, 0.5, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
+                ax.text(-0.2, 0.5, text , ha='left', va='left', transform=ax.transAxes, fontsize=25)
     
-            if ax_counter < Cols:
+            if row_ix ==0 :#ax_counter < Cols:
                 text = ' sigma: '+ str(id_[i][1])
-                ax.text(1.05, 0.9, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
+                ax.text(1.05, 0.1, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
             
-            if ax_counter == Cols * (Rows - 1):
+            if col_ix == 0 and row_ix == Rows-1: #ax_counter == Cols * (Rows - 1):
                 ax.set_xlabel( ' trazas ',fontsize=8); 
                 ax.set_xticks([0,n_cell])
                 ax.set_xticklabels([1,n_cell+1])
                 ax.set_yticks([0,50,100])
                 ax.tick_params(labelsize=20,direction='out', pad=1,length=2)
                 ax.xaxis.set_label_coords(0.5,-0.06)
-            else:
-                ax.set_xticks([0,n_cell])
-                ax.set_xticklabels([])
-                ax.set_yticks([0,50,100])
-                ax.set_yticklabels([])
-                                
+#            else:
+#                ax.set_xticks([0,n_cell])
+#                ax.set_xticklabels([])
+#                ax.set_yticks([0,50,100])
+#                ax.set_yticklabels([])
+#                                
                 
 
     plt.savefig(save_path_name + 'activity_square_dist.pdf', format='pdf')
