@@ -913,14 +913,14 @@ def plot_activity_square_dist(dt,d,T,mean_delta,sigma_delta,it_params_descr_data
 
     
             if len(activity) > 0:
-                p1 = ax.bar(np.arange(1 ,n_cell + 1),silent,width=1,color='darkgray',alpha=0.5,linewidth=0.0)
-                p2 = ax.bar(np.arange(1 ,n_cell + 1),activity,bottom=silent,width=1,alpha=0.8,linewidth=0.0)
+                p1 = ax.bar(np.arange(1 ,n_cell+1),silent,width=1,color='darkgray',alpha=0.5,linewidth=0.0)
+                p2 = ax.bar(np.arange(1 ,n_cell+1),activity,bottom=silent,width=1,alpha=0.8,linewidth=0.0)
                 
                 x , y , silent_experiment = get_activity_data_dyncode(dyncode_filename)
                 p3 = ax.bar(x,y,bottom=silent_experiment,width=0.8,alpha=0.3,linewidth=0.0,color = green)
     
-            ax.set_xlim([0,n_cell]);ax.set_ylim([0,100])
-    
+            ax.set_xlim([1,n_cell+1]);ax.set_ylim([0,100])
+            print(n_cell)
             
     
             if col_ix == 0: #ax_counter%Cols == 0:
@@ -929,11 +929,11 @@ def plot_activity_square_dist(dt,d,T,mean_delta,sigma_delta,it_params_descr_data
     
             if row_ix ==0 :#ax_counter < Cols:
                 text = ' sigma: '+ str(id_[i][1])
-                ax.text(1.05, 0.1, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
+                ax.text(0.05, 1.1, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
             
             if col_ix == 0 and row_ix == Rows-1: #ax_counter == Cols * (Rows - 1):
                 ax.set_xlabel( ' trazas ',fontsize=8); 
-                ax.set_xticks([0,n_cell])
+                ax.set_xticks([1,n_cell+1])
                 ax.set_xticklabels([1,n_cell+1])
                 ax.set_yticks([0,50,100])
                 ax.tick_params(labelsize=20,direction='out', pad=1,length=2)

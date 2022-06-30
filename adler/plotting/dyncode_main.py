@@ -29,7 +29,7 @@ def get_activity_data_dyncode(dyncode_file_name):
     activity_experiment = [activity_experiment[j] for j in activity_experiment_index]
     
     silent_experiment = np.ones(len(activity_experiment)) * 100 - activity_experiment
-    return np.arange(0,len(df_consecutive.index.get_level_values(0).unique())),activity_experiment,silent_experiment
+    return np.arange(1,len(df_consecutive.index.get_level_values(0).unique())+1),activity_experiment,silent_experiment
 
 
 def get_exp_N_total_isolated_consecutive(dyncode_file_name):
