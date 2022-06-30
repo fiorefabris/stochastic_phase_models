@@ -925,7 +925,7 @@ def plot_activity_square_dist(dt,d,T,mean_delta,sigma_delta,it_params_descr_data
     
             if col_ix == 0: #ax_counter%Cols == 0:
                 text = ' mean delta: ' + str(id_[i][0]) + '\n D = ' + str(D)
-                ax.text(-0.2, 0.5, text , ha='left', va='left', transform=ax.transAxes, fontsize=25)
+                ax.text(-0.2, 0.5, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
     
             if row_ix ==0 :#ax_counter < Cols:
                 text = ' sigma: '+ str(id_[i][1])
