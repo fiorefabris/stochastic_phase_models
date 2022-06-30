@@ -886,7 +886,7 @@ def plot_activity_square_dist(dt,d,T,mean_delta,sigma_delta,it_params_descr_data
     
     id_ = list(product(mean_delta,sigma_delta))
     Cols = len(sigma_delta) ;
-    Rows = len(id_)*2; 
+    Rows = len(sigma_delta) *2; 
     colors =  sns.color_palette(sns.color_palette("viridis",Cols*1))
     colors =  colors[::1]
     green =  sns.color_palette(sns.dark_palette("#2ecc71",30,reverse=False))[15]
@@ -921,15 +921,15 @@ def plot_activity_square_dist(dt,d,T,mean_delta,sigma_delta,it_params_descr_data
     
             
     
-            if i//Cols == 0:
+            if ax_counter//Cols == 0:
                 text = ' mean delta: ' + str(id_[i][0]) + '\n D = ' + str(D)
                 ax.text(-0.1, 0.5, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
     
-            if i < Cols:
+            if ax_counter < Cols:
                 text = ' sigma: '+ str(id_[i][1])
                 ax.text(1.05, 0.9, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
             
-            if i == Cols * (Rows - 1):
+            if ax_counter == Cols * (Rows - 1):
                 ax.set_xlabel( ' trazas ',fontsize=8); 
                 ax.set_xticks([1,n_cell + 1])
                 ax.set_yticks([0,50,100])
