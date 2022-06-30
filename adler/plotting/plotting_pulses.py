@@ -897,7 +897,7 @@ def plot_activity_square_dist(dt,d,T,mean_delta,sigma_delta,it_params_descr_data
 
     fig, axs = plt.subplots(Rows, Cols, sharex=True, sharey=True, figsize=(8.27*5, 11.69*2))
     fig.subplots_adjust(bottom=0.15, top=0.9, left=0.1, right=0.99, wspace=0.1, hspace=0.1)
-    axs.ravel()
+    axs = axs.ravel()
     
     for i,(_,description_file,data_folder) in enumerate(it_params_descr_data):
         ax = axs[i]
