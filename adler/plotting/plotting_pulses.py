@@ -2,10 +2,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
+from itertools import product
 
 from adler.data_managing_functions import download_data,check_file,time
-from adler.plotting.plotting_main import set_scale,create_df,download_quantifiers,mask_arr,tune_plot, compute_st_values
-from adler.plotting.dyncode_main import get_dyncode_pulse_rate_st
+from adler.plotting.plotting_main import set_scale,create_df,download_quantifiers,mask_arr,tune_plot, compute_st_values,load_activity_dist
+from adler.plotting.dyncode_main import get_dyncode_pulse_rate_st, get_activity_data_dyncode
 
 
 
@@ -863,5 +864,78 @@ def plot_2d_superposition(dt,T,d,description_file,data_folder,save_path_name):
             ax.set_yticklabels([np.round(y/omega,2) for y in df.index[::10]])
                 
         plt.savefig(save_path_name + str(omega)+'_2dsuperposition.pdf', format='pdf')
+
+#%%
+# =============================================================================
+#         activity 2d plot
+# =============================================================================
+
+def plot_activity_square_dist(dt,d,T,mean_delta,sigma_delta,it_params_descr_data,save_path_name,dyncode_filename): 
+    
+
+    '''
+   plottea la grid de dt
+
+    '''
+    plt.close('all')
+######## Getting data information
+        
+###############################################################################
+### Plotting parameters
+###############################################################################    
+    
+    id_ = list(product(mean_delta,sigma_delta))
+    Cols = len(sigma_delta) ;
+    Rows = len(id_) ; 
+    colors =  sns.color_palette(sns.color_palette("viridis",Cols*1))
+    colors =  colors[::1]
+    green =  sns.color_palette(sns.dark_palette("#2ecc71",30,reverse=False))[15]
+
+###############################################################################
+### Figure
+###############################################################################    
+
+    fig, axs = plt.subplots(Rows, Cols, sharex=True, sharey=True, figsize=(8.27*5, 11.69*2))
+    fig.subplots_adjust(bottom=0.15, top=0.9, left=0.1, right=0.99, wspace=0.1, hspace=0.1)
+    axs.ravel()
+    
+    for i,(_,description_file,data_folder) in enumerate(it_params_descr_data):
+        ax = axs[i]
+        ref = pd.read_excel(description_file,sheet_name='File_references')
+        ref.set_index('Unnamed: 0',inplace=True);
+    
+        activity,silent,n_cell = load_activity_dist(ref,data_folder,dt,T,d)
+
+    
+        if len(activity) > 0:
+            p1 = ax.bar(np.arange(1 ,n_cell + 1),silent,width=1,color='darkgray',alpha=0.5,linewidth=0.0)
+            p2 = ax.bar(np.arange(1 ,n_cell + 1),activity,bottom=silent,width=1,alpha=0.8,linewidth=0.0)
+            
+            x , y , silent_experiment = get_activity_data_dyncode(dyncode_filename)
+            p3 = ax.bar(x,y,bottom=silent_experiment,width=0.8,alpha=0.3,linewidth=0.0,color = green)
+
+        ax.set_xlim([0,n_cell]);ax.set_ylim([0,100])
+
+        
+
+        if i//Cols == 0:
+            text = ' mean delta: ' + str(id_[i][0]) + '\n D = ' + str(ref.D.unique())
+            ax.text(-0.5, 0.5, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
+
+        if i < Cols:
+            text = ' sigma: '+ str(id_[i][1])
+            ax.text(1.05, 0.9, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
+        
+        if i == Cols * (Rows - 1):
+            ax.set_xlabel( ' trazas ',fontsize=8); 
+            ax.set_xticks([1,n_cell + 1])
+            ax.set_yticks([0,50,100])
+            ax.tick_params(labelsize=6,direction='out', pad=1,length=2)
+            ax.xaxis.set_label_coords(0.5,-0.06)
+
+
+    plt.savefig(save_path_name + 'activity_square_dist.pdf', format='pdf')
+    plt.close()
+    return(0)
 
 
