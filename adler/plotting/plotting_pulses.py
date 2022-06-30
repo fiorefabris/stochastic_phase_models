@@ -886,7 +886,7 @@ def plot_activity_square_dist(dt,d,T,mean_delta,sigma_delta,it_params_descr_data
     
     id_ = list(product(mean_delta,sigma_delta))
     Cols = len(sigma_delta) ;
-    Rows = len(sigma_delta) *2; 
+    Rows = len(mean_delta) *2; 
     colors =  sns.color_palette(sns.color_palette("viridis",Cols*1))
     colors =  colors[::1]
     green =  sns.color_palette(sns.dark_palette("#2ecc71",30,reverse=False))[15]
