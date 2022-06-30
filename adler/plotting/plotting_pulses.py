@@ -911,7 +911,7 @@ def plot_activity_square_dist(dt,d,T,mean_delta,sigma_delta,it_params_descr_data
             
             activity,silent,n_cell = load_activity_dist(ref_,data_folder,dt,T,d)
 
-    
+
             if len(activity) > 0:
                 p1 = ax.bar(np.arange(1 ,n_cell+1),silent,width=1,color='darkgray',alpha=0.5,linewidth=0.0)
                 p2 = ax.bar(np.arange(1 ,n_cell+1),activity,bottom=silent,width=1,alpha=0.8,linewidth=0.0)
@@ -919,7 +919,7 @@ def plot_activity_square_dist(dt,d,T,mean_delta,sigma_delta,it_params_descr_data
                 x , y , silent_experiment = get_activity_data_dyncode(dyncode_filename)
                 p3 = ax.bar(x,y,bottom=silent_experiment,width=0.8,alpha=0.3,linewidth=0.0,color = green)
     
-            ax.set_xlim([1,n_cell+1]);ax.set_ylim([0,100])
+            ax.set_xlim([1,69]);ax.set_ylim([0,100])
             print(n_cell)
             
     
@@ -932,12 +932,12 @@ def plot_activity_square_dist(dt,d,T,mean_delta,sigma_delta,it_params_descr_data
                 ax.text(0.05, 1.1, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
             
             if col_ix == 0 and row_ix == Rows-1: #ax_counter == Cols * (Rows - 1):
-                ax.set_xlabel( ' trazas ',fontsize=8); 
-                ax.set_xticks([1,n_cell+1])
-                ax.set_xticklabels([1,n_cell+1])
+                ax.set_xlabel( ' trazas ',fontsize=20); 
+                ax.set_xticks([1,69])
+                ax.set_xticklabels([1,69])
                 ax.set_yticks([0,50,100])
                 ax.tick_params(labelsize=20,direction='out', pad=1,length=2)
-                ax.xaxis.set_label_coords(0.5,-0.06)
+                ax.xaxis.set_label_coords(0.5,-0.1)
 #            else:
 #                ax.set_xticks([0,n_cell])
 #                ax.set_xticklabels([])
