@@ -921,7 +921,7 @@ def plot_activity_square_dist(dt,d,T,mean_delta,sigma_delta,it_params_descr_data
     
             
     
-            if ax_counter//Cols == 0:
+            if ax_counter%Cols == 0:
                 text = ' mean delta: ' + str(id_[i][0]) + '\n D = ' + str(D)
                 ax.text(-0.1, 0.5, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
     
@@ -931,11 +931,18 @@ def plot_activity_square_dist(dt,d,T,mean_delta,sigma_delta,it_params_descr_data
             
             if ax_counter == Cols * (Rows - 1):
                 ax.set_xlabel( ' trazas ',fontsize=8); 
-                ax.set_xticks([1,n_cell + 1])
+                ax.set_xticks([0,n_cell])
+                ax.set_xticklabels([1,n_cell+1])
                 ax.set_yticks([0,50,100])
                 ax.tick_params(labelsize=20,direction='out', pad=1,length=2)
                 ax.xaxis.set_label_coords(0.5,-0.06)
-    
+            else:
+                ax.set_xticks([0,n_cell])
+                ax.set_xticklabels([])
+                ax.set_yticks([0,50,100])
+                ax.set_yticklabels([])
+                                
+                
 
     plt.savefig(save_path_name + 'activity_square_dist.pdf', format='pdf')
     plt.close()
