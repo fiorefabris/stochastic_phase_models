@@ -920,7 +920,7 @@ def plot_activity_square_dist(dt,d,T,mean_delta,sigma_delta,it_params_descr_data
                 p3 = ax.bar(x,y,bottom=silent_experiment,width=0.8,alpha=0.3,linewidth=0.0,color = green)
     
             ax.set_xlim([1,69]);ax.set_ylim([0,100])
-            print(n_cell)
+            print(n_cell,len(x))
             
     
             if col_ix == 0: #ax_counter%Cols == 0:
