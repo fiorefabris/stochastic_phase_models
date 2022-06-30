@@ -874,7 +874,7 @@ def plot_activity_square_dist(dt,d,T,mean_delta,sigma_delta,it_params_descr_data
     
 
     '''
-   plottea la grid de dt
+   plottea la grid de activity. funciona solo para dos valores de D
 
     '''
     plt.close('all')
@@ -886,7 +886,7 @@ def plot_activity_square_dist(dt,d,T,mean_delta,sigma_delta,it_params_descr_data
     
     id_ = list(product(mean_delta,sigma_delta))
     Cols = len(sigma_delta) ;
-    Rows = len(id_) ; 
+    Rows = len(id_)*2; 
     colors =  sns.color_palette(sns.color_palette("viridis",Cols*1))
     colors =  colors[::1]
     green =  sns.color_palette(sns.dark_palette("#2ecc71",30,reverse=False))[15]
@@ -900,39 +900,42 @@ def plot_activity_square_dist(dt,d,T,mean_delta,sigma_delta,it_params_descr_data
     axs = axs.ravel()
     
     for i,(_,description_file,data_folder) in enumerate(it_params_descr_data):
-        ax = axs[i]
+        
         ref = pd.read_excel(description_file,sheet_name='File_references')
         ref.set_index('Unnamed: 0',inplace=True);
-    
-        activity,silent,n_cell = load_activity_dist(ref,data_folder,dt,T,d)
+        
+        for j,ref_ in enumerate(ref.groupby(['D'])):
+            ax_counter = i*2+j
+            ax = axs[ax_counter]
+            activity,silent,n_cell = load_activity_dist(ref_,data_folder,dt,T,d)
 
     
-        if len(activity) > 0:
-            p1 = ax.bar(np.arange(1 ,n_cell + 1),silent,width=1,color='darkgray',alpha=0.5,linewidth=0.0)
-            p2 = ax.bar(np.arange(1 ,n_cell + 1),activity,bottom=silent,width=1,alpha=0.8,linewidth=0.0)
+            if len(activity) > 0:
+                p1 = ax.bar(np.arange(1 ,n_cell + 1),silent,width=1,color='darkgray',alpha=0.5,linewidth=0.0)
+                p2 = ax.bar(np.arange(1 ,n_cell + 1),activity,bottom=silent,width=1,alpha=0.8,linewidth=0.0)
+                
+                x , y , silent_experiment = get_activity_data_dyncode(dyncode_filename)
+                p3 = ax.bar(x,y,bottom=silent_experiment,width=0.8,alpha=0.3,linewidth=0.0,color = green)
+    
+            ax.set_xlim([0,n_cell]);ax.set_ylim([0,100])
+    
             
-            x , y , silent_experiment = get_activity_data_dyncode(dyncode_filename)
-            p3 = ax.bar(x,y,bottom=silent_experiment,width=0.8,alpha=0.3,linewidth=0.0,color = green)
-
-        ax.set_xlim([0,n_cell]);ax.set_ylim([0,100])
-
-        
-
-        if i//Cols == 0:
-            text = ' mean delta: ' + str(id_[i][0]) + '\n D = ' + str(ref.D.unique())
-            ax.text(-0.5, 0.5, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
-
-        if i < Cols:
-            text = ' sigma: '+ str(id_[i][1])
-            ax.text(1.05, 0.9, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
-        
-        if i == Cols * (Rows - 1):
-            ax.set_xlabel( ' trazas ',fontsize=8); 
-            ax.set_xticks([1,n_cell + 1])
-            ax.set_yticks([0,50,100])
-            ax.tick_params(labelsize=6,direction='out', pad=1,length=2)
-            ax.xaxis.set_label_coords(0.5,-0.06)
-
+    
+            if i//Cols == 0:
+                text = ' mean delta: ' + str(id_[i][0]) + '\n D = ' + str(ref_.D.unique())
+                ax.text(-0.1, 0.5, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
+    
+            if i < Cols:
+                text = ' sigma: '+ str(id_[i][1])
+                ax.text(1.05, 0.9, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
+            
+            if i == Cols * (Rows - 1):
+                ax.set_xlabel( ' trazas ',fontsize=8); 
+                ax.set_xticks([1,n_cell + 1])
+                ax.set_yticks([0,50,100])
+                ax.tick_params(labelsize=20,direction='out', pad=1,length=2)
+                ax.xaxis.set_label_coords(0.5,-0.06)
+    
 
     plt.savefig(save_path_name + 'activity_square_dist.pdf', format='pdf')
     plt.close()
