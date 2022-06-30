@@ -900,13 +900,13 @@ def plot_activity_square_dist(dt,d,T,mean_delta,sigma_delta,it_params_descr_data
     #axs = axs.ravel()
     
     for i,(_,description_file,data_folder) in enumerate(it_params_descr_data):
-        col_ix = i % len(mean_delta) 
+        col_ix = i % len(sigma_delta) 
         ref = pd.read_excel(description_file,sheet_name='File_references')
         ref.set_index('Unnamed: 0',inplace=True);
         
         for j,(D,ref_) in enumerate(ref.groupby(['D'])):
            #ax_counter = i*2+j; #ax = axs[ax_counter]
-            row_ix = j+ i % len(sigma_delta) * D_N 
+            row_ix = j+ (i // len(sigma_delta))* D_N 
             ax = axs[row_ix,col_ix]
             
             activity,silent,n_cell = load_activity_dist(ref_,data_folder,dt,T,d)
