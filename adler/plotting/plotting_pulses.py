@@ -905,10 +905,10 @@ def plot_activity_square_dist(dt,d,T,mean_delta,sigma_delta,it_params_descr_data
         ref.set_index('Unnamed: 0',inplace=True);
         
         for j,(D,ref_) in enumerate(ref.groupby(['D'])):
-           #ax_counter = i*2+j
+           #ax_counter = i*2+j; #ax = axs[ax_counter]
             row_ix = j+ i % len(sigma_delta) * D_N 
             ax = axs[row_ix,col_ix]
-            ax = axs[ax_counter]
+            
             activity,silent,n_cell = load_activity_dist(ref_,data_folder,dt,T,d)
 
     
