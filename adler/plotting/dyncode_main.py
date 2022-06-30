@@ -1,6 +1,6 @@
 from adler.plotting.dyncode_suorces import load_file,consecutive_cumulative,consecutive_non_cumulative
 import numpy as np
-
+import pandas as pd
 
 
 #green =  sns.color_palette(sns.dark_palette("#2ecc71",30,reverse=False))[15]
@@ -9,7 +9,8 @@ import numpy as np
 
 #consecutivenes plot
 def get_conc_data(dyncode_file_name):
-    return load_file(dyncode_file_name)
+    if False: return load_file(dyncode_file_name)
+    if True: return pd.read_pickle(dyncode_file_name)
 
 def get_consecutive_data_dyncode(dyncode_file_name):
     ''' para el plot de consecutividad'''
