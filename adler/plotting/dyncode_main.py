@@ -22,7 +22,7 @@ def get_consecutive_data_dyncode(dyncode_file_name):
 
 def get_activity_data_dyncode(dyncode_file_name):
     ''' para el plot de population activity'''
-    df_consecutive = get_conc_data(dyncode_file_name)[ 'an_WT_ESL']
+    df_consecutive = get_conc_data(dyncode_file_name)['an_WT_ESL']
     activity_experiment = df_consecutive['dt_peaks'].groupby(level='cell').sum() / df_consecutive['FRAME'].groupby(level='cell').count() *  100   
     activity_experiment_index = np.argsort(activity_experiment.values)[::-1]
     activity_experiment = [activity_experiment[j] for j in activity_experiment_index]
