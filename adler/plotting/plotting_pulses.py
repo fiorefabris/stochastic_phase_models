@@ -904,12 +904,7 @@ def plot_activity_square_dist(dt,d,T,mean_delta,sigma_delta,it_params_descr_data
         ref = pd.read_excel(description_file,sheet_name='File_references')
         ref.set_index('Unnamed: 0',inplace=True);
         
-        ### time series plotting
-        time_series_name = 'mdelta_' + str(id_[i][0])+ '_sigma_'+ str(id_[i][1]) + '_'
-        for tuple_ in  ref.groupby(['omega','D']):
-            plot_time_series_square_dataset_dist(dt,0,T,d,1,100,data_folder,save_path_name+time_series_name,tuple_)
    
-        ### activity plotting 
         for j,(D,ref_) in enumerate(ref.groupby(['D'])):
            #ax_counter = i*2+j; #ax = axs[ax_counter]
 
@@ -956,5 +951,17 @@ def plot_activity_square_dist(dt,d,T,mean_delta,sigma_delta,it_params_descr_data
     plt.savefig(save_path_name + 'activity_square_dist.pdf', format='pdf')
     plt.close()
     return(0)
+    
 
-
+def plot_activity_square_TS_dist(dt,d,T,mean_delta,sigma_delta,it_params_descr_data,save_path_name):
+        id_ = list(product(mean_delta,sigma_delta))
+        
+        for i,(_,description_file,data_folder) in enumerate(it_params_descr_data):
+            ref = pd.read_excel(description_file,sheet_name='File_references')
+            ref.set_index('Unnamed: 0',inplace=True);
+            
+            ### time series plotting
+            time_series_name = 'mdelta_' + str(id_[i][0])+ '_sigma_'+ str(id_[i][1]) + '_'
+            for tuple_ in  ref.groupby(['omega','D']):
+                plot_time_series_square_dataset_dist(dt,0,T,d,1,100,data_folder,save_path_name+time_series_name,tuple_)
+        return(0)

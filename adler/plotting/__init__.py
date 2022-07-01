@@ -22,7 +22,8 @@ from adler.plotting.plotting_fpt import plot_FPT_all, plot_FPT, plot_FPT_square,
 from adler.plotting.plotting_pulses import  plot_pulses_square
 from adler.plotting.plotting_pulses import  plot_dt_square,plot_ipi_square,plot_dm_square,plot_joint_duration_square
 from adler.plotting.plotting_pulses import  plot_pulses_square_ou, plot_dt_square_ou,plot_ipi_square_ou,plot_dm_square_ou,plot_joint_duration_square_ou
-from adler.plotting.plotting_pulses import  plot_activity_square_dist#plot_pulses,plot_activity, plot_consecutiveness, plot_2d_mean_activity,plot_quantifiers_histograms
+from adler.plotting.plotting_pulses import  plot_activity_square_dist,plot_activity_square_TS_dist
+#plot_pulses,plot_activity, plot_consecutiveness, plot_2d_mean_activity,plot_quantifiers_histograms
 
 from adler.plotting.plotting_pulses import plot_2d_quantifiers,plot_2d_superposition
 from adler.plotting.plotting_consecutive import plot_consecutiveness_activity,plot_consecutiveness_activity_dist
