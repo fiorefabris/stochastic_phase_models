@@ -7,7 +7,7 @@ from itertools import product
 from adler.data_managing_functions import download_data,check_file,time
 from adler.plotting.plotting_main import set_scale,create_df,download_quantifiers,mask_arr,tune_plot, compute_st_values,load_activity_dist
 from adler.plotting.dyncode_main import get_dyncode_pulse_rate_st, get_activity_data_dyncode
-
+from adler.plotting.plotting_consecutive import plot_time_series_square_dataset_dist
 
 
 #%%
@@ -904,8 +904,12 @@ def plot_activity_square_dist(dt,d,T,mean_delta,sigma_delta,it_params_descr_data
         ref = pd.read_excel(description_file,sheet_name='File_references')
         ref.set_index('Unnamed: 0',inplace=True);
         
+        
         for j,(D,ref_) in enumerate(ref.groupby(['D'])):
            #ax_counter = i*2+j; #ax = axs[ax_counter]
+            time_series_name = 'mdelta_' + str(id_[i][0]) +'_D_' + str(D) + '_sigma_'+ str(id_[i][1])
+            plot_time_series_square_dataset_dist(dt,0,T,d,N,100,data_folder,save_path_name+time_series_name, ref_.groupby(['omega','D']))
+
             row_ix = j+ (i // len(sigma_delta))* D_N 
             ax = axs[row_ix,col_ix]
             
