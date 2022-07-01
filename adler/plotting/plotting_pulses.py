@@ -908,7 +908,7 @@ def plot_activity_square_dist(dt,d,T,mean_delta,sigma_delta,it_params_descr_data
         for j,(D,ref_) in enumerate(ref.groupby(['D'])):
            #ax_counter = i*2+j; #ax = axs[ax_counter]
             time_series_name = 'mdelta_' + str(id_[i][0]) +'_D_' + str(D) + '_sigma_'+ str(id_[i][1])
-            plot_time_series_square_dataset_dist(dt,0,T,d,N,100,data_folder,save_path_name+time_series_name, ref_.groupby(['omega','D']))
+            plot_time_series_square_dataset_dist(dt,0,T,d,1,100,data_folder,save_path_name+time_series_name, ref_.groupby(['omega','D']))
 
             row_ix = j+ (i // len(sigma_delta))* D_N 
             ax = axs[row_ix,col_ix]
