@@ -465,9 +465,10 @@ def mp_time_evolution_and_list_ou(main_file_name,dt,T,d,param):
 def time_evolution_save_ou(param,number,order,main_file_name,dt,T,d):
     t0= time.perf_counter()
     time_evolution__ = partial(time_evolution_ou,dt,T,d)
-    theta = time_evolution__(*param) 
+    theta, alpha = time_evolution__(*param) 
     file_name =  str(number)+'_'+str(order)+'.pkl'
     save_data(theta, main_file_name + file_name)
+    save_data(alpha, main_file_name + 'alpha_'+file_name)
     t1 = time.perf_counter() - t0
     print(file_name,t1)
     return(0)
