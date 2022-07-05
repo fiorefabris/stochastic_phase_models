@@ -1,6 +1,6 @@
 from adler.plotting.dyncode_suorces import load_file,consecutive_cumulative,consecutive_non_cumulative
 import numpy as np
-
+import pandas as pd
 
 
 #green =  sns.color_palette(sns.dark_palette("#2ecc71",30,reverse=False))[15]
@@ -9,7 +9,8 @@ import numpy as np
 
 #consecutivenes plot
 def get_conc_data(dyncode_file_name):
-    return load_file(dyncode_file_name)
+    if False: return load_file(dyncode_file_name)
+    if True: return pd.read_pickle(dyncode_file_name)
 
 def get_consecutive_data_dyncode(dyncode_file_name):
     ''' para el plot de consecutividad'''
@@ -22,13 +23,13 @@ def get_consecutive_data_dyncode(dyncode_file_name):
 
 def get_activity_data_dyncode(dyncode_file_name):
     ''' para el plot de population activity'''
-    df_consecutive = get_conc_data(dyncode_file_name)[ 'an_WT_ESL']
+    df_consecutive = get_conc_data(dyncode_file_name)['an_WT_ESL']
     activity_experiment = df_consecutive['dt_peaks'].groupby(level='cell').sum() / df_consecutive['FRAME'].groupby(level='cell').count() *  100   
     activity_experiment_index = np.argsort(activity_experiment.values)[::-1]
     activity_experiment = [activity_experiment[j] for j in activity_experiment_index]
     
     silent_experiment = np.ones(len(activity_experiment)) * 100 - activity_experiment
-    return np.arange(0,len(df_consecutive.index.get_level_values(0).unique())),activity_experiment,silent_experiment
+    return np.arange(1,len(df_consecutive.index.get_level_values(0).unique())+1),activity_experiment,silent_experiment
 
 
 def get_exp_N_total_isolated_consecutive(dyncode_file_name):
