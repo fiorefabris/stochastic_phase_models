@@ -385,7 +385,7 @@ def time_evolution_ou(dt,T,d,omega,alpha0,sigma,tau):
     
     #variables
     theta = np.zeros(ceil(n/d))
-     
+    alpha = np.zeros(ceil(n/d))
 
     #### Initial conditions ############################
     ####################################################
@@ -398,14 +398,16 @@ def time_evolution_ou(dt,T,d,omega,alpha0,sigma,tau):
 
     for i in range(n-1):
         theta_present,alpha_present = get_theta_present(theta_past,alpha_past,omega,alpha0,sigma,tau,dt)
+        
         if i % d == 0:
             theta[i // d] = theta_past
-                    
+            alpha[i // d] = alpha_past
+            
         theta_past = theta_present
         alpha_past = alpha_present
 
 
-    return(theta)
+    return(theta,alpha)
     
 
 def get_ou_process(alpha_past, alpha0,sigma,tau,dt):
