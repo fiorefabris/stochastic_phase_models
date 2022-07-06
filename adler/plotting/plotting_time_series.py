@@ -375,7 +375,7 @@ def plot_time_series_square_ou(dt,beg,T,d,N,Delta,description_file,data_folder,s
                     divider = make_axes_locatable(ax)
                     ax_alpha = divider.append_axes("bottom", size="100%", pad=0.1, sharex=ax)
                     ax_alpha.plot(t[beg_:end:Delta],alpha_arr[beg_:end:Delta],linewidth=2,color='blue')
-                    ax_alpha.plot(t[beg_:end:Delta],np.ones(len(t[beg_:end:Delta])),color='gray',':')
+                    ax_alpha.plot(t[beg_:end:Delta],np.ones(len(t[beg_:end:Delta])),':',color='gray')
                 ###############################################
                 #### Plotting
                 ################################################
