@@ -377,7 +377,7 @@ def plot_time_series_square_ou(dt,beg,T,d,N,Delta,description_file,data_folder,s
                     ax.plot(t[beg_:end:Delta],1+np.sin(theta)[beg_:end:Delta],linewidth=2,color=colors[col])
                     divider = make_axes_locatable(ax)
                     ax_alpha = divider.append_axes("bottom", size="100%", pad=0.1, sharex=ax)
-                    ax_alpha.plot(t[beg_:end:Delta],delta_arr[beg_:end:Delta],linewidth=2,color='black')
+                    ax_alpha.plot(t[beg_:end:Delta],delta_arr[beg_:end:Delta],linewidth=2,color='gray')
                     ax_alpha.plot(t[beg_:end:Delta],np.ones(len(t[beg_:end:Delta])),':',color='gray')
                 ###############################################
                 #### Plotting
@@ -394,7 +394,7 @@ def plot_time_series_square_ou(dt,beg,T,d,N,Delta,description_file,data_folder,s
                 ax_alpha.set_xlim(xlim)
                 ax_alpha.set_ylim([-1.02,2.02])
                 
-                if (row == Rows) and (col == 0): 
+                if (row == Rows-1) and (col == 0): 
                     ax.set_ylabel(r'$1 + \sin(\theta)$', fontsize=30);
                     ax.yaxis.set_label_coords(-0.05, 0.5)
                     ax_alpha.set_xlabel('time', fontsize=30)
