@@ -367,14 +367,14 @@ def plot_time_series_square_ou(dt,beg,T,d,N,Delta,description_file,data_folder,s
                 if check_file(file_name,data_folder):            
                     
                     theta = download_data(data_folder + file_name)
-                    alpha_arr = download_data(data_folder + 'alpha_' + file_name)
+                    delta_arr = [ i/ref_.omega.unique() for i in download_data(data_folder + 'alpha_' + file_name)];
                     t = time(dt,T+beg,d)
                     end = len(t) #end is ix
                     beg_ = int(beg/(dt*d)) # beg_is ix
                     ax.plot(t[beg_:end:Delta],1+np.sin(theta)[beg_:end:Delta],linewidth=2,color=colors[col])
                     divider = make_axes_locatable(ax)
                     ax_alpha = divider.append_axes("bottom", size="100%", pad=0.1, sharex=ax)
-                    ax_alpha.plot(t[beg_:end:Delta],alpha_arr[beg_:end:Delta],linewidth=2,color='blue')
+                    ax_alpha.plot(t[beg_:end:Delta],delta_arr[beg_:end:Delta],linewidth=2,color='black')
                     ax_alpha.plot(t[beg_:end:Delta],np.ones(len(t[beg_:end:Delta])),':',color='gray')
                 ###############################################
                 #### Plotting
@@ -399,7 +399,7 @@ def plot_time_series_square_ou(dt,beg,T,d,N,Delta,description_file,data_folder,s
                    
                 
                 set_scale(ax,[beg,T], [0,2])
-                #ax.set_xticklabels([beg,T])
+                ax.set_xticklabels([None,None])
                 ax.set_yticklabels([0,2])
                 ax.tick_params(labelsize=20)
                 set_scale(ax_alpha,[beg,T], [-1,2])
