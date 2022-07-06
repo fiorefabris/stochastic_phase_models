@@ -388,6 +388,8 @@ def plot_time_series_square_ou(dt,beg,T,d,N,Delta,description_file,data_folder,s
     
                 ax.set_ylim(ylim);
                 ax.set_xlim(xlim)
+                ax_alpha.set_xlim(xlim)
+                ax_alpha.set_ylim([-1.02,2.02])
                 
                 if (row == Rows) and (col == 0): 
                     ax.set_ylabel(r'$1 + \sin(\theta)$', fontsize=30);
