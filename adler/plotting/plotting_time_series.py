@@ -337,6 +337,7 @@ def plot_time_series_square_ou(dt,beg,T,d,N,Delta,description_file,data_folder,s
 ######## Getting data information
     ref_ = pd.read_excel(description_file,sheet_name='File_references')
     ref_.set_index('Unnamed: 0',inplace=True);
+    omega = ref_.omega.unique()
     ###############################################################################
     ### Plotting parameters
     ###############################################################################    
@@ -367,10 +368,12 @@ def plot_time_series_square_ou(dt,beg,T,d,N,Delta,description_file,data_folder,s
                 if check_file(file_name,data_folder):            
                     
                     theta = download_data(data_folder + file_name)
-                    delta_arr = [ i/ref_.omega.unique() for i in download_data(data_folder + 'alpha_' + file_name)];
+                    delta_arr =  download_data(data_folder + 'alpha_' + file_name) / omega
                     t = time(dt,T+beg,d)
+                   
                     end = len(t) #end is ix
                     beg_ = int(beg/(dt*d)) # beg_is ix
+                   
                     ax.plot(t[beg_:end:Delta],1+np.sin(theta)[beg_:end:Delta],linewidth=2,color=colors[col])
                     divider = make_axes_locatable(ax)
                     ax_alpha = divider.append_axes("bottom", size="100%", pad=0.1, sharex=ax)
