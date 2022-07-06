@@ -5,6 +5,7 @@ import pandas as pd
 from math import ceil
 from functools import partial 
 import seaborn as sns
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 from adler.data_managing_functions import download_data,check_file,time
 from adler.plotting.plotting_main import set_scale
@@ -365,12 +366,15 @@ def plot_time_series_square_ou(dt,beg,T,d,N,Delta,description_file,data_folder,s
                 ################################################
                 if check_file(file_name,data_folder):            
                     
-                    theta = download_data(data_folder + file_name) 
+                    theta = download_data(data_folder + file_name)
+                    alpha = download_data(data_folder + 'alpha_' + file_name)
                     t = time(dt,T+beg,d)
                     end = len(t) #end is ix
                     beg_ = int(beg/(dt*d)) # beg_is ix
                     ax.plot(t[beg_:end:Delta],1+np.sin(theta)[beg_:end:Delta],linewidth=2,color=colors[col])
-                
+                    divider = make_axes_locatable(ax)
+                    ax_alpha = divider.append_axes("bottom", size="100%", pad=0.2, sharex=ax)
+                    ax_alpha.plot(t[beg_:end:Delta],alpha[beg_:end:Delta],linewidth=2,color='blue')
                 ###############################################
                 #### Plotting
                 ################################################
