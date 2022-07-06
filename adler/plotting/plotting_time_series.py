@@ -373,8 +373,9 @@ def plot_time_series_square_ou(dt,beg,T,d,N,Delta,description_file,data_folder,s
                     beg_ = int(beg/(dt*d)) # beg_is ix
                     ax.plot(t[beg_:end:Delta],1+np.sin(theta)[beg_:end:Delta],linewidth=2,color=colors[col])
                     divider = make_axes_locatable(ax)
-                    ax_alpha = divider.append_axes("bottom", size="100%", pad=0.2, sharex=ax)
+                    ax_alpha = divider.append_axes("bottom", size="100%", pad=0.1, sharex=ax)
                     ax_alpha.plot(t[beg_:end:Delta],alpha_arr[beg_:end:Delta],linewidth=2,color='blue')
+                    ax_alpha.plot(t[beg_:end:Delta],np.ones(len(t[beg_:end:Delta])),color='gray',':')
                 ###############################################
                 #### Plotting
                 ################################################
@@ -388,16 +389,22 @@ def plot_time_series_square_ou(dt,beg,T,d,N,Delta,description_file,data_folder,s
                 ax.set_ylim(ylim);
                 ax.set_xlim(xlim)
                 
-                if (row == Rows-1) and (col == 0): 
+                if (row == Rows) and (col == 0): 
                     ax.set_ylabel(r'$1 + \sin(\theta)$', fontsize=30);
-                    ax.set_xlabel('time', fontsize=30)
-                    ax.xaxis.set_label_coords(0.5, -0.1);
                     ax.yaxis.set_label_coords(-0.05, 0.5)
+                    ax_alpha.set_xlabel('time', fontsize=30)
+                    ax_alpha.xaxis.set_label_coords(0.5, -0.1);
+                   
                 
                 set_scale(ax,[beg,T], [0,2])
-                ax.set_xticklabels([beg,T])
+                #ax.set_xticklabels([beg,T])
                 ax.set_yticklabels([0,2])
                 ax.tick_params(labelsize=20)
+                set_scale(ax_alpha,[beg,T], [-1,2])
+                ax_alpha.set_xticklabels([beg,T])
+                ax_alpha.set_yticklabels([-1,2])
+                ax_alpha.tick_params(labelsize=20)
+
                 print(alpha)
     
     
