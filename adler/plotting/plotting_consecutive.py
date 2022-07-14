@@ -136,7 +136,8 @@ def plot_consecutiveness_activity(dt,beg,T,d,N,Delta,description_file,data_folde
 
 def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,tuple_):
     
-    
+    green =  sns.color_palette(sns.dark_palette("#2ecc71",30,reverse=False))[15]
+
     fig = plt.figure(constrained_layout=False, figsize=(8.27, 11.692))
     gs_main = gridspec.GridSpec(nrows=3, ncols=2, figure=fig); gs_main.update(left=0.1, right=0.9, bottom=0.1, top=0.90, hspace=0.3,wspace=0.3)
     (omega,alpha,D,number),dataset = tuple_[0],tuple_[1]
@@ -149,8 +150,9 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
     
     ax1 = plt.subplot(gs_main[0,0])
     if len(DT) > 0:
-        ax1.axvspan(6, 8.33, color='y', alpha=0.5, lw=0)
+        
         bins = ax1.hist(DT,bins=np.linspace(0,20,21),density=True,alpha=1,linewidth=1); 
+        ax1.axvspan(6, 8.33, color=green, alpha=0.3, lw=0)
         #tune_plot(ax,'dt (min)','probability density (1/min)',[0,20],1,[0,0.4],1,30,20)
         compute_st_values(ax1,DT,bins,1,10)   
     else:
@@ -165,8 +167,9 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
     
     ax2 = plt.subplot(gs_main[0,1])
     if len(DT) > 0:
-        ax2.axvspan(8, 18.67, color='y', alpha=0.5, lw=0)
+        
         bins = ax2.hist(IPI,bins=np.linspace(0,40,21),density=True,alpha=1,linewidth=1); 
+        ax2.axvspan(8, 18.67, color=green, alpha=0.3, lw=0)
         #tune_plot(ax,'dt (min)','probability density (1/min)',[0,20],1,[0,0.4],1,30,20)
         compute_st_values(ax2,IPI,bins,1,10)   
     else:
@@ -183,7 +186,6 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
 # =============================================================================
 #     consecutiveness plot
 # =============================================================================
-    green =  sns.color_palette(sns.dark_palette("#2ecc71",30,reverse=False))[15]
     (mean_trains_cons,std_trains_cons),total_pulses,isolated_pulses,consecutive_pulses = load_consecutive_statistics_realizations(dataset,save_data_arr)
     colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728']
 
@@ -253,7 +255,7 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
     ax6.tick_params(axis='y', labelsize=8,length=2)
     ax6.set_xlabel('total,isolated,consecutive',fontsize=8)
     ax6.set_ylabel('counts',fontsize=8)
-    ax6.set_ylim([0.9,2.5])
+    ax6.set_ylim([0.0,2.5])
     ax6.xaxis.set_label_coords(0.5, -0.12);ax6.yaxis.set_label_coords(-0.05,0.5)
     ax6.tick_params(labelsize=6,direction='out', pad=1,length=2)
     ax6.set_xticklabels([' total' ,'isolated','consecutive'],rotation = 0)
@@ -288,7 +290,7 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
     if len(activity) > 0:
         p1 = ax4.barh(1,width = np.mean(silent),xerr=np.std(silent),left =0,color='darkgray',alpha=0.5,linewidth=0.0,height=0.6)
         p2 = ax4.barh(1,width = np.mean(activity),left=np.mean(silent),xerr = np.std(activity),alpha=0.8,linewidth=0.0,height=0.6)
-        p3 = ax4.barh(1,width = np.mean(x),left=np.mean(silent_experiment),alpha=0.8,linewidth=0.0,height=0.6,color = green)
+        p3 = ax4.barh(1,width = np.mean(x),left=np.mean(silent_experiment),alpha=0.3,linewidth=0.0,height=0.6,color = green)
 
     ax4.set_xticks([0,50,100])
     ax4.set_xlim([0,100])
