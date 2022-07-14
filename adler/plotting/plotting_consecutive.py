@@ -29,7 +29,7 @@ def get_mean_value_place(trials,no_std = False):
         return(np.array([np.mean(k) for k in arr_aux]),np.array([np.std(k) for k in arr_aux]))
 
 
-def load_consecutive_statistics_realizations(dataset,save_data_arr):
+def load_consecutive_statistics_realizations(dataset,save_data_arr,T):
     mean_trains_cons_trials,total_pulses_trials,isolated_pulses_trials,consecutive_pulses_trials = [],[],[],[]
     
     for data_folder in save_data_arr:
@@ -43,8 +43,12 @@ def load_consecutive_statistics_realizations(dataset,save_data_arr):
     return get_mean_value_place(mean_trains_cons_trials,False),total_pulses_trials,isolated_pulses_trials,consecutive_pulses_trials
 
 
-def load_consecutive_statistics(dataset,data_folder):
-        ''' le pasas un experimento  y te devuelve la estadistica de pulsos cons'''
+def load_consecutive_statistics(dataset,data_folder,T):
+        ''' le pasas un experimento  y te devuelve la estadistica de pulsos cons
+        FALTAAA VER CONSECUTIVE TRIAL
+        el resto esta dividido por la duracion de cada serie temporal
+        
+        '''
         isolated_pulses_dataset = []
         total_pulses_dataset = []
         consecutive_pulses_dataset = []
@@ -57,15 +61,15 @@ def load_consecutive_statistics(dataset,data_folder):
                 
                 if (check_file('i_'+file_name,data_folder)): 
                     isolated_pulses = download_data(data_folder+'i_'+file_name)
-                    isolated_pulses_dataset.append(isolated_pulses)
+                    isolated_pulses_dataset.append(isolated_pulses/T)
                 
                     consecutive_trial = download_data(data_folder+'c_'+file_name)
                     consecutive_trains_dataset.append(consecutive_trial)
-                    total_pulses_dataset.append(consecutive_trial[0])
+                    total_pulses_dataset.append(consecutive_trial[0]/T)
                 
                     consecutive_pulses = consecutive_trial[0]-isolated_pulses
-                    consecutive_pulses_dataset.append(consecutive_pulses)
-        print('len total_pulses_dataset' , len(total_pulses_dataset))
+                    consecutive_pulses_dataset.append(consecutive_pulses/T)
+        print('len total_pulses_dataset, T:' , len(total_pulses_dataset),T)
         return get_mean_value_place(consecutive_trains_dataset,True),sum(total_pulses_dataset),sum(isolated_pulses_dataset),sum(consecutive_pulses_dataset)
 
 # =============================================================================
@@ -186,7 +190,7 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
 # =============================================================================
 #     consecutiveness plot
 # =============================================================================
-    (mean_trains_cons,std_trains_cons),total_pulses,isolated_pulses,consecutive_pulses = load_consecutive_statistics_realizations(dataset,save_data_arr)
+    (mean_trains_cons,std_trains_cons),total_pulses,isolated_pulses,consecutive_pulses = load_consecutive_statistics_realizations(dataset,save_data_arr,T)
     colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728']
 
     ax5 = plt.subplot(gs_main[2,0])
