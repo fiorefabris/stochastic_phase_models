@@ -49,7 +49,7 @@ def download_quantifiers(row_,data_folder,T,dt,d):
             dm = dm + download_data(data_folder+'dm_'+file_name)
             joint_duration = joint_duration + download_data(data_folder+'joint_duration_'+file_name)
             
-            pulse_rate = pulse_rate + pulse_rate_statistics((data_folder+'max_'+file_name),np.arange(ceil(int(T/dt)/d)),int(ceil(int(T/dt)/d)/200),dt,d) 
+            pulse_rate = pulse_rate + pulse_rate_statistics(download_data(data_folder+'max_'+file_name),np.arange(ceil(int(T/dt)/d)),int(ceil(int(T/dt)/d)/200),dt,d) 
         else:
             pass
     return(points_to_time(DT,dt,d),points_to_time(IPI,dt,d),points_to_time(joint_duration,dt,d),points_to_time(dm,dt,d),pulse_rate)
