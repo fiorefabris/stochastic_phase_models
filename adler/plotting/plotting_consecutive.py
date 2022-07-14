@@ -33,7 +33,7 @@ def load_consecutive_statistics_realizations(dataset,save_data_arr,T):
     mean_trains_cons_trials,total_pulses_trials,isolated_pulses_trials,consecutive_pulses_trials = [],[],[],[]
     
     for data_folder in save_data_arr:
-        mean_trains_cons,total_pulses,isolated_pulses,consecutive_pulses = load_consecutive_statistics(dataset,data_folder)
+        mean_trains_cons,total_pulses,isolated_pulses,consecutive_pulses = load_consecutive_statistics(dataset,data_folder,T)
         
         mean_trains_cons_trials.append(mean_trains_cons)
         total_pulses_trials.append(total_pulses)
