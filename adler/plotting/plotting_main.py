@@ -10,6 +10,7 @@ import matplotlib.ticker as ticker
 import numpy as np
 import pandas as pd
 from adler.data_managing_functions import download_data,check_file,time
+from math import ceil
 
 
 
@@ -33,8 +34,9 @@ def set_scale(ax,xlim,ylim):
 def points_to_time(arr,dt,d):
     return np.array(arr)*dt*d #[i*dt*d for i in arr]
 
-def download_quantifiers(row_,data_folder,dt,d):
-    DT = []; IPI = []; joint_duration = []; dm = []
+def download_quantifiers(row_,data_folder,T,dt,d):
+    ''' para pulse rate parto la serie temporal en 200 veces'''
+    DT = []; IPI = []; joint_duration = []; dm = []; pulse_rate = []
     for (order,row) in row_.groupby(['order']):
     #para cada ensayo con todos los mismos parámetros
         number = int(row.number.values[0])
@@ -46,12 +48,38 @@ def download_quantifiers(row_,data_folder,dt,d):
             IPI = IPI + download_data(data_folder+'IPI_'+file_name)
             dm = dm + download_data(data_folder+'dm_'+file_name)
             joint_duration = joint_duration + download_data(data_folder+'joint_duration_'+file_name)
+            
+            pulse_rate = pulse_rate + pulse_rate_statistics((data_folder+'max_'+file_name),np.arange(ceil(int(T/dt)/d)),int(ceil(int(T/dt)/d)/200),dt,d) 
         else:
             pass
-    return(points_to_time(DT,dt,d),points_to_time(IPI,dt,d),points_to_time(joint_duration,dt,d),points_to_time(dm,dt,d))
-    
-        #for plotting 2d plots
+    return(points_to_time(DT,dt,d),points_to_time(IPI,dt,d),points_to_time(joint_duration,dt,d),points_to_time(dm,dt,d),pulse_rate)
 
+
+
+
+def split_len_N(ix,N):
+    '''te parte ix en elementos de N elementos. El ultimo tiene falopa'''
+    aux = []; i = 0
+    while i < len(ix):
+        aux.append(i)
+        i = i + N
+    return  np.split(ix,(aux[1:]))
+
+
+
+def pulse_rate_statistics(MAX,ix,N,dt,d):
+    '''ix es una lista de indices de theta, N esta en puntos
+    Te da el pulse rate de cada parte de N puntos de ix (indices) de la TS'''
+    pulse_rate_aux = []
+        
+    for ix_i in split_len_N(ix,N):
+        pulses =  list(filter(lambda x : x in MAX,ix_i))
+        t_i = points_to_time(time,dt,d)
+        pulse_rate_aux.append(len(pulses)/(t_i[-1]-t_i[0]))
+    return pulse_rate_aux
+            
+
+#for plotting 2d plots
 def create_df(ref,data_folder,dt,T,d):
     ''' creates dataframes where 2d alpha are indexes and D are columns'''
     omega = ref.omega.unique()[0]
@@ -63,10 +91,11 @@ def create_df(ref,data_folder,dt,T,d):
         aux_dt,aux_ipi,aux_fpt,aux_pulses = [],[],[],[]    
         
         for D,col_ in row_.groupby(['D']):
-            DT,IPI,_,_ = download_quantifiers(col_,data_folder,dt,d)
+            DT,IPI,_,_ ,pulse_rate = download_quantifiers(col_,data_folder,T,dt,d)
            
             aux_dt.append(np.median(DT));aux_ipi.append(np.median(IPI))
-            aux_pulses.append(len(DT)/T)
+            aux_pulses.append(np.median(pulse_rate))
+            
              
             fpt_file_name = 'FPT_'+str(omega)+'_'+str(np.round(alpha/omega,4) )+'_'+str(D)+'.pkl'
             if check_file(fpt_file_name,data_folder) :
