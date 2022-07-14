@@ -201,17 +201,15 @@ def filter_extremes_aux(MAX,MIN,X):
     '''
     
     flag_m1 = False
-    
-    if len(MAX) * len(MIN) > 0:
         
-        # ensures that the time series quantification starts from the maxima. 
-       
+    # ensures that the time series quantification starts from the maxima. 
+    if len(MAX) * len(MIN) > 0:
         while MAX[0] > MIN[0]:
             MIN.remove(MIN[0])
             if len(MAX) * len(MIN) == 0:
                 MAX,MIN = [],[]
                 break
-
+    if len(MAX) * len(MIN) > 0:
         while MAX[-1] > MIN[-1]:
             MAX.remove(MAX[-1])
             if len(MAX) * len(MIN) == 0:
@@ -616,7 +614,7 @@ def main_pulse_detection(theta,delta,omega,save_path_name,file_name):
         print('running pulse detection',delta)      
         TH = 0.90;W = 100
         PFE , PFI = get_fixed_points(delta)
-        print(theta[0:100],TH,W,PFE,PFI)
+        #print(theta[0:100],TH,W,PFE,PFI)
         left_minima,right_minima,MAX = get_pulses(theta,TH,W,PFE,PFI)
         print('pulse detection ended')
         
