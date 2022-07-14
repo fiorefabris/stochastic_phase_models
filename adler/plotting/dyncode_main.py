@@ -33,7 +33,9 @@ def get_activity_data_dyncode(dyncode_file_name):
 
 
 def get_exp_N_total_isolated_consecutive(dyncode_file_name):
-    ''' para el boxplot de consecutividad'''
+    ''' para el boxplot de consecutividad
+    te devuelve la proporcion de pulsos , es decir, pulsos/tiempo pa casa serie temporal. Eso, sumado
+    '''
     df_consecutive = get_conc_data(dyncode_file_name)[ 'an_WT_ESL']
     consecutive_non_cumulative_obj = consecutive_non_cumulative(df_consecutive)
     

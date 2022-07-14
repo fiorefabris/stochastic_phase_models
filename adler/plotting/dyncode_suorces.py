@@ -131,7 +131,9 @@ class consecutive_non_cumulative:
         #Para cada conjunto de celulas, te da la estadistica de pulsos aislados
         box = []
         for cell,data in df.groupby(level='cell'):
-            box.append(self.is_isolated_cell(data.amp_peaks,self.joint_duration(data),self.silence(data)))
+            #box.append(self.is_isolated_cell(data.amp_peaks,self.joint_duration(data),self.silence(data))) #old!
+            isolated_cell = self.is_isolated_cell(data.amp_peaks,self.joint_duration(data),self.silence(data))#new!
+            box.append(isolated_cell/(data.FRAME.count()/3))#new!!
         return(box)
     
 
@@ -202,7 +204,8 @@ class consecutive_non_cumulative:
         #Para cada conjunto de celulas, te da la estadistica de pulsos aislados
         pulses = []
         for cell,data in df.groupby(level='cell'):
-            pulses.append(data.amp_peaks.count())
+            #pulses.append(data.amp_peaks.count())
+            pulses.append(data.amp_peaks.count()/(data.FRAME.count()/3)) #new!!
         return(pulses)
  
         
@@ -238,5 +241,7 @@ class consecutive_non_cumulative:
         #Para cada conjunto de celulas, te da la estadistica de pulsos consecutivos
         box = []
         for cell,data in df.groupby(level='cell'):
-            box.append(self.count_consecutive_pulses_cell_number(data.amp_peaks,self.joint_duration(data),self.silence(data)))
+            #box.append(self.count_consecutive_pulses_cell_number(data.amp_peaks,self.joint_duration(data),self.silence(data)))
+            consecutive_cell = self.count_consecutive_pulses_cell_number(data.amp_peaks,self.joint_duration(data),self.silence(data))#new!
+            box.append(consecutive_cell/(data.FRAME.count()/3))#new!!
         return(box)
