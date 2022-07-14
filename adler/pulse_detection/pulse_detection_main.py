@@ -201,15 +201,24 @@ def filter_extremes_aux(MAX,MIN,X):
     '''
     
     flag_m1 = False
-    if len(MAX) * len(MIN) > 0:
     
+    if len(MAX) * len(MIN) > 0:
+        
         # ensures that the time series quantification starts from the maxima. 
+       
         while MAX[0] > MIN[0]:
             MIN.remove(MIN[0])
+            if len(MAX) * len(MIN) == 0:
+                MAX,MIN = [],[]
+                break
+
         while MAX[-1] > MIN[-1]:
             MAX.remove(MAX[-1])
-     
-        
+            if len(MAX) * len(MIN) == 0:
+                MAX,MIN = [],[]
+                break
+    
+    if len(MAX) * len(MIN) > 0:
         list_remove = []; flag_m2 = False; M1_ant = MAX[0]
         for M1,M2 in zip(MAX[:-1],MAX[1:]):
             
