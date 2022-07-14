@@ -199,55 +199,60 @@ def filter_extremes_aux(MAX,MIN,X):
         position of the minima 
     
     '''
-    flag_m1 = False
-    # ensures that the time series quantification starts from the maxima. 
-    while MAX[0] > MIN[0]:
-        MIN.remove(MIN[0])
-    while MAX[-1] > MIN[-1]:
-        MAX.remove(MAX[-1])
- 
     
-    list_remove = []; flag_m2 = False; M1_ant = MAX[0]
-    for M1,M2 in zip(MAX[:-1],MAX[1:]):
+    flag_m1 = False
+    if len(MAX) * len(MIN) > 0:
+    
+        # ensures that the time series quantification starts from the maxima. 
+        while MAX[0] > MIN[0]:
+            MIN.remove(MIN[0])
+        while MAX[-1] > MIN[-1]:
+            MAX.remove(MAX[-1])
+     
         
-        if flag_m2: 
-            #The previous M2 was the candidate to remove 
-            M1 = M1_ant
-            flag_m2 = False
-        
-        aux_list = list(filter(lambda x: (x > M1 and x < M2), MIN))
-        
-        while len(aux_list) > 1:
-            # Removes all the minima till there is only one in aux_list
-            # The minima that removes are the bigger ones. 
-            aux_list_values = [X[i] for i in aux_list]
-            MIN.remove(aux_list[np.argmax(aux_list_values)])
-            aux_list = list(filter(lambda x: (x > M1 and x < M2), MIN))
-
-        if len(aux_list) == 0:
-            # If there is not a maxima between two minimas, remove one maximum
-            # The maxima that removes are the smaller ones. 
-            aux_list_values = [X[i]  for i in [M1,M2]] 
-            remove_candidate = [M1,M2][np.argmin(aux_list_values)]
-            list_remove.append(remove_candidate)
+        list_remove = []; flag_m2 = False; M1_ant = MAX[0]
+        for M1,M2 in zip(MAX[:-1],MAX[1:]):
             
-            if remove_candidate == M2:
-               flag_m2 = True
-               M1_ant = M1
-                              
-            if remove_candidate == M1:
-                flag_m1 = True
-
-        M1_ant = M1
-        if flag_m1 : 
-            # Tiene que volver a empezar porque sino le quedan dos minimos consecutivos
-            break 
+            if flag_m2: 
+                #The previous M2 was the candidate to remove 
+                M1 = M1_ant
+                flag_m2 = False
+            
+            aux_list = list(filter(lambda x: (x > M1 and x < M2), MIN))
+            
+            while len(aux_list) > 1:
+                # Removes all the minima till there is only one in aux_list
+                # The minima that removes are the bigger ones. 
+                aux_list_values = [X[i] for i in aux_list]
+                MIN.remove(aux_list[np.argmax(aux_list_values)])
+                aux_list = list(filter(lambda x: (x > M1 and x < M2), MIN))
+    
+            if len(aux_list) == 0:
+                # If there is not a maxima between two minimas, remove one maximum
+                # The maxima that removes are the smaller ones. 
+                aux_list_values = [X[i]  for i in [M1,M2]] 
+                remove_candidate = [M1,M2][np.argmin(aux_list_values)]
+                list_remove.append(remove_candidate)
                 
-                
-    if len(list_remove) > 0: 
-        #print(list_remove)
-        for NM in set(list_remove):
-            MAX.remove(NM)
+                if remove_candidate == M2:
+                   flag_m2 = True
+                   M1_ant = M1
+                                  
+                if remove_candidate == M1:
+                    flag_m1 = True
+    
+            M1_ant = M1
+            if flag_m1 : 
+                # Tiene que volver a empezar porque sino le quedan dos minimos consecutivos
+                break 
+                    
+                    
+        if len(list_remove) > 0: 
+            #print(list_remove)
+            for NM in set(list_remove):
+                MAX.remove(NM)
+    else:
+        MIN,MAX = [],[]
 
     return(MAX,MIN,flag_m1)
     
@@ -265,7 +270,9 @@ def filter_extremes(MAX,MIN,X):
     while flag_m1:
         #print('flag_m1')
         MAX,MIN,flag_m1 = filter_extremes_aux(MAX,MIN,X)
-    MIN = filter_last_minima(MAX,MIN)
+    
+    if len(MIN)*len(MAX) > 0:
+        MIN = filter_last_minima(MAX,MIN)
     
     assert len(MAX) == len(MIN)
     assert all([M-m > 0 for M,m in zip(MIN,MAX)])
