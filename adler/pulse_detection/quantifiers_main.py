@@ -5,7 +5,7 @@ from functools import partial
 import pandas as pd
 
 #from adler.pulse_detection.pulse_detection_main import test_pulses_sine
-from adler.data_managing_functions import check_file, save_data, download_data
+from adler.data_managing_functions import check_file, save_data, download_data,points_to_time
 
 #%% 
 # =============================================================================
@@ -131,4 +131,78 @@ def compute_pulses_quantifiers(description_file,data_folder,save_path_name):
 
 
 
+#%% calcula el pulse rate en pulsos sobre minutos!
+def compute_pulse_rate(T,dt,d,description_file,data_folder,save_path_name):
+
+    ref = pd.read_excel(description_file,sheet_name= 'File_references')
+    ref.set_index('Unnamed: 0',inplace=True);
+    pool = mp.Pool(processes= ceil(mp.cpu_count()))
+    
+    if 'alpha' in ref.keys(): tuple_ = ref.groupby(['alpha','D','order'])
+    if 'alpha0' in ref.keys(): tuple_ = ref.groupby(['alpha0', 'sigma', 'tau','order'])
+    get_pulse_rate_ = partial(T,dt,d,get_pulse_rate,data_folder,save_path_name)
+    pool.map(get_pulse_rate_,tuple_)
+    pool.close()
+    pool.join()
+    return (2)
+
+def get_pulse_rate(T,dt,d,data_folder,save_path_name,tuple_):
+    '''
+    data folder: donde están los pulsos
+    '''
+    
+    if 'alpha' in tuple_[1].columns:
+        (_,_,order),row = tuple_[0],tuple_[1]
+        file_name =  str(int(row.number))+'_'+str(int(order))+'.pkl'
+    
+    elif 'alpha0' in tuple_[1].columns:
+        (_,_,_,order),row = tuple_[0],tuple_[1]
+        file_name =  str(int(row.number.values[0]))+'_'+str(int(order))+'.pkl'
+ 
+    
+    if (check_file('max_'+file_name,data_folder)):
+        
+        print('running pulse rate computation')      
+        pulse_rate = pulse_rate_statistics(download_data(data_folder+'max_'+file_name),np.arange(ceil(int(T/dt)/d)),int(ceil(int(T/dt)/d)/50),dt,d) 
+        save_data(pulse_rate,save_path_name+'pr_'+file_name)
+        print('pulses quantifiers computation finished :)')
+    else:
+        print(file_name,'maxima file not available')
+
+    return(1)
+    
+    
+    
+def split_len_N(ix,N):
+    '''te parte ix en elementos de N elementos. El ultimo tiene falopa'''
+    aux = []; i = 0
+    while i < len(ix):
+        aux.append(i)
+        i = i + N
+    return  np.split(ix,(aux[1:]))
+
+def take_pulse_rate(MAX,dt,d,ix_i):
+        pulses =  list(filter(lambda x : x in MAX,ix_i))
+        t_i = points_to_time(ix_i,dt,d)
+       # print(t_i)
+        return(len(pulses)/(t_i[-1]-t_i[0]))
+
+def pulse_rate_statistics(MAX,ix,N,dt,d):
+    pool = mp.Pool(processes= mp.cpu_count())
+    take_pulse_rate_ = partial(take_pulse_rate,MAX,dt,d)
+    pulse_rate_aux = pool.map(take_pulse_rate_,split_len_N(ix,N))
+    pool.close() 
+    pool.join()
+    return pulse_rate_aux
+
+#def pulse_rate_statistics_old(MAX,ix,N,dt,d):
+#    '''ix es una lista de indices de theta, N esta en puntos
+#    Te da el pulse rate de cada parte de N puntos de ix (indices) de la TS'''
+#    pulse_rate_aux = []
+#        
+#    for ix_i in split_len_N(ix,N):    
+#        pulses =  list(filter(lambda x : x in MAX,ix_i))
+#        t_i = points_to_time(ix_i,dt,d)
+#        pulse_rate_aux.append(len(pulses)/(t_i[-1]-t_i[0]))
+#    return pulse_rate_aux
 

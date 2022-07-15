@@ -74,6 +74,8 @@ def get_fixed_points(delta):
         PFI = -np.pi/2 + 2*np.pi
     return(PFE,PFI)
 
+def points_to_time(arr,dt,d):
+    return np.array(arr)*dt*d #[i*dt*d for i in arr]
 
 
 #%%

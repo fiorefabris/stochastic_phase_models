@@ -9,7 +9,7 @@ Date  : 01/2020
 import matplotlib.ticker as ticker
 import numpy as np
 import pandas as pd
-from adler.data_managing_functions import download_data,check_file,time
+from adler.data_managing_functions import download_data,check_file,time,points_to_time
 from math import ceil
 from functools import partial
 import multiprocessing as mp
@@ -32,8 +32,7 @@ def set_scale(ax,xlim,ylim):
 
 
 #%%for plotting quantifiers histograms and 2d plots
-def points_to_time(arr,dt,d):
-    return np.array(arr)*dt*d #[i*dt*d for i in arr]
+
 
 def download_quantifiers(row_,data_folder,T,dt,d):
     ''' para pulse rate parto la serie temporal en 200 veces'''
@@ -50,50 +49,10 @@ def download_quantifiers(row_,data_folder,T,dt,d):
             dm = dm + download_data(data_folder+'dm_'+file_name)
             joint_duration = joint_duration + download_data(data_folder+'joint_duration_'+file_name)
             
-            pulse_rate = pulse_rate + pulse_rate_statistics(download_data(data_folder+'max_'+file_name),np.arange(ceil(int(T/dt)/d)),int(ceil(int(T/dt)/d)/200),dt,d) 
+            pulse_rate = pulse_rate + download_data(data_folder+'pr_'+file_name)
         else:
             pass
     return(points_to_time(DT,dt,d),points_to_time(IPI,dt,d),points_to_time(joint_duration,dt,d),points_to_time(dm,dt,d),pulse_rate)
-
-
-
-
-def split_len_N(ix,N):
-    '''te parte ix en elementos de N elementos. El ultimo tiene falopa'''
-    aux = []; i = 0
-    while i < len(ix):
-        aux.append(i)
-        i = i + N
-    return  np.split(ix,(aux[1:]))
-
-#%%
-
-
-def take_pulse_rate(MAX,dt,d,ix_i):
-        pulses =  list(filter(lambda x : x in MAX,ix_i))
-        t_i = points_to_time(ix_i,dt,d)
-       # print(t_i)
-        return(len(pulses)/(t_i[-1]-t_i[0]))
-
-def pulse_rate_statistics(MAX,ix,N,dt,d):
-    pool = mp.Pool(processes= mp.cpu_count())
-    take_pulse_rate_ = partial(take_pulse_rate,MAX,dt,d)
-    pulse_rate_aux = pool.map(take_pulse_rate_,split_len_N(ix,N))
-    pool.close() 
-    pool.join()
-    return pulse_rate_aux
-
-
-#def pulse_rate_statistics_old(MAX,ix,N,dt,d):
-#    '''ix es una lista de indices de theta, N esta en puntos
-#    Te da el pulse rate de cada parte de N puntos de ix (indices) de la TS'''
-#    pulse_rate_aux = []
-#        
-#    for ix_i in split_len_N(ix,N):    
-#        pulses =  list(filter(lambda x : x in MAX,ix_i))
-#        t_i = points_to_time(ix_i,dt,d)
-#        pulse_rate_aux.append(len(pulses)/(t_i[-1]-t_i[0]))
-#    return pulse_rate_aux
 
 
 
