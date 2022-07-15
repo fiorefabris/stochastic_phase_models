@@ -195,7 +195,7 @@ def split_len_N(ix,N):
 #    pool.join()
 #    return pulse_rate_aux
 
-def pulse_rate_statistics_old(MAX,ix,N,dt,d):
+def pulse_rate_statistics(MAX,ix,N,dt,d):
     '''ix es una lista de indices de theta, N esta en puntos
     Te da el pulse rate de cada parte de N puntos de ix (indices) de la TS'''
     pulse_rate_aux = []
