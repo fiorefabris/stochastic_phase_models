@@ -140,7 +140,7 @@ def compute_pulse_rate(T,dt,d,description_file,data_folder,save_path_name):
     
     if 'alpha' in ref.keys(): tuple_ = ref.groupby(['alpha','D','order'])
     if 'alpha0' in ref.keys(): tuple_ = ref.groupby(['alpha0', 'sigma', 'tau','order'])
-    get_pulse_rate_ = partial(T,dt,d,get_pulse_rate,data_folder,save_path_name)
+    get_pulse_rate_ = partial(get_pulse_rate,T,dt,d,data_folder,save_path_name)
     pool.map(get_pulse_rate_,tuple_)
     pool.close()
     pool.join()
