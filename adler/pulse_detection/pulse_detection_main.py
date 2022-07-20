@@ -11,6 +11,8 @@ import pandas as pd
 import time
 
 from adler.data_managing_functions import check_file, save_data, download_data, get_fixed_points
+from adler.pulse_detection.quantifiers_main import get_pulses_quantifiers
+from adler.pulse_detection.consecutive_main import consecutive_trial_st_exp
 
 def pop_list(list_,remove_list_index):
     new_list = []
@@ -678,8 +680,7 @@ def compute_pulse_detection(description_file,data_folder,save_path_name):
     return (2)
 
 #%%
-from pulse_detection.quantifiers_main import get_pulses_quantifiers
-from pulse_detection.consecutive_main import consecutive_trial_st_exp
+
 
 def main_pulse_detection_exp(theta,delta,omega,save_path_name,file_name):
     # calcula y guarda los pulsos de theta en el archivoPONER NOMBRES
