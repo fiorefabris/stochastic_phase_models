@@ -112,7 +112,7 @@ class consecutive_non_cumulative:
         
 
     def silence(self,data):
-    '''calcula los silencios entre pulsos para una serie temporal data'''
+        '''calcula los silencios entre pulsos para una serie temporal data'''
         return(data['IPI'].dropna().values-self.joint_duration(data))
 
 
