@@ -133,6 +133,85 @@ class consecutive_trial_st:
             consecutive_bef = consecutive
         return(isolated_pulses,box_consecutive_trial[:-1])# el último elemento es el que se va a cero, por eso lo sacamos
 
+#%%
+
+class consecutive_trial_st_exp:
+    '''
+    esto es para los boxplots. Quiero la cantidad de pulsos consecutivos, aislados y totales de un dado traza
+    '''
+    def __init__(self,joint_duration,max_,IPI,dm):
+
+        self.joint_duration = joint_duration
+        self.max = max_
+        self.IPI = IPI
+        self.dm = dm
+
+        assert len(self.joint_duration) == len(self.IPI)
+        assert len(self.joint_duration) == len(self.dm)
         
+    def is_consecutive_trial(self):
+        '''
+        Output: binary list. One represents pair of consecutive pulses, and 0 pair of non-consecutive pulses
+        on a certain trial (or time series)
+        '''
+        #NOTA: esto es para consecutive cumulative y non cumulative! 
+        
+        joint_duration,dm = self.joint_duration,self.dm   
+        
+        assert len(joint_duration) == len(dm)
+        assert self.dm == [IPI - jd for IPI,jd in zip(self.IPI,self.joint_duration)]
+        
+        consecutive = []
+        for i in range(len(joint_duration)):
+            if joint_duration[i]*0.5 >= dm[i]:
+                consecutive.append(1)
+            else:
+                consecutive.append(0) 
+        return(consecutive)
+        
+
+    def is_isolated_trial(self):
+        '''computes the amount of isolated pulses
+        substracts the amount of non-isolated pulses to the total pulses
+        '''
+        consecutive = self.is_consecutive_trial()
+        count = 0
+        for i, group in groupby(consecutive):
+            if i == 1:
+                count = count + count_iterable(group) + 1
+        return(len(self.max) - count)
+            
+
+    def raise_order_consecutiveness(self,consecutive_bef):
+        '''computes a higher level of consecutiveness from a binary vector of pulse trains
+        (initialize with is_consecutive_trial() )
+        
+        Returns an empty list when there are no more sequences of pulses of a certain length
+        '''
+        consecutive = []
+        for i,j in zip(consecutive_bef[:-1],consecutive_bef[1:]):
+            consecutive.append(i*j)
+        assert len(consecutive_bef) -1 == len(consecutive)
+        return(consecutive)
+
+            
+
+    def get_consecutive_trains_of_pulses(self):
+        '''
+        1st output: amount of isolated (non-consecutive) pulses
+        2nd output:Given one trial, returns a list with the number of pulses of length n, for the n place of the list
+        '''
+       
+        isolated_pulses = self.is_isolated_trial() # pulsos aislados
+        consecutive_bef = self.is_consecutive_trial() #pares de pulsos consecutivos
+        
+        box_consecutive_trial = [len(self.max),np.sum(consecutive_bef)]
+        
+        while box_consecutive_trial[-1] > 0:
+            consecutive = self.raise_order_consecutiveness(consecutive_bef)            
+            box_consecutive_trial.append(sum(consecutive))
+            consecutive_bef = consecutive
+        return(isolated_pulses,box_consecutive_trial[:-1])# el último elemento es el que se va a cero, por eso lo sacamos
+
     
 

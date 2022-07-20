@@ -34,15 +34,15 @@ def get_activity_data_dyncode(dyncode_file_name):
 
 def get_exp_N_total_isolated_consecutive(dyncode_file_name):
     ''' para el boxplot de consecutividad
-    te devuelve la proporcion de pulsos , es decir, pulsos/tiempo pa casa serie temporal. Eso, sumado
+    te devuelve la proporcion de pulsos , es decir, la media de pulsos/tiempo pa casa serie temporal. 
     '''
     df_consecutive = get_conc_data(dyncode_file_name)[ 'an_WT_ESL']
     consecutive_non_cumulative_obj = consecutive_non_cumulative(df_consecutive)
     
-    isolated_N = sum(consecutive_non_cumulative_obj.is_isolated_box())
-    consecutive_N = sum(consecutive_non_cumulative_obj.count_consecutive_pulses_number())
-    total_N = sum(consecutive_non_cumulative_obj.get_number_of_pulses())
-    return total_N,isolated_N,consecutive_N
+    isolated_median = np.median(consecutive_non_cumulative_obj.is_isolated_box()) ## is_isolated_box Te devuelve una lista con el número de pulsos aislados sobre tiempo para cada célula (el tiempo en minutos)
+    consecutive_median = np.median(consecutive_non_cumulative_obj.count_consecutive_pulses_number()) # count_consecutive_pulses_number te da el total de pulsos que están en intervalos consecutivos, dividido el tiempo en cada célula (tiempo en minutos)
+    total_median = np.median(consecutive_non_cumulative_obj.get_number_of_pulses()) ## get_number_of_pulses Para cada conjunto de celulas, te da la estadistica de pulsos totales sobre tiempo! (minutos)
+    return total_median,isolated_median,consecutive_median
     
 def get_dyncode_pulse_rate_st(dyncode_file_name):
     '''esto es para los dos d plots'''

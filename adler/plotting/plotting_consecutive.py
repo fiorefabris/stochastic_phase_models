@@ -33,6 +33,7 @@ def load_consecutive_statistics_realizations(dataset,save_data_arr,T):
     mean_trains_cons_trials,total_pulses_trials,isolated_pulses_trials,consecutive_pulses_trials = [],[],[],[]
     
     for data_folder in save_data_arr:
+        #para cada trial
         mean_trains_cons,total_pulses,isolated_pulses,consecutive_pulses = load_consecutive_statistics(dataset,data_folder,T)
         
         mean_trains_cons_trials.append(mean_trains_cons)
@@ -45,8 +46,10 @@ def load_consecutive_statistics_realizations(dataset,save_data_arr,T):
 
 def load_consecutive_statistics(dataset,data_folder,T):
         ''' le pasas un experimento  y te devuelve la estadistica de pulsos cons
+        
         FALTAAA VER CONSECUTIVE TRIAL
-        el resto esta dividido por la duracion de cada serie temporal
+
+        para total, consec, isolated te devuelve la mediana del pulse rate (para un solo trial que le pasaste)
         
         '''
         isolated_pulses_dataset = []
@@ -64,13 +67,19 @@ def load_consecutive_statistics(dataset,data_folder,T):
                     isolated_pulses_dataset.append(isolated_pulses/T)
                 
                     consecutive_trial = download_data(data_folder+'c_'+file_name)
-                    consecutive_trains_dataset.append(consecutive_trial)
+                    #consecutive_trains_dataset.append(consecutive_trial)
                     total_pulses_dataset.append(consecutive_trial[0]/T)
                 
                     consecutive_pulses = consecutive_trial[0]-isolated_pulses
                     consecutive_pulses_dataset.append(consecutive_pulses/T)
-        print('len total_pulses_dataset, T:' , len(total_pulses_dataset),T)
-        return get_mean_value_place(consecutive_trains_dataset,True),sum(total_pulses_dataset),sum(isolated_pulses_dataset),sum(consecutive_pulses_dataset)
+                
+                
+                if (check_file('exp_c_'+file_name,data_folder)):
+                    consecutive_trial_exp = download_data(data_folder+'exp_c_'+file_name)
+                    consecutive_trains_dataset.append(consecutive_trial_exp)
+                else:
+                    print('no exp values consecutive')
+        return get_mean_value_place(consecutive_trains_dataset,True),np.median(total_pulses_dataset),np.median(isolated_pulses_dataset),np.median(consecutive_pulses_dataset)
 
 # =============================================================================
 # Esto es para dist
@@ -143,16 +152,16 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
     green =  sns.color_palette(sns.dark_palette("#2ecc71",30,reverse=False))[15]
 
     fig = plt.figure(constrained_layout=False, figsize=(8.27, 11.692))
-    gs_main = gridspec.GridSpec(nrows=3, ncols=2, figure=fig); gs_main.update(left=0.1, right=0.9, bottom=0.1, top=0.90, hspace=0.3,wspace=0.3)
+    gs_main = gridspec.GridSpec(nrows=3, ncols=1, figure=fig); gs_main.update(left=0.1, right=0.9, bottom=0.1, top=0.90, hspace=0.3,wspace=0.3)
     (omega,alpha,D,number),dataset = tuple_[0],tuple_[1]
     delta = np.round(alpha/omega,4)  
 # =============================================================================
 #     quantifiers hist plot
 # =============================================================================
+    gs_row_1 = gridspec.GridSpecFromSubplotSpec(nrows=1, ncols=3, subplot_spec=gs_main[0])
+    DT,IPI,joint_duration,dm,pulse_rate = download_quantifiers(dataset,data_folder,T,dt,d)
     
-    DT,IPI,joint_duration,dm = download_quantifiers(dataset,data_folder,dt,d)
-    
-    ax1 = plt.subplot(gs_main[0,0])
+    ax1 = plt.subplot(gs_row_1[0])
     if len(DT) > 0:
         
         bins = ax1.hist(DT,bins=np.linspace(0,20,21),density=True,alpha=1,linewidth=1); 
@@ -169,7 +178,7 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
     ax1.set_yticklabels([0,0.2])
     ax1.tick_params(labelsize=10)
     
-    ax2 = plt.subplot(gs_main[0,1])
+    ax2 = plt.subplot(gs_row_1[1])
     if len(DT) > 0:
         
         bins = ax2.hist(IPI,bins=np.linspace(0,40,21),density=True,alpha=1,linewidth=1); 
@@ -186,14 +195,35 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
     ax2.set_yticklabels([0,0.1])
     ax2.tick_params(labelsize=10)
 
-
+    ax3 = plt.subplot(gs_row_1[2]) # aca va el histograma de pulse rate :)
+    if len(DT) > 0:
+        
+        bins = ax3.hist(pulse_rate,bins=10,density=True,alpha=1,linewidth=1); 
+        ax3.axvspan(0.0067, 0.02, color=green, alpha=0.3, lw=0)
+        #tune_plot(ax,'dt (min)','probability density (1/min)',[0,20],1,[0,0.4],1,30,20)
+        compute_st_values(ax3,pulse_rate,bins,1,10)   
+    else:
+        print(delta,D,"no data")
+    
+#    ax3.set_ylim([0,0.1]);
+#    ax3.set_xlim([0,40])
+#    set_scale(ax3,[0,10,20,30,40], [0,0.1])
+#    ax3.set_xticklabels([0,10,20,30,40])
+#    ax3.set_yticklabels([0,0.1])
+#    ax3.tick_params(labelsize=10)    
+    
+    
+    
+    
 # =============================================================================
 #     consecutiveness plot
 # =============================================================================
-    (mean_trains_cons,std_trains_cons),total_pulses,isolated_pulses,consecutive_pulses = load_consecutive_statistics_realizations(dataset,save_data_arr,T)
+    gs_row_3 = gridspec.GridSpecFromSubplotSpec(nrows=1, ncols=3, subplot_spec=gs_main[2])
+
+    (mean_trains_cons,std_trains_cons),total_pulses_median,isolated_pulses_median,consecutive_pulses_median = load_consecutive_statistics_realizations(dataset,save_data_arr,T)
     colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728']
 
-    ax5 = plt.subplot(gs_main[2,0])
+    ax5 = plt.subplot(gs_row_3[0])
      
     ax5.plot(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons, linewidth=0.5, marker = "." , markersize=7, alpha=1)
     ax5.fill_between(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons-std_trains_cons,mean_trains_cons+std_trains_cons,alpha = 0.2)
@@ -212,17 +242,16 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
 #     consecutiveness boxplot
 # =============================================================================
     
-    ax6 = plt.subplot(gs_main[2,1])
+    ax6 = plt.subplot(gs_row_3[1])
 
-#hay que hacer varios trials para tener este plot
+    #hay que hacer varios trials para tener este plot
     
-    total_N,isolated_N,consecutive_N = get_exp_N_total_isolated_consecutive(dyncode_filename) 
+    total_median,isolated_median,consecutive_median = get_exp_N_total_isolated_consecutive(dyncode_filename) 
     
 
-    total_pulses_normed = [i/total_N for i in total_pulses]
-    isolated_pulses_normed = [i/isolated_N for i in isolated_pulses]
-    consecutive_pulses_normed = [i/consecutive_N for i in consecutive_pulses]
-    print(consecutive_N,consecutive_pulses)
+    total_pulses_normed = [i/total_median for i in total_pulses_median]
+    isolated_pulses_normed = [i/isolated_median for i in isolated_pulses_median]
+    consecutive_pulses_normed = [i/consecutive_median for i in consecutive_pulses_median]
     
     arr = [total_pulses_normed,isolated_pulses_normed,consecutive_pulses_normed]
     print('len total pulses normed' , len(total_pulses_normed))
@@ -257,8 +286,8 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
 #    ax6.plot([1,2,3],arr,' o ')
     ax6.tick_params(axis='x', labelsize=8,length=2); 
     ax6.tick_params(axis='y', labelsize=8,length=2)
-    ax6.set_xlabel('total,isolated,consecutive',fontsize=8)
-    ax6.set_ylabel('counts',fontsize=8)
+    ax6.set_xlabel(' ',fontsize=8)
+    ax6.set_ylabel('cuentas normalizadas',fontsize=8)
     ax6.set_ylim([0.0,2.5])
     ax6.xaxis.set_label_coords(0.5, -0.12);ax6.yaxis.set_label_coords(-0.05,0.5)
     ax6.tick_params(labelsize=6,direction='out', pad=1,length=2)
@@ -269,7 +298,9 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
 # =============================================================================
 #     activity population and mean plot
 # =============================================================================
-    ax3 = plt.subplot(gs_main[1,0]); plt.rc('axes.spines', top=False, bottom=True, left=True, right=False); 
+    gs_row_2 = gridspec.GridSpecFromSubplotSpec(nrows=1, ncols=3, subplot_spec=gs_main[2])
+
+    ax3 = plt.subplot(gs_row_2[0:2]); plt.rc('axes.spines', top=False, bottom=True, left=True, right=False); 
     
     activity,silent,n_cell = load_activity(dataset,data_folder,dt,T,d)
     
@@ -288,7 +319,7 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
     ax3.xaxis.set_label_coords(0.5,-0.06)
     
     #mean activity
-    ax4 = plt.subplot(gs_main[1,1]); plt.rc('axes.spines', top=False, bottom=True, left=True, right=False); 
+    ax4 = plt.subplot(gs_row_2[2]); plt.rc('axes.spines', top=False, bottom=True, left=True, right=False); 
     
     
     if len(activity) > 0:

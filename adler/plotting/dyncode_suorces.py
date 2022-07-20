@@ -99,6 +99,7 @@ class consecutive_non_cumulative:
         self.df = df
         
     def joint_duration(self,data):
+        '''calcula la joint duration para una serie temporal data'''
         values_dt_mixed = []
         cell_t_M = data[data['amp_peaks'].notna()].FRAME.values
         cell_t_m = data[data['min_'].notna()].FRAME.values
@@ -111,12 +112,13 @@ class consecutive_non_cumulative:
         
 
     def silence(self,data):
+    '''calcula los silencios entre pulsos para una serie temporal data'''
         return(data['IPI'].dropna().values-self.joint_duration(data))
 
 
     def is_isolated_cell(self,MAX,joint_duration,dm):
         # solo para una celula
-        # calcula el numero de picos no consecutivis (isolated)
+        # calcula el numero de picos no consecutivos (isolated)
         # tiene en cuenta las celulas de un solo pulso
         # te devuelve la suma del total de picos menos los que son parte de intervalos consecutivos de pulsos
         consecutive = self.is_consecutive_cell(joint_duration,dm)
@@ -129,6 +131,7 @@ class consecutive_non_cumulative:
     def is_isolated_box(self):
         df = self.df
         #Para cada conjunto de celulas, te da la estadistica de pulsos aislados
+        # Te devuelve una lista con el número de pulsos aislados sobre tiempo (el tiempo en minutos)
         box = []
         for cell,data in df.groupby(level='cell'):
             #box.append(self.is_isolated_cell(data.amp_peaks,self.joint_duration(data),self.silence(data))) #old!
@@ -152,6 +155,9 @@ class consecutive_non_cumulative:
     def is_consecutive_box(self):
         df = self.df
         #Para cada conjunto de celulas, te da la estadistica de pulsos consecutivos en una lista
+        # Es decir, cada lugar en la lista representa una célula. 
+        # Para cada célula, tenés un array con 1 representando pares de pulsos consecutivos y
+        # 0 pares de pulsos no consecutivos
         box = []
         for cell,data in df.groupby(level='cell'):
                 box.append(self.is_consecutive_cell(self.joint_duration(data),self.silence(data)))
@@ -187,6 +193,7 @@ class consecutive_non_cumulative:
     
     def get_consecutive_trains_of_pulses(self):
         #te da la suma sobre todo el dataset
+        #la idea es que los pulsos suman una vez, no es cumulativo 
         
         isolated = self.is_isolated_box()
         box = self.is_consecutive_box()
@@ -201,26 +208,28 @@ class consecutive_non_cumulative:
     
     def get_number_of_pulses(self):
         df = self.df
-        #Para cada conjunto de celulas, te da la estadistica de pulsos aislados
+        #Para cada conjunto de celulas, te da la estadistica de pulsos totales
+        #es sobre tiempo! (minutos)
         pulses = []
         for cell,data in df.groupby(level='cell'):
             #pulses.append(data.amp_peaks.count())
             pulses.append(data.amp_peaks.count()/(data.FRAME.count()/3)) #new!!
         return(pulses)
  
-        
+
+#lo comenté solamente porque hay un "FALSE" en count_consecutive_pulses que no me cierra no me gusta
     
-    def get_consecutive_trains_of_pulses_cells(self):
-        # te da la estadística por célula
-        isolated = self.is_isolated_box()
-        box = self.is_consecutive_box()
-        
-        box_plot_consecutive = [isolated]
-        
-        while np.sum([np.sum(l) for l in box]) > 0:
-            box_plot_consecutive.append(self.count_consecutive_pulses(box,False))
-            box = self.raise_order_consecutiveness(box)
-        return(box_plot_consecutive)
+#    def get_consecutive_trains_of_pulses_cells(self):
+#        # te da la estadística por célula
+#        isolated = self.is_isolated_box()
+#        box = self.is_consecutive_box()
+#        
+#        box_plot_consecutive = [isolated]
+#        
+#        while np.sum([np.sum(l) for l in box]) > 0:
+#            box_plot_consecutive.append(self.count_consecutive_pulses(box,False))
+#            box = self.raise_order_consecutiveness(box)
+#        return(box_plot_consecutive)
     
     
     
@@ -228,7 +237,7 @@ class consecutive_non_cumulative:
         # solo para una celula
         # calcula el numero de picos no consecutivis (isolated)
         # tiene en cuenta las celulas de un solo pulso
-        # te devuelve la suma del total de picos menos los que son parte de intervalos consecutivos de pulsos
+        # te devuelve la suma del total de picos que parte de intervalos consecutivos de pulsos
         consecutive = self.is_consecutive_cell(joint_duration,dm)
         count = 0
         for i, group in groupby(consecutive):
@@ -239,6 +248,7 @@ class consecutive_non_cumulative:
     def count_consecutive_pulses_number(self):
         df = self.df
         #Para cada conjunto de celulas, te da la estadistica de pulsos consecutivos
+        #te da el total de pulsos que están en intervalos consecutivos, dividido el tiepo en cada célula (tiempo en minutos)
         box = []
         for cell,data in df.groupby(level='cell'):
             #box.append(self.count_consecutive_pulses_cell_number(data.amp_peaks,self.joint_duration(data),self.silence(data)))
