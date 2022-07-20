@@ -13,16 +13,17 @@ from adler.plotting.dyncode_main import get_consecutive_data_dyncode,get_exp_N_t
 
 def get_mean_value_place(trials,no_std = False):
     arr_aux = []
-    for j in range(np.max([len(i) for i in trials])):
-        aux = []
-       
-        for i in trials:
-            if len(i) > j : 
-                aux.append(i[j])
-            else:
-                aux.append(0)
-            
-        arr_aux.append(aux)
+    if len([len(i) for i in trials]) > 0: 
+        for j in range(np.max([len(i) for i in trials])):
+            aux = []
+           
+            for i in trials:
+                if len(i) > j : 
+                    aux.append(i[j])
+                else:
+                    aux.append(0)
+                
+            arr_aux.append(aux)
     if no_std:
         return np.array([np.mean(k) for k in arr_aux])
     else:
