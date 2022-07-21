@@ -36,7 +36,6 @@ def load_consecutive_statistics_realizations(dataset,save_data_arr,T):
     for data_folder in save_data_arr:
         #para cada trial
         mean_trains_cons,total_pulses,isolated_pulses,consecutive_pulses = load_consecutive_statistics(dataset,data_folder,T)
-        print(total_pulses/T,isolated_pulses/T,consecutive_pulses/T)
         mean_trains_cons_trials.append(mean_trains_cons)
         total_pulses_trials.append(total_pulses/T)
         isolated_pulses_trials.append(isolated_pulses/T)
@@ -254,9 +253,9 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
     total_pulses_normed = [i/total_median for i in total_pulses_median]
     isolated_pulses_normed = [i/isolated_median for i in isolated_pulses_median]
     consecutive_pulses_normed = [i/consecutive_median for i in consecutive_pulses_median]
-    
+    print( total_pulses_normed,isolated_pulses_normed,consecutive_pulses_normed)
     arr = [total_pulses_normed,isolated_pulses_normed,consecutive_pulses_normed]
-    print('len total pulses normed' , len(total_pulses_normed))
+    #print('len total pulses normed' , len(total_pulses_normed))
     
     X1 = [np.ones(len(arr[i]))*(i+1) for i in range(0,len(arr))]
     bp1 = ax6.boxplot(arr,vert=True,whis=[5, 95],patch_artist=True,showmeans=False,meanline=True,showfliers=False )
