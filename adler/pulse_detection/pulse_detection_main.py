@@ -698,7 +698,7 @@ def main_pulse_detection_exp(theta,delta,omega,save_path_name,file_name):
             consecutive_trial_st_ = consecutive_trial_st_exp(joint_duration,MAX,IPI,dm) 
             isolated_pulses, consecutive_trial = consecutive_trial_st_.get_consecutive_trains_of_pulses()#
             print('---------------------------------------------------',consecutive_trial,isolated_pulses)
-            save_data(consecutive_trial,+'exp_c_'+file_name)
+            save_data(consecutive_trial,save_path_name+'exp_c_'+file_name)
         else:
             print(delta,'no pulses on this condition -> not saving')      
     else:
