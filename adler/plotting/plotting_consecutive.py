@@ -221,6 +221,7 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
     gs_row_3 = gridspec.GridSpecFromSubplotSpec(nrows=1, ncols=3, subplot_spec=gs_main[2])
 
     (mean_trains_cons,std_trains_cons),total_pulses_median,isolated_pulses_median,consecutive_pulses_median = load_consecutive_statistics_realizations(dataset,save_data_arr,T)
+    print(total_pulses_median,isolated_pulses_median,consecutive_pulses_median )
     colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728']
 
     ax5 = plt.subplot(gs_row_3[0])
