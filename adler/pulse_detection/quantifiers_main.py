@@ -131,8 +131,8 @@ def compute_pulses_quantifiers(description_file,data_folder,save_path_name):
 
 
 
-#%% calcula el pulse rate en pulsos sobre minutos!
-def compute_pulse_rate(T,dt,d,description_file,data_folder,save_path_name,split_flag = True):
+#%% calcula el pulse rate en pulsos sobre minutos! PARTE LA SERIE TEMPORAL ES PARA EL DOS D PLOT
+def compute_pulse_rate(T,dt,d,description_file,data_folder,save_path_name):
     ''' split_flag: es para tener una serie temporal larga, y partirla en pedazos'''
     
     ref = pd.read_excel(description_file,sheet_name= 'File_references')
@@ -142,14 +142,14 @@ def compute_pulse_rate(T,dt,d,description_file,data_folder,save_path_name,split_
     if 'alpha' in ref.keys(): tuple_ = ref.groupby(['alpha','D','order'])
     if 'alpha0' in ref.keys(): tuple_ = ref.groupby(['alpha0', 'sigma', 'tau','order'])
     
-    get_pulse_rate_ = partial(get_pulse_rate,T,dt,d,data_folder,save_path_name,split_flag)
+    get_pulse_rate_ = partial(get_pulse_rate,T,dt,d,data_folder,save_path_name)
     pool.map(get_pulse_rate_,tuple_)
     pool.close()
     pool.join()
 
     return (2)
 
-def get_pulse_rate(T,dt,d,data_folder,save_path_name,split_flag,tuple_):
+def get_pulse_rate(T,dt,d,data_folder,save_path_name,tuple_):
     '''
     data folder: donde están los pulsos
     '''
@@ -163,25 +163,16 @@ def get_pulse_rate(T,dt,d,data_folder,save_path_name,split_flag,tuple_):
         file_name =  str(int(row.number.values[0]))+'_'+str(int(order))+'.pkl'
  
     #esto es para tener una serie temporal larga, y partirla en pedazos
-    if split_flag:    
-        if (check_file('max_'+file_name,data_folder)):
-            
-            print('running pulse rate st computation')      
-            pulse_rate = pulse_rate_statistics(download_data(data_folder+'max_'+file_name),np.arange(ceil(int(T/dt)/d)),int(ceil(int(T/dt)/d)/50),dt,d) 
-            save_data(pulse_rate,save_path_name+'pr_'+file_name)
-            print('pulse rate st computation finished :)')
-        else:
-            print(file_name,'maxima file not available')
-            
-    #esto es para tener una serie temporal y ya
+   
+    if (check_file('max_'+file_name,data_folder)):
+        
+        print('running pulse rate st computation')      
+        pulse_rate = pulse_rate_statistics(download_data(data_folder+'max_'+file_name),np.arange(ceil(int(T/dt)/d)),int(ceil(int(T/dt)/d)/50),dt,d) 
+        save_data(pulse_rate,save_path_name+'pr_'+file_name)
+        print('pulse rate st computation finished :)')
     else:
-        if (check_file('max_'+file_name,data_folder)):
-            print('running pulse rate ns computation')      
-            pulse_rate = len(download_data(data_folder+'max_'+file_name)) / T
-            save_data(pulse_rate,save_path_name+'pr_ns_'+file_name) 
-            print('pulse rate ns computation finished :)')
-        else:
-            print(file_name,'maxima file not available')
+        print(file_name,'maxima file not available')
+
     return(1)
     
     
