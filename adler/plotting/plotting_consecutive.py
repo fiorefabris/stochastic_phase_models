@@ -200,7 +200,8 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
     if len(DT) > 0:
         
         bins = ax3.hist(pulse_rate,bins=np.linspace(0,0.08,10),density=True,alpha=1,linewidth=1); 
-        ax3.axvspan(0.0067, 0.02, color=green, alpha=0.3, lw=0)
+        #ax3.axvspan(0.0067, 0.02, color=green, alpha=0.3, lw=0) #old,creo que es en frames
+        ax3.axvspan( 0.02, 0.06, color=green, alpha=0.3, lw=0)
         compute_st_values(ax3,pulse_rate,bins,1,10)   
     else:
         print(delta,D,"no data")
