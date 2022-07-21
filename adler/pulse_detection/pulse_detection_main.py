@@ -697,7 +697,7 @@ def main_pulse_detection_exp(theta,delta,omega,save_path_name,file_name):
             dt,IPI,dm,joint_duration = get_pulses_quantifiers(left_minima,right_minima,MAX)
             consecutive_trial_st_ = consecutive_trial_st_exp(joint_duration,MAX,IPI,dm) 
             isolated_pulses, consecutive_trial = consecutive_trial_st_.get_consecutive_trains_of_pulses()#
-             
+            print('---------------------------------------------------',consecutive_trial)
             save_data(consecutive_trial,save_path_name+'exp_c_'+file_name)
         else:
             print(delta,'no pulses on this condition -> not saving')      
@@ -726,6 +726,7 @@ def main_pulse_detection_exp_(final_exp,data_folder,save_path_name,tuple_):
     if (check_file(file_name,data_folder) and order < len(final_exp)):   
             final_cell = final_exp[int(order)]
             theta = [i for i in download_theta(file_name,data_folder) if i < final_cell]
+            print('----------------------------------------------------final cell-->',final_cell,theta)
             main_pulse_detection_exp(theta,delta,omega,save_path_name,'exp_'+file_name)
     else:
         print('ERROR: file not available',file_name)
