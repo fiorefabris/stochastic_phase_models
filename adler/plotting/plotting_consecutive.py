@@ -81,7 +81,7 @@ def load_consecutive_statistics(dataset,data_folder,T):
                     consecutive_trains_dataset.append(consecutive_trial_exp)
                 else:
                     consecutive_trains_dataset.append([0])
-        return get_mean_value_place(consecutive_trains_dataset,True),np.median(total_pulses_dataset),np.median(isolated_pulses_dataset),np.median(consecutive_pulses_dataset)
+        return get_mean_value_place(consecutive_trains_dataset,True),np.median(total_pulses_dataset),np.median(isolated_pulses_dataset),np.mean(consecutive_pulses_dataset)
 
 # =============================================================================
 # Esto es para dist
