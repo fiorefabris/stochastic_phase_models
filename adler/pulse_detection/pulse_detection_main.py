@@ -570,29 +570,29 @@ def get_pulses(theta,TH,W,PFE,PFI):
     '''
     
 
-    t0 = time.time() ; print('start searching for pulses: 5 steps pending')
+    t0 = time.time() ; #print('start searching for pulses: 5 steps pending')
     
     MAX,MIN = search_extremes(np.sin(theta),TH,W)
     t1 = time.time() - t0
-    print('finished searching local extremes',t1, 'sec')
+    #print('finished searching local extremes',t1, 'sec')
     
     if (len(MAX)>0) and (len(MIN)>0): 
         MAX, MIN =  filter_extremes(MAX,MIN,np.sin(theta))
         t2 = time.time() - t1
-        print('finished setting 1 minimum between 2 maxima',t2, 'sec')
+       # print('finished setting 1 minimum between 2 maxima',t2, 'sec')
     
     if (len(MAX)>0) and (len(MIN)>0): 
         crec, left_minima, MAX ,MIN = get_left_minima(MAX ,MIN,PFE,PFI,theta)
         t3 = time.time() - t2
-        print('finished detecting left pulse minima ',t3, 'sec')
+        #print('finished detecting left pulse minima ',t3, 'sec')
         
         dec, left_minima, right_minima,MAX ,MIN = get_rigth_minima(left_minima,MAX ,MIN,PFE,PFI,theta)
         t4 = time.time() - t3
-        print('finished detecting right pulse minima',t4, 'sec')
+        #print('finished detecting right pulse minima',t4, 'sec')
         
         #print(crec,dec)
         
-        print('testing parameters...')
+        #print('testing parameters...')
         test_pulses(left_minima,right_minima,MAX)
 
         #MAX_sine , MIN_sine = search_extremes(np.sin(theta),TH,W)
@@ -621,11 +621,11 @@ def main_pulse_detection(theta,delta,omega,save_path_name,file_name):
         print('pulse detection ended')
         
         if (len(MAX)>0): #and (len(MIN)>0): 
-            print('saving pulse detection results MAX:',MAX)
+            #print('saving pulse detection results MAX:',MAX)
             save_data(MAX,save_path_name+'max_'+file_name)
             save_data(left_minima,save_path_name+'left_minima_'+file_name)
             save_data(right_minima,save_path_name+'right_minima_'+file_name)
-            print(file_name,'saving finished')
+            #print(file_name,'saving finished')
         else:
             print(delta,'no pulses on this condition -> not saving')      
     else:
@@ -726,7 +726,6 @@ def main_pulse_detection_exp_(final_exp,data_folder,save_path_name,tuple_):
     if (check_file(file_name,data_folder) and order < len(final_exp)):   
             final_cell = final_exp[int(order)]
             theta = [i for i in download_theta(file_name,data_folder) if i < final_cell]
-            print('----------------------------------------------------final cell-->',final_cell)
             main_pulse_detection_exp(theta,delta,omega,save_path_name,'exp_'+file_name)
     else:
         print('ERROR: file not available',file_name)
