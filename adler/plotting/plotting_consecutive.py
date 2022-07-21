@@ -65,14 +65,14 @@ def load_consecutive_statistics(dataset,data_folder,T):
                 
                 if (check_file('i_'+file_name,data_folder)): 
                     isolated_pulses = download_data(data_folder+'i_'+file_name)
-                    isolated_pulses_dataset.append(isolated_pulses/T)
+                    isolated_pulses_dataset.append(isolated_pulses)
                 
                     consecutive_trial = download_data(data_folder+'c_'+file_name)
                     #consecutive_trains_dataset.append(consecutive_trial)
-                    total_pulses_dataset.append(consecutive_trial[0]/T)
+                    total_pulses_dataset.append(consecutive_trial[0])
                 
                     consecutive_pulses = consecutive_trial[0]-isolated_pulses
-                    consecutive_pulses_dataset.append(consecutive_pulses/T)
+                    consecutive_pulses_dataset.append(consecutive_pulses)
                 
                 
                 if (check_file('exp_c_'+file_name,data_folder)):
