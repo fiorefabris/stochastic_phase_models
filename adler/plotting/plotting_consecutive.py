@@ -199,7 +199,7 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
     ax3 = plt.subplot(gs_row_1[2]) # aca va el histograma de pulse rate :)
     if len(DT) > 0:
         
-        bins = ax3.hist(pulse_rate,bins=100,density=True,alpha=1,linewidth=1); 
+        bins = ax3.hist(pulse_rate,bins=10,density=True,alpha=1,linewidth=1); 
         ax3.axvspan(0.0067, 0.02, color=green, alpha=0.3, lw=0)
         #tune_plot(ax,'dt (min)','probability density (1/min)',[0,20],1,[0,0.4],1,30,20)
         compute_st_values(ax3,pulse_rate,bins,1,10)   
