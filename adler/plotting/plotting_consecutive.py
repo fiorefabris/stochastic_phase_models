@@ -70,8 +70,9 @@ def load_consecutive_statistics(dataset,data_folder,T):
                     consecutive_trial = download_data(data_folder+'c_'+file_name)
                     #consecutive_trains_dataset.append(consecutive_trial)
                     total_pulses_dataset.append(consecutive_trial[0])
-                
+                    
                     consecutive_pulses = consecutive_trial[0]-isolated_pulses
+                    print(consecutive_trial[0],isolated_pulses,consecutive_pulses)
                     consecutive_pulses_dataset.append(consecutive_pulses)
                 
                 
@@ -221,7 +222,7 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
     gs_row_3 = gridspec.GridSpecFromSubplotSpec(nrows=1, ncols=3, subplot_spec=gs_main[2])
 
     (mean_trains_cons,std_trains_cons),total_pulses_median,isolated_pulses_median,consecutive_pulses_median = load_consecutive_statistics_realizations(dataset,save_data_arr,T)
-    print('total,is,con',total_pulses_median,isolated_pulses_median,consecutive_pulses_median )
+    #print('total,is,con',total_pulses_median,isolated_pulses_median,consecutive_pulses_median )
     colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728']
 
     ax5 = plt.subplot(gs_row_3[0])
@@ -248,7 +249,7 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
     #hay que hacer varios trials para tener este plot
     
     total_median,isolated_median,consecutive_median = get_exp_N_total_isolated_consecutive(dyncode_filename) 
-    print( 'dyncode',total_median,isolated_median,consecutive_median)
+    #print( 'dyncode',total_median,isolated_median,consecutive_median)
 
     total_pulses_normed = [i/total_median for i in total_pulses_median]
     isolated_pulses_normed = [i/isolated_median for i in isolated_pulses_median]

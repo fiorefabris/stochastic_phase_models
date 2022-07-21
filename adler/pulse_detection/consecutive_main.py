@@ -44,7 +44,7 @@ def get_consecutive_trial(data_folder,save_folder,tuple_):
             
         if (check_file('max_'+file_name,data_folder)):       
             consecutive_trial_st_ = consecutive_trial_st(number,order,data_folder)
-            isolated_pulses, consecutive_trial = consecutive_trial_st_.get_consecutive_trains_of_pulses()#
+            isolated_pulses, consecutive_trial = consecutive_trial_st_.get_consecutive_trains_of_pulses()
                                     
             save_data(consecutive_trial,save_folder+'c_'+file_name)
             save_data(isolated_pulses,save_folder+'i_'+file_name)
@@ -137,7 +137,7 @@ class consecutive_trial_st:
 
 class consecutive_trial_st_exp:
     '''
-    esto es para los boxplots. Quiero la cantidad de pulsos consecutivos, aislados y totales de un dado traza
+    esto es para los consec plots. Quiero la cantidad de pulsos consecutivos, aislados y totales de un dado traza
     '''
     def __init__(self,joint_duration,max_,IPI,dm):
 
