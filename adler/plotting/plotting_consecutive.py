@@ -36,11 +36,11 @@ def load_consecutive_statistics_realizations(dataset,save_data_arr,T):
     for data_folder in save_data_arr:
         #para cada trial
         mean_trains_cons,total_pulses,isolated_pulses,consecutive_pulses = load_consecutive_statistics(dataset,data_folder,T)
-        print(mean_trains_cons,total_pulses,isolated_pulses,consecutive_pulses)
+        print(total_pulses/T,isolated_pulses/T,consecutive_pulses/T)
         mean_trains_cons_trials.append(mean_trains_cons)
-        total_pulses_trials.append(total_pulses)
-        isolated_pulses_trials.append(isolated_pulses)
-        consecutive_pulses_trials.append(consecutive_pulses)
+        total_pulses_trials.append(total_pulses/T)
+        isolated_pulses_trials.append(isolated_pulses/T)
+        consecutive_pulses_trials.append(consecutive_pulses/T)
         
     return get_mean_value_place(mean_trains_cons_trials,False),total_pulses_trials,isolated_pulses_trials,consecutive_pulses_trials
 
