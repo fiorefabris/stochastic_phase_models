@@ -81,7 +81,7 @@ def load_consecutive_statistics(dataset,data_folder,T):
                     consecutive_trains_dataset.append(consecutive_trial_exp)
                 else:
                     consecutive_trains_dataset.append([0])
-        return get_mean_value_place(consecutive_trains_dataset,True),np.median(total_pulses_dataset),np.median(isolated_pulses_dataset),np.mean(consecutive_pulses_dataset)
+        return get_mean_value_place(consecutive_trains_dataset,True),np.median(total_pulses_dataset),np.median(isolated_pulses_dataset),np.median(consecutive_pulses_dataset)
 
 # =============================================================================
 # Esto es para dist
@@ -249,7 +249,7 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
     #hay que hacer varios trials para tener este plot
     
     total_median,isolated_median,consecutive_median = get_exp_N_total_isolated_consecutive(dyncode_filename) 
-    #print( 'dyncode',total_median,isolated_median,consecutive_median)
+    print( 'dyncode',total_median,isolated_median,consecutive_median)
 
     total_pulses_normed = [i/total_median for i in total_pulses_median]
     isolated_pulses_normed = [i/isolated_median for i in isolated_pulses_median]
