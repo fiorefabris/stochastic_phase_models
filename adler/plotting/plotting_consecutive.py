@@ -79,7 +79,7 @@ def load_consecutive_statistics(dataset,data_folder,T):
                     consecutive_trial_exp = download_data(data_folder+'exp_c_'+file_name)
                     consecutive_trains_dataset.append(consecutive_trial_exp)
                 else:
-                    print('no exp values consecutive')
+                    consecutive_trains_dataset[0]
         return get_mean_value_place(consecutive_trains_dataset,True),np.median(total_pulses_dataset),np.median(isolated_pulses_dataset),np.median(consecutive_pulses_dataset)
 
 # =============================================================================
