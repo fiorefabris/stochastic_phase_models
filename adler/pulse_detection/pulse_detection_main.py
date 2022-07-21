@@ -726,7 +726,7 @@ def main_pulse_detection_exp_(final_exp,data_folder,save_path_name,tuple_):
     if (check_file(file_name,data_folder) and order < len(final_exp)):   
             final_cell = final_exp[int(order)]
             theta = [i for i in download_theta(file_name,data_folder) if i < final_cell]
-            print('----------------------------------------------------final cell-->',final_cell,theta)
+            print('----------------------------------------------------final cell-->',final_cell)
             main_pulse_detection_exp(theta,delta,omega,save_path_name,'exp_'+file_name)
     else:
         print('ERROR: file not available',file_name)
