@@ -63,7 +63,7 @@ def download_quantifiers(row_,data_folder,T,dt,d,split_ts):
             else:
                  pulse_rate = pulse_rate + [0]
         else:
-            pulse_rate + list(download_data(data_folder+'pr_'+file_name) )
+            pulse_rate = pulse_rate + list(download_data(data_folder+'pr_'+file_name) )
             #ver quantifiers main si tenés dudas
     return(points_to_time(DT,dt,d),points_to_time(IPI,dt,d),points_to_time(joint_duration,dt,d),points_to_time(dm,dt,d),pulse_rate)
 
