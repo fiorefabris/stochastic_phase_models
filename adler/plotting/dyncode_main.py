@@ -13,7 +13,9 @@ def get_conc_data(dyncode_file_name):
     if True: return pd.read_pickle(dyncode_file_name)
 
 def get_consecutive_data_dyncode(dyncode_file_name):
-    ''' para el plot de consecutividad'''
+    ''' para el plot de consecutividad
+    Parece estar nromalizado por el total de trazas, no importa si tiene pulsos o no :)
+    '''
     df_consecutive = get_conc_data(dyncode_file_name)[ 'an_WT_ESL']
     consecutive_cumulative_obj = consecutive_cumulative(df_consecutive)
     box_plot_consecutive_cumulative = consecutive_cumulative_obj.get_consecutive_trains_of_pulses()

@@ -12,6 +12,7 @@ from adler.plotting.plotting_main import set_scale,mask_arr,load_activity,comput
 from adler.plotting.dyncode_main import get_consecutive_data_dyncode,get_exp_N_total_isolated_consecutive,get_activity_data_dyncode
 
 def get_mean_value_place(trials,no_std = False):
+    #por cada lista vacia, es como si hubiera una lista de ceros! 
     arr_aux = []
     if len([len(i) for i in trials]) > 0: 
         for j in range(np.max([len(i) for i in trials])):
@@ -62,18 +63,18 @@ def load_consecutive_statistics(dataset,data_folder,T):
                 number      = int(row.number)
                 file_name   =  str(number)+'_'+str(order)+'.pkl'
                 
-                if (check_file('i_'+file_name,data_folder)): 
+                if (check_file('i_'+file_name,data_folder)): #esto sucede solamente si hay pulsos en la serie temporal
                     isolated_pulses = download_data(data_folder+'i_'+file_name)
                     isolated_pulses_dataset.append(isolated_pulses)
                 
-                    consecutive_trial = download_data(data_folder+'c_'+file_name)
+                    consecutive_trial = download_data(data_folder+'c_'+file_name) #esto es sin normalizar
                     #consecutive_trains_dataset.append(consecutive_trial)
                     total_pulses_dataset.append(consecutive_trial[0])
                     
                     consecutive_pulses = consecutive_trial[0]-isolated_pulses
                     #print(consecutive_trial[0],isolated_pulses,consecutive_pulses)
                     consecutive_pulses_dataset.append(consecutive_pulses)
-                
+#acaaaa ---> poner que cuente tb cuando no hay maximos! agregar listas vacias asi despues la funcion get_mean_value los cuenta                    
                 
                 if (check_file('exp_c_'+file_name,data_folder)):
                     consecutive_trial_exp = download_data(data_folder+'exp_c_'+file_name)
