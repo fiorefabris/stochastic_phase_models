@@ -160,7 +160,7 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
 #     quantifiers hist plot
 # =============================================================================
     gs_row_1 = gridspec.GridSpecFromSubplotSpec(nrows=1, ncols=3, subplot_spec=gs_main[0])
-    DT,IPI,joint_duration,dm,pulse_rate = download_quantifiers(dataset,data_folder,T,dt,d)
+    DT,IPI,joint_duration,dm,pulse_rate = download_quantifiers(dataset,data_folder,T,dt,d,False)
     
     ax1 = plt.subplot(gs_row_1[0])
     if len(DT) > 0:
