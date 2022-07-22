@@ -132,6 +132,9 @@ def compute_pulses_quantifiers(description_file,data_folder,save_path_name):
 
 
 #%% calcula el pulse rate en pulsos sobre minutos! PARTE LA SERIE TEMPORAL ES PARA EL DOS D PLOT
+
+
+
 def compute_pulse_rate(T,dt,d,description_file,data_folder,save_path_name):
     ''' split_flag: es para tener una serie temporal larga, y partirla en pedazos'''
     
@@ -153,7 +156,7 @@ def get_pulse_rate(T,dt,d,data_folder,save_path_name,tuple_):
     '''
     data folder: donde están los pulsos
     '''
-    
+    N = 50
     if 'alpha' in tuple_[1].columns:
         (_,_,order),row = tuple_[0],tuple_[1]
         file_name =  str(int(row.number))+'_'+str(int(order))+'.pkl'
@@ -162,15 +165,17 @@ def get_pulse_rate(T,dt,d,data_folder,save_path_name,tuple_):
         (_,_,_,order),row = tuple_[0],tuple_[1]
         file_name =  str(int(row.number.values[0]))+'_'+str(int(order))+'.pkl'
  
-    #esto es para tener una serie temporal larga, y partirla en pedazos
+    #esto es para tener una serie temporal larga, y partirla en pedazos, en principio en 50
    
     if (check_file('max_'+file_name,data_folder)):
         
         print('running pulse rate st computation')      
-        pulse_rate = pulse_rate_statistics(download_data(data_folder+'max_'+file_name),np.arange(ceil(int(T/dt)/d)),int(ceil(int(T/dt)/d)/50),dt,d) 
+        pulse_rate = pulse_rate_statistics(download_data(data_folder+'max_'+file_name),np.arange(ceil(int(T/dt)/d)),int(ceil(int(T/dt)/d)/N),dt,d) 
         save_data(pulse_rate,save_path_name+'pr_'+file_name)
-        print('pulse rate st computation finished :)')
+        print('pulse rate st computation finished :) len pulse rate',len(pulse_rate))
     else:
+        pulse_rate = np.zeros(N)
+        save_data(pulse_rate,save_path_name+'pr_'+file_name)
         print(file_name,'maxima file not available')
 
     return(1)
@@ -185,19 +190,6 @@ def split_len_N(ix,N):
         i = i + N
     return  np.split(ix,(aux[1:]))
 
-#def take_pulse_rate(MAX,dt,d,ix_i):
-#        pulses =  list(filter(lambda x : x in MAX,ix_i))
-#        t_i = points_to_time(ix_i,dt,d)
-#       # print(t_i)
-#        return(len(pulses)/(t_i[-1]-t_i[0]))
-#
-#def pulse_rate_statistics(MAX,ix,N,dt,d):
-#    pool = mp.Pool(processes= mp.cpu_count())
-#    take_pulse_rate_ = partial(take_pulse_rate,MAX,dt,d)
-#    pulse_rate_aux = pool.map(take_pulse_rate_,split_len_N(ix,N))
-#    pool.close() 
-#    pool.join()
-#    return pulse_rate_aux
 
 def pulse_rate_statistics(MAX,ix,N,dt,d):
     '''ix es una lista de indices de theta, N esta en puntos

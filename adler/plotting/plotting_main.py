@@ -34,8 +34,13 @@ def set_scale(ax,xlim,ylim):
 #%%for plotting quantifiers histograms and 2d plots
 
 
-def download_quantifiers(row_,data_folder,T,dt,d):
-    ''' para pulse rate parto la serie temporal en 200 veces'''
+def download_quantifiers(row_,data_folder,T,dt,d,split_ts):
+    ''' 
+    Agarra y junta los resultados de los cuantifiers para un dado conjunto de parámetrois, todos los experimentos (order)
+    TODOS los cuantificadores están en minutos
+    
+     la flag split_ts sirve para tener una serie temporal larga y hacer estadistica de pulsos
+    '''
     DT = []; IPI = []; joint_duration = []; dm = []; pulse_rate = []
     for (order,row) in row_.groupby(['order']):
     #para cada ensayo con todos los mismos parámetros
@@ -48,11 +53,18 @@ def download_quantifiers(row_,data_folder,T,dt,d):
             IPI = IPI + download_data(data_folder+'IPI_'+file_name)
             dm = dm + download_data(data_folder+'dm_'+file_name)
             joint_duration = joint_duration + download_data(data_folder+'joint_duration_'+file_name)
-            
-            pulse_rate = pulse_rate + [len(download_data(data_folder+'max_'+file_name)) / T]
-            #pulse_rate + download_data(data_folder+'pr_ns_'+file_name)
         else:
-             pulse_rate = pulse_rate + [0]
+            pass
+        
+        
+        if not split_ts:
+            if check_file('max_'+file_name,data_folder):
+                pulse_rate = pulse_rate + [len(download_data(data_folder+'max_'+file_name)) / T]
+            else:
+                 pulse_rate = pulse_rate + [0]
+        else:
+            pulse_rate + download_data(data_folder+'pr_'+file_name) 
+            #ver quantifiers main si tenés dudas
     return(points_to_time(DT,dt,d),points_to_time(IPI,dt,d),points_to_time(joint_duration,dt,d),points_to_time(dm,dt,d),pulse_rate)
 
 
@@ -61,18 +73,24 @@ def download_quantifiers(row_,data_folder,T,dt,d):
 
 
 #for plotting 2d plots
-def create_df(ref,data_folder,dt,T,d):
-    ''' creates dataframes where 2d alpha are indexes and D are columns'''
+def create_df(ref,data_folder,dt,T,d,split_ts = False):
+    ''' creates dataframes where 2d alpha are indexes and D are columns
+    
+    Para cada par alpha,D (asume omega siempre el mismo), baja la media de los cuantifiers. Eso es lo que incluye después en cada dataframe!
+    
+    See also: download_quantifiers 
+    
+    '''
     omega = ref.omega.unique()[0]
     Cols = ref.D.unique()
     Rows = ref.alpha.unique()
-    mean_dt_matrix,mean_ipi_matrix,mean_fpt_matrix,mean_pulses_matrix = [],[],[],[]
+    median_dt_matrix,median_ipi_matrix,median_fpt_matrix,median_pulses_matrix = [],[],[],[]
     
     for alpha,row_ in ref.groupby(['alpha']):
         aux_dt,aux_ipi,aux_fpt,aux_pulses = [],[],[],[]    
         
         for D,col_ in row_.groupby(['D']):
-            DT,IPI,_,_ ,pulse_rate = download_quantifiers(col_,data_folder,T,dt,d)
+            DT,IPI,_,_ ,pulse_rate = download_quantifiers(col_,data_folder,T,dt,d,split_ts)
            
             aux_dt.append(np.median(DT));aux_ipi.append(np.median(IPI))
             aux_pulses.append(np.median(pulse_rate))
@@ -88,10 +106,10 @@ def create_df(ref,data_folder,dt,T,d):
             #activity,_,_ = load_activity(col_,data_folder,dt,T,d); 
            
             #assert ((np.mean(activity) <= 100) or (len(activity) == 0)),(alpha,D,activity)
-           # if len(activity) > 0: aux_act.append(np.mean(activity))
-           # else:aux_act.append(0)
-        mean_dt_matrix.append(aux_dt);mean_ipi_matrix.append(aux_ipi),mean_fpt_matrix.append(aux_fpt),mean_pulses_matrix.append(aux_pulses)
-    return (pd.DataFrame(mean_dt_matrix,columns = Cols,index = Rows),pd.DataFrame(mean_ipi_matrix,columns = Cols,index = Rows),pd.DataFrame(mean_fpt_matrix,columns = Cols,index = Rows),pd.DataFrame(mean_pulses_matrix,columns = Cols,index = Rows))
+            # if len(activity) > 0: aux_act.append(np.mean(activity))
+            # else:aux_act.append(0)
+        median_dt_matrix.append(aux_dt);median_ipi_matrix.append(aux_ipi),median_fpt_matrix.append(aux_fpt),median_pulses_matrix.append(aux_pulses)
+    return (pd.DataFrame(median_dt_matrix,columns = Cols,index = Rows),pd.DataFrame(median_ipi_matrix,columns = Cols,index = Rows),pd.DataFrame(median_fpt_matrix,columns = Cols,index = Rows),pd.DataFrame(median_pulses_matrix,columns = Cols,index = Rows))
 
 
 def load_activity(row_,data_folder,dt,T,d):

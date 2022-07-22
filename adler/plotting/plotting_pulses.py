@@ -745,6 +745,8 @@ def plot_joint_duration_square_ou(dt,d,description_file,data_folder,save_path_na
 
 def plot_2d_quantifiers(dt,T,d,description_file,data_folder,save_path_name):
 ######## Getting data information
+    ''' function for plotting the 2d maps'''
+    
     plt.rcdefaults();
     ref = pd.read_excel(description_file,sheet_name='File_references')
     ref.set_index('Unnamed: 0',inplace=True);
@@ -766,7 +768,7 @@ def plot_2d_quantifiers(dt,T,d,description_file,data_folder,save_path_name):
 ###############################################################################    
 
        
-        df_dt,df_ipi,df_fpt,df_pulses = create_df(ref_,data_folder,dt,T,d)
+        df_dt,df_ipi,df_fpt,df_pulses = create_df(ref_,data_folder,dt,T,d,True)
         
         for i,df in enumerate([df_dt,df_ipi,df_fpt,df_pulses]):
             plt.close()
@@ -826,7 +828,7 @@ def plot_2d_superposition(dt,T,d,description_file,data_folder,save_path_name):
 ### data
 ###############################################################################    
 
-        df_dt,_,df_fpt,df_activity= create_df(ref_,data_folder,dt,T,d)
+        df_dt,_,df_fpt,df_activity= create_df(ref_,data_folder,dt,T,d,True)
         masks = []
         for i,df in enumerate([df_dt,df_fpt,df_activity]):
  
