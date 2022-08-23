@@ -123,7 +123,7 @@ def plot_fft_alpha(save_path_name,data_folder,dt,d,tuple_):
             
             #Plotting 
             ax.plot(xf,yf, linewidth=0.5)
-            if len(xf) > 10: ax.plot(xf,moving_average(yf,100), linewidth=0.5,color ='red')
+            #if len(xf) > 10: ax.plot(xf,moving_average(yf,100), linewidth=0.5,color ='red')
             if alpha <= 1: ax.axvline(np.sqrt(omega**2-i**2),ls = '--', color = 'gray',linewidth=0.5)
             
         else:
@@ -158,7 +158,7 @@ def plot_fft_alpha(save_path_name,data_folder,dt,d,tuple_):
 #%%
 
 def plot_fft_all(description_file,data_folder,dt,d,save_path_name):
-    
+    #para un omega, plotea los alphas uno encima del otro
     ref = pd.read_excel(description_file,sheet_name= 'File_references')
     ref.set_index('Unnamed: 0',inplace=True);
     
@@ -230,8 +230,8 @@ def plot_fft_alpha_all(save_path_name,data_folder,dt,d,tuple_):
         yf = download_data(data_folder+'fft_yf_'+str(omega)+'_'+str(alpha)+'_'+str(D)+'.pkl')
             
             #Plotting 
-        if D == 0: ax.plot(xf,moving_average(yf,50),linewidth=1,color =colors[k],alpha = 0.6,label = str(D))
-        else:ax.plot(xf,moving_average(yf,50), linewidth=1,color =colors[k],alpha = 1,label = str(D))
+        if D == 0: ax.plot(xf,yf,linewidth=1,color =colors[k],alpha = 0.6,label = str(D))
+        else:ax.plot(xf,yf, linewidth=1,color =colors[k],alpha = 1,label = str(D))
             #if alpha <= 1: ax.axvline(np.sqrt(omega**2-i**2),ls = '--', color = 'gray',linewidth=0.5)
             
 

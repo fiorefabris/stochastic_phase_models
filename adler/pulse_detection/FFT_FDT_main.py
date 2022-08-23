@@ -123,7 +123,7 @@ def norm_fft_statistics_aux_yf(data_folder,dt,d,ix_data):
     file_name =  str(number)+'_'+str(order)+'.pkl'
     
     if check_file(file_name,data_folder):
-        return norm_fft_yf(np.cos(download_data(data_folder + file_name) ),dt * d) 
+        return norm_fft_yf(1+np.sin(download_data(data_folder + file_name) ),dt * d) 
     else:
        return []
     
@@ -161,7 +161,7 @@ def norm_fft_statistics_aux_xf(data_folder,dt,d,ix_data):
     file_name =  str(number)+'_'+str(order)+'.pkl'
     
     if check_file(file_name,data_folder):
-        return norm_fft_xf(np.cos(download_data(data_folder + file_name)),dt * d) 
+        return norm_fft_xf(1 + np.sin(download_data(data_folder + file_name)),dt * d) 
     else:
         return []
 
