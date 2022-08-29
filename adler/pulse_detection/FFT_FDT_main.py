@@ -248,7 +248,8 @@ def norm_fft_statistics(row,data_folder,dt,d):
     print('XF finished')
     
     YF = filter_nans(YF); XF = filter_nans(XF)
-
+    
+    print(len(YF))
     if len(YF)*len(XF)>0:
         print('len >>>')  
         return(np.mean(XF,axis=0),np.mean(np.abs(YF)**2,axis=0) )
