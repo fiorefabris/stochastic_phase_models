@@ -119,6 +119,7 @@ def norm_fft_statistics_aux_yf(data_folder,dt,d,ix_data):
 
 
     '''
+
     order = int(ix_data[1].order);number = int(ix_data[1].number)
     file_name =  str(number)+'_'+str(order)+'.pkl'
     
@@ -159,6 +160,7 @@ def norm_fft_statistics_aux_xf(data_folder,dt,d,ix_data):
     '''
     order = int(ix_data[1].order);number = int(ix_data[1].number)
     file_name =  str(number)+'_'+str(order)+'.pkl'
+    
     
     if check_file(file_name,data_folder):
         return norm_fft_xf(1 + np.sin(download_data(data_folder + file_name)),dt * d) 
@@ -247,11 +249,13 @@ def norm_fft_statistics(row,data_folder,dt,d):
     pool2.join()
     print('XF finished')
     
+    print(len(YF), len(XF))
     YF = filter_nans(YF); XF = filter_nans(XF)
     
-    print(len(YF))
+    print(len(YF), len(XF))
     if len(YF)*len(XF)>0:
         print('len >>>')  
+        #return(XF,np.abs(YF)**2)
         return(np.mean(XF,axis=0),np.mean(np.abs(YF)**2,axis=0) )
     else:
         print('len <<<')    
@@ -284,6 +288,7 @@ def compute_fft(description_file,data_folder,dt,d,save_path_name):
     ''' 
     Function for running several experiments bla bla 
     Te devuelve numpy arrays
+    Esto es para separar cada experimento
     '''
     ref = pd.read_excel(description_file,sheet_name= 'File_references')
     ref.set_index('Unnamed: 0',inplace=True);
