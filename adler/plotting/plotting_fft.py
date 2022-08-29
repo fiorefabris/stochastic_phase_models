@@ -122,9 +122,9 @@ def plot_fft_alpha(save_path_name,data_folder,dt,d,tuple_):
             yf = download_data(save_path_name+'fft_yf_'+str(omega)+'_'+str(alpha)+'_'+str(D)+'.pkl')
             
             #Plotting 
-            print(yf)
+            print(yf[0])
             ax.plot(xf,yf, linewidth=0.5)
-            ax.set_yscale('log')
+           # ax.set_yscale('log')
             #if len(xf) > 10: ax.plot(xf,moving_average(yf,100), linewidth=0.5,color ='red')
             if alpha <= 1: ax.axvline(np.sqrt(omega**2-i**2),ls = '--', color = 'gray',linewidth=0.5)
             
