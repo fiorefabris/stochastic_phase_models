@@ -173,6 +173,7 @@ def get_quality_factor(x_signal, signal):
         
         
         w0 = x_signal[w0_ix] #frecuencia fundamental 
+        print(w0,S_w0,widthy[0])
         beta = w0 * S_w0 / widthy[0]
         return(beta)
     else: 
@@ -254,6 +255,7 @@ def plot_fft_alpha_all(save_path_name,data_folder,dt,d,tuple_):
             #Plotting 
         if D == 0: ax.plot(xf,yf,linewidth=1,color =colors[k],alpha = 0.6,label = str(D))
         else: ax.plot(xf,yf, linewidth=1,color =colors[k],alpha = 1,label = str(D))
+        print(alpha,D)
         beta = get_quality_factor(xf, yf)
         if beta is not None:
             BETA.append(beta)
