@@ -99,7 +99,7 @@ def plot_fft_alpha(save_path_name,data_folder,dt,d,tuple_):
 ###############################################################################    
     Cols = 1; Tot = len(rows.groupby(['D'])) ;
     Rows = ceil(Tot/ Cols)
-    ylim = [0,3e3] ; xlim = [0,4*omega]
+    ylim = [0,3e1] ; xlim = [0,8*omega]
     xticks = np.arange(0,5,1)*omega ;
 ###############################################################################
 ### Figure
