@@ -236,7 +236,7 @@ def plot_fft_alpha_all(save_path_name,data_folder,dt,d,tuple_):
 ### Figure
 ###############################################################################    
 
-    fig, axs = plt.subplots(2, 1, sharex=True, sharey=True, figsize=(8.27, 11.69))
+    fig, axs = plt.subplots(2, 1, sharex=False, sharey=False, figsize=(8.27, 11.69))
     fig.subplots_adjust(bottom=0.15, top=0.9, left=0.15, right=0.8, wspace=0.1, hspace=0.2)
     axs = axs.ravel();
     text = r'$\omega = \frac{2\pi}{7 min}$' + ' ~ ' + r'$ \alpha = $'+str(alpha) + r'$ \frac{2\pi}{7 min}$' 
@@ -244,7 +244,7 @@ def plot_fft_alpha_all(save_path_name,data_folder,dt,d,tuple_):
 
     BETA = []; D_ = []
     for k,(D,row) in enumerate(rows.groupby(['D'])):
-        ax = axs[0]; ax.grid(False);
+        ax = axs[1]; ax.grid(False);
         assert check_file('fft_yf_'+str(omega)+'_'+str(alpha)+'_'+str(D)+'.pkl',data_folder)
         print(alpha,np.round(D,5))
             
@@ -267,7 +267,7 @@ def plot_fft_alpha_all(save_path_name,data_folder,dt,d,tuple_):
     ax.set_xticks(xticks);
     ax.set_yticks(ylim)
     ax.tick_params(labelsize=10)
-    ax[1].plot(D,BETA)
+    axs[0].plot(D,BETA)
 
         
         #text = 'D = ' + str(np.round(D,5))
