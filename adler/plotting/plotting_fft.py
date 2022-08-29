@@ -269,7 +269,7 @@ def plot_fft_alpha_all(save_path_name,data_folder,dt,d,tuple_):
     ax.set_xticks(xticks);
     ax.set_yticks(ylim)
     ax.tick_params(labelsize=10)
-    axs[0].plot(D,BETA)
+    axs[0].plot(D_,BETA)
 
         
         #text = 'D = ' + str(np.round(D,5))
