@@ -223,7 +223,10 @@ def plot_time_series_square(dt,beg,T,d,N,Delta,description_file,data_folder,save
 ######## Getting data information
     ref_ = pd.read_excel(description_file,sheet_name='File_references')
     ref_.set_index('Unnamed: 0',inplace=True);
-    for T0,ref in ref_.groupby(['T0']):
+    
+    if 'omega' in ref_.keys() : iterator_T = ref_.groupby(['omega'])
+    if 'T0' in ref_.keys() : iterator_T = ref_.groupby(['T0'])
+    for T0,ref in iterator_T:
     ###############################################################################
     ### Plotting parameters
     ###############################################################################    
