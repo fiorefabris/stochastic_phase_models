@@ -164,7 +164,7 @@ from scipy.signal import find_peaks,peak_widths
 
 #x_signal = np.linspace(0,100,200)
 #signal = np.sin(x_signal) + 1
-def get_quality_factor(x_signal, signal):
+def get_quality_factor_OLD(x_signal, signal):
     #peaks, h = find_peaks(signal,height=0) #encuentra todos los picos, y el alto lo mide desde x = 0
     w0_ix = np.argmax(signal)
     
@@ -180,7 +180,30 @@ def get_quality_factor(x_signal, signal):
     return(beta)
     #else: 
      #   return None
+
+#%%
+     
+
+def get_quality_factor(x_signal, signal):
+
+    w0_ix = np.argmax(signal) # el índice de la fundamental 
+    S_w0 = signal[w0_ix] #la potencia del pico más alto
     
+    rel_height=S_w0/np.sqrt(np.e)
+    for ix,s in enumerate(signal[w0_ix:]):
+        if s > rel_height:
+            pass
+        else:
+            break
+    
+    widthx = 2*(ix - w0_ix) * np.diff(x_signal)[1] #ancho que tiene la cosa cuando la altura es rel_height
+    
+    
+    w0 = x_signal[w0_ix] #frecuencia fundamental 
+    print(w0,S_w0,widthx)
+    beta = w0 * S_w0 / widthx
+    return(beta)
+
 
 def plot_fft_all(description_file,data_folder,dt,d,save_path_name):
     #para un omega, plotea los alphas uno encima del otro
