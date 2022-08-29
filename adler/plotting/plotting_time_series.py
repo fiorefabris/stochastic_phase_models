@@ -251,7 +251,7 @@ def plot_time_series_square(dt,beg,T,d,N,Delta,description_file,data_folder,save
             for row, (alpha,row_)  in  enumerate(iterator):
                 if 'alpha' in ref.keys() : delta= np.round(alpha/col_.omega.unique()[0],4)  
                 if 'delta' in ref.keys() : delta = alpha
-                order = int(row_.order); number = int(row_.number)
+                order = int(row_.order.unique()[0]); number = int(row_.number.unique()[0])
                 file_name =  str(number)+'_'+str(order)+'.pkl'
                 ax = axs[row,col]; ax.grid(False);
                 
