@@ -288,8 +288,8 @@ def plot_fft_alpha_all(save_path_name,data_folder,dt,d,tuple_):
             ax.plot(xf,yf,linewidth=1,color =colors[k],alpha = 0.6,label = str(D))
         else: 
             ax.plot(xf,yf, linewidth=1,color =colors[k],alpha = 1,label = str(D))
-            ax.plot(w0, S_w0, 'o', color = 'black',alpha = 1)
-            ax.plot(xf[wdt_ix],S_wdt, 'o', color = 'black',alpha = 1)
+            #ax.plot(w0, S_w0, 'o', color = 'black',alpha = 1)
+            #ax.plot(xf[wdt_ix],S_wdt, 'o', color = 'black',alpha = 1)
             #if alpha <= 1: ax.axvline(np.sqrt(omega**2-i**2),ls = '--', color = 'gray',linewidth=0.5)
             
 
