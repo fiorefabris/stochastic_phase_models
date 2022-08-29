@@ -165,14 +165,18 @@ from scipy.signal import find_peaks,peak_widths
 
 def get_quality_factor(x_signal, signal):
     peaks, h = find_peaks(signal,height=0) #encuentra todos los picos, y el alto lo mide desde x = 0
-    w0_ix = peaks[np.argmax(signal[peaks])] #el pico más alto
-    S_w0 = signal[w0_ix] #la potencia del pico más alto
-    widthx,widthy,left_ips,rigth_ips = peak_widths(signal, [w0_ix], rel_height=(1-1/np.sqrt(np.e))) # ancho (en índice), alto, donde empieza y donde termina (son puntos interpolados)
     
-    
-    w0 = x_signal[w0_ix] #frecuencia fundamental 
-    beta = w0 * S_w0 / widthy[0]
-    return(beta)
+    if len(peaks) > 0:
+        w0_ix = peaks[np.argmax(signal[peaks])] #el pico más alto
+        S_w0 = signal[w0_ix] #la potencia del pico más alto
+        widthx,widthy,left_ips,rigth_ips = peak_widths(signal, [w0_ix], rel_height=(1-1/np.sqrt(np.e))) # ancho (en índice), alto, donde empieza y donde termina (son puntos interpolados)
+        
+        
+        w0 = x_signal[w0_ix] #frecuencia fundamental 
+        beta = w0 * S_w0 / widthy[0]
+        return(beta)
+    else: 
+        return None
     
 
 def plot_fft_all(description_file,data_folder,dt,d,save_path_name):
@@ -251,7 +255,7 @@ def plot_fft_alpha_all(save_path_name,data_folder,dt,d,tuple_):
         if D == 0: ax.plot(xf,yf,linewidth=1,color =colors[k],alpha = 0.6,label = str(D))
         else: ax.plot(xf,yf, linewidth=1,color =colors[k],alpha = 1,label = str(D))
         beta = get_quality_factor(xf, yf)
-        BETA.append(beta); D_.append(D)
+        if beta is not None: BETA.append(beta); D_.append(D)
             #if alpha <= 1: ax.axvline(np.sqrt(omega**2-i**2),ls = '--', color = 'gray',linewidth=0.5)
             
 
