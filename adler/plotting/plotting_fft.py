@@ -203,7 +203,7 @@ def get_quality_factor(x_signal, signal):
     w0 = x_signal[w0_ix] #frecuencia fundamental 
     print(w0,S_w0,widthx)
     beta = w0 * S_w0 / widthx
-    return(beta)
+    return(w0, S_w0, ix+w0_ix,rel_height, beta)
 
 
 def plot_fft_all(description_file,data_folder,dt,d,save_path_name):
@@ -273,19 +273,23 @@ def plot_fft_alpha_all(save_path_name,data_folder,dt,d,tuple_):
     for k,(D,row) in enumerate(rows.groupby(['D'])):
         ax = axs[1]; ax.grid(False);
         assert check_file('fft_yf_'+str(omega)+'_'+str(alpha)+'_'+str(D)+'.pkl',data_folder)
-        print(alpha,np.round(D,5))
             
         xf = download_data(data_folder+'fft_xf_'+str(omega)+'_'+str(alpha)+'_'+str(D)+'.pkl')
         yf = download_data(data_folder+'fft_yf_'+str(omega)+'_'+str(alpha)+'_'+str(D)+'.pkl')
-            
-            #Plotting 
-        if D == 0: ax.plot(xf,yf,linewidth=1,color =colors[k],alpha = 0.6,label = str(D))
-        else: ax.plot(xf,yf, linewidth=1,color =colors[k],alpha = 1,label = str(D))
-        print(alpha,D)
-        beta = get_quality_factor(xf, yf)
+
+        w0, S_w0,wdt_ix,S_wdt, beta = get_quality_factor(xf, yf)
         if beta is not None:
             BETA.append(beta)
             D_.append(D)
+
+            
+        #Plotting 
+        if D == 0: 
+            ax.plot(xf,yf,linewidth=1,color =colors[k],alpha = 0.6,label = str(D))
+        else: 
+            ax.plot(xf,yf, linewidth=1,color =colors[k],alpha = 1,label = str(D))
+            ax.plot(w0, S_w0, 'o', color = 'b',alpha = 1)
+            ax.plot(wdt_ix,S_wdt, 'o', color = 'b',alpha = 1)
             #if alpha <= 1: ax.axvline(np.sqrt(omega**2-i**2),ls = '--', color = 'gray',linewidth=0.5)
             
 
@@ -297,7 +301,7 @@ def plot_fft_alpha_all(save_path_name,data_folder,dt,d,tuple_):
     ax.set_xticks(xticks);
     ax.set_yticks(ylim)
     ax.tick_params(labelsize=10)
-    axs[0].plot(D_[1:],BETA[1:],'o') ; axs[0].set_xscale('log')
+    axs[0].plot(D_[1:],BETA[1:],'o',color = colors) ; axs[0].set_xscale('log')
 
         
         #text = 'D = ' + str(np.round(D,5))
