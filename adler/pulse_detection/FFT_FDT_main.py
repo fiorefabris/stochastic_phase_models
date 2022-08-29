@@ -183,8 +183,8 @@ def filter_nans(list_):
 
  
     '''
+    aux = []
     for arr in list_:
-        aux = []
         if len(arr) == 0:
             pass
         else:
