@@ -116,6 +116,7 @@ def get_epsilon_plus(init,dt,T,omega,alpha,D):
 
 def get_epsilon_plus_pop(main_filename,dt,T,p):
     """
+    
     mide en steps solamente los que son success
     
     para cada condicion inicial corre get_epsilon_plus total veces
@@ -174,7 +175,62 @@ def get_epsilon_plus_pop_mp(main_filename,dt,T,params,nproc = mp.cpu_count()):
     return(0)
     
 
+#%%
+# =============================================================================
+# ESTO ES PARA CALCULAR MUCHA ESTADISTICA EN X MENOS
+# =============================================================================
+
+def get_epsilon_plus_in_x_minus_mp(main_filename,dt,T,params,nproc = mp.cpu_count()):
+    
+    
+    t0= time.perf_counter(); print('starting...')
+    pool = mp.Pool(processes= nproc)
+    
+    get_epsilon_plus_in_x_minus_ = partial(get_epsilon_plus_in_x_minus,main_filename,dt,T)
+    
+    pool.map(get_epsilon_plus_in_x_minus_,all_combinations(params)) 
+    pool.close() 
+    pool.join()
+    t1 = time.perf_counter() - t0
+    print("time elapsed: ", t1)
+    return(0)
 
 
 
-
+def get_epsilon_plus_in_x_minus(main_filename,dt,T,p):
+    """
+    
+    la condicion inicial solamente es el PFI
+    
+    """
+    omega,alpha,D = p
+   # print(omega)
+    total = 100000;     t0= time.perf_counter(); 
+    PFE,PFI = get_fixed_points(alpha/omega)
+    PFI = PFI - 2* np.pi
+    #print(alpha/omega,PFI/np.pi*2,PFE/np.pi*2)
+    initial_conditions = [PFI]
+    
+    cond_prob = []
+    steps_plus = []
+    
+    for init in initial_conditions:        
+        suc = 0
+        steps_plus_aux = []
+        
+        for j in range(total):
+                print("j : ",j, " time elapsed : ", time.perf_counter() - t0)
+                test, _ , steps = get_epsilon_plus(init,dt,T,omega,alpha,D)
+                if test == 2:
+                    suc = suc+1
+                    steps_plus_aux.append(steps)
+           # print(suc/total) #numero que va entre 0 y 1
+        cond_prob.append(suc)
+        steps_plus.append(steps_plus_aux)
+        
+    cond_prob_filename = main_filename +  'x_minus_cond_prob_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
+    #initial_conditions_filename = main_filename +  'initial_conditions_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
+    save_data(cond_prob, cond_prob_filename)
+    #save_data(initial_conditions, initial_conditions_filename)
+    step_plus_filename = main_filename +  'x_minus_step_plus_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
+    save_data(steps_plus, step_plus_filename)

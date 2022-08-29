@@ -138,11 +138,11 @@ def plot_epsilon_plus(data_folder,save_path_name,params):
     
     """
 
-    
+    total = 1000
     #colors =  sns.color_palette(sns.color_palette("viridis",len(params['alpha'])))
     
     D_ = len(params['D']); ALP = len(params['alpha'])
-    y_lim = 1100    
+    y_lim = [-1/total, 1100 / total]
     
     fig, axs = plt.subplots(ALP,D_, sharex=False, sharey=True, figsize=(8.27, 11.69))
     fig.subplots_adjust(bottom=0.15, top=0.9, left=0.15, right=0.8, wspace=0.1, hspace=0.2)
@@ -160,17 +160,21 @@ def plot_epsilon_plus(data_folder,save_path_name,params):
             cond_prob = download_data(cond_prob_filename)
             initial_conditions = download_data(initial_conditions_filename)
 
-            if alpha >= omega:
-                x,t_e = get_epsilon_plus_th_function(omega,alpha,D)
-                ax.plot(x,[i*1000 for i in t_e] ,linewidth=1,color = 'black',alpha = 1)
+            #if alpha >= omega:
+            x,t_e = get_epsilon_plus_th_function(omega,alpha,D)
+            ax.plot(x,[i for i in t_e] ,linewidth=1,color = 'black',alpha = 1)
     
            # ax.plot(initial_conditions,cond_prob,linewidth=1) #,color=colors[k]
             ax.plot(initial_conditions,cond_prob,'o', markersize = 1)
-            x = get_zero_position(initial_conditions,cond_prob)
-            ax.plot(x,np.zeros(len(x)),'o', markersize = 3,color = 'r') 
-            ax.set_ylim([-1,y_lim]); 
+            #x = get_zero_position(initial_conditions,cond_prob)
+            #ax.plot(x,np.zeros(len(x)),'o', markersize = 3,color = 'r') 
+            ax.set_ylim(y_lim); 
             ax.set_xlim([-np.pi/2,3/2*np.pi])
-#            print('ylim',ax.get_ylim())
+            
+            
+            PFE,PFI = get_fixed_points(alpha/omega) ; PFI = PFI - 2* np.pi
+            ax.axvspan(-np.pi/2, PFI , alpha=0.2, color='gray')
+            ax.axvspan(PFE, 3/2*np.pi , alpha=0.2, color='gray')
             
 
               
@@ -179,8 +183,8 @@ def plot_epsilon_plus(data_folder,save_path_name,params):
             ax.set_xlabel("initial conditions", fontsize=10)
             ax.xaxis.set_label_coords(0.5, -0.5);
             ax.yaxis.set_label_coords(-0.4, 0.5)
-            set_scale(ax,[-np.pi/2,3/2*np.pi],[-1,y_lim])
-            ax.set_xticks([-np.pi/2,3/2*np.pi]);ax.set_yticks([-1,y_lim])
+            set_scale(ax,[-np.pi/2,3/2*np.pi],y_lim)
+            ax.set_xticks([-np.pi/2,3/2*np.pi]);ax.set_yticks(y_lim)
             ax.set_yticklabels([str(-1),str(y_lim)]); ax.set_xticklabels([r'$-\frac{\pi}{2}$',r'$\frac{3 \pi}{2}$']); ax.tick_params(labelsize=10) 
         else:
             silent_ax(ax)
@@ -213,7 +217,7 @@ def plot_epsilon_plus_in_x_minus(data_folder,save_path_name,params):
     
     
 
-    
+    total = 100000    
     fig, axs = plt.subplots(2,2, sharex=False, sharey=True, figsize=(8.27, 11.69))
     fig.subplots_adjust(bottom=0.15, top=0.9, left=0.15, right=0.8, wspace=0.1, hspace=0.2)
     ax = axs[0,0]; 
@@ -229,13 +233,13 @@ def plot_epsilon_plus_in_x_minus(data_folder,save_path_name,params):
         result = []; D_aux = []
        
         for D in params['D']:                    
-            cond_prob_filename = data_folder +  'cond_prob_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
+            cond_prob_filename = data_folder +  'x_minus_cond_prob_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
         #initial_conditions_filename = data_folder +  'initial_conditions_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
         
             if check_file(cond_prob_filename,""):
                 cond_prob = download_data(cond_prob_filename)
                 #initial_conditions = download_data(initial_conditions_filename)
-                result.append(cond_prob[0])
+                result.append(cond_prob/total) #[0]
                 D_aux.append(D)
                         
         #ax.plot(initial_conditions,cond_prob,linewidth=1) #,color=colors[k]
@@ -264,13 +268,13 @@ def plot_epsilon_plus_in_x_minus(data_folder,save_path_name,params):
        
         for alpha in params['alpha']:                    
             #print(alpha/omega,omega,D)
-            cond_prob_filename = data_folder +  'cond_prob_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
+            cond_prob_filename = data_folder +  'x_minus_cond_prob_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
         #initial_conditions_filename = data_folder +  'initial_conditions_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
         
             if check_file(cond_prob_filename,""):
                 cond_prob = download_data(cond_prob_filename)
                 #initial_conditions = download_data(initial_conditions_filename)
-                result.append(cond_prob[0])
+                result.append(cond_prob/total) #[0]
                 ALP_aux.append(alpha)
                         
         #ax.plot(initial_conditions,cond_prob,linewidth=1) #,color=colors[k]
@@ -291,6 +295,9 @@ def plot_epsilon_plus_in_x_minus(data_folder,save_path_name,params):
     return(0)
 
 #%%
+
+
+
 def plot_t_plus(data_folder,save_path_name,params):
     """ Plotting function for conditional first passage time.
     Each column is a different D value and each row is a different alpha value.
