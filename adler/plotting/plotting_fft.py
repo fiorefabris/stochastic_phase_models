@@ -255,7 +255,9 @@ def plot_fft_alpha_all(save_path_name,data_folder,dt,d,tuple_):
         if D == 0: ax.plot(xf,yf,linewidth=1,color =colors[k],alpha = 0.6,label = str(D))
         else: ax.plot(xf,yf, linewidth=1,color =colors[k],alpha = 1,label = str(D))
         beta = get_quality_factor(xf, yf)
-        if beta is not None: BETA.append(beta); D_.append(D)
+        if beta is not None:
+            BETA.append(beta)
+            D_.append(D)
             #if alpha <= 1: ax.axvline(np.sqrt(omega**2-i**2),ls = '--', color = 'gray',linewidth=0.5)
             
 
