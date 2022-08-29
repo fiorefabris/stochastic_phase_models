@@ -189,6 +189,7 @@ def get_quality_factor(x_signal, signal):
     w0_ix = np.argmax(signal) # el índice de la fundamental 
     S_w0 = signal[w0_ix] #la potencia del pico más alto
     
+    
     rel_height=S_w0/np.sqrt(np.e)
     for ix,s in enumerate(signal[w0_ix:]):
         if s > rel_height:
@@ -196,7 +197,7 @@ def get_quality_factor(x_signal, signal):
         else:
             break
     
-    widthx = 2*(ix - w0_ix) * np.diff(x_signal)[1] #ancho que tiene la cosa cuando la altura es rel_height
+    widthx = 2*ix * np.diff(x_signal)[1] #ancho que tiene la cosa cuando la altura es rel_height
     
     
     w0 = x_signal[w0_ix] #frecuencia fundamental 
