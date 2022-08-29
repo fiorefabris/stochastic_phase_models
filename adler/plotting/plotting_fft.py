@@ -162,22 +162,24 @@ def plot_fft_alpha(save_path_name,data_folder,dt,d,tuple_):
 #%%
 from scipy.signal import find_peaks,peak_widths
 
-
+#x_signal = np.linspace(0,100,200)
+#signal = np.sin(x_signal) + 1
 def get_quality_factor(x_signal, signal):
-    peaks, h = find_peaks(signal,height=0) #encuentra todos los picos, y el alto lo mide desde x = 0
+    #peaks, h = find_peaks(signal,height=0) #encuentra todos los picos, y el alto lo mide desde x = 0
+    w0_ix = np.argmax(signal)
     
-    if len(peaks) > 0:
-        w0_ix = peaks[np.argmax(signal[peaks])] #el pico más alto
-        S_w0 = signal[w0_ix] #la potencia del pico más alto
-        widthx,widthy,left_ips,rigth_ips = peak_widths(signal, [w0_ix], rel_height=(1-1/np.sqrt(np.e))) # ancho (en índice), alto, donde empieza y donde termina (son puntos interpolados)
-        
-        
-        w0 = x_signal[w0_ix] #frecuencia fundamental 
-        print(w0,S_w0,widthy[0])
-        beta = w0 * S_w0 / widthy[0]
-        return(beta)
-    else: 
-        return None
+   # if len(peaks) > 0:
+    #w0_ix = peaks[np.argmax(signal[peaks])] #el pico más alto
+    S_w0 = signal[w0_ix] #la potencia del pico más alto
+    widthx,widthy,left_ips,rigth_ips = peak_widths(signal, [w0_ix], rel_height=(1-1/np.sqrt(np.e))) # ancho (en índice), alto, donde empieza y donde termina (son puntos interpolados)
+    
+    
+    w0 = x_signal[w0_ix] #frecuencia fundamental 
+    print(w0,S_w0,widthy[0])
+    beta = w0 * S_w0 / widthy[0]
+    return(beta)
+    #else: 
+     #   return None
     
 
 def plot_fft_all(description_file,data_folder,dt,d,save_path_name):
