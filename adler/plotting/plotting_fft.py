@@ -159,6 +159,22 @@ def plot_fft_alpha(save_path_name,data_folder,dt,d,tuple_):
     return(0)
 #%%
 
+#%%
+from scipy.signal import find_peaks,peak_widths
+
+
+def get_quality_factor(x_signal, signal):
+    peaks, h = find_peaks(signal,height=0) #encuentra todos los picos, y el alto lo mide desde x = 0
+    w0_ix = peaks[np.argmax(signal[peaks])] #el pico más alto
+    S_w0 = signal[w0_ix] #la potencia del pico más alto
+    widthx,widthy,left_ips,rigth_ips = peak_widths(signal, [w0_ix], rel_height=(1-1/np.sqrt(np.e))) # ancho (en índice), alto, donde empieza y donde termina (son puntos interpolados)
+    
+    
+    w0 = x_signal[w0_ix] #frecuencia fundamental 
+    beta = w0 * S_w0 / widthy[0]
+    return(beta)
+    
+
 def plot_fft_all(description_file,data_folder,dt,d,save_path_name):
     #para un omega, plotea los alphas uno encima del otro
     ref = pd.read_excel(description_file,sheet_name= 'File_references')
@@ -222,7 +238,7 @@ def plot_fft_alpha_all(save_path_name,data_folder,dt,d,tuple_):
     text = r'$\omega = \frac{2\pi}{7 min}$' + ' ~ ' + r'$ \alpha = $'+str(alpha) + r'$ \frac{2\pi}{7 min}$' 
     axs[0].text(0.2,1.05, text, ha='center', va='center', transform=axs[0].transAxes, fontsize=12)
 
-    
+    BETA = []; D_ = []
     for k,(D,row) in enumerate(rows.groupby(['D'])):
         ax = axs[0]; ax.grid(False);
         assert check_file('fft_yf_'+str(omega)+'_'+str(alpha)+'_'+str(D)+'.pkl',data_folder)
@@ -233,7 +249,9 @@ def plot_fft_alpha_all(save_path_name,data_folder,dt,d,tuple_):
             
             #Plotting 
         if D == 0: ax.plot(xf,yf,linewidth=1,color =colors[k],alpha = 0.6,label = str(D))
-        else:ax.plot(xf,yf, linewidth=1,color =colors[k],alpha = 1,label = str(D))
+        else: ax.plot(xf,yf, linewidth=1,color =colors[k],alpha = 1,label = str(D))
+        beta = get_quality_factor(xf, yf)
+        BETA.append(beta); D_.append(D)
             #if alpha <= 1: ax.axvline(np.sqrt(omega**2-i**2),ls = '--', color = 'gray',linewidth=0.5)
             
 
@@ -245,6 +263,7 @@ def plot_fft_alpha_all(save_path_name,data_folder,dt,d,tuple_):
     ax.set_xticks(xticks);
     ax.set_yticks(ylim)
     ax.tick_params(labelsize=10)
+    ax[1].plot(D,BETA)
 
         
         #text = 'D = ' + str(np.round(D,5))
@@ -264,3 +283,4 @@ def plot_fft_alpha_all(save_path_name,data_folder,dt,d,tuple_):
     plt.savefig(save_path_name + 'all_fft_alpha_'+str(alpha)+'.pdf', format='pdf')
 
     return(0)
+    
