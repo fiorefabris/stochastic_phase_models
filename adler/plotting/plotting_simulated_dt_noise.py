@@ -6,127 +6,6 @@ from adler.get_time_series.main import all_combinations
 from adler.plotting.plotting_main import set_scale,silent_ax
 import scipy.integrate as integrate
 
-
-
-def get_mean_value(list_):
-    aux = []
-    for i in list_:
-        if len(i) > 0:
-            aux.append(np.mean(i))
-        else:
-            aux.append(np.nan)
-    assert len(list_) == len(aux)
-    return(aux)
-
-def get_nan_values_position(x,list_):
-    x_aux = [] 
-    for i,l in enumerate(get_mean_value(list_)):
-        if np.isnan(l):
-            x_aux.append(x[i])
-    return(x_aux)
-
-def get_zero_position(x,list_):
-    x_aux = [] 
-    for i,l in enumerate(list_):
-        if l == 0:
-            x_aux.append(x[i])
-    return(x_aux)
-#%%
-    
-    
-###############################################################################
-###  computes the theoretical value of epsilon plus
-###############################################################################     
-    
-def f(x,omega,alpha,D): 
-    return(np.exp((-omega/D * x + alpha/D * np.cos(x))))
-    
-def epsilon_plus_th(x,omega,alpha,D,PFE,PFI):
-    aux , _ =  integrate.quad(f,PFI,x,args = (omega,alpha,D))    
-    N_aux , _ =  integrate.quad(f,PFI,PFE,args = (omega,alpha,D)) #no es funcion de x
-    
-    if N_aux == np.inf and aux == np.inf:
-        #print(' 0000 ' ,N_aux)
-        return(1)
-    else:
-        return(aux/N_aux)
-
-
-def get_epsilon_plus_th_function(omega,alpha,D):
-    PFE,PFI = get_fixed_points(alpha/omega); PFI = PFI - 2* np.pi
-    aux = []
-    for x in np.linspace(PFI,PFE,1000):
-        N  = epsilon_plus_th(x,omega,alpha,D,PFE,PFI)
-        aux.append(N)
-    return(np.linspace(PFI,PFE,1000), aux)
-    
-    
-###############################################################################
-###  computes the theoretical value of t plus with alpha =!0
-###############################################################################    
-def V(x,omega,alpha):
-    return omega * x - alpha * np.cos(x)
-
-def teo_t_plus_new(x,omega,alpha,D):
-    PFE,PFI = get_fixed_points(alpha/omega); PFI = PFI - 2* np.pi
-    N_aux , _ =  integrate.quad(f,PFI,PFE,args = (omega,alpha,D),limit = 100000,epsabs = 1.49e-10,epsrel= 1.49e-10) #no es funcion de x    
-    return N_aux/D * (int_1(x,omega,alpha,D,PFE,PFI) + int_2(x,omega,alpha,D,PFE,PFI))
-
-def I1(x,omega,alpha,D,PFE,PFI):
-    return epsilon_plus_th(x,omega,alpha,D,PFE,PFI) * np.exp(V(x,omega,alpha)/D) * (1 -  epsilon_plus_th(x,omega,alpha,D,PFE,PFI))
-
-def I2(x,omega,alpha,D,PFE,PFI):
-    return epsilon_plus_th(x,omega,alpha,D,PFE,PFI)**2 * np.exp(V(x,omega,alpha)/D)
-
-def int_1(x,omega,alpha,D,PFE,PFI):
-    aux , _ = integrate.quad(I1,x,PFE,args = (omega,alpha,D,PFE,PFI),limit = 100000,epsabs = 1.49e-10,epsrel= 1.49e-10)
-    return aux
-
-def int_2(x,omega,alpha,D,PFE,PFI):
-    aux , _ = integrate.quad(I2,PFI,x,args = (omega,alpha,D,PFE,PFI),limit = 100000,epsabs = 1.49e-10,epsrel= 1.49e-10)
-    eps_plus = epsilon_plus_th(x,omega,alpha,D,PFE,PFI)
-    return aux * (1/eps_plus - 1)
-
-def teo_t_plus_new_pop(omega,alpha,D):
-    PFE,PFI = PFE,PFI = get_fixed_points(alpha/omega); PFI = PFI - 2* np.pi
-    aux = []
-    for x in  np.linspace(PFI+1e-3,PFE,100):
-        #x = x - PFI
-        res = teo_t_plus_new(x,omega,alpha,D)
-        aux.append(res)
-    return(np.linspace(PFI,PFE,100),aux)
-
-
-###############################################################################
-###  computes the limit of t plus with xplus -> 0
-###############################################################################    
-
-def I5(x,omega,alpha,D,PFE,PFI):
-    return epsilon_plus_th(x,omega,alpha,D,PFE,PFI) * np.exp(V(x,omega,alpha)/D) * (1 -  epsilon_plus_th(x,omega,alpha,D,PFE,PFI))
-
-def epsilon_plus_x_minus_th(PFI,PFE,omega,alpha,D):
-    N_aux , _ =  integrate.quad(f,PFI,PFE,args = (omega,alpha,D),limit = 10000000,epsabs = 1.49e-12,epsrel= 1.49e-12) #no es funcion de x    
-    aux , _ = integrate.quad(I5,PFI,PFE,args = (omega,alpha,D,PFE,PFI),limit = 10000000,epsabs = 1.49e-12,epsrel= 1.49e-12)
-    return N_aux / D * aux
-###############################################################################
-###  computes the theoretical value of t plus with alpha =0 (from book :)
-###############################################################################    
-
-def exponential(x,omega,D):
-   return( x / omega *  ( 1 + np.exp(- omega * x / D) ) / ( 1 - np.exp(- omega * x / D) ) )
-
-def teo_t_plus(x,omega,D):# esto es con alpha = 0
-    PFE,PFI = get_fixed_points(0); PFI = PFI - 2* np.pi
-    return ( exponential(PFE - PFI,omega,D) -  exponential(x,omega,D) )
-
-def get_teo_t_plus_pop(omega,D):
-    PFE,PFI = get_fixed_points(0); PFI = PFI - 2* np.pi
-    aux = []
-    for x in  np.linspace(PFI,PFE,100):
-        x = x - PFI
-        res = teo_t_plus(x,omega,D)
-        aux.append(res)
-    return(np.linspace(PFI,PFE,100),aux)
 #%%    
 ###############################################################################
 ###  plotting module for conditional first passage time measures
@@ -427,3 +306,140 @@ def plot_t_plus_in_x_minus(data_folder,save_path_name,params):
         
     plt.savefig(save_path_name + 'plotting_t_plus_in_x_minus.pdf', format='pdf')
     return(0)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+###############################################################################
+###  OLD
+###############################################################################     
+def get_mean_value(list_):
+    aux = []
+    for i in list_:
+        if len(i) > 0:
+            aux.append(np.mean(i))
+        else:
+            aux.append(np.nan)
+    assert len(list_) == len(aux)
+    return(aux)
+
+def get_nan_values_position(x,list_):
+    x_aux = [] 
+    for i,l in enumerate(get_mean_value(list_)):
+        if np.isnan(l):
+            x_aux.append(x[i])
+    return(x_aux)
+
+def get_zero_position(x,list_):
+    x_aux = [] 
+    for i,l in enumerate(list_):
+        if l == 0:
+            x_aux.append(x[i])
+    return(x_aux)
+#%%
+    
+    
+###############################################################################
+###  computes the theoretical value of epsilon plus
+###############################################################################     
+    
+def f(x,omega,alpha,D): 
+    return(np.exp((-omega/D * x + alpha/D * np.cos(x))))
+    
+def epsilon_plus_th(x,omega,alpha,D,PFE,PFI):
+    aux , _ =  integrate.quad(f,PFI,x,args = (omega,alpha,D))    
+    N_aux , _ =  integrate.quad(f,PFI,PFE,args = (omega,alpha,D)) #no es funcion de x
+    
+    if N_aux == np.inf and aux == np.inf:
+        #print(' 0000 ' ,N_aux)
+        return(1)
+    else:
+        return(aux/N_aux)
+
+
+def get_epsilon_plus_th_function(omega,alpha,D):
+    PFE,PFI = get_fixed_points(alpha/omega); PFI = PFI - 2* np.pi
+    aux = []
+    for x in np.linspace(PFI,PFE,1000):
+        N  = epsilon_plus_th(x,omega,alpha,D,PFE,PFI)
+        aux.append(N)
+    return(np.linspace(PFI,PFE,1000), aux)
+    
+    
+###############################################################################
+###  computes the theoretical value of t plus with alpha =!0
+###############################################################################    
+def V(x,omega,alpha):
+    return omega * x - alpha * np.cos(x)
+
+def teo_t_plus_new(x,omega,alpha,D):
+    PFE,PFI = get_fixed_points(alpha/omega); PFI = PFI - 2* np.pi
+    N_aux , _ =  integrate.quad(f,PFI,PFE,args = (omega,alpha,D),limit = 100000,epsabs = 1.49e-10,epsrel= 1.49e-10) #no es funcion de x    
+    return N_aux/D * (int_1(x,omega,alpha,D,PFE,PFI) + int_2(x,omega,alpha,D,PFE,PFI))
+
+def I1(x,omega,alpha,D,PFE,PFI):
+    return epsilon_plus_th(x,omega,alpha,D,PFE,PFI) * np.exp(V(x,omega,alpha)/D) * (1 -  epsilon_plus_th(x,omega,alpha,D,PFE,PFI))
+
+def I2(x,omega,alpha,D,PFE,PFI):
+    return epsilon_plus_th(x,omega,alpha,D,PFE,PFI)**2 * np.exp(V(x,omega,alpha)/D)
+
+def int_1(x,omega,alpha,D,PFE,PFI):
+    aux , _ = integrate.quad(I1,x,PFE,args = (omega,alpha,D,PFE,PFI),limit = 100000,epsabs = 1.49e-10,epsrel= 1.49e-10)
+    return aux
+
+def int_2(x,omega,alpha,D,PFE,PFI):
+    aux , _ = integrate.quad(I2,PFI,x,args = (omega,alpha,D,PFE,PFI),limit = 100000,epsabs = 1.49e-10,epsrel= 1.49e-10)
+    eps_plus = epsilon_plus_th(x,omega,alpha,D,PFE,PFI)
+    return aux * (1/eps_plus - 1)
+
+def teo_t_plus_new_pop(omega,alpha,D):
+    PFE,PFI = PFE,PFI = get_fixed_points(alpha/omega); PFI = PFI - 2* np.pi
+    aux = []
+    for x in  np.linspace(PFI+1e-3,PFE,100):
+        #x = x - PFI
+        res = teo_t_plus_new(x,omega,alpha,D)
+        aux.append(res)
+    return(np.linspace(PFI,PFE,100),aux)
+
+
+###############################################################################
+###  computes the limit of t plus with xplus -> 0
+###############################################################################    
+
+def I5(x,omega,alpha,D,PFE,PFI):
+    return epsilon_plus_th(x,omega,alpha,D,PFE,PFI) * np.exp(V(x,omega,alpha)/D) * (1 -  epsilon_plus_th(x,omega,alpha,D,PFE,PFI))
+
+def epsilon_plus_x_minus_th(PFI,PFE,omega,alpha,D):
+    N_aux , _ =  integrate.quad(f,PFI,PFE,args = (omega,alpha,D),limit = 10000000,epsabs = 1.49e-12,epsrel= 1.49e-12) #no es funcion de x    
+    aux , _ = integrate.quad(I5,PFI,PFE,args = (omega,alpha,D,PFE,PFI),limit = 10000000,epsabs = 1.49e-12,epsrel= 1.49e-12)
+    return N_aux / D * aux
+###############################################################################
+###  computes the theoretical value of t plus with alpha =0 (from book :)
+###############################################################################    
+
+def exponential(x,omega,D):
+   return( x / omega *  ( 1 + np.exp(- omega * x / D) ) / ( 1 - np.exp(- omega * x / D) ) )
+
+def teo_t_plus(x,omega,D):# esto es con alpha = 0
+    PFE,PFI = get_fixed_points(0); PFI = PFI - 2* np.pi
+    return ( exponential(PFE - PFI,omega,D) -  exponential(x,omega,D) )
+
+def get_teo_t_plus_pop(omega,D):
+    PFE,PFI = get_fixed_points(0); PFI = PFI - 2* np.pi
+    aux = []
+    for x in  np.linspace(PFI,PFE,100):
+        x = x - PFI
+        res = teo_t_plus(x,omega,D)
+        aux.append(res)
+    return(np.linspace(PFI,PFE,100),aux)
