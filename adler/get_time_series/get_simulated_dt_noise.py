@@ -148,7 +148,7 @@ def get_epsilon_plus_pop(main_filename,dt,T,p):
 
     cond_prob_filename = main_filename +  'cond_prob_omega_'+str(omega)+'_alpha_'+str(alpha/omega)+'_D_'+str(D)+'.pkl'    
     save_data((initial_conditions,cond_prob), cond_prob_filename)
-    step_plus_filename = main_filename +  'step_plus_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
+    step_plus_filename = main_filename +  'step_plus_omega_'+ 'cond_prob_omega_'+str(omega)+'_alpha_'+str(alpha/omega)+'_D_'+str(D)+'.pkl'    
     save_data((initial_conditions,steps_plus), step_plus_filename)
 
     return(0)
@@ -235,9 +235,11 @@ def get_epsilon_plus_in_x_minus(main_filename,dt,T,p):
         cond_prob.append(suc)
         steps_plus.append(steps_plus_aux)
         
-    cond_prob_filename = main_filename +  'x_minus_cond_prob_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
-    #initial_conditions_filename = main_filename +  'initial_conditions_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
-    save_data(cond_prob, cond_prob_filename)
-    #save_data(initial_conditions, initial_conditions_filename)
-    step_plus_filename = main_filename +  'x_minus_step_plus_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
-    save_data(steps_plus, step_plus_filename)
+    return cond_prob, steps_plus
+
+#    cond_prob_filename = main_filename +  'x_minus_cond_prob_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
+#    #initial_conditions_filename = main_filename +  'initial_conditions_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
+#    save_data(cond_prob, cond_prob_filename)
+#    #save_data(initial_conditions, initial_conditions_filename)
+#    step_plus_filename = main_filename +  'x_minus_step_plus_omega_'+str(np.round(omega,3))+'_alpha_'+str(np.round(alpha/omega,3))+'_D_'+str(D)+'.pkl'
+#    save_data(steps_plus, step_plus_filename)
