@@ -127,7 +127,7 @@ def get_epsilon_plus_pop(main_filename,dt,T,p):
     PFE,PFI = get_fixed_points(alpha/omega)
     PFI = PFI - 2* np.pi
     #print(alpha/omega,PFI/np.pi*2,PFE/np.pi*2)
-    initial_conditions = get_geomspace(PFI,PFE,100)
+    initial_conditions = get_geomspace(PFI+1e-3,PFE,10)
     
     cond_prob = []
     steps_plus = []
