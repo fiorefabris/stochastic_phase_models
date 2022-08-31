@@ -12,7 +12,7 @@ import pickle
 import pandas as pd
 from math import ceil
 import time
-from adler.data_managing_functions import compute_theoretical_omega
+from adler.data_managing_functions import compute_theoretical_omega,check_file
 
 
 #%%
@@ -166,12 +166,15 @@ def mp_time_evolution_and_list(main_file_name,dt,T,d,param):
 
 def time_evolution_save(param,number,order,main_file_name,dt,T,d):
     t0= time.perf_counter()
-    time_evolution__ = partial(time_evolution_,dt,T,d)
-    theta = time_evolution__(*param) 
     file_name =  str(number)+'_'+str(order)+'.pkl'
-    save_data(theta, main_file_name + file_name)
-    t1 = time.perf_counter() - t0
-    print(file_name,t1)
+    if check_file(file_name,main_file_name):
+        print(param)
+    else:
+        time_evolution__ = partial(time_evolution_,dt,T,d)
+        theta = time_evolution__(*param) 
+        save_data(theta, main_file_name + file_name)
+        t1 = time.perf_counter() - t0
+        print(file_name,t1)
     return(0)
 
 
