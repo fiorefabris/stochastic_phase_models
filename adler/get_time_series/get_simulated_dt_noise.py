@@ -211,7 +211,7 @@ def get_epsilon_plus_in_x_minus(main_filename,dt,T,p):
     
     """
     omega,alpha,D = p
-    total = 10000;     t0= time.perf_counter(); 
+    total = 1e6;     t0= time.perf_counter(); 
     PFE,PFI = get_fixed_points(alpha/omega)
     PFI = PFI - 2* np.pi
     initial_conditions = [PFI]
