@@ -80,7 +80,7 @@ def get_epsilon_plus(init,dt,T,omega,alpha,D):
     np.random.seed()
     PFE,PFI = get_fixed_points(alpha/omega)
     theta_past = init
-    assert (theta_past >= -np.pi/2) and (theta_past <= PFE)
+    assert(theta_past >= -np.pi/2) and (theta_past <= PFE),('omega,delta,D,theta_past:',omega, alpha/omega,D,theta_past)
 
 
     
@@ -123,7 +123,7 @@ def get_epsilon_plus_pop(main_filename,dt,T,p):
     """
     omega,alpha,D = p
    # print(omega)
-    total = 500;     t0= time.perf_counter(); 
+    total = 500;     #t0= time.perf_counter(); 
     PFE,PFI = get_fixed_points(alpha/omega)
     PFI = PFI - 2* np.pi
     #print(alpha/omega,PFI/np.pi*2,PFE/np.pi*2)
@@ -135,9 +135,9 @@ def get_epsilon_plus_pop(main_filename,dt,T,p):
     for init in initial_conditions:        
         suc = 0
         steps_plus_aux = []
-        
+        print(init)
         for j in range(total):
-                print("j : ",j, " time elapsed : ", time.perf_counter() - t0)
+                #print("j : ",j, " time elapsed : ", time.perf_counter() - t0)
                 test, _ , steps = get_epsilon_plus(init,dt,T,omega,alpha,D)
                 if test == 2:
                     suc = suc+1
