@@ -128,6 +128,7 @@ def get_epsilon_plus_pop(main_filename,dt,T,p):
     PFI = PFI - 2* np.pi
     #print(alpha/omega,PFI/np.pi*2,PFE/np.pi*2)
     initial_conditions = get_geomspace(PFI+1e-3,PFE,10)
+    print('omega,delta,D,initial conditions : ',omega,alpha/omega,D,initial_conditions)
     
     cond_prob = []
     steps_plus = []
