@@ -365,7 +365,7 @@ def get_left_minima(MAX,MIN,PFE,PFI,theta):
     
     
     if len(MAX) <= 0:
-        print('The trace has no maxima values')
+        #print('The trace has no maxima values')
     
     else:
        
@@ -462,7 +462,7 @@ def get_rigth_minima(left_minima,MAX,MIN,PFE,PFI,theta):
     right_minima = []; remove_MAX = []; 
 
     if len(MAX) <= 0:
-        print('The trace has no maxima values')
+        #print('The trace has no maxima values')
     else:
         n0 = theta[MAX[0]] // (2*np.pi);
     
@@ -605,7 +605,7 @@ def get_pulses(theta,TH,W,PFE,PFI):
         
         return left_minima,right_minima,MAX
     else:
-        print('The trace has no maxima or minima values available')
+        #print('The trace has no maxima or minima values available')
         return [],[],[]
 
 
