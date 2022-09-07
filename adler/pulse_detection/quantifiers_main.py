@@ -199,7 +199,8 @@ def pulse_rate_statistics(MAX,ix,N,dt,d):
     for ix_i in split_len_N(ix,N):    
         pulses =  list(filter(lambda x : x in MAX,ix_i))
         t_i = points_to_time(ix_i,dt,d)
-        pulse_rate_aux.append(len(pulses)/(t_i[-1]-t_i[0]))
+        if len(ix_i) > 1: #con esto anda, pero no sería lo más preciso del mundo...
+            pulse_rate_aux.append(len(pulses)/(t_i[-1]-t_i[0]))
     return pulse_rate_aux
 
 
