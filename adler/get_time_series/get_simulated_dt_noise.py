@@ -30,6 +30,8 @@ def get_geomspace(PFI,PFE,n):
     aux = []
     for i in np.geomspace(1,PFE-PFI+1,n):
         aux.append(i-(-PFI+1))
+    if aux[-1] > PFE: #esto es porque a veces el get_geomspace falla en el ultimo decimal después de esta suma
+        aux[-1]=PFE
     return (aux)
 #%%
 # =============================================================================
