@@ -6,7 +6,7 @@ from math import ceil
 from functools import partial 
 import seaborn as sns
 
-from adler.data_managing_functions import download_data,check_file
+from adler.data_managing_functions import download_data,check_file,get_fixed_points
 
 
 #%%
@@ -288,7 +288,8 @@ def plot_fft_alpha_all(save_path_name,data_folder,dt,d,tuple_):
         if beta is not None:
             BETA.append(beta)
             D_.append(D)
-            OMEGAP_.append(2*np.pi/get_omega_p(xf, yf))
+            PFE,PFI = get_fixed_points(alpha) ; PFI = PFI - 2* np.pi; print(alpha)
+            OMEGAP_.append((PFE-PFI)/get_omega_p(xf, yf))
 
             
         #Plotting 
