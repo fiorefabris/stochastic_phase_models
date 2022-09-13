@@ -272,13 +272,13 @@ def plot_fft_alpha_all(save_path_name,data_folder,dt,d,tuple_):
 
     fig, axs = plt.subplots(2, 2, sharex=False, sharey=False, figsize=(8.27, 11.69))
     fig.subplots_adjust(bottom=0.15, top=0.9, left=0.15, right=0.8, wspace=0.1, hspace=0.2)
-    #axs = axs.ravel();
+    axs = axs.ravel();
     text = r'$\omega = \frac{2\pi}{7 min}$' + ' ~ ' + r'$ \alpha = $'+str(alpha) + r'$ \frac{2\pi}{7 min}$' 
-    axs[0,0].text(0.2,1.05, text, ha='center', va='center', transform=axs[0].transAxes, fontsize=12)
+    axs[0].text(0.2,1.05, text, ha='center', va='center', transform=axs[0].transAxes, fontsize=12)
 
     BETA = []; D_ = []; OMEGAP_=[]
     for k,(D,row) in enumerate(rows.groupby(['D'])):
-        ax = axs[1,0]; ax.grid(False);
+        ax = axs[2]; ax.grid(False);
         assert check_file('fft_yf_'+str(omega)+'_'+str(alpha)+'_'+str(D)+'.pkl',data_folder)
             
         xf = download_data(data_folder+'fft_xf_'+str(omega)+'_'+str(alpha)+'_'+str(D)+'.pkl')
@@ -310,8 +310,8 @@ def plot_fft_alpha_all(save_path_name,data_folder,dt,d,tuple_):
     ax.set_yticks(ylim)
     ax.tick_params(labelsize=10)
     #axs[0].plot(D_[1:],BETA[1:],'-o') ; axs[0].set_xscale('log')
-    axs[0,0].plot(D_,BETA,'-o') ; axs[0,0].set_xscale('log')
-    axs[0,1].plot(D_,OMEGAP_,'-o') ; axs[0,1].set_xscale('log')
+    axs[0].plot(D_,BETA,'-o') ; axs[0,0].set_xscale('log')
+    axs[1].plot(D_,OMEGAP_,'-o') ; axs[0,1].set_xscale('log')
     print(OMEGAP_)
 
 
