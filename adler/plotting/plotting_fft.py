@@ -272,7 +272,7 @@ def plot_fft_alpha_all(save_path_name,data_folder,dt,d,tuple_):
 
     fig, axs = plt.subplots(2, 2, sharex=False, sharey=False, figsize=(8.27, 11.69))
     fig.subplots_adjust(bottom=0.15, top=0.9, left=0.15, right=0.8, wspace=0.1, hspace=0.2)
-    axs = axs.ravel();
+    #axs = axs.ravel();
     text = r'$\omega = \frac{2\pi}{7 min}$' + ' ~ ' + r'$ \alpha = $'+str(alpha) + r'$ \frac{2\pi}{7 min}$' 
     axs[0,0].text(0.2,1.05, text, ha='center', va='center', transform=axs[0].transAxes, fontsize=12)
 
