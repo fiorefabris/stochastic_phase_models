@@ -311,7 +311,8 @@ def plot_fft_alpha_all(save_path_name,data_folder,dt,d,tuple_):
     ax.tick_params(labelsize=10)
     #axs[0].plot(D_[1:],BETA[1:],'-o') ; axs[0].set_xscale('log')
     axs[0,0].plot(D_,BETA,'-o') ; axs[0,0].set_xscale('log')
-    axs[0,1].plot(D_,BETA,'-o') ; axs[0,1].set_xscale('log')
+    axs[0,1].plot(D_,OMEGAP_,'-o') ; axs[0,1].set_xscale('log')
+    print(OMEGAP_)
 
 
         
