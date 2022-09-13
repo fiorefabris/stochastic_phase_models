@@ -201,7 +201,7 @@ def get_quality_factor(x_signal, signal):
     
     
     w0 = x_signal[w0_ix] #frecuencia fundamental 
-    print(w0,S_w0,widthx)
+    #print(w0,S_w0,widthx)
     beta = w0 * S_w0 / widthx
     return(w0, S_w0, ix+w0_ix,rel_height, beta)
 
@@ -288,8 +288,8 @@ def plot_fft_alpha_all(save_path_name,data_folder,dt,d,tuple_):
         if beta is not None:
             BETA.append(beta)
             D_.append(D)
-            PFE,PFI = get_fixed_points(alpha) ; PFI = PFI - 2* np.pi; print(alpha)
-            OMEGAP_.append((PFE-PFI)/get_omega_p(xf, yf))
+            PFE,PFI = get_fixed_points(alpha) ; PFI = PFI - 2* np.pi; #print(alpha)
+            OMEGAP_.append(1/get_omega_p(xf, yf))
 
             
         #Plotting 
@@ -319,8 +319,8 @@ def plot_fft_alpha_all(save_path_name,data_folder,dt,d,tuple_):
         alpha =  1.1 * omega    
         (teo_XX,teo_DUR) = download_data(teo_data_folder_ +str(alpha/omega)+'.pkl')
         axs[0,1].plot(teo_XX,teo_DUR ,linewidth=1,color = 'black',alpha = 1,label = str(alpha/omega))        
-
-    print(OMEGAP_)
+        
+    print(OMEGAP_,teo_DUR)
 
 
         
