@@ -288,7 +288,7 @@ def plot_fft_alpha_all(save_path_name,data_folder,dt,d,tuple_):
         if beta is not None:
             BETA.append(beta)
             D_.append(D)
-            OMEGAP_.append(get_omega_p(xf, yf))
+            OMEGAP_.append(2*np.pi/get_omega_p(xf, yf))
 
             
         #Plotting 
