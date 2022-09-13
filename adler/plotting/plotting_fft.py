@@ -289,7 +289,7 @@ def plot_fft_alpha_all(save_path_name,data_folder,dt,d,tuple_):
             BETA.append(beta)
             D_.append(D)
             PFE,PFI = get_fixed_points(alpha) ; PFI = PFI - 2* np.pi; #print(alpha)
-            OMEGAP_.append(np.pi/get_omega_p(xf, yf))
+            OMEGAP_.append(3/get_omega_p(xf, yf))
 
             
         #Plotting 
@@ -319,7 +319,7 @@ def plot_fft_alpha_all(save_path_name,data_folder,dt,d,tuple_):
         alpha =  1.1 * omega    
         (teo_XX,teo_DUR) = download_data(teo_data_folder_ +str(alpha/omega)+'.pkl')
         axs[0,1].plot(teo_XX,teo_DUR ,linewidth=1,color = 'black',alpha = 1,label = str(alpha/omega))        
-        
+        axs[0,1].set_xlim[0.4,1]
     print(OMEGAP_,teo_DUR)
 
 
