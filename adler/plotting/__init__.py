@@ -26,7 +26,7 @@ from adler.plotting.plotting_pulses import  plot_activity_square_dist,plot_activ
 #plot_pulses,plot_activity, plot_consecutiveness, plot_2d_mean_activity,plot_quantifiers_histograms
 
 from adler.plotting.plotting_pulses import plot_2d_quantifiers,plot_2d_superposition
-from adler.plotting.plotting_consecutive import plot_consecutiveness_activity,plot_consecutiveness_activity_dist
+from adler.plotting.plotting_consecutive import plot_consecutiveness_activity,plot_consecutiveness_activity_dist,plot_consecutiveness_activity_ou
 
 
 from adler.plotting.plotting_dt_alpha import plot_simulated_dt_alpha,plot_theta_alpha, plot_simulated_fixed_dt_alpha,plot_theta_fixed_alpha
