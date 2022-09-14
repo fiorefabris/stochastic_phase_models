@@ -10,6 +10,49 @@ from functools import partial
 def count_iterable(iterator):
     return sum(1 for i in iterator)
 
+
+
+#%%
+################################################
+#### Module for computing the consecutiveness OU
+################################################  
+
+def get_consecutive_ou(description_file,data_folder,save_folder):
+    '''
+    data folder: donde están los dt
+    '''
+
+    ref = pd.read_excel(description_file,sheet_name= 'File_references')
+    ref.set_index('Unnamed: 0',inplace=True);
+    pool = mp.Pool(processes= ceil(mp.cpu_count()))
+    
+    tuple_ = ref.groupby(['alpha0','sigma','tau'])
+    get_consecutive_trial_ = partial(get_consecutive_trial_ou,data_folder,save_folder)
+    pool.map(get_consecutive_trial_,tuple_)
+    pool.close()
+    pool.join()
+    return (2)
+
+def get_consecutive_trial_ou(data_folder,save_folder,tuple_):
+    
+    (_,_,_),row_ = tuple_[0],tuple_[1]
+    
+   # omega =  row_.omega.unique()[0]
+   # delta = np.round(i/omega,4)  
+    
+    for (order,row) in row_.groupby(['order']):
+        number      = int(row.number)
+        file_name   =  str(number)+'_'+str(order)+'.pkl'
+            
+        if (check_file('max_'+file_name,data_folder)):       
+            consecutive_trial_st_ = consecutive_trial_st(number,order,data_folder)
+            isolated_pulses, consecutive_trial = consecutive_trial_st_.get_consecutive_trains_of_pulses()
+                                    
+            save_data(consecutive_trial,save_folder+'c_'+file_name)
+            save_data(isolated_pulses,save_folder+'i_'+file_name)
+        else:
+            pass
+    return(0)
 #%%
 ################################################
 #### Module for computing the consecutiveness
