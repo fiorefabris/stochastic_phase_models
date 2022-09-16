@@ -752,12 +752,12 @@ def plot_consecutiveness_activity_ou_(dt,T,d,data_folder,save_folder,dyncode_fil
     
     ax1 = plt.subplot(gs_row_1[1,0])
     ax1_dc = plt.subplot(gs_row_1[0,0])
-    bins_dc = ax1_dc.hist(dyncode_df.dt_peaks.dropna().values/3,bins=np.linspace(0,20,21),density=True,color=green,alpha=1,linewidth=1); 
+    bins_dc = ax1_dc.hist(dyncode_df.dt_peaks.dropna().values/3,bins=np.linspace(0,20,21),density=True,color=green,alpha=1,linewidth=0); 
     compute_st_values(ax1_dc,dyncode_df.dt_peaks.dropna().values/3,bins_dc,1,10)   
     
     if len(DT) > 0:
         
-        bins = ax1.hist(DT,bins=np.linspace(0,20,21),density=True,alpha=1,linewidth=1); 
+        bins = ax1.hist(DT,bins=np.linspace(0,20,21),density=True,alpha=1,linewidth=0); 
         ax1.axvspan(6, 8.33, color=green, alpha=0.3, lw=0)
         #tune_plot(ax,'dt (min)','probability density (1/min)',[0,20],1,[0,0.4],1,30,20)
         compute_st_values(ax1,DT,bins,1,10)   
@@ -777,12 +777,12 @@ def plot_consecutiveness_activity_ou_(dt,T,d,data_folder,save_folder,dyncode_fil
 
     ax2 = plt.subplot(gs_row_1[1,1])
     ax2_dc = plt.subplot(gs_row_1[0,1])
-    bins_dc = ax2_dc.hist(dyncode_df.IPI.dropna().values/3,np.linspace(0,40,21),density=True,color = green,alpha=1,linewidth=1); 
+    bins_dc = ax2_dc.hist(dyncode_df.IPI.dropna().values/3,np.linspace(0,40,21),density=True,color = green,alpha=1,linewidth=0); 
     compute_st_values(ax2_dc,dyncode_df.IPI.dropna().values/3,bins_dc,1,10)   
 
     if len(DT) > 0:
         
-        bins = ax2.hist(IPI,bins=np.linspace(0,40,21),density=True,alpha=1,linewidth=1); 
+        bins = ax2.hist(IPI,bins=np.linspace(0,40,21),density=True,alpha=1,linewidth=0); 
         ax2.axvspan(8, 18.67, color=green, alpha=0.3, lw=0)
         #tune_plot(ax,'dt (min)','probability density (1/min)',[0,20],1,[0,0.4],1,30,20)
         compute_st_values(ax2,IPI,bins,1,10)   
@@ -801,12 +801,12 @@ def plot_consecutiveness_activity_ou_(dt,T,d,data_folder,save_folder,dyncode_fil
     ax3 = plt.subplot(gs_row_1[1,2])
     ax3_dc = plt.subplot(gs_row_1[0,2])
     dyncode_pr = dyncode_df.groupby(level="cell").amp_peaks.count()/(dyncode_df.groupby(level="cell").FRAME.count()/3)
-    bins_dc = ax3_dc.hist(dyncode_pr,bins=np.linspace(0,0.08,10),density=True,color = green,alpha=1,linewidth=1); 
+    bins_dc = ax3_dc.hist(dyncode_pr,bins=np.linspace(0,0.08,10),density=True,color = green,alpha=1,linewidth=0); 
     compute_st_values(ax3_dc,dyncode_pr,bins_dc,1,10)   
 
     if len(DT) > 0:
         
-        bins = ax3.hist(pulse_rate,bins=np.linspace(0,0.08,10),density=True,alpha=1,linewidth=1); 
+        bins = ax3.hist(pulse_rate,bins=np.linspace(0,0.08,10),density=True,alpha=1,linewidth=0); 
         #ax3.axvspan(0.0067, 0.02, color=green, alpha=0.3, lw=0) #old,creo que es en frames
         ax3.axvspan( 0.02, 0.06, color=green, alpha=0.3, lw=0)
         compute_st_values(ax3,pulse_rate,bins,1,10)   
@@ -816,7 +816,7 @@ def plot_consecutiveness_activity_ou_(dt,T,d,data_folder,save_folder,dyncode_fil
     for ax in [ax3,ax3_dc]:
         ax.set_ylim([0,40]);
         ax.set_xlim([0,0.08])
-        set_scale(ax3,[0,0.08], [0,40])       
+        set_scale(ax,[0,0.08], [0,40])       
         ax.set_yticklabels([0,40])
         ax.tick_params(labelsize=10)    
     ax3.set_xticklabels([0,0.08])
