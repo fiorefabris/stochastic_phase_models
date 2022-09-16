@@ -126,7 +126,8 @@ def load_activity(row_,data_folder,dt,T,d):
         
         number      = int(row.number)
         file_name   =  str(number)+'_'+str(order)+'.pkl'
-        if order < 69:
+       
+        if n_cell < 69:
             if (check_file('dt_'+file_name,data_folder)):        
                 
                 duration_cell   = download_data(data_folder+'dt_'+file_name)     

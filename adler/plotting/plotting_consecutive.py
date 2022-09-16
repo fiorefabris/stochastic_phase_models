@@ -772,6 +772,7 @@ def plot_consecutiveness_activity_ou_(dt,T,d,data_folder,save_folder,dyncode_fil
         ax.tick_params(labelsize=10)
     ax1.set_xticklabels([0,5,10,15,20])
     ax1_dc.set_xticklabels([])
+    ax1.set_xlabel('duración' ,fontsize=10); 
 
 
 
@@ -797,6 +798,7 @@ def plot_consecutiveness_activity_ou_(dt,T,d,data_folder,save_folder,dyncode_fil
         ax.tick_params(labelsize=10)
     ax2.set_xticklabels([0,10,20,30,40])
     ax2_dc.set_xticklabels([])
+    ax2.set_xlabel('IPI' ,fontsize=10); 
 
     ax3 = plt.subplot(gs_row_1[1,2])
     ax3_dc = plt.subplot(gs_row_1[0,2])
@@ -821,7 +823,8 @@ def plot_consecutiveness_activity_ou_(dt,T,d,data_folder,save_folder,dyncode_fil
         ax.tick_params(labelsize=10)    
     ax3.set_xticklabels([0,0.08])
     ax3_dc.set_xticklabels([])
-    
+    ax3.set_xlabel('pulse rate' ,fontsize=10); 
+
     
     
 # =============================================================================
