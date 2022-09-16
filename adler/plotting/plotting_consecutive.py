@@ -9,7 +9,7 @@ import seaborn as sns
 
 from adler.data_managing_functions import download_data,check_file,time
 from adler.plotting.plotting_main import set_scale,mask_arr,load_activity,compute_st_values,download_quantifiers,load_activity_dist
-from adler.plotting.dyncode_main import get_consecutive_data_dyncode,get_exp_N_total_isolated_consecutive,get_activity_data_dyncode
+from adler.plotting.dyncode_main import get_consecutive_data_dyncode,get_exp_N_total_isolated_consecutive,get_activity_data_dyncode,get_conc_data
 
 def get_mean_value_place(trials,no_std = False):
     #por cada lista vacia, es como si hubiera una lista de ceros! 
@@ -723,10 +723,16 @@ def plot_consecutiveness_activity_ou_(dt,T,d,data_folder,save_folder,dyncode_fil
 # =============================================================================
 #     quantifiers hist plot
 # =============================================================================
-    gs_row_1 = gridspec.GridSpecFromSubplotSpec(nrows=1, ncols=3, subplot_spec=gs_main[0])
+    gs_row_1 = gridspec.GridSpecFromSubplotSpec(nrows=2, ncols=3, subplot_spec=gs_main[0])
     DT,IPI,joint_duration,dm,pulse_rate = download_quantifiers(dataset,data_folder,T,dt,d,False)
+    dyncode_df = get_conc_data(dyncode_filename)['an_WT_ESL']
     
-    ax1 = plt.subplot(gs_row_1[0])
+    
+    ax1 = plt.subplot(gs_row_1[1,0])
+    ax1_dc = plt.subplot(gs_row_1[0,0])
+    bins_dc = ax1_dc.hist(dyncode_df.dt_peaks.dropna().values/3,bins=np.linspace(0,20,21),density=True,color=green,alpha=1,linewidth=1); 
+    compute_st_values(ax1_dc,dyncode_df.dt_peaks.dropna().values/3,bins_dc,1,10)   
+    
     if len(DT) > 0:
         
         bins = ax1.hist(DT,bins=np.linspace(0,20,21),density=True,alpha=1,linewidth=1); 
@@ -736,14 +742,21 @@ def plot_consecutiveness_activity_ou_(dt,T,d,data_folder,save_folder,dyncode_fil
     else:
         print(delta0,"no data")
     
-    ax1.set_ylim([0,0.2]);
-    ax1.set_xlim([0,20])
-    set_scale(ax1,[0,5,10,15,20], [0,0.2])
-    ax1.set_xticklabels([0,5,10,15,20])
-    ax1.set_yticklabels([0,0.2])
-    ax1.tick_params(labelsize=10)
+    for ax in [ax1,ax1_dc]:
+        ax.set_ylim([0,0.2]);
+        ax.set_xlim([0,20])
+        set_scale(ax,[0,5,10,15,20], [0,0.2])
+        ax.set_xticklabels([0,5,10,15,20])
+        ax.set_yticklabels([0,0.2])
+        ax.tick_params(labelsize=10)
     
-    ax2 = plt.subplot(gs_row_1[1])
+    
+
+    ax2 = plt.subplot(gs_row_1[1,1])
+    ax2_dc = plt.subplot(gs_row_1[0,1])
+    bins_dc = ax2_dc.hist(dyncode_df.IPI.dropna().values/3,np.linspace(0,40,21),density=True,color = green,alpha=1,linewidth=1); 
+    compute_st_values(ax2_dc,dyncode_df.IPI.dropna().values/3,bins_dc,1,10)   
+
     if len(DT) > 0:
         
         bins = ax2.hist(IPI,bins=np.linspace(0,40,21),density=True,alpha=1,linewidth=1); 
@@ -753,14 +766,20 @@ def plot_consecutiveness_activity_ou_(dt,T,d,data_folder,save_folder,dyncode_fil
     else:
         print(delta0,"no data")
     
-    ax2.set_ylim([0,0.1]);
-    ax2.set_xlim([0,40])
-    set_scale(ax2,[0,10,20,30,40], [0,0.1])
-    ax2.set_xticklabels([0,10,20,30,40])
-    ax2.set_yticklabels([0,0.1])
-    ax2.tick_params(labelsize=10)
+    for ax in [ax2,ax2_dc]:
+        ax.set_ylim([0,0.1]);
+        ax.set_xlim([0,40])
+        set_scale(ax,[0,10,20,30,40], [0,0.1])
+        ax.set_xticklabels([0,10,20,30,40])
+        ax.set_yticklabels([0,0.1])
+        ax.tick_params(labelsize=10)
 
-    ax3 = plt.subplot(gs_row_1[2]) # aca va el histograma de pulse rate :)
+    ax3 = plt.subplot(gs_row_1[1,2])
+    ax3_dc = plt.subplot(gs_row_1[0,2])
+    dyncode_pr = dyncode_df.groupby(level="cell").amp_peaks.count()/(dyncode_df.groupby(level="cell").FRAME.count()/3)
+    bins_dc = ax3_dc.hist(dyncode_pr,bins=np.linspace(0,0.08,10),density=True,color = green,alpha=1,linewidth=1); 
+    compute_st_values(ax3_dc,dyncode_pr,bins_dc,1,10)   
+
     if len(DT) > 0:
         
         bins = ax3.hist(pulse_rate,bins=np.linspace(0,0.08,10),density=True,alpha=1,linewidth=1); 

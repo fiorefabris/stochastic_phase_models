@@ -132,6 +132,12 @@ def load_activity(row_,data_folder,dt,T,d):
             duration_cell   = download_data(data_folder+'dt_'+file_name)     
             n_cell = n_cell + 1
             activity = activity + [sum(duration_cell) / len(time(dt,T,d)) *  100]
+        
+        elif  (check_file(file_name,data_folder)):
+            activity = activity + [0]
+            n_cell = n_cell + 1 
+        else:
+            print("load_activity: no TS for file_name",file_name)
             
     activity = np.sort(activity)[::-1] #orden descendente
     silent = np.ones(len(activity)) * 100 - activity
