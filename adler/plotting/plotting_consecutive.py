@@ -11,6 +11,28 @@ from adler.data_managing_functions import download_data,check_file,time
 from adler.plotting.plotting_main import set_scale,mask_arr,load_activity,compute_st_values,download_quantifiers,load_activity_dist
 from adler.plotting.dyncode_main import get_consecutive_data_dyncode,get_exp_N_total_isolated_consecutive,get_activity_data_dyncode,get_conc_data
 
+#%%
+import matplotlib
+matplotlib.rcParams['lines.markeredgecolor'] = 'black'
+matplotlib.rcParams['lines.markeredgewidth'] = 0
+matplotlib.rcParams['savefig.transparent'] = True
+matplotlib.rc('pdf', fonttype=42)
+matplotlib.rcParams['savefig.transparent'] = True
+
+
+# change font
+matplotlib.rcParams['font.sans-serif'] = "Arial"
+matplotlib.rcParams['font.family'] = "sans-serif"
+
+
+sns.despine()
+sns.set(context='paper', style='ticks')
+plt.grid(0)
+plt.rc('axes.spines', top=True, bottom=True, left=True, right=True); 
+
+
+
+#%%
 def get_mean_value_place(trials,no_std = False):
     #por cada lista vacia, es como si hubiera una lista de ceros! 
     arr_aux = []
@@ -746,11 +768,12 @@ def plot_consecutiveness_activity_ou_(dt,T,d,data_folder,save_folder,dyncode_fil
         ax.set_ylim([0,0.2]);
         ax.set_xlim([0,20])
         set_scale(ax,[0,5,10,15,20], [0,0.2])
-        ax.set_xticklabels([0,5,10,15,20])
         ax.set_yticklabels([0,0.2])
         ax.tick_params(labelsize=10)
-    
-    
+    ax1.set_xticklabels([0,5,10,15,20])
+    ax1_dc.set_xticklabels([])
+
+
 
     ax2 = plt.subplot(gs_row_1[1,1])
     ax2_dc = plt.subplot(gs_row_1[0,1])
@@ -770,9 +793,10 @@ def plot_consecutiveness_activity_ou_(dt,T,d,data_folder,save_folder,dyncode_fil
         ax.set_ylim([0,0.1]);
         ax.set_xlim([0,40])
         set_scale(ax,[0,10,20,30,40], [0,0.1])
-        ax.set_xticklabels([0,10,20,30,40])
         ax.set_yticklabels([0,0.1])
         ax.tick_params(labelsize=10)
+    ax2.set_xticklabels([0,10,20,30,40])
+    ax2_dc.set_xticklabels([])
 
     ax3 = plt.subplot(gs_row_1[1,2])
     ax3_dc = plt.subplot(gs_row_1[0,2])
@@ -789,13 +813,14 @@ def plot_consecutiveness_activity_ou_(dt,T,d,data_folder,save_folder,dyncode_fil
     else:
         print(delta0,"no data")
     
-    ax3.set_ylim([0,40]);
-    ax3.set_xlim([0,0.08])
-    set_scale(ax3,[0,0.08], [0,40])
+    for ax in [ax3,ax3_dc]:
+        ax.set_ylim([0,40]);
+        ax.set_xlim([0,0.08])
+        set_scale(ax3,[0,0.08], [0,40])       
+        ax.set_yticklabels([0,40])
+        ax.tick_params(labelsize=10)    
     ax3.set_xticklabels([0,0.08])
-    ax3.set_yticklabels([0,40])
-    ax3.tick_params(labelsize=10)    
-    
+    ax3_dc.set_xticklabels([])
     
     
     
