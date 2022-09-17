@@ -472,3 +472,61 @@ def time_evolution_save_ou(param,number,order,main_file_name,dt,T,d):
     t1 = time.perf_counter() - t0
     print(file_name,t1)
     return(0)
+    
+    
+#%%
+# =============================================================================
+# =============================================================================
+# =============================================================================
+# Module for computing the time series with colored noise in alpha and additive white noise
+# =============================================================================
+# =============================================================================
+# =============================================================================
+
+
+# Time evolution funtion 
+def time_evolution_ou_D(dt,T,d,omega,alpha0,sigma,tau,D):
+    ''' Simulated data of the Adler phase model with white nouse and colopr noise in alpha,
+
+'''
+
+    n     = int(T/dt) # total number of steps
+    
+    #variables
+    theta = np.zeros(ceil(n/d))
+    alpha = np.zeros(ceil(n/d))
+
+    #### Initial conditions ############################
+    ####################################################
+    np.random.seed()
+    theta_past = np.random.uniform(0,2)*np.pi
+    alpha_past = alpha0
+    
+    #### Time evolution ################################
+    ####################################################
+
+    for i in range(n-1):
+        theta_present,alpha_present = get_theta_present_D(theta_past,alpha_past,omega,alpha0,sigma,tau,D,dt)
+        
+        if i % d == 0:
+            theta[i // d] = theta_past
+            alpha[i // d] = alpha_past
+            
+        theta_past = theta_present
+        alpha_past = alpha_present
+
+
+    return(theta,alpha)
+
+def get_theta_present_D(theta_past,alpha_past,omega,alpha0,sigma,tau,D,dt):
+    alpha_present = get_ou_process(alpha_past, alpha0,sigma,tau,dt) 
+    
+    k = dt * omega #parte determinista    
+    l = (dt* alpha_past) * np.sin(theta_past) # parte ruido de color
+    
+    u = np.sqrt(-2* np.log(np.random.uniform(0,1))) * np.cos(2*np.pi*np.random.uniform(0,1)) #ruido blanco
+    l_D = np.sqrt(dt * 2 * D) * u # ruido blanco
+    
+    theta_present = theta_past + dt * omega +  (dt* alpha_past)/2 * (np.sin(theta_past) + np.sin(theta_past+k+l+l_D))+ l_D
+
+    return(theta_present,alpha_present)
