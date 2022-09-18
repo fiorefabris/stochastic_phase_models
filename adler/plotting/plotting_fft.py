@@ -212,7 +212,7 @@ def get_omega_p(x_signal, signal):
     return x_signal[w0_ix]
 
 def get_omega_p_avrg(x_signal, signal,window_size):
-    return get_omega_p(x_signal, moving_average(data, window_size))
+    return get_omega_p(x_signal, moving_average(signal, window_size))
 
 def plot_fft_all(description_file,data_folder,dt,d,save_path_name):
     #para un omega, plotea los alphas uno encima del otro
