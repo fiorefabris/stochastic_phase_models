@@ -6,7 +6,7 @@ from math import ceil
 from functools import partial 
 import seaborn as sns
 
-from adler.data_managing_functions import download_data,check_file,get_fixed_points
+from adler.data_managing_functions import download_data,check_file,get_fixed_points,save_data
 
 
 #%%
@@ -210,8 +210,9 @@ def get_omega_p(x_signal, signal):
     w0_ix = np.argmax(signal) # el índice de la fundamental 
     S_w0 = signal[w0_ix] #la potencia del pico más alto
     return x_signal[w0_ix]
-    
 
+def get_omega_p_avrg(x_signal, signal,window_size):
+    return get_omega_p(x_signal, moving_average(data, window_size))
 
 def plot_fft_all(description_file,data_folder,dt,d,save_path_name):
     #para un omega, plotea los alphas uno encima del otro
@@ -270,13 +271,13 @@ def plot_fft_alpha_all(save_path_name,data_folder,dt,d,tuple_):
 ### Figure
 ###############################################################################    
 
-    fig, axs = plt.subplots(2, 2, sharex=False, sharey=False, figsize=(8.27, 11.69))
+    fig, axs = plt.subplots(4, 4, sharex=False, sharey=False, figsize=(8.27, 11.69))
     fig.subplots_adjust(bottom=0.15, top=0.9, left=0.15, right=0.8, wspace=0.1, hspace=0.2)
     #axs = axs.ravel();
     text = r'$\omega = \frac{2\pi}{7 min}$' + ' ~ ' + r'$ \alpha = $'+str(alpha) + r'$ \frac{2\pi}{7 min}$' 
     axs[0,0].text(0.2,1.05, text, ha='center', va='center', transform=axs[0,0].transAxes, fontsize=12)
 
-    BETA = []; D_ = []; OMEGAP_=[]
+    BETA = []; D_ = []; OMEGAP_=[]; 
     for k,(D,row) in enumerate(rows.groupby(['D'])):
         ax = axs[1,0]; ax.grid(False);
         assert check_file('fft_yf_'+str(omega)+'_'+str(alpha)+'_'+str(D)+'.pkl',data_folder)
@@ -285,11 +286,12 @@ def plot_fft_alpha_all(save_path_name,data_folder,dt,d,tuple_):
         yf = download_data(data_folder+'fft_yf_'+str(omega)+'_'+str(alpha)+'_'+str(D)+'.pkl')
 
         w0, S_w0,wdt_ix,S_wdt, beta = get_quality_factor(xf, yf)
+        
         if beta is not None:
             BETA.append(beta)
             D_.append(D)
-            PFE,PFI = get_fixed_points(alpha) ; PFI = PFI - 2* np.pi; #print(alpha)
-            OMEGAP_.append(3/get_omega_p(xf, yf))
+            #PFE,PFI = get_fixed_points(alpha) ; PFI = PFI - 2* np.pi; #print(alpha)
+            OMEGAP_.append(get_omega_p_avrg(xf, yf,100))
 
             
         #Plotting 
@@ -313,14 +315,7 @@ def plot_fft_alpha_all(save_path_name,data_folder,dt,d,tuple_):
     #axs[0].plot(D_[1:],BETA[1:],'-o') ; axs[0].set_xscale('log')
     axs[0,0].plot(D_,BETA,'-o') ; axs[0,0].set_xscale('log')
     axs[0,1].plot(D_,OMEGAP_,'-o') ; axs[0,1].set_xscale('log')
-    if True:
-        teo_data_folder_ = '/home/fiore/C6_figs/cuenta/teo_integrals/stochastic_res_zoom_' 
-        omega = 2 *np.pi/7 * 9/4
-        alpha =  1.1 * omega    
-        (teo_XX,teo_DUR) = download_data(teo_data_folder_ +str(alpha/omega)+'.pkl')
-        axs[0,1].plot(teo_XX,teo_DUR ,linewidth=1,color = 'black',alpha = 1,label = str(alpha/omega))        
-        axs[0,1].set_xlim([0.4,1])
-    print(OMEGAP_,teo_DUR)
+    save_data(OMEGAP_,save_path_name+'epx_W0_'+str(alpha)+'.pkl')
 
 
         
