@@ -469,20 +469,23 @@ def plot_consecutiveness_activity_dist(dt,beg,T,d,N,Delta,description_file,data_
 
 def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,tuple_):
     
-    
+    green =  sns.color_palette(sns.dark_palette("#2ecc71",30,reverse=False))[15]
     fig = plt.figure(constrained_layout=False, figsize=(8.27, 11.692))
-    gs_main = gridspec.GridSpec(nrows=3, ncols=2, figure=fig); gs_main.update(left=0.1, right=0.9, bottom=0.1, top=0.90, hspace=0.3,wspace=0.3)
+    gs_main = gridspec.GridSpec(nrows=3, ncols=1, figure=fig); gs_main.update(left=0.1, right=0.9, bottom=0.1, top=0.90, hspace=0.3,wspace=0.3)
     (omega,D),ref_ = tuple_[0],tuple_[1]
 
 # =============================================================================
 #     quantifiers hist plot
 # =============================================================================
+    gs_row_1 = gridspec.GridSpecFromSubplotSpec(nrows=1, ncols=3, subplot_spec=gs_main[0])
+    
+    
     DT,IPI,joint_duration,dm = [],[],[],[]
     for (alpha,number),dataset in ref_.groupby(['alpha','number']):
-        DT_aux,IPI_aux,joint_duration_aux,dm_aux = download_quantifiers(dataset,data_folder,T,dt,d,False)
-        DT= DT + list(DT_aux); IPI = IPI + list(IPI_aux); joint_duration = joint_duration + list(joint_duration_aux) ;dm = dm  + list(dm_aux)
-    
-    ax1 = plt.subplot(gs_main[0,0])
+         DT_aux,IPI_aux,joint_duration_aux,dm_aux,pulse_rate_aux = download_quantifiers(dataset,data_folder,T,dt,d,False)
+         DT= DT + list(DT_aux); IPI = IPI + list(IPI_aux); pulse_rate = pulse_rate + list(pulse_rate_aux)
+         
+    ax1 = plt.subplot(gs_row_1[0])
     if len(DT) > 0:
         ax1.axvspan(6, 8.33, color='y', alpha=0.5, lw=0)
         bins = ax1.hist(DT,bins=np.linspace(0,20,21),density=True,alpha=1,linewidth=1); 
@@ -499,7 +502,7 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
     ax1.set_yticklabels([0,0.2])
     ax1.tick_params(labelsize=10)
     
-    ax2 = plt.subplot(gs_main[0,1])
+    ax2 = plt.subplot(gs_row_1[1])
     if len(DT) > 0:
         ax2.axvspan(8, 18.67, color='y', alpha=0.5, lw=0)
         bins = ax2.hist(IPI,bins=np.linspace(0,40,21),density=True,alpha=1,linewidth=1); 
@@ -515,6 +518,23 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
     ax2.set_yticklabels([0,0.1])
     ax2.tick_params(labelsize=10)
 
+    ax3 = plt.subplot(gs_row_1[2]) # aca va el histograma de pulse rate :)
+    if len(DT) > 0:
+        
+        bins = ax3.hist(pulse_rate,bins=np.linspace(0,0.08,10),density=True,alpha=1,linewidth=1); 
+        #ax3.axvspan(0.0067, 0.02, color=green, alpha=0.3, lw=0) #old,creo que es en frames
+        ax3.axvspan( 0.02, 0.06, color=green, alpha=0.3, lw=0)
+        compute_st_values(ax3,pulse_rate,bins,1,10)   
+    else:
+        pass
+    
+    ax3.set_ylim([0,40]);
+    ax3.set_xlim([0,0.08])
+    set_scale(ax3,[0,0.08], [0,40])
+    ax3.set_xticklabels([0,0.08])
+    ax3.set_yticklabels([0,40])
+    ax3.tick_params(labelsize=10)    
+    
 
 # =============================================================================
 #     consecutiveness plot
