@@ -110,43 +110,53 @@ def load_consecutive_statistics(dataset,data_folder,T):
 # =============================================================================
 
 
-def load_consecutive_statistics_realizations_dist(dataset,save_data_arr):
+def load_consecutive_statistics_realizations_dist(dataset,save_data_arr,T):
     mean_trains_cons_trials,total_pulses_trials,isolated_pulses_trials,consecutive_pulses_trials = [],[],[],[]
     
     for data_folder in save_data_arr:
-        mean_trains_cons,total_pulses,isolated_pulses,consecutive_pulses = load_consecutive_statistics_dist(dataset,data_folder)
+        mean_trains_cons,total_pulses,isolated_pulses,consecutive_pulses = load_consecutive_statistics_dist(dataset,data_folder,T)
         
         mean_trains_cons_trials.append(mean_trains_cons)
-        total_pulses_trials.append(total_pulses)
-        isolated_pulses_trials.append(isolated_pulses)
-        consecutive_pulses_trials.append(consecutive_pulses)
+        total_pulses_trials.append(total_pulses/T)
+        isolated_pulses_trials.append(isolated_pulses/T)
+        consecutive_pulses_trials.append(consecutive_pulses/T)
         
     return get_mean_value_place(mean_trains_cons_trials,False),total_pulses_trials,isolated_pulses_trials,consecutive_pulses_trials
 
 
-def load_consecutive_statistics_dist(ref_,data_folder):
+def load_consecutive_statistics_dist(ref_,data_folder,T):
         ''' le pasas un experimento  y te devuelve la estadistica de pulsos cons
         Con distinto number! y order puede ser (osea distintas alphas)'''
+        
         isolated_pulses_dataset = []
         total_pulses_dataset = []
         consecutive_pulses_dataset = []
         consecutive_trains_dataset = []
-        
+        cell_n = 0
         for (number,order),row in ref_.groupby(['number','order']):
             file_name   =  str(number)+'_'+str(order)+'.pkl'
             
-            if (check_file('i_'+file_name,data_folder)): 
-                isolated_pulses = download_data(data_folder+'i_'+file_name)
-                isolated_pulses_dataset.append(isolated_pulses)
-            
-                consecutive_trial = download_data(data_folder+'c_'+file_name)
-                consecutive_trains_dataset.append(consecutive_trial)
-                total_pulses_dataset.append(consecutive_trial[0])
-            
-                consecutive_pulses = consecutive_trial[0]-isolated_pulses
-                consecutive_pulses_dataset.append(consecutive_pulses)
+            if cell_n < 69:
+                if (check_file('i_'+file_name,data_folder)): 
+                    cell_n = cell_n + 1
+                    isolated_pulses = download_data(data_folder+'i_'+file_name)
+                    isolated_pulses_dataset.append(isolated_pulses)
+                
+                    consecutive_trial = download_data(data_folder+'c_'+file_name)
+                    #consecutive_trains_dataset.append(consecutive_trial)
+                    total_pulses_dataset.append(consecutive_trial[0])
+                
+                    consecutive_pulses = consecutive_trial[0]-isolated_pulses
+                    consecutive_pulses_dataset.append(consecutive_pulses)
+                
+                if (check_file('exp_c_'+file_name,data_folder)):
+                    consecutive_trial_exp = download_data(data_folder+'exp_c_'+file_name)
+                    consecutive_trains_dataset.append(consecutive_trial_exp)
+                else:
+                    consecutive_trains_dataset.append([0])
         print('len total_pulses_dataset' , len(total_pulses_dataset))
-        return get_mean_value_place(consecutive_trains_dataset,True),sum(total_pulses_dataset),sum(isolated_pulses_dataset),sum(consecutive_pulses_dataset)
+        return get_mean_value_place(consecutive_trains_dataset,True),np.median(total_pulses_dataset),np.median(isolated_pulses_dataset),np.median(consecutive_pulses_dataset)
+        #return get_mean_value_place(consecutive_trains_dataset,True),sum(total_pulses_dataset),sum(isolated_pulses_dataset),sum(consecutive_pulses_dataset)
 
 
 #%%
