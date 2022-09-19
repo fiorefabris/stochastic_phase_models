@@ -149,8 +149,8 @@ def load_consecutive_statistics_dist(ref_,data_folder,T):
                     consecutive_pulses = consecutive_trial[0]-isolated_pulses
                     consecutive_pulses_dataset.append(consecutive_pulses)
                 else:
-                    isolated_pulses_dataset.append([0])
-                    total_pulses_dataset.append([0])
+                    isolated_pulses_dataset.append(0)
+                    total_pulses_dataset.append(0)
                 if (check_file('exp_c_'+file_name,data_folder)):
                     consecutive_trial_exp = download_data(data_folder+'exp_c_'+file_name)
                     consecutive_trains_dataset.append(consecutive_trial_exp)
