@@ -479,7 +479,7 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
 # =============================================================================
     DT,IPI,joint_duration,dm = [],[],[],[]
     for (alpha,number),dataset in ref_.groupby(['alpha','number']):
-        DT_aux,IPI_aux,joint_duration_aux,dm_aux = download_quantifiers(dataset,data_folder,dt,d)
+        DT_aux,IPI_aux,joint_duration_aux,dm_aux = download_quantifiers(dataset,data_folder,T,dt,d,False)
         DT= DT + list(DT_aux); IPI = IPI + list(IPI_aux); joint_duration = joint_duration + list(joint_duration_aux) ;dm = dm  + list(dm_aux)
     
     ax1 = plt.subplot(gs_main[0,0])
