@@ -573,10 +573,10 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
     total_pulses_normed = [i/total_N for i in total_pulses]
     isolated_pulses_normed = [i/isolated_N for i in isolated_pulses]
     consecutive_pulses_normed = [i/consecutive_N for i in consecutive_pulses]
-    print(consecutive_N,consecutive_pulses)
+    #print(consecutive_N,consecutive_pulses)
     
     arr = [total_pulses_normed,isolated_pulses_normed,consecutive_pulses_normed]
-    print(total_pulses_normed,total_pulses,total_N)
+    #print(total_pulses_normed,total_pulses,total_N)
     
     X1 = [np.ones(len(arr[i]))*(i+1) for i in range(0,len(arr))]
     bp1 = ax6.boxplot(arr,vert=True,whis=[5, 95],patch_artist=True,showmeans=False,meanline=True,showfliers=False )
@@ -599,14 +599,13 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
 
     ax6.tick_params(axis='x', labelsize=8,length=2); 
     ax6.tick_params(axis='y', labelsize=8,length=2)
-    ax6.set_xlabel('total,isolated,consecutive',fontsize=8)
-    ax6.set_ylabel('counts',fontsize=8)
-    ax6.set_ylim([0.9,2.5])
+    ax6.set_xlabel(' ',fontsize=8)
+    ax6.set_ylabel('cuentas normalizadas',fontsize=8)
+    ax6.set_ylim([0.0,2.5])
     ax6.xaxis.set_label_coords(0.5, -0.12);ax6.yaxis.set_label_coords(-0.05,0.5)
     ax6.tick_params(labelsize=6,direction='out', pad=1,length=2)
     ax6.set_xticklabels([' total' ,'isolated','consecutive'],rotation = 0)
     ax6.axhline(y = 1,color = green,linewidth=0.5,linestyle = 'dashed')
-
 
 # =============================================================================
 #     activity population and mean plot
