@@ -611,7 +611,8 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
 # =============================================================================
 #     activity population and mean plot
 # =============================================================================
-    ax3 = plt.subplot(gs_main[1,0]); plt.rc('axes.spines', top=False, bottom=True, left=True, right=False); 
+    gs_row_2 = gridspec.GridSpecFromSubplotSpec(nrows=1, ncols=3, subplot_spec=gs_main[1])
+    ax3 = plt.subplot(gs_row_2[0:2]); plt.rc('axes.spines', top=False, bottom=True, left=True, right=False); 
     
     #activity,silent,n_cell = load_activity(dataset,data_folder,dt,T,d)
     activity,silent,n_cell = load_activity_dist(ref_,data_folder,dt,T,d)
@@ -631,7 +632,7 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
     ax3.xaxis.set_label_coords(0.5,-0.06)
     
     #mean activity
-    ax4 = plt.subplot(gs_main[1,1]); plt.rc('axes.spines', top=False, bottom=True, left=True, right=False); 
+    ax4 = plt.subplot(gs_row_2[2]); plt.rc('axes.spines', top=False, bottom=True, left=True, right=False); 
     
     
     if len(activity) > 0:
