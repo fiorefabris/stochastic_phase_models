@@ -79,13 +79,17 @@ def load_consecutive_statistics(dataset,data_folder,T):
         total_pulses_dataset = []
         consecutive_pulses_dataset = []
         consecutive_trains_dataset = []
+        n_cell = 0
         
         for (order,row) in dataset.groupby(['order']):
-            if order < 69:
+            if n_cell < 68:
                 number      = int(row.number)
                 file_name   =  str(number)+'_'+str(order)+'.pkl'
+                n_cell = n_cell+1
                 
-                if (check_file('i_'+file_name,data_folder)): #esto sucede solamente si hay pulsos en la serie temporal
+                if (check_file('i_'+file_name,data_folder)): 
+                    #esto sucede solamente si hay pulsos en la serie temporal
+                    
                     isolated_pulses = download_data(data_folder+'i_'+file_name)
                     isolated_pulses_dataset.append(isolated_pulses)
                 
@@ -96,13 +100,20 @@ def load_consecutive_statistics(dataset,data_folder,T):
                     consecutive_pulses = consecutive_trial[0]-isolated_pulses
                     #print(consecutive_trial[0],isolated_pulses,consecutive_pulses)
                     consecutive_pulses_dataset.append(consecutive_pulses)
-#acaaaa ---> poner que cuente tb cuando no hay maximos! agregar listas vacias asi despues la funcion get_mean_value los cuenta                    
-                
+                    
+                    
+                else:
+                    isolated_pulses_dataset.append(0)
+                    total_pulses_dataset.append(0)
+                    consecutive_pulses_dataset.append([])
+                    
                 if (check_file('exp_c_'+file_name,data_folder)):
+                    #esto sucede sólo si hay máximos
                     consecutive_trial_exp = download_data(data_folder+'exp_c_'+file_name)
                     consecutive_trains_dataset.append(consecutive_trial_exp)
                 else:
                     consecutive_trains_dataset.append([0])
+                    #para get_mean_value_place, es lo mismo lista vacía que lista con cerois
         return get_mean_value_place(consecutive_trains_dataset,True),np.median(total_pulses_dataset),np.median(isolated_pulses_dataset),np.median(consecutive_pulses_dataset)
 
 # =============================================================================
@@ -194,47 +205,65 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
 # =============================================================================
 #     quantifiers hist plot
 # =============================================================================
-    gs_row_1 = gridspec.GridSpecFromSubplotSpec(nrows=1, ncols=3, subplot_spec=gs_main[0])
+    gs_row_1 = gridspec.GridSpecFromSubplotSpec(nrows=2, ncols=3, subplot_spec=gs_main[0])
+    dyncode_df = get_conc_data(dyncode_filename)['an_WT_ESL']
     DT,IPI,joint_duration,dm,pulse_rate = download_quantifiers(dataset,data_folder,T,dt,d,False)
     
-    ax1 = plt.subplot(gs_row_1[0])
+    ax1 = plt.subplot(gs_row_1[1,0])
+    ax1_dc = plt.subplot(gs_row_1[0,0])
+    bins_dc = ax1_dc.hist(dyncode_df.dt_peaks.dropna().values/3,bins=np.linspace(0,20,21),density=True,color=green,alpha=1,linewidth=0); 
+    compute_st_values(ax1_dc,dyncode_df.dt_peaks.dropna().values/3,bins_dc,1,10)   
+    
     if len(DT) > 0:
         
-        bins = ax1.hist(DT,bins=np.linspace(0,20,21),density=True,alpha=1,linewidth=1); 
+        bins = ax1.hist(DT,bins=np.linspace(0,20,21),density=True,alpha=1,linewidth=0); 
         ax1.axvspan(6, 8.33, color=green, alpha=0.3, lw=0)
         #tune_plot(ax,'dt (min)','probability density (1/min)',[0,20],1,[0,0.4],1,30,20)
         compute_st_values(ax1,DT,bins,1,10)   
     else:
         print(delta,D,"no data")
     
-    ax1.set_ylim([0,0.2]);
-    ax1.set_xlim([0,20])
-    set_scale(ax1,[0,5,10,15,20], [0,0.2])
+    for ax in [ax1,ax1_dc]:    
+        ax.set_ylim([0,0.2]);
+        ax.set_xlim([0,20])
+        set_scale(ax,[0,5,10,15,20], [0,0.2])
+        ax.set_yticklabels([0,0.2])
+        ax.tick_params(labelsize=10)
     ax1.set_xticklabels([0,5,10,15,20])
-    ax1.set_yticklabels([0,0.2])
-    ax1.tick_params(labelsize=10)
+    ax1_dc.set_xticklabels([])
+    ax1.set_xlabel('duración' ,fontsize=10); 
     
-    ax2 = plt.subplot(gs_row_1[1])
+    ax2 = plt.subplot(gs_row_1[1,1])
+    ax2_dc = plt.subplot(gs_row_1[0,1])
+    bins_dc = ax2_dc.hist(dyncode_df.IPI.dropna().values/3,np.linspace(0,40,21),density=True,color = green,alpha=1,linewidth=0); 
+    compute_st_values(ax2_dc,dyncode_df.IPI.dropna().values/3,bins_dc,1,10)   
     if len(DT) > 0:
         
-        bins = ax2.hist(IPI,bins=np.linspace(0,40,21),density=True,alpha=1,linewidth=1); 
+        bins = ax2.hist(IPI,bins=np.linspace(0,40,21),density=True,alpha=1,linewidth=0); 
         ax2.axvspan(8, 18.67, color=green, alpha=0.3, lw=0)
         #tune_plot(ax,'dt (min)','probability density (1/min)',[0,20],1,[0,0.4],1,30,20)
         compute_st_values(ax2,IPI,bins,1,10)   
     else:
         print(delta,D,"no data")
     
-    ax2.set_ylim([0,0.1]);
-    ax2.set_xlim([0,40])
-    set_scale(ax2,[0,10,20,30,40], [0,0.1])
+    for ax in [ax2,ax2_dc]:
+        ax.set_ylim([0,0.1]);
+        ax.set_xlim([0,40])
+        set_scale(ax,[0,10,20,30,40], [0,0.1])
+        ax.set_yticklabels([0,0.1])
+        ax.tick_params(labelsize=10)
     ax2.set_xticklabels([0,10,20,30,40])
-    ax2.set_yticklabels([0,0.1])
-    ax2.tick_params(labelsize=10)
+    ax2_dc.set_xticklabels([])
+    ax2.set_xlabel('IPI' ,fontsize=10); 
 
-    ax3 = plt.subplot(gs_row_1[2]) # aca va el histograma de pulse rate :)
+    ax3 = plt.subplot(gs_row_1[1,2])
+    ax3_dc = plt.subplot(gs_row_1[0,2])
+    dyncode_pr = dyncode_df.groupby(level="cell").amp_peaks.count()/(dyncode_df.groupby(level="cell").FRAME.count()/3)
+    bins_dc = ax3_dc.hist(dyncode_pr,bins=np.linspace(0,0.08,10),density=True,color = green,alpha=1,linewidth=0); 
+    compute_st_values(ax3_dc,dyncode_pr,bins_dc,1,10)   
     if len(DT) > 0:
         
-        bins = ax3.hist(pulse_rate,bins=np.linspace(0,0.08,10),density=True,alpha=1,linewidth=1); 
+        bins = ax3.hist(pulse_rate,bins=np.linspace(0,0.08,10),density=True,alpha=1,linewidth=0); 
         #ax3.axvspan(0.0067, 0.02, color=green, alpha=0.3, lw=0) #old,creo que es en frames
         ax3.axvspan( 0.02, 0.06, color=green, alpha=0.3, lw=0)
         compute_st_values(ax3,pulse_rate,bins,1,10)   
@@ -247,8 +276,6 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
     ax3.set_xticklabels([0,0.08])
     ax3.set_yticklabels([0,40])
     ax3.tick_params(labelsize=10)    
-    
-    
     
     
 # =============================================================================
