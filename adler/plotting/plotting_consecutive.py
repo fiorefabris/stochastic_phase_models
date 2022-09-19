@@ -480,7 +480,7 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
     gs_row_1 = gridspec.GridSpecFromSubplotSpec(nrows=1, ncols=3, subplot_spec=gs_main[0])
     
     
-    DT,IPI,joint_duration,dm = [],[],[],[]
+    DT,IPI,pulse_rate= [],[],[]
     for (alpha,number),dataset in ref_.groupby(['alpha','number']):
          DT_aux,IPI_aux,joint_duration_aux,dm_aux,pulse_rate_aux = download_quantifiers(dataset,data_folder,T,dt,d,False)
          DT= DT + list(DT_aux); IPI = IPI + list(IPI_aux); pulse_rate = pulse_rate + list(pulse_rate_aux)
