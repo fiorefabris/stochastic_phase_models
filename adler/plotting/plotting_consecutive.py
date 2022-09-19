@@ -539,12 +539,12 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
 # =============================================================================
 #     consecutiveness plot
 # =============================================================================
-    green =  sns.color_palette(sns.dark_palette("#2ecc71",30,reverse=False))[15]
     (mean_trains_cons,std_trains_cons),total_pulses,isolated_pulses,consecutive_pulses = load_consecutive_statistics_realizations_dist(ref_,save_data_arr)
     colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728']
 
 
-    ax5 = plt.subplot(gs_main[2,0])
+    gs_row_3 = gridspec.GridSpecFromSubplotSpec(nrows=1, ncols=3, subplot_spec=gs_main[2])
+    ax5 = plt.subplot(gs_row_3[0])
      
     ax5.plot(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons, linewidth=0.5, marker = "." , markersize=7, alpha=1)
     ax5.fill_between(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons-std_trains_cons,mean_trains_cons+std_trains_cons,alpha = 0.2)
@@ -563,7 +563,7 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
 #     consecutiveness boxplot
 # =============================================================================
     
-    ax6 = plt.subplot(gs_main[2,1])
+    ax6 = plt.subplot(gs_row_3[1])
 
 #hay que hacer varios trials para tener este plot
     
