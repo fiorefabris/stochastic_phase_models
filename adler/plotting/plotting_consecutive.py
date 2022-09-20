@@ -105,7 +105,7 @@ def load_consecutive_statistics(dataset,data_folder,T):
                 else:
                     isolated_pulses_dataset.append(0)
                     total_pulses_dataset.append(0)
-                    consecutive_pulses_dataset.append([0])
+                    consecutive_pulses_dataset.append(0)
                     
                 if (check_file('exp_c_'+file_name,data_folder)):
                     #esto sucede sólo si hay máximos
