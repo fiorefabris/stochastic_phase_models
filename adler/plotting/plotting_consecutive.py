@@ -307,7 +307,7 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
 # =============================================================================
     
     ax6 = plt.subplot(gs_row_3[1])
-    ax6.axhline(y = 1,color = green,linewidth=0.5,linestyle = 'dashed')
+    ax6.axhline(y = 1,color = green,linewidth=0.5,alpha = 0.3,linestyle = 'dashed')
 
     #hay que hacer varios trials para tener este plot
     
@@ -371,9 +371,9 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
     #population activity
     if len(activity) > 0:
         p1 = ax3.bar(np.arange(1 ,n_cell + 1),silent,width=1,color='darkgray',alpha=0.5,linewidth=0.0)
-        p2 = ax3.bar(np.arange(1 ,n_cell + 1),activity,bottom=silent,width=0.8,alpha=0.8,linewidth=0.0)
+        p2 = ax3.bar(np.arange(1 ,n_cell + 1),activity,bottom=silent,width=0.9,alpha=0.8,linewidth=0.0)
         x , y , silent_experiment = get_activity_data_dyncode(dyncode_filename)
-        p3 = ax3.bar(x,y,bottom=silent_experiment,width=0.8,alpha=0.3,linewidth=0.0,color = green)
+        p3 = ax3.bar(x,y,bottom=silent_experiment,width=0.9,alpha=0.3,linewidth=0.0,color = green)
         
     ax3.set_xlim([0,n_cell]);ax3.set_ylim([0,100])
     ax3.set_xlabel( ' trazas ',fontsize=8); 
@@ -796,6 +796,16 @@ def plot_time_series_square_dataset_dist(dt,beg,T,d,N,Delta,data_folder,save_pat
     return(0)
 
 #%% FOR OU DATA
+# =============================================================================
+# =============================================================================
+# =============================================================================
+# =============================================================================
+# Plotting ou
+# =============================================================================
+# =============================================================================
+# =============================================================================
+# =============================================================================
+
 
 def plot_consecutiveness_activity_ou(dt,beg,T,d,N,Delta,description_file,data_folder,save_folder,dyncode_filename,save_data_arr):
     '''
@@ -819,6 +829,7 @@ def plot_consecutiveness_activity_ou(dt,beg,T,d,N,Delta,description_file,data_fo
 
 def plot_consecutiveness_activity_ou_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,tuple_):
     
+    red = sns.color_palette("deep",6)[2]
     green =  sns.color_palette(sns.dark_palette("#2ecc71",30,reverse=False))[15]
 
     fig = plt.figure(constrained_layout=False, figsize=(8.27, 11.692))
@@ -840,7 +851,7 @@ def plot_consecutiveness_activity_ou_(dt,T,d,data_folder,save_folder,dyncode_fil
     
     if len(DT) > 0:
         
-        bins = ax1.hist(DT,bins=np.linspace(0,20,21),density=True,alpha=1,linewidth=0); 
+        bins = ax1.hist(DT,bins=np.linspace(0,20,21),density=True,color = red,alpha=1,linewidth=0); 
         ax1.axvspan(6, 8.33, color=green, alpha=0.3, lw=0)
         #tune_plot(ax,'dt (min)','probability density (1/min)',[0,20],1,[0,0.4],1,30,20)
         compute_st_values(ax1,DT,bins,1,10)   
@@ -865,9 +876,8 @@ def plot_consecutiveness_activity_ou_(dt,T,d,data_folder,save_folder,dyncode_fil
     compute_st_values(ax2_dc,dyncode_df.IPI.dropna().values/3,bins_dc,1,10)   
 
     if len(DT) > 0:
-        
-        bins = ax2.hist(IPI,bins=np.linspace(0,40,21),density=True,alpha=1,linewidth=0); 
         ax2.axvspan(8, 18.67, color=green, alpha=0.3, lw=0)
+        bins = ax2.hist(IPI,bins=np.linspace(0,40,21),density=True,color = red,alpha=1,linewidth=0); 
         #tune_plot(ax,'dt (min)','probability density (1/min)',[0,20],1,[0,0.4],1,30,20)
         compute_st_values(ax2,IPI,bins,1,10)   
     else:
@@ -890,10 +900,9 @@ def plot_consecutiveness_activity_ou_(dt,T,d,data_folder,save_folder,dyncode_fil
     compute_st_values(ax3_dc,dyncode_pr,bins_dc,1,10)   
 
     if len(DT) > 0:
-        
-        bins = ax3.hist(pulse_rate,bins=np.linspace(0,0.08,10),density=True,alpha=1,linewidth=0); 
-        #ax3.axvspan(0.0067, 0.02, color=green, alpha=0.3, lw=0) #old,creo que es en frames
         ax3.axvspan( 0.02, 0.06, color=green, alpha=0.3, lw=0)
+        bins = ax3.hist(pulse_rate,bins=np.linspace(0,0.08,10),density=True,color = red,alpha=1,linewidth=0); 
+        #ax3.axvspan(0.0067, 0.02, color=green, alpha=0.3, lw=0) #old,creo que es en frames
         compute_st_values(ax3,pulse_rate,bins,1,10)   
     else:
         print(delta0,"no data")
@@ -921,8 +930,8 @@ def plot_consecutiveness_activity_ou_(dt,T,d,data_folder,save_folder,dyncode_fil
 
     ax5 = plt.subplot(gs_row_3[0])
      
-    ax5.plot(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons, linewidth=0.5, marker = "." , markersize=7, alpha=1)
-    ax5.fill_between(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons-std_trains_cons,mean_trains_cons+std_trains_cons,alpha = 0.2)
+    ax5.plot(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons, linewidth=0.5, marker = "." , color = red,markersize=7, alpha=1)
+    ax5.fill_between(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons-std_trains_cons,mean_trains_cons+std_trains_cons,color = red,alpha = 0.2,linewidth=0)
     x,y = get_consecutive_data_dyncode(dyncode_filename)
     ax5.plot(x,y,linewidth=0.5, marker = "." , markersize=7, alpha=1,color = green)
 
@@ -939,6 +948,7 @@ def plot_consecutiveness_activity_ou_(dt,T,d,data_folder,save_folder,dyncode_fil
 # =============================================================================
     
     ax6 = plt.subplot(gs_row_3[1])
+    ax6.axhline(y = 1,color = green,linewidth=0.5,alpha = 0.3,linestyle = 'dashed')
 
     #hay que hacer varios trials para tener este plot
     
@@ -956,13 +966,13 @@ def plot_consecutiveness_activity_ou_(dt,T,d,data_folder,save_folder,dyncode_fil
     bp1 = ax6.boxplot(arr,vert=True,whis=[5, 95],patch_artist=True,showmeans=False,meanline=True,showfliers=False )
 
     for i,box_ in enumerate(bp1['boxes']):
-         box_.set( color=colors[i], linewidth=0.0,facecolor=colors[i],alpha = 0.1)# change outline color
+         box_.set( color=red, linewidth=0.0,facecolor=red,alpha = 0.1)# change outline color
     for i,whisker in enumerate(bp1['whiskers']):
-        whisker.set(color=colors[i//2],linestyle = '-', linewidth=1,alpha=0.3)
+        whisker.set(color=red,linestyle = '-', linewidth=1,alpha=0.3)
     for i,cap in enumerate(bp1['caps']):
-        cap.set(color=colors[i//2],linestyle = '-', linewidth=1,alpha=0.3)## change color and linewidth of the caps
+        cap.set(color=red,linestyle = '-', linewidth=1,alpha=0.3)## change color and linewidth of the caps
     for i,median in enumerate(bp1['medians']):
-        median.set(color=colors[i],linestyle = '-', linewidth=1.5)## change color and linewidth of the medians
+        median.set(color=red,linestyle = '-', linewidth=1.5)## change color and linewidth of the medians
     for i,flyer in enumerate(bp1['fliers']):
         flyer.set(markeredgecolor='black')## change color and linewidth of the medians
     
@@ -988,7 +998,6 @@ def plot_consecutiveness_activity_ou_(dt,T,d,data_folder,save_folder,dyncode_fil
     ax6.xaxis.set_label_coords(0.5, -0.12);ax6.yaxis.set_label_coords(-0.05,0.5)
     ax6.tick_params(labelsize=6,direction='out', pad=1,length=2)
     ax6.set_xticklabels([' total' ,'isolated','consecutive'],rotation = 0)
-    ax6.axhline(y = 1,color = green,linewidth=0.5,linestyle = 'dashed')
 
 
 # =============================================================================
@@ -1003,9 +1012,9 @@ def plot_consecutiveness_activity_ou_(dt,T,d,data_folder,save_folder,dyncode_fil
     #population activity
     if len(activity) > 0:
         p1 = ax3.bar(np.arange(1 ,n_cell + 1),silent,width=1,color='darkgray',alpha=0.5,linewidth=0.0)
-        p2 = ax3.bar(np.arange(1 ,n_cell + 1),activity,bottom=silent,width=1,alpha=0.8,linewidth=0.0)
+        p2 = ax3.bar(np.arange(1 ,n_cell + 1),activity,bottom=silent,width=0.9,alpha=0.8,linewidth=0.0)
         x , y , silent_experiment = get_activity_data_dyncode(dyncode_filename)
-        p3 = ax3.bar(x,y,bottom=silent_experiment,width=0.8,alpha=0.3,linewidth=0.0,color = green)
+        p3 = ax3.bar(x,y,bottom=silent_experiment,width=0.9,alpha=0.3,linewidth=0.0,color = green)
         
     ax3.set_xlim([0,n_cell]);ax3.set_ylim([0,100])
     ax3.set_xlabel( ' trazas ',fontsize=8); 
@@ -1043,6 +1052,7 @@ def plot_time_series_square_dataset_ou(dt,beg,T,d,N,Delta,data_folder,save_path_
     '''
     (omega,alpha0,sigma,tau,number),dataset = tuple_[0],tuple_[1]
     delta0 = np.round(alpha0/omega,4)  
+    red = sns.color_palette("deep",6)[2]
 ###############################################################################
 ### Plotting parameters
 ###############################################################################    
@@ -1073,7 +1083,7 @@ def plot_time_series_square_dataset_ou(dt,beg,T,d,N,Delta,data_folder,save_path_
                 beg_ = int(beg/(dt*d))
                 assert len(t) == len(theta), (len(t),len(theta))
                 
-                ax.plot(t[beg_:end:Delta],1+np.sin(theta)[beg_:end:Delta],linewidth=2)
+                ax.plot(t[beg_:end:Delta],1+np.sin(theta)[beg_:end:Delta],linewidth=2,color = red)
             
             if check_file('max_'+file_name,data_folder):            
                     
