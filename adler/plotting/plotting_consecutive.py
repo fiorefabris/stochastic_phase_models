@@ -162,11 +162,14 @@ def load_consecutive_statistics_dist(ref_,data_folder,T):
                 else:
                     isolated_pulses_dataset.append(0)
                     total_pulses_dataset.append(0)
+                    consecutive_pulses_dataset.append(0)
+                    
                 if (check_file('exp_c_'+file_name,data_folder)):
                     consecutive_trial_exp = download_data(data_folder+'exp_c_'+file_name)
                     consecutive_trains_dataset.append(consecutive_trial_exp)
                 else:
                     consecutive_trains_dataset.append([0])
+                    
         print('len total_pulses_dataset' , len(total_pulses_dataset))
         return get_mean_value_place(consecutive_trains_dataset,True),np.median(total_pulses_dataset),np.median(isolated_pulses_dataset),np.median(consecutive_pulses_dataset)
         #return get_mean_value_place(consecutive_trains_dataset,True),sum(total_pulses_dataset),sum(isolated_pulses_dataset),sum(consecutive_pulses_dataset)
@@ -324,13 +327,13 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
     bp1 = ax6.boxplot(arr,vert=True,whis=[5, 95],patch_artist=True,showmeans=False,meanline=True,showfliers=False )
 
     for i,box_ in enumerate(bp1['boxes']):
-         box_.set( color=colors[i], linewidth=0.0,facecolor=colors[i],alpha = 0.1)# change outline color
+         box_.set( color=colors[0], linewidth=0.0,facecolor=colors[0],alpha = 0.1)# change outline color
     for i,whisker in enumerate(bp1['whiskers']):
-        whisker.set(color=colors[i//2],linestyle = '-', linewidth=1,alpha=0.3)
+        whisker.set(color=colors[0],linestyle = '-', linewidth=1,alpha=0.3)
     for i,cap in enumerate(bp1['caps']):
-        cap.set(color=colors[i//2],linestyle = '-', linewidth=1,alpha=0.3)## change color and linewidth of the caps
+        cap.set(color=colors[0],linestyle = '-', linewidth=1,alpha=0.3)## change color and linewidth of the caps
     for i,median in enumerate(bp1['medians']):
-        median.set(color=colors[i],linestyle = '-', linewidth=1.5)## change color and linewidth of the medians
+        median.set(color=colors[0],linestyle = '-', linewidth=1.5)## change color and linewidth of the medians
     for i,flyer in enumerate(bp1['fliers']):
         flyer.set(markeredgecolor='black')## change color and linewidth of the medians
     
@@ -509,6 +512,8 @@ def plot_consecutiveness_activity_dist(dt,beg,T,d,N,Delta,description_file,data_
 def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,tuple_):
     
     green =  sns.color_palette(sns.dark_palette("#2ecc71",30,reverse=False))[15]
+    orange = sns.color_palette("deep",6)[1]
+    
     fig = plt.figure(constrained_layout=False, figsize=(8.27, 11.692))
     gs_main = gridspec.GridSpec(nrows=3, ncols=1, figure=fig); gs_main.update(left=0.1, right=0.9, bottom=0.1, top=0.90, hspace=0.3,wspace=0.3)
     (omega,D),ref_ = tuple_[0],tuple_[1]
@@ -533,7 +538,7 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
     
     if len(DT) > 0:
         ax1.axvspan(6, 8.33, color=green, alpha=0.3, lw=0)
-        bins = ax1.hist(DT,bins=np.linspace(0,20,21),density=True,alpha=1,linewidth=0); 
+        bins = ax1.hist(DT,bins=np.linspace(0,20,21),density=True,color = orange,alpha=1,linewidth=0); 
         #tune_plot(ax,'dt (min)','probability density (1/min)',[0,20],1,[0,0.4],1,30,20)
         compute_st_values(ax1,DT,bins,1,10)
     else:
@@ -558,7 +563,7 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
     
     if len(DT) > 0:
         ax2.axvspan(8, 18.67, color=green, alpha=0.3, lw=0)
-        bins = ax2.hist(IPI,bins=np.linspace(0,40,21),density=True,alpha=1,linewidth=0); 
+        bins = ax2.hist(IPI,bins=np.linspace(0,40,21),density=True,color = orange,alpha=1,linewidth=0); 
         #tune_plot(ax,'dt (min)','probability density (1/min)',[0,20],1,[0,0.4],1,30,20)
         compute_st_values(ax2,IPI,bins,1,10)   
     else:
@@ -582,7 +587,7 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
     
     if len(DT) > 0:
         
-        bins = ax3.hist(pulse_rate,bins=np.linspace(0,0.08,10),density=True,alpha=1,linewidth=0); 
+        bins = ax3.hist(pulse_rate,bins=np.linspace(0,0.08,10),density=True,color = orange,alpha=1,linewidth=0); 
         #ax3.axvspan(0.0067, 0.02, color=green, alpha=0.3, lw=0) #old,creo que es en frames
         ax3.axvspan( 0.02, 0.06, color=green, alpha=0.3, lw=0)
         compute_st_values(ax3,pulse_rate,bins,1,10)   
@@ -607,8 +612,8 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
     gs_row_3 = gridspec.GridSpecFromSubplotSpec(nrows=1, ncols=3, subplot_spec=gs_main[2])
     ax5 = plt.subplot(gs_row_3[0])
      
-    ax5.plot(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons, linewidth=0.5, marker = "." , markersize=7, alpha=1)
-    ax5.fill_between(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons-std_trains_cons,mean_trains_cons+std_trains_cons,alpha = 0.2)
+    ax5.plot(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons, linewidth=0.5, color = orange, marker = "." , markersize=7, alpha=1)
+    ax5.fill_between(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons-std_trains_cons,mean_trains_cons+std_trains_cons,color = orange,alpha = 0.2)
     x,y = get_consecutive_data_dyncode(dyncode_filename)
     ax5.plot(x,y,linewidth=0.5, marker = "." , markersize=7, alpha=1,color = green)
 
@@ -643,13 +648,13 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
     bp1 = ax6.boxplot(arr,vert=True,whis=[5, 95],patch_artist=True,showmeans=False,meanline=True,showfliers=False )
 
     for i,box_ in enumerate(bp1['boxes']):
-         box_.set( color=colors[i], linewidth=0.0,facecolor=colors[i],alpha = 0.1)# change outline color
+         box_.set( color=orange, linewidth=0.0,facecolor=colors[i],alpha = 0.1)# change outline color
     for i,whisker in enumerate(bp1['whiskers']):
-        whisker.set(color=colors[i//2],linestyle = '-', linewidth=1,alpha=0.3)
+        whisker.set(color=orange,linestyle = '-', linewidth=1,alpha=0.3)
     for i,cap in enumerate(bp1['caps']):
-        cap.set(color=colors[i//2],linestyle = '-', linewidth=1,alpha=0.3)## change color and linewidth of the caps
+        cap.set(color=orange,linestyle = '-', linewidth=1,alpha=0.3)## change color and linewidth of the caps
     for i,median in enumerate(bp1['medians']):
-        median.set(color=colors[i],linestyle = '-', linewidth=1.5)## change color and linewidth of the medians
+        median.set(color=orange,linestyle = '-', linewidth=1.5)## change color and linewidth of the medians
     for i,flyer in enumerate(bp1['fliers']):
         flyer.set(markeredgecolor='black')## change color and linewidth of the medians
     
@@ -680,7 +685,7 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
     #population activity
     if len(activity) > 0:
         p1 = ax3.bar(np.arange(1 ,n_cell + 1),silent,width=1,color='darkgray',alpha=0.5,linewidth=0.0)
-        p2 = ax3.bar(np.arange(1 ,n_cell + 1),activity,bottom=silent,width=1,alpha=0.8,linewidth=0.0)
+        p2 = ax3.bar(np.arange(1 ,n_cell + 1),activity,bottom=silent,width=1,color=orange,alpha=0.8,linewidth=0.0)
         x , y , silent_experiment = get_activity_data_dyncode(dyncode_filename)
         p3 = ax3.bar(x,y,bottom=silent_experiment,width=0.8,alpha=0.3,linewidth=0.0,color = green)
         
@@ -696,9 +701,9 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
     
     
     if len(activity) > 0:
-        p1 = ax4.barh(1,width = np.mean(silent),xerr=np.std(silent),left =0,color='darkgray',alpha=0.5,linewidth=0.0,height=0.6)
-        p2 = ax4.barh(1,width = np.mean(activity),left=np.mean(silent),xerr = np.std(activity),alpha=0.8,linewidth=0.0,height=0.6)
-        p3 = ax4.barh(1,width = np.mean(x),left=np.mean(silent_experiment),alpha=0.8,linewidth=0.0,height=0.6,color = green)
+        p1 = ax4.barh(1,width = np.mean(silent),xerr=np.std(silent),left =0,color='darkgray',alpha=0.5,linewidth=0.0,height=1)
+        p2 = ax4.barh(1,width = np.mean(activity),left=np.mean(silent),xerr = np.std(activity),alpha=0.8,color=orange,linewidth=0.0,height=1)
+        p3 = ax4.barh(1,width = np.mean(x),left=np.mean(silent_experiment),alpha=0.8,linewidth=0.0,height=1,color = green)
 
     ax4.set_xticks([0,50,100])
     ax4.set_xlim([0,100])
@@ -740,7 +745,7 @@ def plot_time_series_square_dataset_dist(dt,beg,T,d,N,Delta,data_folder,save_pat
         if ix < len(axs):
             ax = axs[ix]
             delta = np.round(alpha/omega,4) 
-            print(delta,D)
+           # print(delta,D)
             
             ################################################
             #### download data
@@ -754,7 +759,7 @@ def plot_time_series_square_dataset_dist(dt,beg,T,d,N,Delta,data_folder,save_pat
                 beg_ = int(beg/(dt*d))
                 assert len(t) == len(theta), (len(t),len(theta))
                 
-                ax.plot(t[beg_:end:Delta],1+np.sin(theta)[beg_:end:Delta],linewidth=2)
+                ax.plot(t[beg_:end:Delta],1+np.sin(theta)[beg_:end:Delta],linewidth=2,color=orange)
             
             if check_file('max_'+file_name,data_folder):            
                     
