@@ -681,9 +681,9 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
     #population activity
     if len(activity) > 0:
         p1 = ax3.bar(np.arange(1 ,n_cell + 1),silent,width=1,color='darkgray',alpha=0.5,linewidth=0.0)
-        p2 = ax3.bar(np.arange(1 ,n_cell + 1),activity,bottom=silent,width=0.8,color=orange,alpha=0.8,linewidth=0.0)
+        p2 = ax3.bar(np.arange(1 ,n_cell + 1),activity,bottom=silent,width=0.9,color=orange,alpha=0.8,linewidth=0.0)
         x , y , silent_experiment = get_activity_data_dyncode(dyncode_filename)
-        p3 = ax3.bar(x,y,bottom=silent_experiment,width=0.8,alpha=0.3,linewidth=0.0,color = green)
+        p3 = ax3.bar(x,y,bottom=silent_experiment,width=0.9,alpha=0.3,linewidth=0.0,color = green)
         
     ax3.set_xlim([0,n_cell]);ax3.set_ylim([0,100])
     ax3.set_xlabel( ' trazas ',fontsize=8); 
