@@ -829,7 +829,7 @@ def plot_consecutiveness_activity_ou(dt,beg,T,d,N,Delta,description_file,data_fo
 
 def plot_consecutiveness_activity_ou_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,tuple_):
     
-    red = sns.color_palette("deep",6)[2]
+    red = sns.color_palette("deep",6)[3]
     green =  sns.color_palette(sns.dark_palette("#2ecc71",30,reverse=False))[15]
 
     fig = plt.figure(constrained_layout=False, figsize=(8.27, 11.692))
@@ -953,12 +953,12 @@ def plot_consecutiveness_activity_ou_(dt,T,d,data_folder,save_folder,dyncode_fil
     #hay que hacer varios trials para tener este plot
     
     total_median,isolated_median,consecutive_median = get_exp_N_total_isolated_consecutive(dyncode_filename) 
-    print( 'dyncode',total_median,isolated_median,consecutive_median)
+    #print( 'dyncode',total_median,isolated_median,consecutive_median)
 
     total_pulses_normed = [i/total_median for i in total_pulses_median]
     isolated_pulses_normed = [i/isolated_median for i in isolated_pulses_median]
     consecutive_pulses_normed = [i/consecutive_median for i in consecutive_pulses_median]
-    print( total_pulses_normed,isolated_pulses_normed,consecutive_pulses_normed)
+    #print( total_pulses_normed,isolated_pulses_normed,consecutive_pulses_normed)
     arr = [total_pulses_normed,isolated_pulses_normed,consecutive_pulses_normed]
     #print('len total pulses normed' , len(total_pulses_normed))
     
@@ -1012,7 +1012,7 @@ def plot_consecutiveness_activity_ou_(dt,T,d,data_folder,save_folder,dyncode_fil
     #population activity
     if len(activity) > 0:
         p1 = ax3.bar(np.arange(1 ,n_cell + 1),silent,width=1,color='darkgray',alpha=0.5,linewidth=0.0)
-        p2 = ax3.bar(np.arange(1 ,n_cell + 1),activity,bottom=silent,width=0.9,alpha=0.8,linewidth=0.0)
+        p2 = ax3.bar(np.arange(1 ,n_cell + 1),activity,bottom=silent,width=0.9,alpha=0.8,color = red,linewidth=0.0)
         x , y , silent_experiment = get_activity_data_dyncode(dyncode_filename)
         p3 = ax3.bar(x,y,bottom=silent_experiment,width=0.9,alpha=0.3,linewidth=0.0,color = green)
         
@@ -1029,7 +1029,7 @@ def plot_consecutiveness_activity_ou_(dt,T,d,data_folder,save_folder,dyncode_fil
     
     if len(activity) > 0:
         p1 = ax4.barh(1,width = np.mean(silent),xerr=np.std(silent),left =0,color='darkgray',alpha=0.5,linewidth=0.0,height=0.6)
-        p2 = ax4.barh(1,width = np.mean(activity),left=np.mean(silent),xerr = np.std(activity),alpha=0.8,linewidth=0.0,height=0.6)
+        p2 = ax4.barh(1,width = np.mean(activity),left=np.mean(silent),xerr = np.std(activity),color = red,alpha=0.8,linewidth=0.0,height=0.6)
         p3 = ax4.barh(1,width = np.mean(x),left=np.mean(silent_experiment),alpha=0.3,linewidth=0.0,height=0.6,color = green)
 
     ax4.set_xticks([0,50,100])
@@ -1052,7 +1052,7 @@ def plot_time_series_square_dataset_ou(dt,beg,T,d,N,Delta,data_folder,save_path_
     '''
     (omega,alpha0,sigma,tau,number),dataset = tuple_[0],tuple_[1]
     delta0 = np.round(alpha0/omega,4)  
-    red = sns.color_palette("deep",6)[2]
+    red = sns.color_palette("deep",6)[3]
 ###############################################################################
 ### Plotting parameters
 ###############################################################################    
