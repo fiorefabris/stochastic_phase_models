@@ -218,9 +218,8 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
     compute_st_values(ax1_dc,dyncode_df.dt_peaks.dropna().values/3,bins_dc,1,10)   
     
     if len(DT) > 0:
-        
-        bins = ax1.hist(DT,bins=np.linspace(0,20,21),density=True,alpha=1,linewidth=0); 
         ax1.axvspan(6, 8.33, color=green, alpha=0.3, lw=0)
+        bins = ax1.hist(DT,bins=np.linspace(0,20,21),density=True,alpha=1,linewidth=0); 
         #tune_plot(ax,'dt (min)','probability density (1/min)',[0,20],1,[0,0.4],1,30,20)
         compute_st_values(ax1,DT,bins,1,10)   
     else:
@@ -241,9 +240,8 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
     bins_dc = ax2_dc.hist(dyncode_df.IPI.dropna().values/3,np.linspace(0,40,21),density=True,color = green,alpha=1,linewidth=0); 
     compute_st_values(ax2_dc,dyncode_df.IPI.dropna().values/3,bins_dc,1,10)   
     if len(DT) > 0:
-        
-        bins = ax2.hist(IPI,bins=np.linspace(0,40,21),density=True,alpha=1,linewidth=0); 
         ax2.axvspan(8, 18.67, color=green, alpha=0.3, lw=0)
+        bins = ax2.hist(IPI,bins=np.linspace(0,40,21),density=True,alpha=1,linewidth=0); 
         #tune_plot(ax,'dt (min)','probability density (1/min)',[0,20],1,[0,0.4],1,30,20)
         compute_st_values(ax2,IPI,bins,1,10)   
     else:
@@ -265,10 +263,9 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
     bins_dc = ax3_dc.hist(dyncode_pr,bins=np.linspace(0,0.08,10),density=True,color = green,alpha=1,linewidth=0); 
     compute_st_values(ax3_dc,dyncode_pr,bins_dc,1,10)   
     if len(DT) > 0:
-        
+        ax3.axvspan( 0.02, 0.06, color=green, alpha=0.3, lw=0)
         bins = ax3.hist(pulse_rate,bins=np.linspace(0,0.08,10),density=True,alpha=1,linewidth=0); 
         #ax3.axvspan(0.0067, 0.02, color=green, alpha=0.3, lw=0) #old,creo que es en frames
-        ax3.axvspan( 0.02, 0.06, color=green, alpha=0.3, lw=0)
         compute_st_values(ax3,pulse_rate,bins,1,10)   
     else:
         print(delta,D,"no data")
@@ -293,7 +290,7 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
     ax5 = plt.subplot(gs_row_3[0])
      
     ax5.plot(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons, linewidth=0.5, marker = "." , markersize=7, alpha=1)
-    ax5.fill_between(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons-std_trains_cons,mean_trains_cons+std_trains_cons,alpha = 0.2)
+    ax5.fill_between(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons-std_trains_cons,mean_trains_cons+std_trains_cons,alpha = 0.2,linewidth=0)
     x,y = get_consecutive_data_dyncode(dyncode_filename)
     ax5.plot(x,y,linewidth=0.5, marker = "." , markersize=7, alpha=1,color = green)
 
@@ -373,8 +370,8 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
     
     #population activity
     if len(activity) > 0:
-        p1 = ax3.bar(np.arange(1 ,n_cell + 1),silent,width=1,color='darkgray',alpha=0.5,linewidth=0.0)
-        p2 = ax3.bar(np.arange(1 ,n_cell + 1),activity,bottom=silent,width=1,alpha=0.8,linewidth=0.0)
+        p1 = ax3.bar(np.arange(1 ,n_cell + 1),silent,width=0.8,color='darkgray',alpha=0.5,linewidth=0.0)
+        p2 = ax3.bar(np.arange(1 ,n_cell + 1),activity,bottom=silent,width=0.8,alpha=0.8,linewidth=0.0)
         x , y , silent_experiment = get_activity_data_dyncode(dyncode_filename)
         p3 = ax3.bar(x,y,bottom=silent_experiment,width=0.8,alpha=0.3,linewidth=0.0,color = green)
         
@@ -586,10 +583,9 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
     compute_st_values(ax3_dc,dyncode_pr,bins_dc,1,10)   
     
     if len(DT) > 0:
-        
+        ax3.axvspan( 0.02, 0.06, color=green, alpha=0.3, lw=0)
         bins = ax3.hist(pulse_rate,bins=np.linspace(0,0.08,10),density=True,color = orange,alpha=1,linewidth=0); 
         #ax3.axvspan(0.0067, 0.02, color=green, alpha=0.3, lw=0) #old,creo que es en frames
-        ax3.axvspan( 0.02, 0.06, color=green, alpha=0.3, lw=0)
         compute_st_values(ax3,pulse_rate,bins,1,10)   
     else:
         pass
@@ -613,7 +609,7 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
     ax5 = plt.subplot(gs_row_3[0])
      
     ax5.plot(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons, linewidth=0.5, color = orange, marker = "." , markersize=7, alpha=1)
-    ax5.fill_between(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons-std_trains_cons,mean_trains_cons+std_trains_cons,color = orange,alpha = 0.2)
+    ax5.fill_between(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons-std_trains_cons,mean_trains_cons+std_trains_cons,color = orange,alpha = 0.2,linewidth=0)
     x,y = get_consecutive_data_dyncode(dyncode_filename)
     ax5.plot(x,y,linewidth=0.5, marker = "." , markersize=7, alpha=1,color = green)
 
@@ -648,7 +644,7 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
     bp1 = ax6.boxplot(arr,vert=True,whis=[5, 95],patch_artist=True,showmeans=False,meanline=True,showfliers=False )
 
     for i,box_ in enumerate(bp1['boxes']):
-         box_.set( color=orange, linewidth=0.0,facecolor=colors[i],alpha = 0.1)# change outline color
+         box_.set( color=orange, linewidth=0.0,facecolor=orange,alpha = 0.1)# change outline color
     for i,whisker in enumerate(bp1['whiskers']):
         whisker.set(color=orange,linestyle = '-', linewidth=1,alpha=0.3)
     for i,cap in enumerate(bp1['caps']):
@@ -684,8 +680,8 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
     
     #population activity
     if len(activity) > 0:
-        p1 = ax3.bar(np.arange(1 ,n_cell + 1),silent,width=1,color='darkgray',alpha=0.5,linewidth=0.0)
-        p2 = ax3.bar(np.arange(1 ,n_cell + 1),activity,bottom=silent,width=1,color=orange,alpha=0.8,linewidth=0.0)
+        p1 = ax3.bar(np.arange(1 ,n_cell + 1),silent,width=0.8,color='darkgray',alpha=0.5,linewidth=0.0)
+        p2 = ax3.bar(np.arange(1 ,n_cell + 1),activity,bottom=silent,width=0.8,color=orange,alpha=0.8,linewidth=0.0)
         x , y , silent_experiment = get_activity_data_dyncode(dyncode_filename)
         p3 = ax3.bar(x,y,bottom=silent_experiment,width=0.8,alpha=0.3,linewidth=0.0,color = green)
         
@@ -701,9 +697,9 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
     
     
     if len(activity) > 0:
-        p1 = ax4.barh(1,width = np.mean(silent),xerr=np.std(silent),left =0,color='darkgray',alpha=0.5,linewidth=0.0,height=1)
-        p2 = ax4.barh(1,width = np.mean(activity),left=np.mean(silent),xerr = np.std(activity),alpha=0.8,color=orange,linewidth=0.0,height=1)
-        p3 = ax4.barh(1,width = np.mean(x),left=np.mean(silent_experiment),alpha=0.8,linewidth=0.0,height=1,color = green)
+        p1 = ax4.barh(1,width = np.mean(silent),xerr=np.std(silent),left =0,color='darkgray',alpha=0.5,linewidth=0.0,height=0.6)
+        p2 = ax4.barh(1,width = np.mean(activity),left=np.mean(silent),xerr = np.std(activity),alpha=0.8,color=orange,linewidth=0.0,height=0.6)
+        p3 = ax4.barh(1,width = np.mean(x),left=np.mean(silent_experiment),alpha=0.8,linewidth=0.0,height=0.6,color = green)
 
     ax4.set_xticks([0,50,100])
     ax4.set_xlim([0,100])
