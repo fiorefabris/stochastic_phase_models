@@ -170,7 +170,7 @@ def load_consecutive_statistics_dist(ref_,data_folder,T):
                 else:
                     consecutive_trains_dataset.append([0])
                     
-        print('len total_pulses_dataset' , len(total_pulses_dataset))
+        #print('len total_pulses_dataset' , len(total_pulses_dataset))
         return get_mean_value_place(consecutive_trains_dataset,True),np.median(total_pulses_dataset),np.median(isolated_pulses_dataset),np.median(consecutive_pulses_dataset)
         #return get_mean_value_place(consecutive_trains_dataset,True),sum(total_pulses_dataset),sum(isolated_pulses_dataset),sum(consecutive_pulses_dataset)
 
@@ -726,6 +726,7 @@ def plot_time_series_square_dataset_dist(dt,beg,T,d,N,Delta,data_folder,save_pat
     '''
     
     '''
+    orange = sns.color_palette("deep",6)[1]
     (omega,D),ref_ = tuple_[0],tuple_[1]
     #delta = np.round(alpha/omega,4)  
 ###############################################################################
