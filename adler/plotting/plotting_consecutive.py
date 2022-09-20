@@ -307,16 +307,17 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
 # =============================================================================
     
     ax6 = plt.subplot(gs_row_3[1])
+    ax6.axhline(y = 1,color = green,linewidth=0.5,linestyle = 'dashed')
 
     #hay que hacer varios trials para tener este plot
     
     total_median,isolated_median,consecutive_median = get_exp_N_total_isolated_consecutive(dyncode_filename) 
-    print( 'dyncode',total_median,isolated_median,consecutive_median)
+    #print( 'dyncode',total_median,isolated_median,consecutive_median)
 
     total_pulses_normed = [i/total_median for i in total_pulses_median]
     isolated_pulses_normed = [i/isolated_median for i in isolated_pulses_median]
     consecutive_pulses_normed = [i/consecutive_median for i in consecutive_pulses_median]
-    print( total_pulses_normed,isolated_pulses_normed,consecutive_pulses_normed)
+   # print( total_pulses_normed,isolated_pulses_normed,consecutive_pulses_normed)
     arr = [total_pulses_normed,isolated_pulses_normed,consecutive_pulses_normed]
     #print('len total pulses normed' , len(total_pulses_normed))
     
@@ -356,7 +357,6 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
     ax6.xaxis.set_label_coords(0.5, -0.12);ax6.yaxis.set_label_coords(-0.05,0.5)
     ax6.tick_params(labelsize=6,direction='out', pad=1,length=2)
     ax6.set_xticklabels([' total' ,'isolated','consecutive'],rotation = 0)
-    ax6.axhline(y = 1,color = green,linewidth=0.5,linestyle = 'dashed')
 
 
 # =============================================================================
@@ -370,7 +370,7 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
     
     #population activity
     if len(activity) > 0:
-        p1 = ax3.bar(np.arange(1 ,n_cell + 1),silent,width=0.8,color='darkgray',alpha=0.5,linewidth=0.0)
+        p1 = ax3.bar(np.arange(1 ,n_cell + 1),silent,width=1,color='darkgray',alpha=0.5,linewidth=0.0)
         p2 = ax3.bar(np.arange(1 ,n_cell + 1),activity,bottom=silent,width=0.8,alpha=0.8,linewidth=0.0)
         x , y , silent_experiment = get_activity_data_dyncode(dyncode_filename)
         p3 = ax3.bar(x,y,bottom=silent_experiment,width=0.8,alpha=0.3,linewidth=0.0,color = green)
@@ -626,6 +626,7 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
 # =============================================================================
     
     ax6 = plt.subplot(gs_row_3[1])
+    ax6.axhline(y = 1,color = green,linewidth=0.5,alpha = 0.3,linestyle = 'dashed')
 
 #hay que hacer varios trials para tener este plot
     
@@ -667,7 +668,6 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
     ax6.xaxis.set_label_coords(0.5, -0.12);ax6.yaxis.set_label_coords(-0.05,0.5)
     ax6.tick_params(labelsize=6,direction='out', pad=1,length=2)
     ax6.set_xticklabels([' total' ,'isolated','consecutive'],rotation = 0)
-    ax6.axhline(y = 1,color = green,linewidth=0.5,linestyle = 'dashed')
 
 # =============================================================================
 #     activity population and mean plot
@@ -680,7 +680,7 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
     
     #population activity
     if len(activity) > 0:
-        p1 = ax3.bar(np.arange(1 ,n_cell + 1),silent,width=0.8,color='darkgray',alpha=0.5,linewidth=0.0)
+        p1 = ax3.bar(np.arange(1 ,n_cell + 1),silent,width=1,color='darkgray',alpha=0.5,linewidth=0.0)
         p2 = ax3.bar(np.arange(1 ,n_cell + 1),activity,bottom=silent,width=0.8,color=orange,alpha=0.8,linewidth=0.0)
         x , y , silent_experiment = get_activity_data_dyncode(dyncode_filename)
         p3 = ax3.bar(x,y,bottom=silent_experiment,width=0.8,alpha=0.3,linewidth=0.0,color = green)
@@ -699,7 +699,7 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
     if len(activity) > 0:
         p1 = ax4.barh(1,width = np.mean(silent),xerr=np.std(silent),left =0,color='darkgray',alpha=0.5,linewidth=0.0,height=0.6)
         p2 = ax4.barh(1,width = np.mean(activity),left=np.mean(silent),xerr = np.std(activity),alpha=0.8,color=orange,linewidth=0.0,height=0.6)
-        p3 = ax4.barh(1,width = np.mean(x),left=np.mean(silent_experiment),alpha=0.8,linewidth=0.0,height=0.6,color = green)
+        p3 = ax4.barh(1,width = np.mean(x),left=np.mean(silent_experiment),alpha=0.3,linewidth=0.0,height=0.6,color = green)
 
     ax4.set_xticks([0,50,100])
     ax4.set_xlim([0,100])
