@@ -530,3 +530,53 @@ def get_theta_present_D(theta_past,alpha_past,omega,alpha0,sigma,tau,D,dt):
     theta_present = theta_past + dt * omega +  (dt* alpha_past)/2 * (np.sin(theta_past) + np.sin(theta_past+k+l+l_D))+ l_D
 
     return(theta_present,alpha_present)
+
+#%%
+
+def compute_time_series_ou_D(save_path_name_description,save_path_name_data,params,dt,T,d,N):
+    # =============================================================================
+    # Generates the description
+    # =============================================================================
+    
+    #save_path_name_file_name = '/home/fiore/running_25_10_2021/coding/description.xlsx'
+    get_file_references(params,N,save_path_name_description)
+    
+    # =============================================================================
+    #   Generates the trazes  
+    # =============================================================================
+    
+    #save_path_name = '/home/fiore/running_25_10_2021/data/'
+    explore_param_space_time_evolution_ou_D(params, save_path_name_data,dt,T,d,N)
+
+
+def explore_param_space_time_evolution_ou_D(params, main_file_name,dt,T,d,N=1, nproc = mp.cpu_count()):
+    ''' hhh
+    '''
+    t0= time.perf_counter(); print('starting...')
+    pool = mp.Pool(processes= nproc)
+    mp_time_evolution_and_list_ = partial(mp_time_evolution_and_list_ou_D, main_file_name,dt,T,d)
+    pool.map(mp_time_evolution_and_list_,repeat_and_list_all_combinations(params,N) ) 
+    pool.close() 
+    pool.join()
+    t1 = time.perf_counter() - t0
+    print("time elapsed: ", t1)
+    return(0)
+
+
+def mp_time_evolution_and_list_ou_D(main_file_name,dt,T,d,param):
+    # Function for calling the main function with a tuple of parameters
+    time_evolution_save_ou_D(*param,main_file_name,dt,T,d) 
+    return(0)
+
+
+def time_evolution_save_ou_D(param,number,order,main_file_name,dt,T,d):
+    t0= time.perf_counter()
+    time_evolution__ = partial(time_evolution_ou_D,dt,T,d)
+    theta, alpha = time_evolution__(*param) 
+    file_name =  str(number)+'_'+str(order)+'.pkl'
+    save_data(theta, main_file_name + file_name)
+    save_data(alpha, main_file_name + 'alpha_'+file_name)
+    t1 = time.perf_counter() - t0
+    print(file_name,t1)
+    return(0)
+    
