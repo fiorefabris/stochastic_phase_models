@@ -1356,7 +1356,7 @@ def plot_consecutiveness_activity_ou_D_(dt,T,d,data_folder,save_folder,dyncode_f
     
     if len(activity) > 0:
         p1 = ax4.barh(1,width = np.mean(silent),xerr=np.std(silent),left =0,color='darkgray',alpha=0.5,linewidth=0.0,height=0.6)
-        p2 = ax4.barh(1,width = np.mean(activity),left=np.mean(silent),xerr = np.std(activity),color = red,alpha=0.8,linewidth=0.0,height=0.6)
+        p2 = ax4.barh(1,width = np.mean(activity),left=np.mean(silent),xerr = np.std(activity),color = violet,alpha=0.8,linewidth=0.0,height=0.6)
         p3 = ax4.barh(1,width = np.mean(x),left=np.mean(silent_experiment),alpha=0.3,linewidth=0.0,height=0.6,color = green)
 
     ax4.set_xticks([0,50,100])
