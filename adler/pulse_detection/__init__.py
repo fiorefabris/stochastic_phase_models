@@ -1,4 +1,4 @@
 from adler.pulse_detection.FFT_FDT_main import  compute_fft, compute_FPT,norm_fft_yf, norm_fft_xf
 from adler.pulse_detection.consecutive_main import get_consecutive,get_consecutive_ou
 from adler.pulse_detection.quantifiers_main import compute_pulses_quantifiers, compute_pulse_rate,get_pulses_quantifiers,pulse_rate_statistics
-from adler.pulse_detection.pulse_detection_main import compute_pulse_detection,compute_pulse_detection_exp,get_pulses
+from adler.pulse_detection.pulse_detection_main import compute_pulse_detection,compute_pulse_detection_exp,get_pulses,search_extremes,filter_extremes

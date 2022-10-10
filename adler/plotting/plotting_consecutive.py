@@ -215,12 +215,14 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
     ax1 = plt.subplot(gs_row_1[1,0])
     ax1_dc = plt.subplot(gs_row_1[0,0])
     bins_dc = ax1_dc.hist(dyncode_df.dt_peaks.dropna().values/3,bins=np.linspace(0,20,21),density=True,color=green,alpha=1,linewidth=0); 
+    print("dyncode")
     compute_st_values(ax1_dc,dyncode_df.dt_peaks.dropna().values/3,bins_dc,1,10)   
     
     if len(DT) > 0:
         ax1.axvspan(6, 8.33, color=green, alpha=0.3, lw=0)
         bins = ax1.hist(DT,bins=np.linspace(0,20,21),density=True,alpha=1,linewidth=0); 
         #tune_plot(ax,'dt (min)','probability density (1/min)',[0,20],1,[0,0.4],1,30,20)
+        print("TS")
         compute_st_values(ax1,DT,bins,1,10)   
     else:
         print(delta,D,"no data")
@@ -238,11 +240,13 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
     ax2 = plt.subplot(gs_row_1[1,1])
     ax2_dc = plt.subplot(gs_row_1[0,1])
     bins_dc = ax2_dc.hist(dyncode_df.IPI.dropna().values/3,np.linspace(0,40,21),density=True,color = green,alpha=1,linewidth=0); 
+    print("dyncode")
     compute_st_values(ax2_dc,dyncode_df.IPI.dropna().values/3,bins_dc,1,10)   
     if len(DT) > 0:
         ax2.axvspan(8, 18.67, color=green, alpha=0.3, lw=0)
         bins = ax2.hist(IPI,bins=np.linspace(0,40,21),density=True,alpha=1,linewidth=0); 
         #tune_plot(ax,'dt (min)','probability density (1/min)',[0,20],1,[0,0.4],1,30,20)
+        print("TS")
         compute_st_values(ax2,IPI,bins,1,10)   
     else:
         print(delta,D,"no data")
@@ -261,22 +265,28 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
     ax3_dc = plt.subplot(gs_row_1[0,2])
     dyncode_pr = dyncode_df.groupby(level="cell").amp_peaks.count()/(dyncode_df.groupby(level="cell").FRAME.count()/3)
     bins_dc = ax3_dc.hist(dyncode_pr,bins=np.linspace(0,0.08,10),density=True,color = green,alpha=1,linewidth=0); 
+    print("dyncode")
     compute_st_values(ax3_dc,dyncode_pr,bins_dc,1,10)   
     if len(DT) > 0:
         ax3.axvspan( 0.02, 0.06, color=green, alpha=0.3, lw=0)
         bins = ax3.hist(pulse_rate,bins=np.linspace(0,0.08,10),density=True,alpha=1,linewidth=0); 
         #ax3.axvspan(0.0067, 0.02, color=green, alpha=0.3, lw=0) #old,creo que es en frames
+        print("TS")
         compute_st_values(ax3,pulse_rate,bins,1,10)   
     else:
         print(delta,D,"no data")
     
-    ax3.set_ylim([0,40]);
-    ax3.set_xlim([0,0.08])
-    set_scale(ax3,[0,0.08], [0,40])
-    ax3.set_xticklabels([0,0.08])
-    ax3.set_yticklabels([0,40])
-    ax3.tick_params(labelsize=10)    
-    
+    for ax in [ax3_dc,ax3]:
+        ax.set_ylim([0,40]);
+        ax.set_xlim([0,0.08])
+        set_scale(ax,[0,0.02,0.04,0.06,0.08], [0,40])
+        ax.set_xticklabels([0,0.08])
+        ax.set_yticklabels([0,40])
+        ax.tick_params(labelsize=10)    
+
+    ax3.set_xticklabels([0,0.02,0.04,0.06,0.08])
+    ax3_dc.set_xticklabels([])
+    ax3.set_xlabel('tasa de pulsado' ,fontsize=10); 
     
 # =============================================================================
 #     consecutiveness plot
@@ -289,18 +299,18 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
 
     ax5 = plt.subplot(gs_row_3[0])
      
-    ax5.plot(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons, linewidth=0.5, marker = "." , markersize=7, alpha=1)
+    ax5.plot(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons, linewidth=0.5, marker = "." , markersize=7, alpha=1,label = "model")
     ax5.fill_between(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons-std_trains_cons,mean_trains_cons+std_trains_cons,alpha = 0.2,linewidth=0)
     x,y = get_consecutive_data_dyncode(dyncode_filename)
-    ax5.plot(x,y,linewidth=0.5, marker = "." , markersize=7, alpha=1,color = green)
+    ax5.plot(x,y,linewidth=0.5, marker = "." , markersize=7, alpha=1,color = green,label = "serum + LIF")
 
-    #X_lim = [0,50]
-    #ax5.set_xlim(X_lim);
+    ax5.set_xlim([0,10.5]);
     ax5.set_yscale('log')
-    #ax5.set_ylim(YC_lim)
+    ax5.set_ylim([10**(-2),10**1])
     ax5.set_ylabel('counts x trace',fontsize=10); ax5.set_xlabel('length of sequence of \n consecutive pulses',fontsize=10)
     ax5.xaxis.set_label_coords(0.5, -0.08);ax5.yaxis.set_label_coords(-0.2,0.5);
-    #ax3.set_xticks([0,3,6,9,12,15])        
+    ax5.set_xticks([1,4,7,10])  
+    ax5.legend()      
 
 # =============================================================================
 #     consecutiveness boxplot
