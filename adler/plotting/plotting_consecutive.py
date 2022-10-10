@@ -280,7 +280,6 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
         ax.set_ylim([0,40]);
         ax.set_xlim([0,0.08])
         set_scale(ax,[0,0.02,0.04,0.06,0.08], [0,40])
-        ax.set_xticklabels([0,0.08])
         ax.set_yticklabels([0,40])
         ax.tick_params(labelsize=10)    
 
