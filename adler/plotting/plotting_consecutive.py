@@ -202,7 +202,7 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
     green =  sns.color_palette(sns.dark_palette("#2ecc71",30,reverse=False))[15]
 
     fig = plt.figure(constrained_layout=False, figsize=(8.27, 11.692))
-    gs_main = gridspec.GridSpec(nrows=3, ncols=1, figure=fig); gs_main.update(left=0.1, right=0.9, bottom=0.1, top=0.90, hspace=0.3,wspace=0.3)
+    gs_main = gridspec.GridSpec(nrows=6, ncols=1, figure=fig); gs_main.update(left=0.1, right=0.9, bottom=0.1, top=0.90, hspace=0.3,wspace=0.3)
     (omega,alpha,D,number),dataset = tuple_[0],tuple_[1]
     delta = np.round(alpha/omega,4)  
 # =============================================================================
@@ -429,7 +429,7 @@ def plot_time_series_square_dataset(dt,beg,T,d,N,Delta,data_folder,save_path_nam
 ### Figure
 ###############################################################################    
 
-    fig, axs = plt.subplots(10, 7, sharex=True, sharey=True, figsize=(8.27*5, 11.69*2))
+    fig, axs = plt.subplots(10, 7, sharex=True, sharey=True, figsize=(8.27, 11.69/2))
     fig.subplots_adjust(bottom=0.15, top=0.9, left=0.1, right=0.99, wspace=0.1, hspace=0.1)
     axs = axs.ravel(); 
         
@@ -459,7 +459,7 @@ def plot_time_series_square_dataset(dt,beg,T,d,N,Delta,data_folder,save_path_nam
                 right_minima = mask_arr(beg_,end, download_data(data_folder + 'right_minima_'+ file_name) )
                 
                 if len(MAX) > 0:
-                    ax.plot(t[beg_:end][MAX],(1+ np.sin(theta))[beg_:end][MAX],'o',color = 'blue',markersize = 8)
+                    ax.plot(t[beg_:end][MAX],(1+ np.sin(theta))[beg_:end][MAX],'o',color = 'red',markersize = 8)
                     ax.plot(t[beg_:end][left_minima],(1+ np.sin(theta))[beg_:end][left_minima],'<',color = 'black',markersize = 8)
                     ax.plot(t[beg_:end][right_minima],(1+ np.sin(theta))[beg_:end][right_minima],'>',color='black',markersize = 8)
 
