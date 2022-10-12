@@ -429,7 +429,7 @@ def plot_time_series_square_dataset(dt,beg,T,d,N,Delta,data_folder,save_path_nam
 ### Figure
 ###############################################################################    
 
-    fig, axs = plt.subplots(10, 7, sharex=True, sharey=True, figsize=(8.27, 11.69/2))
+    fig, axs = plt.subplots(10, 7, sharex=True, sharey=True, figsize=(8.27*5, 11.69*2))
     fig.subplots_adjust(bottom=0.15, top=0.9, left=0.1, right=0.99, wspace=0.1, hspace=0.1)
     axs = axs.ravel(); 
         
