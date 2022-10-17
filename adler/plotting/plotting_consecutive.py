@@ -208,7 +208,7 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
 # =============================================================================
 #     quantifiers hist plot
 # =============================================================================
-    gs_row_1 = gridspec.GridSpecFromSubplotSpec(nrows=2, ncols=3, subplot_spec=gs_main[0])
+    gs_row_1 = gridspec.GridSpecFromSubplotSpec(nrows=2, ncols=3, subplot_spec=gs_main[0:2])
     dyncode_df = get_conc_data(dyncode_filename)['an_WT_ESL']
     DT,IPI,joint_duration,dm,pulse_rate = download_quantifiers(dataset,data_folder,T,dt,d,False)
     
@@ -290,7 +290,7 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
 # =============================================================================
 #     consecutiveness plot
 # =============================================================================
-    gs_row_3 = gridspec.GridSpecFromSubplotSpec(nrows=1, ncols=3, subplot_spec=gs_main[2])
+    gs_row_3 = gridspec.GridSpecFromSubplotSpec(nrows=1, ncols=3, subplot_spec=gs_main[3])
 
     (mean_trains_cons,std_trains_cons),total_pulses_median,isolated_pulses_median,consecutive_pulses_median = load_consecutive_statistics_realizations(dataset,save_data_arr,T)
     #print('total,is,con',total_pulses_median,isolated_pulses_median,consecutive_pulses_median )
@@ -316,7 +316,7 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
 # =============================================================================
     
     ax6 = plt.subplot(gs_row_3[1])
-    ax6.axhline(y = 1,color = green,linewidth=0.5,alpha = 0.3,linestyle = 'dashed')
+    ax6.axhline(y = 1,color = green,linewidth=0.5,alpha = 1,linestyle = 'dashed')
 
     #hay que hacer varios trials para tener este plot
     
@@ -371,7 +371,7 @@ def plot_consecutiveness_activity_(dt,T,d,data_folder,save_folder,dyncode_filena
 # =============================================================================
 #     activity population and mean plot
 # =============================================================================
-    gs_row_2 = gridspec.GridSpecFromSubplotSpec(nrows=1, ncols=3, subplot_spec=gs_main[1])
+    gs_row_2 = gridspec.GridSpecFromSubplotSpec(nrows=1, ncols=3, subplot_spec=gs_main[2])
 
     ax3 = plt.subplot(gs_row_2[0:2]); plt.rc('axes.spines', top=False, bottom=True, left=True, right=False); 
     
