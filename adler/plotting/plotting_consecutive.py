@@ -844,13 +844,13 @@ def plot_consecutiveness_activity_ou_(dt,T,d,data_folder,save_folder,dyncode_fil
     green =  sns.color_palette(sns.dark_palette("#2ecc71",30,reverse=False))[15]
 
     fig = plt.figure(constrained_layout=False, figsize=(8.27, 11.692))
-    gs_main = gridspec.GridSpec(nrows=3, ncols=1, figure=fig); gs_main.update(left=0.1, right=0.9, bottom=0.1, top=0.90, hspace=0.3,wspace=0.3)
+    gs_main = gridspec.GridSpec(nrows=6, ncols=1, figure=fig); gs_main.update(left=0.1, right=0.9, bottom=0.1, top=0.90, hspace=0.3,wspace=0.3)
     (omega,alpha0,sigma,tau,number),dataset = tuple_[0],tuple_[1]
     delta0 = np.round(alpha0/omega,4)  
 # =============================================================================
 #     quantifiers hist plot
 # =============================================================================
-    gs_row_1 = gridspec.GridSpecFromSubplotSpec(nrows=2, ncols=3, subplot_spec=gs_main[0])
+    gs_row_1 = gridspec.GridSpecFromSubplotSpec(nrows=2, ncols=3, subplot_spec=gs_main[0:2])
     DT,IPI,joint_duration,dm,pulse_rate = download_quantifiers(dataset,data_folder,T,dt,d,False)
     dyncode_df = get_conc_data(dyncode_filename)['an_WT_ESL']
     
@@ -933,7 +933,7 @@ def plot_consecutiveness_activity_ou_(dt,T,d,data_folder,save_folder,dyncode_fil
 # =============================================================================
 #     consecutiveness plot
 # =============================================================================
-    gs_row_3 = gridspec.GridSpecFromSubplotSpec(nrows=1, ncols=3, subplot_spec=gs_main[2])
+    gs_row_3 = gridspec.GridSpecFromSubplotSpec(nrows=1, ncols=3, subplot_spec=gs_main[3])
 
     (mean_trains_cons,std_trains_cons),total_pulses_median,isolated_pulses_median,consecutive_pulses_median = load_consecutive_statistics_realizations(dataset,save_data_arr,T)
     #print('total,is,con',total_pulses_median,isolated_pulses_median,consecutive_pulses_median )
@@ -941,25 +941,25 @@ def plot_consecutiveness_activity_ou_(dt,T,d,data_folder,save_folder,dyncode_fil
 
     ax5 = plt.subplot(gs_row_3[0])
      
-    ax5.plot(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons, linewidth=0.5, marker = "." , color = red,markersize=7, alpha=1)
+    ax5.plot(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons, linewidth=0.5, marker = "." , color = red,markersize=7, alpha=1,label = "model")
     ax5.fill_between(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons-std_trains_cons,mean_trains_cons+std_trains_cons,color = red,alpha = 0.2,linewidth=0)
     x,y = get_consecutive_data_dyncode(dyncode_filename)
-    ax5.plot(x,y,linewidth=0.5, marker = "." , markersize=7, alpha=1,color = green)
+    ax5.plot(x,y,linewidth=0.5, marker = "." , markersize=7, alpha=1,color = green,label = "exp")
 
-    #X_lim = [0,50]
-    #ax5.set_xlim(X_lim);
+    ax5.set_xlim([0,10.5]);
     ax5.set_yscale('log')
-    #ax5.set_ylim(YC_lim)
+    ax5.set_ylim([10**(-2),10**1])
     ax5.set_ylabel('counts x trace',fontsize=10); ax5.set_xlabel('length of sequence of \n consecutive pulses',fontsize=10)
     ax5.xaxis.set_label_coords(0.5, -0.08);ax5.yaxis.set_label_coords(-0.2,0.5);
-    #ax3.set_xticks([0,3,6,9,12,15])        
+    ax5.set_xticks([1,4,7,10])  
+    ax5.legend()       
 
 # =============================================================================
 #     consecutiveness boxplot
 # =============================================================================
     
     ax6 = plt.subplot(gs_row_3[1])
-    ax6.axhline(y = 1,color = green,linewidth=0.5,alpha = 0.3,linestyle = 'dashed')
+    ax6.axhline(y = 1,color = green,linewidth=0.5,alpha = 1,linestyle = 'dashed')
 
     #hay que hacer varios trials para tener este plot
     
@@ -1014,7 +1014,7 @@ def plot_consecutiveness_activity_ou_(dt,T,d,data_folder,save_folder,dyncode_fil
 # =============================================================================
 #     activity population and mean plot
 # =============================================================================
-    gs_row_2 = gridspec.GridSpecFromSubplotSpec(nrows=1, ncols=3, subplot_spec=gs_main[1])
+    gs_row_2 = gridspec.GridSpecFromSubplotSpec(nrows=1, ncols=3, subplot_spec=gs_main[2])
 
     ax3 = plt.subplot(gs_row_2[0:2]); plt.rc('axes.spines', top=False, bottom=True, left=True, right=False); 
     
