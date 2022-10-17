@@ -425,7 +425,7 @@ def plot_time_series_square_dataset(dt,beg,T,d,N,Delta,data_folder,save_path_nam
 ### Plotting parameters
 ###############################################################################    
     xlim = [-5+beg,T+5] ;# ylim = [-0.2,2.2] ;   
-    ylim = [-1000,23000] ;        
+    ylim = [np.exp(-100)-1e-43,np.exp(100)+1e42] ;        
 
 ###############################################################################
 ### Figure
