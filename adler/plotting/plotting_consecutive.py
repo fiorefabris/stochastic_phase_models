@@ -600,14 +600,17 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
     else:
         pass
     
-    ax3.set_ylim([0,40]);
-    ax3.set_xlim([0,0.08])
-    set_scale(ax3,[0,0.08], [0,40])
-    ax3.set_xticklabels([0,0.08])
-    ax3.set_yticklabels([0,40])
-    ax3.tick_params(labelsize=10)    
     
+    for ax in [ax3_dc,ax3]:
+        ax.set_ylim([0,40]);
+        ax.set_xlim([0,0.08])
+        set_scale(ax,[0,0.02,0.04,0.06,0.08], [0,40])
+        ax.set_yticklabels([0,40])
+        ax.tick_params(labelsize=10)    
 
+    ax3.set_xticklabels([0,0.02,0.04,0.06,0.08])
+    ax3_dc.set_xticklabels([])
+    ax3.set_xlabel('tasa de pulsado' ,fontsize=10); 
 # =============================================================================
 #     consecutiveness plot
 # =============================================================================
@@ -615,7 +618,7 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
     colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728']
 
 
-    gs_row_3 = gridspec.GridSpecFromSubplotSpec(nrows=1, ncols=3, subplot_spec=gs_main[2])
+    gs_row_3 = gridspec.GridSpecFromSubplotSpec(nrows=1, ncols=3, subplot_spec=gs_main[3])
     ax5 = plt.subplot(gs_row_3[0])
      
     ax5.plot(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons, linewidth=0.5, color = orange, marker = "." , markersize=7, alpha=1,label = "model")
@@ -637,7 +640,7 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
 # =============================================================================
     
     ax6 = plt.subplot(gs_row_3[1])
-    ax6.axhline(y = 1,color = green,linewidth=0.5,alpha = 0.3,linestyle = 'dashed')
+    ax6.axhline(y = 1,color = green,linewidth=1,alpha = 1,linestyle = 'dashed')
 
 #hay que hacer varios trials para tener este plot
     
@@ -683,7 +686,7 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
 # =============================================================================
 #     activity population and mean plot
 # =============================================================================
-    gs_row_2 = gridspec.GridSpecFromSubplotSpec(nrows=1, ncols=3, subplot_spec=gs_main[1])
+    gs_row_2 = gridspec.GridSpecFromSubplotSpec(nrows=1, ncols=3, subplot_spec=gs_main[2])
     ax3 = plt.subplot(gs_row_2[0:2]); plt.rc('axes.spines', top=False, bottom=True, left=True, right=False); 
     
     #activity,silent,n_cell = load_activity(dataset,data_folder,dt,T,d)
