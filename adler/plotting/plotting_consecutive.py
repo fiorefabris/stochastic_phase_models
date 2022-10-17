@@ -31,7 +31,7 @@ plt.grid(0)
 plt.rc('axes.spines', top=True, bottom=True, left=True, right=True); 
 
 def von_mises(theta,k=100):
-    return np.exp(k*np.sin(theta))
+    return np.exp(k*np.sin(theta))/np.exp(k)
 
 #%%
 def get_mean_value_place(trials,no_std = False):
@@ -425,7 +425,7 @@ def plot_time_series_square_dataset(dt,beg,T,d,N,Delta,data_folder,save_path_nam
 ### Plotting parameters
 ###############################################################################    
     xlim = [-5+beg,T+5] ;# ylim = [-0.2,2.2] ;   
-    ylim = [0-1e42,np.exp(100)+1e42] ;        
+    ylim = [-0.1,1.1] ;        
 
 ###############################################################################
 ### Figure
@@ -476,8 +476,8 @@ def plot_time_series_square_dataset(dt,beg,T,d,N,Delta,data_folder,save_path_nam
             ###############################################
             #### Plotting
             ################################################
-            text = str(ix)
-            ax.text(0.9, 0.9, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
+          #  text = str(ix)
+          #  ax.text(0.9, 0.9, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
             
             if (ix == len(axs)-6):
                 ax.set_ylabel(r'$1 + \sin(\theta)$', fontsize=30);
@@ -486,10 +486,10 @@ def plot_time_series_square_dataset(dt,beg,T,d,N,Delta,data_folder,save_path_nam
                 ax.yaxis.set_label_coords(-0.05, 0.5)
             
             #set_scale(ax,[beg,T], [0,2]) 
-            set_scale(ax,[beg,T], [0,np.exp(100)])
+            set_scale(ax,[beg,T], [0,1])
             ax.set_xticklabels([beg,T])
             #ax.set_yticklabels([0,2])
-            ax.set_yticklabels([0,np.exp(100)])
+            ax.set_yticklabels([0,1])
             ax.tick_params(labelsize=20)
     
 
@@ -750,7 +750,7 @@ def plot_time_series_square_dataset_dist(dt,beg,T,d,N,Delta,data_folder,save_pat
 ###############################################################################
 ### Plotting parameters
 ###############################################################################    
-    xlim = [-5+beg,T+5] ; ylim = [-0.2,2.2] ;         
+    xlim = [-5+beg,T+5] ; ylim = [-0.1,1.1] ;  #ylim = [-0.2,2.2] ;         
 
 ###############################################################################
 ### Figure
@@ -778,8 +778,9 @@ def plot_time_series_square_dataset_dist(dt,beg,T,d,N,Delta,data_folder,save_pat
                 beg_ = int(beg/(dt*d))
                 assert len(t) == len(theta), (len(t),len(theta))
                 
-                ax.plot(t[beg_:end:Delta],1+np.sin(theta)[beg_:end:Delta],linewidth=2,color=orange)
-            
+               # ax.plot(t[beg_:end:Delta],1+np.sin(theta)[beg_:end:Delta],linewidth=2,color=orange)
+                ax.plot(t[beg_:end:1],von_mises(theta)[beg_:end:1],linewidth=2,color=orange)
+
             if check_file('max_'+file_name,data_folder):            
                     
                 MAX          = mask_arr(beg_,end, download_data(data_folder + 'max_'+file_name))
@@ -787,9 +788,12 @@ def plot_time_series_square_dataset_dist(dt,beg,T,d,N,Delta,data_folder,save_pat
                 right_minima = mask_arr(beg_,end, download_data(data_folder + 'right_minima_'+ file_name) )
                 
                 if len(MAX) > 0:
-                    ax.plot(t[beg_:end][MAX],(1+ np.sin(theta))[beg_:end][MAX],'o',color = 'blue',markersize = 8)
-                    ax.plot(t[beg_:end][left_minima],(1+ np.sin(theta))[beg_:end][left_minima],'<',color = 'black',markersize = 8)
-                    ax.plot(t[beg_:end][right_minima],(1+ np.sin(theta))[beg_:end][right_minima],'>',color='black',markersize = 8)
+                   # ax.plot(t[beg_:end][MAX],(1+ np.sin(theta))[beg_:end][MAX],'o',color = 'blue',markersize = 8)
+                  #  ax.plot(t[beg_:end][left_minima],(1+ np.sin(theta))[beg_:end][left_minima],'<',color = 'black',markersize = 8)
+                   # ax.plot(t[beg_:end][right_minima],(1+ np.sin(theta))[beg_:end][right_minima],'>',color='black',markersize = 8)
+                    ax.plot(t[beg_:end][MAX],von_mises(theta)[beg_:end][MAX],'o',color = 'red',markersize = 8)
+                    ax.plot(t[beg_:end][left_minima],von_mises(theta)[beg_:end][left_minima],'<',color = 'black',markersize = 8)
+                    ax.plot(t[beg_:end][right_minima],von_mises(theta)[beg_:end][right_minima],'>',color='black',markersize = 8)
 
 
             ax.set_ylim(ylim);
@@ -798,8 +802,8 @@ def plot_time_series_square_dataset_dist(dt,beg,T,d,N,Delta,data_folder,save_pat
             ###############################################
             #### Plotting
             ################################################
-            text = str(ix)
-            ax.text(0.9, 0.9, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
+           # text = str(ix)
+          #  ax.text(0.9, 0.9, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
             
             if (ix == len(axs)-6):
                 ax.set_ylabel(r'$1 + \sin(\theta)$', fontsize=30);
@@ -807,9 +811,9 @@ def plot_time_series_square_dataset_dist(dt,beg,T,d,N,Delta,data_folder,save_pat
                 ax.xaxis.set_label_coords(0.5, -0.1);
                 ax.yaxis.set_label_coords(-0.05, 0.5)
             
-            set_scale(ax,[beg,T], [0,2])
+            set_scale(ax,[beg,T], [0,1]) #set_scale(ax,[beg,T], [0,2])
             ax.set_xticklabels([beg,T])
-            ax.set_yticklabels([0,2])
+            ax.set_yticklabels([0,1])#ax.set_yticklabels([0,2])
             ax.tick_params(labelsize=20)
     
 
@@ -1078,7 +1082,7 @@ def plot_time_series_square_dataset_ou(dt,beg,T,d,N,Delta,data_folder,save_path_
 ###############################################################################
 ### Plotting parameters
 ###############################################################################    
-    xlim = [-5+beg,T+5] ; ylim = [-0.2,2.2] ;         
+    xlim = [-5+beg,T+5] ;ylim = [-0.1,1.1] # ylim = [-0.2,2.2] ;         
 
 ###############################################################################
 ### Figure
@@ -1105,8 +1109,9 @@ def plot_time_series_square_dataset_ou(dt,beg,T,d,N,Delta,data_folder,save_path_
                 beg_ = int(beg/(dt*d))
                 assert len(t) == len(theta), (len(t),len(theta))
                 
-                ax.plot(t[beg_:end:Delta],1+np.sin(theta)[beg_:end:Delta],linewidth=2,color = red)
-            
+                #ax.plot(t[beg_:end:Delta],1+np.sin(theta)[beg_:end:Delta],linewidth=2,color = red)
+                ax.plot(t[beg_:end:1],von_mises(theta)[beg_:end:1],linewidth=2,color=red)
+
             if check_file('max_'+file_name,data_folder):            
                     
                 MAX          = mask_arr(beg_,end, download_data(data_folder + 'max_'+file_name))
@@ -1114,9 +1119,12 @@ def plot_time_series_square_dataset_ou(dt,beg,T,d,N,Delta,data_folder,save_path_
                 right_minima = mask_arr(beg_,end, download_data(data_folder + 'right_minima_'+ file_name) )
                 
                 if len(MAX) > 0:
-                    ax.plot(t[beg_:end][MAX],(1+ np.sin(theta))[beg_:end][MAX],'o',color = 'blue',markersize = 8)
-                    ax.plot(t[beg_:end][left_minima],(1+ np.sin(theta))[beg_:end][left_minima],'<',color = 'black',markersize = 8)
-                    ax.plot(t[beg_:end][right_minima],(1+ np.sin(theta))[beg_:end][right_minima],'>',color='black',markersize = 8)
+                   # ax.plot(t[beg_:end][MAX],(1+ np.sin(theta))[beg_:end][MAX],'o',color = 'blue',markersize = 8)
+                   # ax.plot(t[beg_:end][left_minima],(1+ np.sin(theta))[beg_:end][left_minima],'<',color = 'black',markersize = 8)
+                   # ax.plot(t[beg_:end][right_minima],(1+ np.sin(theta))[beg_:end][right_minima],'>',color='black',markersize = 8)
+                   ax.plot(t[beg_:end][MAX],von_mises(theta)[beg_:end][MAX],'o',color = 'red',markersize = 8)
+                   ax.plot(t[beg_:end][left_minima],von_mises(theta)[beg_:end][left_minima],'<',color = 'black',markersize = 8)
+                   ax.plot(t[beg_:end][right_minima],von_mises(theta)[beg_:end][right_minima],'>',color='black',markersize = 8)
 
 
             ax.set_ylim(ylim);
@@ -1125,8 +1133,8 @@ def plot_time_series_square_dataset_ou(dt,beg,T,d,N,Delta,data_folder,save_path_
             ###############################################
             #### Plotting
             ################################################
-            text = str(ix)
-            ax.text(0.9, 0.9, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
+           # text = str(ix)
+          #  ax.text(0.9, 0.9, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
             
             if (ix == len(axs)-6):
                 ax.set_ylabel(r'$1 + \sin(\theta)$', fontsize=30);
@@ -1134,9 +1142,9 @@ def plot_time_series_square_dataset_ou(dt,beg,T,d,N,Delta,data_folder,save_path_
                 ax.xaxis.set_label_coords(0.5, -0.1);
                 ax.yaxis.set_label_coords(-0.05, 0.5)
             
-            set_scale(ax,[beg,T], [0,2])
+            set_scale(ax,[beg,T], [0,1]) #set_scale(ax,[beg,T], [0,2])
             ax.set_xticklabels([beg,T])
-            ax.set_yticklabels([0,2])
+            ax.set_yticklabels([0,1])#ax.set_yticklabels([0,2])
             ax.tick_params(labelsize=20)
     
 
@@ -1150,7 +1158,7 @@ def plot_time_series_square_dataset_ou(dt,beg,T,d,N,Delta,data_folder,save_path_
 # =============================================================================
 # =============================================================================
 # =============================================================================
-# Plotting ou
+# Plotting ou D
 # =============================================================================
 # =============================================================================
 # =============================================================================
@@ -1405,7 +1413,7 @@ def plot_time_series_square_dataset_ou_D(dt,beg,T,d,N,Delta,data_folder,save_pat
 ###############################################################################
 ### Plotting parameters
 ###############################################################################    
-    xlim = [-5+beg,T+5] ; ylim = [-0.2,2.2] ;         
+    xlim = [-5+beg,T+5] ;ylim = [-0.1,1.1] # ylim = [-0.2,2.2] ;         
 
 ###############################################################################
 ### Figure
@@ -1432,8 +1440,9 @@ def plot_time_series_square_dataset_ou_D(dt,beg,T,d,N,Delta,data_folder,save_pat
                 beg_ = int(beg/(dt*d))
                 assert len(t) == len(theta), (len(t),len(theta))
                 
-                ax.plot(t[beg_:end:Delta],1+np.sin(theta)[beg_:end:Delta],linewidth=2,color = violet)
-            
+               # ax.plot(t[beg_:end:Delta],1+np.sin(theta)[beg_:end:Delta],linewidth=2,color = violet)
+               ax.plot(t[beg_:end:1],von_mises(theta)[beg_:end:1],linewidth=2,color = violet)
+
             if check_file('max_'+file_name,data_folder):            
                     
                 MAX          = mask_arr(beg_,end, download_data(data_folder + 'max_'+file_name))
@@ -1441,9 +1450,12 @@ def plot_time_series_square_dataset_ou_D(dt,beg,T,d,N,Delta,data_folder,save_pat
                 right_minima = mask_arr(beg_,end, download_data(data_folder + 'right_minima_'+ file_name) )
                 
                 if len(MAX) > 0:
-                    ax.plot(t[beg_:end][MAX],(1+ np.sin(theta))[beg_:end][MAX],'o',color = 'blue',markersize = 8)
-                    ax.plot(t[beg_:end][left_minima],(1+ np.sin(theta))[beg_:end][left_minima],'<',color = 'black',markersize = 8)
-                    ax.plot(t[beg_:end][right_minima],(1+ np.sin(theta))[beg_:end][right_minima],'>',color='black',markersize = 8)
+                    #ax.plot(t[beg_:end][MAX],(1+ np.sin(theta))[beg_:end][MAX],'o',color = 'blue',markersize = 8)
+                   # ax.plot(t[beg_:end][left_minima],(1+ np.sin(theta))[beg_:end][left_minima],'<',color = 'black',markersize = 8)
+                    #ax.plot(t[beg_:end][right_minima],(1+ np.sin(theta))[beg_:end][right_minima],'>',color='black',markersize = 8)
+                   ax.plot(t[beg_:end][MAX],von_mises(theta)[beg_:end][MAX],'o',color = 'red',markersize = 8)
+                   ax.plot(t[beg_:end][left_minima],von_mises(theta)[beg_:end][left_minima],'<',color = 'black',markersize = 8)
+                   ax.plot(t[beg_:end][right_minima],von_mises(theta)[beg_:end][right_minima],'>',color='black',markersize = 8)
 
 
             ax.set_ylim(ylim);
@@ -1452,8 +1464,8 @@ def plot_time_series_square_dataset_ou_D(dt,beg,T,d,N,Delta,data_folder,save_pat
             ###############################################
             #### Plotting
             ################################################
-            text = str(ix)
-            ax.text(0.9, 0.9, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
+            #text = str(ix)
+           # ax.text(0.9, 0.9, text , ha='center', va='center', transform=ax.transAxes, fontsize=25)
             
             if (ix == len(axs)-6):
                 ax.set_ylabel(r'$1 + \sin(\theta)$', fontsize=30);
@@ -1461,11 +1473,10 @@ def plot_time_series_square_dataset_ou_D(dt,beg,T,d,N,Delta,data_folder,save_pat
                 ax.xaxis.set_label_coords(0.5, -0.1);
                 ax.yaxis.set_label_coords(-0.05, 0.5)
             
-            set_scale(ax,[beg,T], [0,2])
+            set_scale(ax,[beg,T], [0,1]) #set_scale(ax,[beg,T], [0,2])
             ax.set_xticklabels([beg,T])
-            ax.set_yticklabels([0,2])
+            ax.set_yticklabels([0,1])#ax.set_yticklabels([0,2])
             ax.tick_params(labelsize=20)
-    
 
     
     plt.savefig(save_path_name + 'time_series'+str(delta0)+'_'+str(sigma)+'_'+str(tau)+'_'+str(D)+'.pdf', format='pdf')
