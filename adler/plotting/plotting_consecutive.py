@@ -30,7 +30,8 @@ sns.set(context='paper', style='ticks')
 plt.grid(0)
 plt.rc('axes.spines', top=True, bottom=True, left=True, right=True); 
 
-
+def von_mises(theta,k=10):
+    return np.exp(k*np.sin(theta))
 
 #%%
 def get_mean_value_place(trials,no_std = False):
@@ -423,7 +424,8 @@ def plot_time_series_square_dataset(dt,beg,T,d,N,Delta,data_folder,save_path_nam
 ###############################################################################
 ### Plotting parameters
 ###############################################################################    
-    xlim = [-5+beg,T+5] ; ylim = [-0.2,2.2] ;         
+    xlim = [-5+beg,T+5] ;# ylim = [-0.2,2.2] ;   
+    ylim = [0,22100] ;        
 
 ###############################################################################
 ### Figure
@@ -450,8 +452,9 @@ def plot_time_series_square_dataset(dt,beg,T,d,N,Delta,data_folder,save_path_nam
                 beg_ = int(beg/(dt*d))
                 assert len(t) == len(theta), (len(t),len(theta))
                 
-                ax.plot(t[beg_:end:Delta],1+np.sin(theta)[beg_:end:Delta],linewidth=2)
-            
+                #ax.plot(t[beg_:end:Delta],1+np.sin(theta)[beg_:end:Delta],linewidth=2)
+                ax.plot(t[beg_:end:Delta],von_mises(theta)[beg_:end:Delta],linewidth=2)
+                
             if check_file('max_'+file_name,data_folder):            
                     
                 MAX          = mask_arr(beg_,end, download_data(data_folder + 'max_'+file_name))
@@ -459,9 +462,12 @@ def plot_time_series_square_dataset(dt,beg,T,d,N,Delta,data_folder,save_path_nam
                 right_minima = mask_arr(beg_,end, download_data(data_folder + 'right_minima_'+ file_name) )
                 
                 if len(MAX) > 0:
-                    ax.plot(t[beg_:end][MAX],(1+ np.sin(theta))[beg_:end][MAX],'o',color = 'red',markersize = 8)
-                    ax.plot(t[beg_:end][left_minima],(1+ np.sin(theta))[beg_:end][left_minima],'<',color = 'black',markersize = 8)
-                    ax.plot(t[beg_:end][right_minima],(1+ np.sin(theta))[beg_:end][right_minima],'>',color='black',markersize = 8)
+                   # ax.plot(t[beg_:end][MAX],(1+ np.sin(theta))[beg_:end][MAX],'o',color = 'red',markersize = 8)
+                   # ax.plot(t[beg_:end][left_minima],(1+ np.sin(theta))[beg_:end][left_minima],'<',color = 'black',markersize = 8)
+                   # ax.plot(t[beg_:end][right_minima],(1+ np.sin(theta))[beg_:end][right_minima],'>',color='black',markersize = 8)
+                    ax.plot(t[beg_:end][MAX],von_mises(theta)[beg_:end][MAX],'o',color = 'red',markersize = 8)
+                    ax.plot(t[beg_:end][left_minima],von_mises(theta)[beg_:end][left_minima],'<',color = 'black',markersize = 8)
+                    ax.plot(t[beg_:end][right_minima],von_mises(theta)[beg_:end][right_minima],'>',color='black',markersize = 8)
 
 
             ax.set_ylim(ylim);
@@ -479,9 +485,9 @@ def plot_time_series_square_dataset(dt,beg,T,d,N,Delta,data_folder,save_path_nam
                 ax.xaxis.set_label_coords(0.5, -0.1);
                 ax.yaxis.set_label_coords(-0.05, 0.5)
             
-            set_scale(ax,[beg,T], [0,2])
+            #set_scale(ax,[beg,T], [0,2])
             ax.set_xticklabels([beg,T])
-            ax.set_yticklabels([0,2])
+            #ax.set_yticklabels([0,2])
             ax.tick_params(labelsize=20)
     
 
