@@ -425,7 +425,7 @@ def plot_time_series_square_dataset(dt,beg,T,d,N,Delta,data_folder,save_path_nam
 ### Plotting parameters
 ###############################################################################    
     xlim = [-5+beg,T+5] ;# ylim = [-0.2,2.2] ;   
-    ylim = [np.exp(-100)-1e-43,np.exp(100)+1e42] ;        
+    ylim = [0-1e42,np.exp(100)+1e42] ;        
 
 ###############################################################################
 ### Figure
@@ -486,10 +486,10 @@ def plot_time_series_square_dataset(dt,beg,T,d,N,Delta,data_folder,save_path_nam
                 ax.yaxis.set_label_coords(-0.05, 0.5)
             
             #set_scale(ax,[beg,T], [0,2]) 
-            set_scale(ax,[beg,T], [0,22500])
+            set_scale(ax,[beg,T], [0,np.exp(100)])
             ax.set_xticklabels([beg,T])
             #ax.set_yticklabels([0,2])
-            ax.set_yticklabels([0,22500])
+            ax.set_yticklabels([0,np.exp(100)])
             ax.tick_params(labelsize=20)
     
 
