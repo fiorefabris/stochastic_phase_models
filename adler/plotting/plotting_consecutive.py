@@ -30,7 +30,7 @@ sns.set(context='paper', style='ticks')
 plt.grid(0)
 plt.rc('axes.spines', top=True, bottom=True, left=True, right=True); 
 
-def von_mises(theta,k=10):
+def von_mises(theta,k=100):
     return np.exp(k*np.sin(theta))
 
 #%%
@@ -425,7 +425,7 @@ def plot_time_series_square_dataset(dt,beg,T,d,N,Delta,data_folder,save_path_nam
 ### Plotting parameters
 ###############################################################################    
     xlim = [-5+beg,T+5] ;# ylim = [-0.2,2.2] ;   
-    ylim = [-100,23000] ;        
+    ylim = [-1000,23000] ;        
 
 ###############################################################################
 ### Figure
