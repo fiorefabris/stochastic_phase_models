@@ -521,14 +521,14 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
     orange = sns.color_palette("deep",6)[1]
     
     fig = plt.figure(constrained_layout=False, figsize=(8.27, 11.692))
-    gs_main = gridspec.GridSpec(nrows=3, ncols=1, figure=fig); gs_main.update(left=0.1, right=0.9, bottom=0.1, top=0.90, hspace=0.3,wspace=0.3)
+    gs_main = gridspec.GridSpec(nrows=6, ncols=1, figure=fig); gs_main.update(left=0.1, right=0.9, bottom=0.1, top=0.90, hspace=0.3,wspace=0.3)
     (omega,D),ref_ = tuple_[0],tuple_[1]
 
 # =============================================================================
 #     quantifiers hist plot
 # =============================================================================
     dyncode_df = get_conc_data(dyncode_filename)['an_WT_ESL']
-    gs_row_1 = gridspec.GridSpecFromSubplotSpec(nrows=2, ncols=3, subplot_spec=gs_main[0])
+    gs_row_1 = gridspec.GridSpecFromSubplotSpec(nrows=2, ncols=3, subplot_spec=gs_main[0:2])
     
     
     DT,IPI,pulse_rate= [],[],[]
@@ -539,6 +539,7 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
     ax1 = plt.subplot(gs_row_1[1,0])
     ax1_dc = plt.subplot(gs_row_1[0,0])
     bins_dc = ax1_dc.hist(dyncode_df.dt_peaks.dropna().values/3,bins=np.linspace(0,20,21),density=True,color=green,alpha=1,linewidth=0); 
+    print("dyncode")
     compute_st_values(ax1_dc,dyncode_df.dt_peaks.dropna().values/3,bins_dc,1,10)   
     
     
@@ -617,18 +618,19 @@ def plot_consecutiveness_activity_dist_(dt,T,d,data_folder,save_folder,dyncode_f
     gs_row_3 = gridspec.GridSpecFromSubplotSpec(nrows=1, ncols=3, subplot_spec=gs_main[2])
     ax5 = plt.subplot(gs_row_3[0])
      
-    ax5.plot(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons, linewidth=0.5, color = orange, marker = "." , markersize=7, alpha=1)
+    ax5.plot(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons, linewidth=0.5, color = orange, marker = "." , markersize=7, alpha=1,label = "model")
     ax5.fill_between(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons-std_trains_cons,mean_trains_cons+std_trains_cons,color = orange,alpha = 0.2,linewidth=0)
     x,y = get_consecutive_data_dyncode(dyncode_filename)
-    ax5.plot(x,y,linewidth=0.5, marker = "." , markersize=7, alpha=1,color = green)
+    ax5.plot(x,y,linewidth=0.5, marker = "." , markersize=7, alpha=1,color = green,label = "experiment")
 
-    #X_lim = [0,50]
-    #ax5.set_xlim(X_lim);
+    ax5.set_xlim([0,10.5]);
     ax5.set_yscale('log')
-    #ax5.set_ylim(YC_lim)
+    ax5.set_ylim([10**(-2),10**1])
     ax5.set_ylabel('counts x trace',fontsize=10); ax5.set_xlabel('length of sequence of \n consecutive pulses',fontsize=10)
     ax5.xaxis.set_label_coords(0.5, -0.08);ax5.yaxis.set_label_coords(-0.2,0.5);
-    #ax3.set_xticks([0,3,6,9,12,15])        
+    ax5.set_xticks([1,4,7,10])  
+    ax5.legend()      
+ 
 
 # =============================================================================
 #     consecutiveness boxplot
