@@ -1,5 +1,5 @@
 # adler
-Package for studying adler dynamical system with gaussian white noise.
+Package for generating time series from the theta face model and some stochasti variations, and data analysis and visualization, following the data analysis protocol detailed in [*Intermittent ERK oscillations downstream of FGF in mouse embryonic stem cells*](https://journals.biologists.com/dev/article/149/4/dev199710/274396/Intermittent-ERK-oscillations-downstream-of-FGF-in).
 
 
 <ins>Functionalities</ins>
