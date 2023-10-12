@@ -70,13 +70,18 @@ def download_quantifiers(row_,data_folder,T,dt,d,split_ts):
 def download_quantifiers_realizations(dataset,save_data_arr,T,dt,d):
     ''' 
     '''
-    DT = []; IPI = []; joint_duration = []; dm = []; pulse_rate = []
+    DT = np.array([]); IPI = np.array([]); joint_duration = np.array([]); dm = np.array([]); pulse_rate = np.array([])
 
     for data_folder in save_data_arr:
         #para cada trial
-        print(data_folder)
         DT_aux,IPI_aux,joint_duration_aux,dm_aux,pulse_rate_aux = download_quantifiers(dataset,data_folder,T,dt,d,False)
-        DT.append(DT_aux), IPI.append(IPI_aux),joint_duration.append(joint_duration_aux),dm.append(dm_aux),pulse_rate.append(pulse_rate_aux)
+        
+        DT = np.concatenate((DT, DT_aux))
+        IPI = np.concatenate((IPI, IPI_aux))
+        joint_duration = np.concatenate((joint_duration, joint_duration_aux))
+        dm = np.concatenate((dm, dm_aux))
+        pulse_rate = np.concatenate((pulse_rate, pulse_rate_aux))
+    print(DT)
     return DT,IPI,joint_duration,dm,pulse_rate
 
 
