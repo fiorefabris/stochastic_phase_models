@@ -9,11 +9,30 @@ import seaborn as sns
 
 from adler.data_managing_functions import download_data,check_file,time
 
-from adler.plotting.plotting_main import set_scale,mask_arr,load_activity_realizations,compute_st_values, download_quantifiers_realizations
+from adler.plotting.plotting_main import set_scale,mask_arr,load_activity_realizations,compute_st_values,print_st_values, download_quantifiers_realizations
 
 from adler.plotting.dyncode_main import get_consecutive_data_dyncode,get_exp_N_total_isolated_consecutive_mean,get_activity_data_dyncode,get_conc_data
 from adler.plotting.plotting_consecutive import get_mean_value_place
 #%%
+import matplotlib
+matplotlib.rcParams['lines.markeredgecolor'] = 'black'
+matplotlib.rcParams['lines.markeredgewidth'] = 0
+matplotlib.rcParams['savefig.transparent'] = True
+matplotlib.rc('pdf', fonttype=42)
+matplotlib.rcParams['savefig.transparent'] = True
+
+
+# change font
+matplotlib.rcParams['font.sans-serif'] = "Arial"
+matplotlib.rcParams['font.family'] = "sans-serif"
+
+
+sns.despine()
+sns.set(context='paper', style='ticks')
+plt.grid(0)
+plt.rc('axes.spines', top=True, bottom=True, left=True, right=True); 
+#%%
+
 def load_consecutive_statistics_realizations_mean(dataset,save_data_arr,T):
     mean_trains_cons_trials,total_pulses_trials,isolated_pulses_trials,consecutive_pulses_trials = [],[],[],[]
     
@@ -117,18 +136,19 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
 # =============================================================================
     gs_row_1 = gridspec.GridSpecFromSubplotSpec(nrows=1, ncols=4, subplot_spec=gs_main[0])
     DT,IPI,joint_duration,dm,pulse_rate =  download_quantifiers_realizations(dataset,save_data_arr,T,dt,d) 
-    print(len(DT))
     dyncode_df = get_conc_data(dyncode_filename)['an_WT_ESL']
     
     #dynocde data
     ax1 = plt.subplot(gs_row_1[0,1]) #second column
-    bins_dc = ax1.hist(dyncode_df.dt_peaks.dropna().values/3,bins=np.linspace(0,20,21),density=True,color=green,histtype='step',alpha=0.3,linewidth=1); 
-   # compute_st_values(ax1,dyncode_df.dt_peaks.dropna().values/3,bins_dc,1,10)   
+    bins_dc = ax1.hist(dyncode_df.dt_peaks.dropna().values/3,bins=np.linspace(0,20,21),density=True,color=green,histtype='step',alpha=1,linewidth=1); 
+    print("duration \n dynode:\n")
+    print_st_values(ax1,dyncode_df.dt_peaks.dropna().values/3,bins_dc,1,10)   
     
     #synthetic data
     if len(DT) > 0:
-        bins = ax1.hist(DT,bins=np.linspace(0,20,21),density=True,color = violet,histtype='step',alpha=0.3,linewidth=1); 
-        compute_st_values(ax1,DT,bins,1,10)   
+        bins = ax1.hist(DT,bins=np.linspace(0,20,21),density=True,color = violet,histtype='step',alpha=1,linewidth=1); 
+        print("duration \n model:\n")
+        print_st_values(ax1,DT,bins,1,10)   
     else:
         print(delta0,"no data")
     
@@ -144,12 +164,14 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
 
 
     ax2 = plt.subplot(gs_row_1[0,0])
-    bins_dc = ax2.hist(dyncode_df.IPI.dropna().values/3,np.linspace(0,40,21),density=True,color = green,histtype='step',alpha=0,linewidth=1); 
-    compute_st_values(ax2,dyncode_df.IPI.dropna().values/3,bins_dc,1,10)   
+    bins_dc = ax2.hist(dyncode_df.IPI.dropna().values/3,np.linspace(0,40,21),density=True,color = green,histtype='step',alpha=1,linewidth=1); 
+    print("IPI \n dyncode:\n")
+    print_st_values(ax2,dyncode_df.IPI.dropna().values/3,bins_dc,1,10)   
 
     if len(DT) > 0:
-        bins = ax2.hist(IPI,bins=np.linspace(0,40,21),density=True,color = violet,histtype='step',alpha=0,linewidth=1); 
-        compute_st_values(ax2,IPI,bins,1,10)   
+        bins = ax2.hist(IPI,bins=np.linspace(0,40,21),density=True,color = violet,histtype='step',alpha=1,linewidth=1); 
+        print("IPI \n model:\n")
+        print_st_values(ax2,IPI,bins,1,10)   
     else:
         print(delta0,"no data")
     
@@ -166,12 +188,14 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
 
     ax3 = plt.subplot(gs_row_1[0,2])
     dyncode_pr = dyncode_df.groupby(level="cell").amp_peaks.count()/(dyncode_df.groupby(level="cell").FRAME.count()/3)
-    bins_dc = ax3.hist(dyncode_pr,bins=np.linspace(0,0.08,10),density=True,color = green,histtype='step',alpha=0,linewidth=1); 
-    compute_st_values(ax3,dyncode_pr,bins_dc,1,10)   
+    bins_dc = ax3.hist(dyncode_pr,bins=np.linspace(0,0.08,10),density=True,color = green,histtype='step',alpha=1,linewidth=1); 
+    print("pulse_rate \n dyncode:\n")
+    print_st_values(ax3,dyncode_pr,bins_dc,1,10)   
 
     if len(DT) > 0:
-        bins = ax3.hist(pulse_rate,bins=np.linspace(0,0.08,10),density=True,color = violet,histtype='step',alpha=0,linewidth=1); 
-        compute_st_values(ax3,pulse_rate,bins,1,10)   
+        bins = ax3.hist(pulse_rate,bins=np.linspace(0,0.08,10),density=True,color = violet,histtype='step',alpha=1,linewidth=1); 
+        print("pulse_rate \n model:\n")
+        print_st_values(ax3,pulse_rate,bins,1,10)   
     else:
         print(delta0,"no data")
     

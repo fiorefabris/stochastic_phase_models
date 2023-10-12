@@ -286,3 +286,26 @@ def compute_st_values(ax,samples,bins,scale,fs = 6):
             text_borders = '< lower bound :'+str(neg) + '\n > upper bound :'+str(pos)
             print(text_borders)
             #ax.text(1, 0.75, text_borders, ha='right', va='center', transform=ax.transAxes, fontsize=fs) 
+            
+            
+def print_st_values(ax,samples,bins,scale,fs = 6):
+    ''' Esto esuna función auxiliar printear.
+    computa la moda de samples usando bins, y los cuartiles de samples usando samples. 
+    samples es el dataset que queres estudiar, y bins es el histograma que estas graficando.
+    scale es por loque tengo que dividir samples para llegar a minutos. fs es el fontsize del texto. '''           
+    
+    if len(samples) <= 0:
+        pass
+    else:
+        mode = (bins[1][np.argmax(bins[0])] + bins[1][np.argmax(bins[0])+1])/2 ; 
+        mode = 'mode: '+str(np.round(mode/scale,2))+' min \n'
+        quartile = r'$Q$: '+str(np.round(np.quantile(samples,0.25)/scale,2))+' ; '+str(np.round(np.quantile(samples,0.5)/scale,2))+' ; ' +str(np.round(np.quantile(samples,0.75)/scale,2)) +'\n'
+        total_data = 'total data: ' + str(len(samples)) +'\n'
+        print(mode,quartile,total_data)
+    
+    #chequeamos que no haya numeros raros
+        if True:
+            neg = sum([1 for i in samples if i < bins[1][0]]) 
+            pos =  sum([1 for i in samples if i > bins[1][-1]])
+            text_borders = '< lower bound :'+str(neg) + '\n > upper bound :'+str(pos)
+            print(text_borders)
