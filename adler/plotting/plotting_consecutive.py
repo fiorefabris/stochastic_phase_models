@@ -8,7 +8,7 @@ from functools import partial
 import seaborn as sns
 
 from adler.data_managing_functions import download_data,check_file,time
-from adler.plotting.plotting_main import set_scale,mask_arr,load_activity,compute_st_values,download_quantifiers,load_activity_dist
+from adler.plotting.plotting_main import get_mean_value_place, set_scale,mask_arr,load_activity,compute_st_values,download_quantifiers,load_activity_dist
 from adler.plotting.dyncode_main import get_consecutive_data_dyncode,get_exp_N_total_isolated_consecutive,get_activity_data_dyncode,get_conc_data
 
 #%%
@@ -34,25 +34,6 @@ def von_mises(theta,k=100):
     return np.exp(k*np.sin(theta))/np.exp(k)
 
 #%%
-def get_mean_value_place(trials,no_std = False):
-    #por cada lista vacia, es como si hubiera una lista de ceros! 
-    arr_aux = []
-    if len([len(i) for i in trials]) > 0: 
-        for j in range(np.max([len(i) for i in trials])):
-            aux = []
-           
-            for i in trials:
-                if len(i) > j : 
-                    aux.append(i[j])
-                else:
-                    aux.append(0)
-                
-            arr_aux.append(aux)
-    if no_std:
-        return np.array([np.mean(k) for k in arr_aux])
-    else:
-        return(np.array([np.mean(k) for k in arr_aux]),np.array([np.std(k) for k in arr_aux]))
-
 
 def load_consecutive_statistics_realizations(dataset,save_data_arr,T):
     mean_trains_cons_trials,total_pulses_trials,isolated_pulses_trials,consecutive_pulses_trials = [],[],[],[]

@@ -67,6 +67,17 @@ def download_quantifiers(row_,data_folder,T,dt,d,split_ts):
             #ver quantifiers main si tenés dudas
     return(points_to_time(DT,dt,d),points_to_time(IPI,dt,d),points_to_time(joint_duration,dt,d),points_to_time(dm,dt,d),pulse_rate)
 
+def download_quantifiers_realizations(dataset,save_data_arr,T,dt,d):
+    ''' 
+    '''
+    DT = []; IPI = []; joint_duration = []; dm = []; pulse_rate = []
+
+    for data_folder in save_data_arr:
+        #para cada trial
+        print(data_folder)
+        DT_aux,IPI_aux,joint_duration_aux,dm_aux,pulse_rate_aux = download_quantifiers(dataset,data_folder,T,dt,d,False)
+        DT.append(DT_aux), IPI.append(IPI_aux),joint_duration.append(joint_duration_aux),dm.append(dm_aux),pulse_rate.append(pulse_rate_aux)
+    return DT,IPI,joint_duration,dm,pulse_rate
 
 
 #%%
@@ -110,6 +121,61 @@ def create_df(ref,data_folder,dt,T,d,split_ts = False):
             # else:aux_act.append(0)
         median_dt_matrix.append(aux_dt);median_ipi_matrix.append(aux_ipi),median_fpt_matrix.append(aux_fpt),median_pulses_matrix.append(aux_pulses)
     return (pd.DataFrame(median_dt_matrix,columns = Cols,index = Rows),pd.DataFrame(median_ipi_matrix,columns = Cols,index = Rows),pd.DataFrame(median_fpt_matrix,columns = Cols,index = Rows),pd.DataFrame(median_pulses_matrix,columns = Cols,index = Rows))
+
+#%%
+def get_mean_value_place(trials,no_std = False):
+    ''' get_mean_value_place (trials,no_std = False): calculates the mean value for each position across a list of lists (trials). 
+    
+    It considers the elements at corresponding positions in the sublists and computes their mean values. Optionally, it can also compute the standard deviation for each position.
+
+    Note: 
+        If a sublist in trials is shorter than the maximum length of all sublists, it is assumed that the missing values are 0.
+
+    Parameters
+    ----------
+    trials : (list of lists)
+            A list of lists where each inner list represents a set of values.
+    no_std : boolean, optional, default=False
+        If set to True, only the mean values are calculated and returned. If set to False, both mean values and standard deviations are computed and returned.
+
+    Returns
+    -------
+    tuple containing two arrays
+        The first array contains the mean values for each position across the sublists.
+        The second array contains the standard deviations for each position across the sublists (only if no_std is False)
+
+
+    '''
+    #por cada lista vacia, es como si hubiera una lista de ceros! 
+    arr_aux = []
+    if len([len(i) for i in trials]) > 0: 
+        for j in range(np.max([len(i) for i in trials])):
+            aux = []
+           
+            for i in trials:
+                if len(i) > j : 
+                    aux.append(i[j])
+                else:
+                    aux.append(0)
+                
+            arr_aux.append(aux)
+    if no_std:
+        return np.array([np.mean(k) for k in arr_aux])
+    else:
+        return(np.array([np.mean(k) for k in arr_aux]),np.array([np.std(k) for k in arr_aux]))
+
+#%%
+def load_activity_realizations(dataset,save_data_arr,dt,T,d): 
+    ''' 
+    '''
+    # (row_,data_folder,T,dt,d,split_ts) (dataset,data_folder,T,dt,d,False)
+    activity_arr,silent_arr = [],[];
+
+    for data_folder in save_data_arr:
+        activity,silent,n_cell = load_activity(dataset, data_folder, dt, T, d)
+        assert n_cell == 67
+        activity_arr.append(activity),silent_arr.append(silent)
+    return  get_mean_value_place(activity_arr),get_mean_value_place(silent_arr),n_cell
 
 
 def load_activity(row_,data_folder,dt,T,d):

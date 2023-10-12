@@ -34,6 +34,20 @@ def get_activity_data_dyncode(dyncode_file_name):
     return np.arange(1,len(df_consecutive.index.get_level_values(0).unique())+1),activity_experiment,silent_experiment
 
 
+def get_exp_N_total_isolated_consecutive_mean(dyncode_file_name):
+    ''' para el boxplot de consecutividad
+    te devuelve la proporcion de pulsos , es decir, el promedio de pulsos/tiempo pa casa serie temporal. 
+    '''
+    df_consecutive = get_conc_data(dyncode_file_name)[ 'an_WT_ESL']
+    consecutive_non_cumulative_obj = consecutive_non_cumulative(df_consecutive)
+    
+    isolated_mean = np.mean(consecutive_non_cumulative_obj.is_isolated_box())  # Compute mean instead of median
+    consecutive_mean = np.mean(consecutive_non_cumulative_obj.count_consecutive_pulses_number())  # Compute mean instead of median
+    total_mean = np.mean(consecutive_non_cumulative_obj.get_number_of_pulses())  # Compute mean instead of median
+    
+    return total_mean, isolated_mean, consecutive_mean
+
+
 def get_exp_N_total_isolated_consecutive(dyncode_file_name):
     ''' para el boxplot de consecutividad
     te devuelve la proporcion de pulsos , es decir, la media de pulsos/tiempo pa casa serie temporal. 
