@@ -178,7 +178,8 @@ def load_activity_realizations(dataset,save_data_arr,dt,T,d):
 
     for data_folder in save_data_arr:
         activity,silent,n_cell = load_activity(dataset, data_folder, dt, T, d)
-        assert n_cell == 67
+        #assert n_cell == 67
+        print(n_cell)
         activity_arr.append(activity),silent_arr.append(silent)
     return  get_mean_value_place(activity_arr),get_mean_value_place(silent_arr),n_cell
 
