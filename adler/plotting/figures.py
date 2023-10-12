@@ -147,7 +147,7 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
     #synthetic data
     if len(DT) > 0:
         bins = ax1.hist(DT,bins=np.linspace(0,20,21),density=True,color = violet,histtype='step',alpha=1,linewidth=1,hatch='///'); 
-        #bins = ax1.hist(DT,bins=np.linspace(0,20,21),density=True,color = violet,histtype='stepfilled',alpha=0.2,linewidth=0); 
+        bins = ax1.hist(DT,bins=np.linspace(0,20,21),density=True,color = violet,histtype='stepfilled',alpha=0.2,linewidth=0); 
         print("duration \n model:\n")
         print_st_values(ax1,DT,bins,1,10)   
     else:
@@ -171,7 +171,7 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
 
     if len(DT) > 0:
         bins = ax2.hist(IPI,bins=np.linspace(0,40,21),density=True,color = violet,histtype='step',alpha=1,linewidth=1,hatch='///');  
-        #bins = ax2.hist(IPI,bins=np.linspace(0,40,21),density=True,color = violet,histtype='stepfilled',alpha=0.2,linewidth=0); 
+        bins = ax2.hist(IPI,bins=np.linspace(0,40,21),density=True,color = violet,histtype='stepfilled',alpha=0.2,linewidth=0); 
         print("IPI \n model:\n")
         print_st_values(ax2,IPI,bins,1,10)   
     else:
@@ -196,7 +196,7 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
 
     if len(DT) > 0:
         bins = ax3.hist(pulse_rate,bins=np.linspace(0,0.08,10),density=True,color = violet,histtype='step',alpha=1,linewidth=1,hatch='///'); 
-        #bins = ax3.hist(pulse_rate,bins=np.linspace(0,0.08,10),density=True,color = violet,histtype='stepfilled',alpha=0.2,linewidth=0); 
+        bins = ax3.hist(pulse_rate,bins=np.linspace(0,0.08,10),density=True,color = violet,histtype='stepfilled',alpha=0.2,linewidth=0); 
         print("pulse_rate \n model:\n")
         print_st_values(ax3,pulse_rate,bins,1,10)   
     else:
