@@ -140,24 +140,24 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
     
     #dynocde data
     ax1 = plt.subplot(gs_row_1[0,1]) #second column
-    bins_dc = ax1.hist(dyncode_df.dt_peaks.dropna().values/3,bins=np.linspace(0,20,21),density=True,color=green,histtype='step',alpha=1,linewidth=1); 
+    bins_dc = ax1.hist(dyncode_df.dt_peaks.dropna().values/3,bins=np.linspace(0,20,21),density=True,color=green,histtype='step',alpha=1,linewidth=1,hatch='\\'); 
     print("duration \n dynode:\n")
     print_st_values(ax1,dyncode_df.dt_peaks.dropna().values/3,bins_dc,1,10)   
     
     #synthetic data
     if len(DT) > 0:
-        bins = ax1.hist(DT,bins=np.linspace(0,20,21),density=True,color = violet,histtype='step',alpha=1,linewidth=1); 
-        bins = ax1.hist(DT,bins=np.linspace(0,20,21),density=True,color = violet,histtype='stepfilled',alpha=0.2,linewidth=0); 
+        bins = ax1.hist(DT,bins=np.linspace(0,20,21),density=True,color = violet,histtype='step',alpha=1,linewidth=1,hatch='/'); 
+        #bins = ax1.hist(DT,bins=np.linspace(0,20,21),density=True,color = violet,histtype='stepfilled',alpha=0.2,linewidth=0); 
         print("duration \n model:\n")
         print_st_values(ax1,DT,bins,1,10)   
     else:
         print(delta0,"no data")
     
     for ax in [ax1]:
-        ax.set_ylim([0,0.25]);
+        ax.set_ylim([0,0.3]);
         ax.set_xlim([0,20])
-        set_scale(ax,[0,5,10,15,20], [0,0.25])
-        ax.set_yticklabels([0,0.25])
+        set_scale(ax,[0,5,10,15,20], [0,0.3])
+        ax.set_yticklabels([0,0.3])
         ax.tick_params(labelsize=10)
     ax1.set_xticklabels([0,5,10,15,20])
     ax1.set_xlabel('duration (min)' ,fontsize=10); 
@@ -165,13 +165,13 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
 
 
     ax2 = plt.subplot(gs_row_1[0,0])
-    bins_dc = ax2.hist(dyncode_df.IPI.dropna().values/3,np.linspace(0,40,21),density=True,color = green,histtype='step',alpha=1,linewidth=1); 
+    bins_dc = ax2.hist(dyncode_df.IPI.dropna().values/3,np.linspace(0,40,21),density=True,color = green,histtype='step',alpha=1,linewidth=1,hatch='\\');  
     print("IPI \n dyncode:\n")
     print_st_values(ax2,dyncode_df.IPI.dropna().values/3,bins_dc,1,10)   
 
     if len(DT) > 0:
-        bins = ax2.hist(IPI,bins=np.linspace(0,40,21),density=True,color = violet,histtype='step',alpha=1,linewidth=1); 
-        bins = ax2.hist(IPI,bins=np.linspace(0,40,21),density=True,color = violet,histtype='stepfilled',alpha=0.2,linewidth=0); 
+        bins = ax2.hist(IPI,bins=np.linspace(0,40,21),density=True,color = violet,histtype='step',alpha=1,linewidth=1,hatch='/');  
+        #bins = ax2.hist(IPI,bins=np.linspace(0,40,21),density=True,color = violet,histtype='stepfilled',alpha=0.2,linewidth=0); 
         print("IPI \n model:\n")
         print_st_values(ax2,IPI,bins,1,10)   
     else:
@@ -190,13 +190,13 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
 
     ax3 = plt.subplot(gs_row_1[0,2])
     dyncode_pr = dyncode_df.groupby(level="cell").amp_peaks.count()/(dyncode_df.groupby(level="cell").FRAME.count()/3)
-    bins_dc = ax3.hist(dyncode_pr,bins=np.linspace(0,0.08,10),density=True,color = green,histtype='step',alpha=1,linewidth=1); 
+    bins_dc = ax3.hist(dyncode_pr,bins=np.linspace(0,0.08,10),density=True,color = green,histtype='step',alpha=1,linewidth=1,hatch='\\'); 
     print("pulse_rate \n dyncode:\n")
     print_st_values(ax3,dyncode_pr,bins_dc,1,10)   
 
     if len(DT) > 0:
-        bins = ax3.hist(pulse_rate,bins=np.linspace(0,0.08,10),density=True,color = violet,histtype='step',alpha=1,linewidth=1); 
-        bins = ax3.hist(pulse_rate,bins=np.linspace(0,0.08,10),density=True,color = violet,histtype='stepfilled',alpha=0.2,linewidth=0); 
+        bins = ax3.hist(pulse_rate,bins=np.linspace(0,0.08,10),density=True,color = violet,histtype='step',alpha=1,linewidth=1,hatch='/'); 
+        #bins = ax3.hist(pulse_rate,bins=np.linspace(0,0.08,10),density=True,color = violet,histtype='stepfilled',alpha=0.2,linewidth=0); 
         print("pulse_rate \n model:\n")
         print_st_values(ax3,pulse_rate,bins,1,10)   
     else:
