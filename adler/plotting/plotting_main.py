@@ -81,7 +81,6 @@ def download_quantifiers_realizations(dataset,save_data_arr,T,dt,d):
         joint_duration = np.concatenate((joint_duration, joint_duration_aux))
         dm = np.concatenate((dm, dm_aux))
         pulse_rate = np.concatenate((pulse_rate, pulse_rate_aux))
-    print(DT)
     return DT,IPI,joint_duration,dm,pulse_rate
 
 
@@ -178,8 +177,7 @@ def load_activity_realizations(dataset,save_data_arr,dt,T,d):
 
     for data_folder in save_data_arr:
         activity,silent,n_cell = load_activity(dataset, data_folder, dt, T, d)
-        #assert n_cell == 67
-        print(n_cell)
+        assert n_cell == 68
         activity_arr.append(activity),silent_arr.append(silent)
     return  get_mean_value_place(activity_arr),get_mean_value_place(silent_arr),n_cell
 

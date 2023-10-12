@@ -117,16 +117,17 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
 # =============================================================================
     gs_row_1 = gridspec.GridSpecFromSubplotSpec(nrows=1, ncols=4, subplot_spec=gs_main[0])
     DT,IPI,joint_duration,dm,pulse_rate =  download_quantifiers_realizations(dataset,save_data_arr,T,dt,d) 
+    print(len(DT))
     dyncode_df = get_conc_data(dyncode_filename)['an_WT_ESL']
     
     #dynocde data
     ax1 = plt.subplot(gs_row_1[0,1]) #second column
-    bins_dc = ax1.hist(dyncode_df.dt_peaks.dropna().values/3,bins=np.linspace(0,20,21),density=True,color=green,histtype='step',alpha=0,linewidth=1); 
-    compute_st_values(ax1,dyncode_df.dt_peaks.dropna().values/3,bins_dc,1,10)   
+    bins_dc = ax1.hist(dyncode_df.dt_peaks.dropna().values/3,bins=np.linspace(0,20,21),density=True,color=green,histtype='step',alpha=0.3,linewidth=1); 
+   # compute_st_values(ax1,dyncode_df.dt_peaks.dropna().values/3,bins_dc,1,10)   
     
     #synthetic data
     if len(DT) > 0:
-        bins = ax1.hist(DT,bins=np.linspace(0,20,21),density=True,color = violet,histtype='step',alpha=0,linewidth=1); 
+        bins = ax1.hist(DT,bins=np.linspace(0,20,21),density=True,color = violet,histtype='step',alpha=0.3,linewidth=1); 
         compute_st_values(ax1,DT,bins,1,10)   
     else:
         print(delta0,"no data")
@@ -254,16 +255,16 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
 # =============================================================================
 #     activity population and mean plot
 # =============================================================================
-    gs_row_2_in = gridspec.GridSpecFromSubplotSpec(nrows=1, ncols=3, subplot_spec=gs_row_2[0,1:3])
+    gs_row_2_in = gridspec.GridSpecFromSubplotSpec(nrows=2, ncols=3, subplot_spec=gs_row_2[0,1:3])
 
-    ax3 = plt.subplot(gs_row_2_in[0:2]); plt.rc('axes.spines', top=False, bottom=True, left=True, right=False); 
+    ax3 = plt.subplot(gs_row_2_in[1,0:2]); plt.rc('axes.spines', top=False, bottom=True, left=True, right=False); 
     
     (activity,activity_err),(silent,_),n_cell = load_activity_realizations(dataset,save_data_arr,dt,T,d)
     
     #population activity
     if len(activity) > 0:
-        p1 = ax3.bar(np.arange(1 ,n_cell + 1),silent,width=1,color='darkgray',alpha=0.5,linewidth=0.0)
-        p2 = ax3.bar(np.arange(1 ,n_cell + 1),activity,bottom=silent,width=0.9,alpha=0.8,color = violet,linewidth=0.0,yerr=activity_err)
+        p1 = ax3.bar(np.arange(1 ,n_cell + 1),silent,width=1,color='darkgray',alpha=0.5,linewidth=0.0,yerr=activity_err)
+        p2 = ax3.bar(np.arange(1 ,n_cell + 1),activity,bottom=silent,width=0.9,alpha=0.8,color = violet,linewidth=0.0)
         x , y , silent_experiment = get_activity_data_dyncode(dyncode_filename)
         p3 = ax3.bar(x,y,bottom=silent_experiment,width=0.9,alpha=0.3,linewidth=0.0,color = green)
         
@@ -279,7 +280,7 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
     
     
     #mean activity
-    ax4 = plt.subplot(gs_row_2_in[2]); plt.rc('axes.spines', top=False, bottom=True, left=True, right=False); 
+    ax4 = plt.subplot(gs_row_2_in[1,2]); plt.rc('axes.spines', top=False, bottom=True, left=True, right=False); 
 
     
     if len(activity) > 0:
