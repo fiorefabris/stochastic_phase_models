@@ -172,7 +172,7 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
 
     ax2 = plt.subplot(gs_row_1[0,0])
     #bins_dc = ax2.hist(dyncode_df.IPI.dropna().values/3,np.linspace(0,40,21),density=True,color = green,histtype='step',alpha=1,linewidth=1,hatch='\\\\');  
-    hist_dc, edges_dc = np.histogram(dyncode_df.IPI.dropna().values/3,np.linspace(0,20,21),density=True); 
+    hist_dc, edges_dc = np.histogram(dyncode_df.IPI.dropna().values/3,np.linspace(0,20,11),density=True); 
     bin_centers_dc = (edges_dc[:-1] + edges_dc[1:]) / 2
     ax2.plot(bin_centers_dc, hist_dc, linewidth=0.5, marker = "." , color = green, markersize=7, alpha=1)
     print("IPI \n dyncode:\n")
@@ -181,7 +181,7 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
     if len(DT) > 0:
         #bins = ax2.hist(IPI,bins=np.linspace(0,20,21),density=True,color = violet,histtype='step',alpha=1,linewidth=1)#,hatch='///');  
        # bins = ax2.hist(IPI,bins=np.linspace(0,20,21),density=True,color = violet,histtype='stepfilled',alpha=0.2,linewidth=0); 
-        hist, edges = np.histogram(IPI,bins=np.linspace(0,20,21),density=True); 
+        hist, edges = np.histogram(IPI,bins=np.linspace(0,20,11),density=True); 
         bin_centers = (edges[:-1] + edges[1:]) / 2
         ax2.plot(bin_centers, hist, linewidth=0.5, marker = "." , color = violet, markersize=7, alpha=1)
         print("IPI \n model:\n")
