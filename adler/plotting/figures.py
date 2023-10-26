@@ -145,7 +145,7 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
     bin_centers_dc = (edges_dc[:-1] + edges_dc[1:]) / 2
     ax1.plot(bin_centers_dc, hist_dc, '-o', color=green)   
     print("duration \n dynode:\n")
-    print_st_values(ax1,dyncode_df.dt_peaks.dropna().values/3,[bin_centers_dc,hist_dc],1,10)   
+    #print_st_values(ax1,dyncode_df.dt_peaks.dropna().values/3,[bin_centers_dc,hist_dc],1,10)   
     
     #synthetic data
     if len(DT) > 0:
@@ -155,7 +155,7 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
         bin_centers = (edges[:-1] + edges[1:]) / 2
         ax1.plot(bin_centers, hist, '-o', color=violet)
         print("duration \n model:\n")
-        print_st_values(ax1,DT,[bin_centers,hist],1,10)   
+       # print_st_values(ax1,DT,[bin_centers,hist],1,10)   
     else:
         print(delta0,"no data")
     
@@ -176,7 +176,7 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
     bin_centers_dc = (edges_dc[:-1] + edges_dc[1:]) / 2
     ax1.plot(bin_centers_dc, hist_dc, '-o', color=green)   
     print("IPI \n dyncode:\n")
-    print_st_values(ax2,dyncode_df.IPI.dropna().values/3,[bin_centers_dc,hist_dc],1,10)   
+    #print_st_values(ax2,dyncode_df.IPI.dropna().values/3,[bin_centers_dc,hist_dc],1,10)   
 
     if len(DT) > 0:
         #bins = ax2.hist(IPI,bins=np.linspace(0,20,21),density=True,color = violet,histtype='step',alpha=1,linewidth=1)#,hatch='///');  
@@ -185,7 +185,7 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
         bin_centers = (edges[:-1] + edges[1:]) / 2
         ax1.plot(bin_centers, hist, '-o', color=violet)
         print("IPI \n model:\n")
-        print_st_values(ax2,IPI,[bin_centers,hist],1,10)   
+        #print_st_values(ax2,IPI,[bin_centers,hist],1,10)   
     else:
         print(delta0,"no data")
     
@@ -207,7 +207,7 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
     bin_centers_dc = (edges_dc[:-1] + edges_dc[1:]) / 2
     ax1.plot(bin_centers_dc, hist_dc, '-o', color=green)   
     print("pulse_rate \n dyncode:\n")
-    print_st_values(ax3,dyncode_pr,[bin_centers,hist],1,10)   
+    #print_st_values(ax3,dyncode_pr,[bin_centers,hist],1,10)   
 
     if len(DT) > 0:
         #bins = ax3.hist(pulse_rate,bins=np.linspace(0,0.08,10),density=True,color = violet,histtype='step',alpha=1,linewidth=1)#,hatch='///'); 
@@ -216,7 +216,7 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
         bin_centers = (edges[:-1] + edges[1:]) / 2
         ax1.plot(bin_centers, hist, '-o', color=violet)
         print("pulse_rate \n model:\n")
-        print_st_values(ax3,pulse_rate,[bin_centers,hist],1,10)   
+       # print_st_values(ax3,pulse_rate,[bin_centers,hist],1,10)   
     else:
         print(delta0,"no data")
     
