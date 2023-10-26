@@ -126,7 +126,7 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
     green =  sns.color_palette(sns.dark_palette("#2ecc71",30,reverse=False))[15]
 
     fig = plt.figure(constrained_layout=False, figsize=(8.27, 11.692))
-    gs_main = gridspec.GridSpec(nrows=4, ncols=1, figure=fig); gs_main.update(left=0.1, right=0.9, bottom=0.1, top=0.90, hspace=0.3,wspace=0.3)
+    gs_main = gridspec.GridSpec(nrows=8, ncols=1, figure=fig); gs_main.update(left=0.1, right=0.9, bottom=0.1, top=0.90, hspace=0.3,wspace=0.3)
     
     (omega,alpha0,sigma,tau,D,number),dataset = tuple_[0],tuple_[1]
     delta0 = np.round(alpha0/omega,4)  
@@ -140,16 +140,22 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
     
     #dynocde data
     ax1 = plt.subplot(gs_row_1[0,1]) #second column
-    bins_dc = ax1.hist(dyncode_df.dt_peaks.dropna().values/3,bins=np.linspace(0,20,21),density=True,color=green,histtype='step',alpha=1,linewidth=1,hatch='\\\\'); 
+    #bins_dc = ax1.hist(dyncode_df.dt_peaks.dropna().values/3,bins=np.linspace(0,20,21),density=True,color=green,histtype='step',alpha=1,linewidth=1,hatch='\\\\'); 
+    hist_dc, edges_dc = np.histogram(dyncode_df.dt_peaks.dropna().values/3,bins=np.linspace(0,20,21),density=True); 
+    bin_centers_dc = (edges_dc[:-1] + edges_dc[1:]) / 2
+    ax1.plot(bin_centers_dc, hist_dc, '-o', color=green)   
     print("duration \n dynode:\n")
-    print_st_values(ax1,dyncode_df.dt_peaks.dropna().values/3,bins_dc,1,10)   
+    print_st_values(ax1,dyncode_df.dt_peaks.dropna().values/3,[bin_centers_dc,hist_dc],1,10)   
     
     #synthetic data
     if len(DT) > 0:
-        bins = ax1.hist(DT,bins=np.linspace(0,20,21),density=True,color = violet,histtype='step',alpha=1,linewidth=1)#,hatch='///'); 
-        bins = ax1.hist(DT,bins=np.linspace(0,20,21),density=True,color = violet,histtype='stepfilled',alpha=0.2,linewidth=0); 
+        #bins = ax1.hist(DT,bins=np.linspace(0,20,21),density=True,color = violet,histtype='step',alpha=1,linewidth=1)#,hatch='///'); 
+        #bins = ax1.hist(DT,bins=np.linspace(0,20,21),density=True,color = violet,histtype='stepfilled',alpha=0.2,linewidth=0); 
+        hist, edges = np.histogram(DT,bins=np.linspace(0,20,21),density=True); 
+        bin_centers = (edges[:-1] + edges[1:]) / 2
+        ax1.plot(bin_centers, hist, '-o', color=violet)
         print("duration \n model:\n")
-        print_st_values(ax1,DT,bins,1,10)   
+        print_st_values(ax1,DT,[bin_centers,hist],1,10)   
     else:
         print(delta0,"no data")
     
@@ -165,40 +171,52 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
 
 
     ax2 = plt.subplot(gs_row_1[0,0])
-    bins_dc = ax2.hist(dyncode_df.IPI.dropna().values/3,np.linspace(0,40,21),density=True,color = green,histtype='step',alpha=1,linewidth=1,hatch='\\\\');  
+    #bins_dc = ax2.hist(dyncode_df.IPI.dropna().values/3,np.linspace(0,40,21),density=True,color = green,histtype='step',alpha=1,linewidth=1,hatch='\\\\');  
+    hist_dc, edges_dc = np.histogram(dyncode_df.IPI.dropna().values/3,np.linspace(0,40,21),density=True); 
+    bin_centers_dc = (edges_dc[:-1] + edges_dc[1:]) / 2
+    ax1.plot(bin_centers_dc, hist_dc, '-o', color=green)   
     print("IPI \n dyncode:\n")
-    print_st_values(ax2,dyncode_df.IPI.dropna().values/3,bins_dc,1,10)   
+    print_st_values(ax2,dyncode_df.IPI.dropna().values/3,[bin_centers_dc,hist_dc],1,10)   
 
     if len(DT) > 0:
-        bins = ax2.hist(IPI,bins=np.linspace(0,40,21),density=True,color = violet,histtype='step',alpha=1,linewidth=1)#,hatch='///');  
-        bins = ax2.hist(IPI,bins=np.linspace(0,40,21),density=True,color = violet,histtype='stepfilled',alpha=0.2,linewidth=0); 
+        #bins = ax2.hist(IPI,bins=np.linspace(0,20,21),density=True,color = violet,histtype='step',alpha=1,linewidth=1)#,hatch='///');  
+       # bins = ax2.hist(IPI,bins=np.linspace(0,20,21),density=True,color = violet,histtype='stepfilled',alpha=0.2,linewidth=0); 
+        hist, edges = np.histogram(IPI,bins=np.linspace(0,20,21),density=True); 
+        bin_centers = (edges[:-1] + edges[1:]) / 2
+        ax1.plot(bin_centers, hist, '-o', color=violet)
         print("IPI \n model:\n")
-        print_st_values(ax2,IPI,bins,1,10)   
+        print_st_values(ax2,IPI,[bin_centers,hist],1,10)   
     else:
         print(delta0,"no data")
     
     for ax in [ax2]:
         ax.set_ylim([0,0.15]);
-        ax.set_xlim([0,40])
-        set_scale(ax,[0,10,20,30,40], [0,0.15])
+        ax.set_xlim([0,20])
+        set_scale(ax,[0,5,10,15,20], [0,0.15])
         ax.set_yticklabels([0,0.15])
         ax.tick_params(labelsize=10)
-    ax2.set_xticklabels([0,10,20,30,40])
+    ax2.set_xticklabels([0,5,10,15,20])
     ax2.set_xlabel('Interpulse interval (min)' ,fontsize=10); 
 
 
 
     ax3 = plt.subplot(gs_row_1[0,2])
     dyncode_pr = dyncode_df.groupby(level="cell").amp_peaks.count()/(dyncode_df.groupby(level="cell").FRAME.count()/3)
-    bins_dc = ax3.hist(dyncode_pr,bins=np.linspace(0,0.08,10),density=True,color = green,histtype='step',alpha=1,linewidth=1,hatch='\\\\'); 
+   # bins_dc = ax3.hist(dyncode_pr,bins=np.linspace(0,0.08,10),density=True,color = green,histtype='step',alpha=1,linewidth=1,hatch='\\\\'); 
+    hist_dc, edges_dc = np.histogram(dyncode_pr,bins=np.linspace(0,0.08,10),density=True); 
+    bin_centers_dc = (edges_dc[:-1] + edges_dc[1:]) / 2
+    ax1.plot(bin_centers_dc, hist_dc, '-o', color=green)   
     print("pulse_rate \n dyncode:\n")
-    print_st_values(ax3,dyncode_pr,bins_dc,1,10)   
+    print_st_values(ax3,dyncode_pr,[bin_centers,hist],1,10)   
 
     if len(DT) > 0:
-        bins = ax3.hist(pulse_rate,bins=np.linspace(0,0.08,10),density=True,color = violet,histtype='step',alpha=1,linewidth=1)#,hatch='///'); 
-        bins = ax3.hist(pulse_rate,bins=np.linspace(0,0.08,10),density=True,color = violet,histtype='stepfilled',alpha=0.2,linewidth=0); 
+        #bins = ax3.hist(pulse_rate,bins=np.linspace(0,0.08,10),density=True,color = violet,histtype='step',alpha=1,linewidth=1)#,hatch='///'); 
+       # bins = ax3.hist(pulse_rate,bins=np.linspace(0,0.08,10),density=True,color = violet,histtype='stepfilled',alpha=0.2,linewidth=0); 
+        hist, edges = np.histogram(pulse_rate,bins=np.linspace(0,20,21),density=True); 
+        bin_centers = (edges[:-1] + edges[1:]) / 2
+        ax1.plot(bin_centers, hist, '-o', color=violet)
         print("pulse_rate \n model:\n")
-        print_st_values(ax3,pulse_rate,bins,1,10)   
+        print_st_values(ax3,pulse_rate,[bin_centers,hist],1,10)   
     else:
         print(delta0,"no data")
     
@@ -225,12 +243,12 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
     x,y = get_consecutive_data_dyncode(dyncode_filename)
     ax5.plot(x,y,linewidth=0.5, marker = "." , markersize=7, alpha=1,color = green,label = "exp")
 
-    ax5.set_xlim([0,10.5]);
+    ax5.set_xlim([0,8.5]);
     ax5.set_yscale('log')
     ax5.set_ylim([10**(-2),10**1])
     ax5.set_ylabel('counts x trace',fontsize=10); ax5.set_xlabel('length of sequence of \n consecutive pulses',fontsize=10)
     ax5.xaxis.set_label_coords(0.5, -0.08);ax5.yaxis.set_label_coords(-0.2,0.5);
-    ax5.set_xticks([1,4,7,10])  
+    ax5.set_xticks([1,4,8])  
     ax5.legend()       
 
 
@@ -273,7 +291,7 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
     ax6.tick_params(axis='y', labelsize=8,length=2)
     ax6.set_xlabel(' ',fontsize=8)
     ax6.set_ylabel('normalized counts',fontsize=8)
-    ax6.set_ylim([0.0,2.5])
+    ax6.set_ylim([0.0,1.5])
     ax6.xaxis.set_label_coords(0.5, -0.12);ax6.yaxis.set_label_coords(-0.05,0.5)
     ax6.tick_params(labelsize=6,direction='out', pad=1,length=2)
     ax6.set_xticklabels([' total' ,'isolated','consecutive'],rotation = 0)
@@ -282,18 +300,21 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
 # =============================================================================
 #     activity population and mean plot
 # =============================================================================
-    gs_row_2_in = gridspec.GridSpecFromSubplotSpec(nrows=2, ncols=3, subplot_spec=gs_row_2[0,1:3])
+    gs_row_2_in = gridspec.GridSpecFromSubplotSpec(nrows=1, ncols=3, subplot_spec=gs_row_2[0,1:3])
 
-    ax3 = plt.subplot(gs_row_2_in[1,0:2]); plt.rc('axes.spines', top=False, bottom=True, left=True, right=False); 
+    ax3 = plt.subplot(gs_row_2_in[0:2]); plt.rc('axes.spines', top=False, bottom=True, left=True, right=False); 
     
     (activity,activity_err),(silent,_),n_cell = load_activity_realizations(dataset,save_data_arr,dt,T,d)
     
     #population activity
     if len(activity) > 0:
-        p1 = ax3.bar(np.arange(1 ,n_cell + 1),silent,width=1,color='darkgray',alpha=0.5,linewidth=0.0,yerr=activity_err)
-        p2 = ax3.bar(np.arange(1 ,n_cell + 1),activity,bottom=silent,width=0.9,alpha=0.8,color = violet,linewidth=0.0)
+        #p1 = ax3.bar(np.arange(1 ,n_cell + 1),silent,width=1,color='darkgray',alpha=0.5,linewidth=0.0,yerr=activity_err)
+        #p2 = ax3.bar(np.arange(1 ,n_cell + 1),activity,bottom=silent,width=0.9,alpha=0.8,color = violet,linewidth=0.0)
+        ax3.plot(np.arange(1 ,n_cell + 1),activity[::-1],color = violet)
+        ax3.fill_between(np.arange(1, n_cell + 1), (activity - activity_err)[::-1], (activity + activity_err)[::-1], color=violet, alpha=0.2,linewidth=0)
         x , y , silent_experiment = get_activity_data_dyncode(dyncode_filename)
-        p3 = ax3.bar(x,y,bottom=silent_experiment,width=0.9,alpha=0.3,linewidth=0.0,color = green)
+        #p3 = ax3.bar(x,y,bottom=silent_experiment,width=0.9,alpha=0.3,linewidth=0.0,color = green)
+        ax3.plot(x,y[::-1],alpha=0.3,color = green)
         
     ax3.set_xlim([0,n_cell]);ax3.set_ylim([0,100])
     ax3.set_xlabel( ' trazas ',fontsize=8); 
@@ -307,7 +328,7 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
     
     
     #mean activity
-    ax4 = plt.subplot(gs_row_2_in[1,2]); plt.rc('axes.spines', top=False, bottom=True, left=True, right=False); 
+    ax4 = plt.subplot(gs_row_2_in[2]); plt.rc('axes.spines', top=False, bottom=True, left=True, right=False); 
 
     
     if len(activity) > 0:
