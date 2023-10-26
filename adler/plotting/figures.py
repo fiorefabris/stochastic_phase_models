@@ -314,7 +314,7 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
         ax3.fill_between(np.arange(1, n_cell + 1), (activity - activity_err)[::-1], (activity + activity_err)[::-1], color=violet, alpha=0.2,linewidth=0)
         x , y , silent_experiment = get_activity_data_dyncode(dyncode_filename)
         #p3 = ax3.bar(x,y,bottom=silent_experiment,width=0.9,alpha=0.3,linewidth=0.0,color = green)
-        ax3.plot(x,y[::-1],alpha=0.3,linewidth=0.5, marker = "." , color = green, markersize=0, alpha=1)
+        ax3.plot(x,y[::-1],linewidth=0.5, marker = "." , color = green, markersize=0, alpha=1)
         
     ax3.set_xlim([0,n_cell]);ax3.set_ylim([0,100])
     ax3.set_xlabel( ' trazas ',fontsize=8); 
