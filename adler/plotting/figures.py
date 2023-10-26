@@ -143,7 +143,7 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
     #bins_dc = ax1.hist(dyncode_df.dt_peaks.dropna().values/3,bins=np.linspace(0,20,21),density=True,color=green,histtype='step',alpha=1,linewidth=1,hatch='\\\\'); 
     hist_dc, edges_dc = np.histogram(dyncode_df.dt_peaks.dropna().values/3,bins=np.linspace(0,20,21),density=True); 
     bin_centers_dc = (edges_dc[:-1] + edges_dc[1:]) / 2
-    ax1.plot(bin_centers_dc, hist_dc, '-o', color=green)   
+    ax1.plot(bin_centers_dc, hist_dc, linewidth=0.5, marker = "." , color = green, markersize=7, alpha=1)
     print("duration \n dynode:\n")
     #print_st_values(ax1,dyncode_df.dt_peaks.dropna().values/3,[bin_centers_dc,hist_dc],1,10)   
     
@@ -153,7 +153,7 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
         #bins = ax1.hist(DT,bins=np.linspace(0,20,21),density=True,color = violet,histtype='stepfilled',alpha=0.2,linewidth=0); 
         hist, edges = np.histogram(DT,bins=np.linspace(0,20,21),density=True); 
         bin_centers = (edges[:-1] + edges[1:]) / 2
-        ax1.plot(bin_centers, hist, '-o', color=violet)
+        ax1.plot(bin_centers, hist, linewidth=0.5, marker = "." , color = violet, markersize=7, alpha=1)
         print("duration \n model:\n")
        # print_st_values(ax1,DT,[bin_centers,hist],1,10)   
     else:
@@ -174,7 +174,7 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
     #bins_dc = ax2.hist(dyncode_df.IPI.dropna().values/3,np.linspace(0,40,21),density=True,color = green,histtype='step',alpha=1,linewidth=1,hatch='\\\\');  
     hist_dc, edges_dc = np.histogram(dyncode_df.IPI.dropna().values/3,np.linspace(0,40,21),density=True); 
     bin_centers_dc = (edges_dc[:-1] + edges_dc[1:]) / 2
-    ax1.plot(bin_centers_dc, hist_dc, '-o', color=green)   
+    ax2.plot(bin_centers_dc, hist_dc, linewidth=0.5, marker = "." , color = green, markersize=7, alpha=1)
     print("IPI \n dyncode:\n")
     #print_st_values(ax2,dyncode_df.IPI.dropna().values/3,[bin_centers_dc,hist_dc],1,10)   
 
@@ -183,7 +183,7 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
        # bins = ax2.hist(IPI,bins=np.linspace(0,20,21),density=True,color = violet,histtype='stepfilled',alpha=0.2,linewidth=0); 
         hist, edges = np.histogram(IPI,bins=np.linspace(0,20,21),density=True); 
         bin_centers = (edges[:-1] + edges[1:]) / 2
-        ax1.plot(bin_centers, hist, '-o', color=violet)
+        ax2.plot(bin_centers, hist, linewidth=0.5, marker = "." , color = violet, markersize=7, alpha=1)
         print("IPI \n model:\n")
         #print_st_values(ax2,IPI,[bin_centers,hist],1,10)   
     else:
@@ -205,7 +205,7 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
    # bins_dc = ax3.hist(dyncode_pr,bins=np.linspace(0,0.08,10),density=True,color = green,histtype='step',alpha=1,linewidth=1,hatch='\\\\'); 
     hist_dc, edges_dc = np.histogram(dyncode_pr,bins=np.linspace(0,0.08,10),density=True); 
     bin_centers_dc = (edges_dc[:-1] + edges_dc[1:]) / 2
-    ax1.plot(bin_centers_dc, hist_dc, '-o', color=green)   
+    ax3.plot(bin_centers_dc, hist_dc, linewidth=0.5, marker = "." , color = green, markersize=7, alpha=1)
     print("pulse_rate \n dyncode:\n")
     #print_st_values(ax3,dyncode_pr,[bin_centers,hist],1,10)   
 
@@ -214,7 +214,7 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
        # bins = ax3.hist(pulse_rate,bins=np.linspace(0,0.08,10),density=True,color = violet,histtype='stepfilled',alpha=0.2,linewidth=0); 
         hist, edges = np.histogram(pulse_rate,bins=np.linspace(0,20,21),density=True); 
         bin_centers = (edges[:-1] + edges[1:]) / 2
-        ax1.plot(bin_centers, hist, '-o', color=violet)
+        ax3.plot(bin_centers, hist, linewidth=0.5, marker = "." , color = violet, markersize=7, alpha=1)
         print("pulse_rate \n model:\n")
        # print_st_values(ax3,pulse_rate,[bin_centers,hist],1,10)   
     else:
@@ -310,11 +310,11 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
     if len(activity) > 0:
         #p1 = ax3.bar(np.arange(1 ,n_cell + 1),silent,width=1,color='darkgray',alpha=0.5,linewidth=0.0,yerr=activity_err)
         #p2 = ax3.bar(np.arange(1 ,n_cell + 1),activity,bottom=silent,width=0.9,alpha=0.8,color = violet,linewidth=0.0)
-        ax3.plot(np.arange(1 ,n_cell + 1),activity[::-1],color = violet)
+        ax3.plot(np.arange(1 ,n_cell + 1),activity[::-1],linewidth=0.5, marker = "." , color = violet, markersize=0, alpha=1)
         ax3.fill_between(np.arange(1, n_cell + 1), (activity - activity_err)[::-1], (activity + activity_err)[::-1], color=violet, alpha=0.2,linewidth=0)
         x , y , silent_experiment = get_activity_data_dyncode(dyncode_filename)
         #p3 = ax3.bar(x,y,bottom=silent_experiment,width=0.9,alpha=0.3,linewidth=0.0,color = green)
-        ax3.plot(x,y[::-1],alpha=0.3,color = green)
+        ax3.plot(x,y[::-1],alpha=0.3,linewidth=0.5, marker = "." , color = green, markersize=0, alpha=1)
         
     ax3.set_xlim([0,n_cell]);ax3.set_ylim([0,100])
     ax3.set_xlabel( ' trazas ',fontsize=8); 
