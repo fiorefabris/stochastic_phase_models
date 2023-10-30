@@ -261,11 +261,19 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
     ax6.axhline(y = 1,color = green,linewidth=0.5,alpha = 1,linestyle = 'dashed')
     
     total_mean, isolated_mean, consecutive_mean = get_exp_N_total_isolated_consecutive_mean(dyncode_filename) 
+    (activity,activity_err),(silent,_),n_cell,activity_mean,silent_mean = load_activity_realizations(dataset,save_data_arr,dt,T,d)
+    x , y , silent_experiment = get_activity_data_dyncode(dyncode_filename)
+
 
     total_pulses_normed = [i/total_mean for i in total_pulses_mean]
     isolated_pulses_normed = [i/isolated_mean for i in isolated_pulses_mean]
     consecutive_pulses_normed = [i/consecutive_mean for i in consecutive_pulses_mean]
-    arr = [total_pulses_normed,isolated_pulses_normed,consecutive_pulses_normed]
+    
+    activity_mean_normed = [i/np.mean(x) for i in activity_mean]
+
+    
+    arr = [activity_mean_normed,total_pulses_normed,isolated_pulses_normed,consecutive_pulses_normed]
+
 
     
     X1 = [np.ones(len(arr[i]))*(i+1) for i in range(0,len(arr))]
@@ -294,7 +302,7 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
     ax6.set_ylim([0.0,1.5])
     ax6.xaxis.set_label_coords(0.5, -0.12);ax6.yaxis.set_label_coords(-0.05,0.5)
     ax6.tick_params(labelsize=6,direction='out', pad=1,length=2)
-    ax6.set_xticklabels([' total' ,'isolated','consecutive'],rotation = 0)
+    ax6.set_xticklabels(["activity",' total' ,'isolated','consecutive'],rotation = 0)
 
 
 # =============================================================================
@@ -304,7 +312,7 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
 
     ax3 = plt.subplot(gs_row_2_in[0:2]); plt.rc('axes.spines', top=False, bottom=True, left=True, right=False); 
     
-    (activity,activity_err),(silent,_),n_cell = load_activity_realizations(dataset,save_data_arr,dt,T,d)
+   # (activity,activity_err),(silent,_),n_cell,activity_mean,silent_mean = load_activity_realizations(dataset,save_data_arr,dt,T,d)
     
     #population activity
     if len(activity) > 0:
@@ -312,7 +320,7 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
         #p2 = ax3.bar(np.arange(1 ,n_cell + 1),activity,bottom=silent,width=0.9,alpha=0.8,color = violet,linewidth=0.0)
         ax3.plot(np.arange(1 ,n_cell + 1),activity[::-1],linewidth=0.5, marker = "." , color = violet, markersize=0, alpha=1)
         ax3.fill_between(np.arange(1, n_cell + 1), (activity - activity_err)[::-1], (activity + activity_err)[::-1], color=violet, alpha=0.2,linewidth=0)
-        x , y , silent_experiment = get_activity_data_dyncode(dyncode_filename)
+       # x , y , silent_experiment = get_activity_data_dyncode(dyncode_filename)
         #p3 = ax3.bar(x,y,bottom=silent_experiment,width=0.9,alpha=0.3,linewidth=0.0,color = green)
         ax3.plot(x,y[::-1],linewidth=0.5, marker = "." , color = green, markersize=0, alpha=1)
         
@@ -323,28 +331,28 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
     ax3.tick_params(labelsize=6,direction='out', pad=1,length=2)
     ax3.xaxis.set_label_coords(0.5,-0.06)
     
-    
+
     
     
     
     #mean activity
-    ax4 = plt.subplot(gs_row_2_in[2]); plt.rc('axes.spines', top=False, bottom=True, left=True, right=False); 
+    # ax4 = plt.subplot(gs_row_2_in[2]); plt.rc('axes.spines', top=False, bottom=True, left=True, right=False); 
 
     
-    if len(activity) > 0:
-        p1 = ax4.barh(1,width = np.mean(silent),xerr=np.std(silent),left =0,color='darkgray',alpha=0.5,linewidth=0.0,height=0.6)
-        p2 = ax4.barh(1,width = np.mean(activity),left=np.mean(silent),xerr = np.std(activity),color = violet,alpha=0.8,linewidth=0.0,height=0.6)
-        p3 = ax4.barh(1,width = np.mean(x),left=np.mean(silent_experiment),alpha=0.3,linewidth=0.0,height=0.6,color = green)
+    # if len(activity) > 0:
+    #     p1 = ax4.barh(1,width = np.mean(silent),xerr=np.std(silent),left =0,color='darkgray',alpha=0.5,linewidth=0.0,height=0.6)
+    #     p2 = ax4.barh(1,width = np.mean(activity),left=np.mean(silent),xerr = np.std(activity),color = violet,alpha=0.8,linewidth=0.0,height=0.6)
+    #     p3 = ax4.barh(1,width = np.mean(x),left=np.mean(silent_experiment),alpha=0.3,linewidth=0.0,height=0.6,color = green)
 
-    ax4.set_xticks([0,50,100])
-    ax4.set_xlim([0,100])
-    #ax4.set_yticks([1,n_cell + 1])
-    ax4.tick_params(labelsize=6,direction='out', pad=1,length=2)
-    ax4.invert_yaxis()
+    # ax4.set_xticks([0,50,100])
+    # ax4.set_xlim([0,100])
+    # #ax4.set_yticks([1,n_cell + 1])
+    # ax4.tick_params(labelsize=6,direction='out', pad=1,length=2)
+    # ax4.invert_yaxis()
     
     
-    ax3.set_ylabel('fraction of cell track' ,fontsize=8); 
-    ax4.set_xlabel('fraction of cell track' ,fontsize=8); 
+    # ax3.set_ylabel('fraction of cell track' ,fontsize=8); 
+    # ax4.set_xlabel('fraction of cell track' ,fontsize=8); 
 
     plt.savefig(save_folder+ 'figure3_m3a2_'+str(delta0)+'_'+str(sigma)+'_'+str(tau)+str(D)+'.pdf', format='pdf')
     
