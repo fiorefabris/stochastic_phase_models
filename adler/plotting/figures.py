@@ -32,6 +32,13 @@ sns.set(context='paper', style='ticks')
 plt.grid(0)
 plt.rc('axes.spines', top=True, bottom=True, left=True, right=True); 
 #%%
+def get_realizations_parameters(main_path,n):
+    save_description_arr = [];save_data_arr = []
+    for i in range(n):
+        save_description_arr.append(main_path + '/descriptions/description_'+str(i)+'.xlsx')
+        save_data_arr.append( main_path + '/realizations/data_'+str(i)+'/')
+    return save_description_arr,save_data_arr
+
 
 def load_consecutive_statistics_realizations_mean(dataset,save_data_arr,T):
     mean_trains_cons_trials,total_pulses_trials,isolated_pulses_trials,consecutive_pulses_trials = [],[],[],[]
@@ -122,7 +129,7 @@ def figure3_m3a2(dt,beg,T,d,N,Delta,description_file,data_folder,save_folder,dyn
 
 def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,tuple_):
     
-    violet = sns.color_palette("deep",6)[4]
+    red = sns.color_palette("deep",6)[3]
     green =  sns.color_palette(sns.dark_palette("#2ecc71",30,reverse=False))[15]
 
     fig = plt.figure(constrained_layout=False, figsize=(8.27, 11.692))
@@ -149,11 +156,11 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
     
     #synthetic data
     if len(DT) > 0:
-        #bins = ax1.hist(DT,bins=np.linspace(0,20,21),density=True,color = violet,histtype='step',alpha=1,linewidth=1)#,hatch='///'); 
-        #bins = ax1.hist(DT,bins=np.linspace(0,20,21),density=True,color = violet,histtype='stepfilled',alpha=0.2,linewidth=0); 
+        #bins = ax1.hist(DT,bins=np.linspace(0,20,21),density=True,color = red,histtype='step',alpha=1,linewidth=1)#,hatch='///'); 
+        #bins = ax1.hist(DT,bins=np.linspace(0,20,21),density=True,color = red,histtype='stepfilled',alpha=0.2,linewidth=0); 
         hist, edges = np.histogram(DT,bins=np.linspace(0,20,21),density=True); 
         bin_centers = (edges[:-1] + edges[1:]) / 2
-        ax1.plot(bin_centers, hist, linewidth=0.5, marker = "." , color = violet, markersize=7, alpha=1)
+        ax1.plot(bin_centers, hist, linewidth=0.5, marker = "." , color = red, markersize=7, alpha=1)
         print("duration \n model:\n")
        # print_st_values(ax1,DT,[bin_centers,hist],1,10)   
     else:
@@ -179,11 +186,11 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
     #print_st_values(ax2,dyncode_df.IPI.dropna().values/3,[bin_centers_dc,hist_dc],1,10)   
 
     if len(DT) > 0:
-        #bins = ax2.hist(IPI,bins=np.linspace(0,20,21),density=True,color = violet,histtype='step',alpha=1,linewidth=1)#,hatch='///');  
-       # bins = ax2.hist(IPI,bins=np.linspace(0,20,21),density=True,color = violet,histtype='stepfilled',alpha=0.2,linewidth=0); 
+        #bins = ax2.hist(IPI,bins=np.linspace(0,20,21),density=True,color = red,histtype='step',alpha=1,linewidth=1)#,hatch='///');  
+       # bins = ax2.hist(IPI,bins=np.linspace(0,20,21),density=True,color = red,histtype='stepfilled',alpha=0.2,linewidth=0); 
         hist, edges = np.histogram(IPI,bins=np.linspace(0,20,11),density=True); 
         bin_centers = (edges[:-1] + edges[1:]) / 2
-        ax2.plot(bin_centers, hist, linewidth=0.5, marker = "." , color = violet, markersize=7, alpha=1)
+        ax2.plot(bin_centers, hist, linewidth=0.5, marker = "." , color = red, markersize=7, alpha=1)
         print("IPI \n model:\n")
         #print_st_values(ax2,IPI,[bin_centers,hist],1,10)   
     else:
@@ -210,11 +217,11 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
     #print_st_values(ax3,dyncode_pr,[bin_centers,hist],1,10)   
 
     if len(DT) > 0:
-        #bins = ax3.hist(pulse_rate,bins=np.linspace(0,0.08,10),density=True,color = violet,histtype='step',alpha=1,linewidth=1)#,hatch='///'); 
-       # bins = ax3.hist(pulse_rate,bins=np.linspace(0,0.08,10),density=True,color = violet,histtype='stepfilled',alpha=0.2,linewidth=0); 
+        #bins = ax3.hist(pulse_rate,bins=np.linspace(0,0.08,10),density=True,color = red,histtype='step',alpha=1,linewidth=1)#,hatch='///'); 
+       # bins = ax3.hist(pulse_rate,bins=np.linspace(0,0.08,10),density=True,color = red,histtype='stepfilled',alpha=0.2,linewidth=0); 
         hist, edges = np.histogram(pulse_rate,bins=np.linspace(0,0.08,10),density=True); 
         bin_centers = (edges[:-1] + edges[1:]) / 2
-        ax3.plot(bin_centers, hist, linewidth=0.5, marker = "." , color = violet, markersize=7, alpha=1)
+        ax3.plot(bin_centers, hist, linewidth=0.5, marker = "." , color = red, markersize=7, alpha=1)
         print("pulse_rate \n model:\n")
        # print_st_values(ax3,pulse_rate,[bin_centers,hist],1,10)   
     else:
@@ -238,8 +245,8 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
 
     ax5 = plt.subplot(gs_row_1[0,3])
      
-    ax5.plot(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons, linewidth=0.5, marker = "." , color = violet,markersize=7, alpha=1,label = "model")
-    ax5.fill_between(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons-std_trains_cons,mean_trains_cons+std_trains_cons,color = violet,alpha = 0.2,linewidth=0)
+    ax5.plot(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons, linewidth=0.5, marker = "." , color = red,markersize=7, alpha=1,label = "model")
+    ax5.fill_between(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons-std_trains_cons,mean_trains_cons+std_trains_cons,color = red,alpha = 0.2,linewidth=0)
     x,y = get_consecutive_data_dyncode(dyncode_filename)
     ax5.plot(x,y,linewidth=0.5, marker = "." , markersize=7, alpha=1,color = green,label = "exp")
 
@@ -269,10 +276,11 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
     isolated_pulses_normed = [i/isolated_mean for i in isolated_pulses_mean]
     consecutive_pulses_normed = [i/consecutive_mean for i in consecutive_pulses_mean]
     
-    activity_mean_normed = [i/np.mean(x) for i in activity_mean]
+    #activity_mean_normed = [i/np.mean(x) for i in activity_mean]
 
     
-    arr = [activity_mean_normed,total_pulses_normed,isolated_pulses_normed,consecutive_pulses_normed]
+    #arr = [activity_mean_normed,total_pulses_normed,isolated_pulses_normed,consecutive_pulses_normed]
+    arr = [total_pulses_normed,isolated_pulses_normed,consecutive_pulses_normed]
 
 
     
@@ -280,13 +288,13 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
     bp1 = ax6.boxplot(arr,vert=True,whis=[5, 95],patch_artist=True,showmeans=False,meanline=True,showfliers=False )
 
     for i,box_ in enumerate(bp1['boxes']):
-         box_.set( color=violet, linewidth=0.0,facecolor=violet,alpha = 0.1)# change outline color
+         box_.set( color=red, linewidth=0.0,facecolor=red,alpha = 0.1)# change outline color
     for i,whisker in enumerate(bp1['whiskers']):
-        whisker.set(color=violet,linestyle = '-', linewidth=1,alpha=0.3)
+        whisker.set(color=red,linestyle = '-', linewidth=1,alpha=0.3)
     for i,cap in enumerate(bp1['caps']):
-        cap.set(color=violet,linestyle = '-', linewidth=1,alpha=0.3)## change color and linewidth of the caps
+        cap.set(color=red,linestyle = '-', linewidth=1,alpha=0.3)## change color and linewidth of the caps
     for i,median in enumerate(bp1['medians']):
-        median.set(color=violet,linestyle = '-', linewidth=1.5)## change color and linewidth of the medians
+        median.set(color=red,linestyle = '-', linewidth=1.5)## change color and linewidth of the medians
     for i,flyer in enumerate(bp1['fliers']):
         flyer.set(markeredgecolor='black')## change color and linewidth of the medians
     
@@ -302,24 +310,24 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
     ax6.set_ylim([0.0,1.5])
     ax6.xaxis.set_label_coords(0.5, -0.12);ax6.yaxis.set_label_coords(-0.05,0.5)
     ax6.tick_params(labelsize=6,direction='out', pad=1,length=2)
-    ax6.set_xticklabels(["activity",' total' ,'isolated','consecutive'],rotation = 0)
+    ax6.set_xticklabels([' total' ,'isolated','consecutive'],rotation = 0)
 
 
 # =============================================================================
 #     activity population and mean plot
 # =============================================================================
-    gs_row_2_in = gridspec.GridSpecFromSubplotSpec(nrows=1, ncols=3, subplot_spec=gs_row_2[0,1:3])
+   # gs_row_2_in = gridspec.GridSpecFromSubplotSpec(nrows=1, ncols=3, subplot_spec=gs_row_2[0,1:3])
 
-    ax3 = plt.subplot(gs_row_2_in[0:2]); plt.rc('axes.spines', top=False, bottom=True, left=True, right=False); 
+    ax3 = plt.subplot(gs_row_2[0,1]); plt.rc('axes.spines', top=False, bottom=True, left=True, right=False); 
     
    # (activity,activity_err),(silent,_),n_cell,activity_mean,silent_mean = load_activity_realizations(dataset,save_data_arr,dt,T,d)
     
     #population activity
     if len(activity) > 0:
         #p1 = ax3.bar(np.arange(1 ,n_cell + 1),silent,width=1,color='darkgray',alpha=0.5,linewidth=0.0,yerr=activity_err)
-        #p2 = ax3.bar(np.arange(1 ,n_cell + 1),activity,bottom=silent,width=0.9,alpha=0.8,color = violet,linewidth=0.0)
-        ax3.plot(np.arange(1 ,n_cell + 1),activity[::-1],linewidth=0.5, marker = "." , color = violet, markersize=0, alpha=1)
-        ax3.fill_between(np.arange(1, n_cell + 1), (activity - activity_err)[::-1], (activity + activity_err)[::-1], color=violet, alpha=0.2,linewidth=0)
+        #p2 = ax3.bar(np.arange(1 ,n_cell + 1),activity,bottom=silent,width=0.9,alpha=0.8,color = red,linewidth=0.0)
+        ax3.plot(np.arange(1 ,n_cell + 1),activity[::-1],linewidth=0.5, marker = "." , color = red, markersize=0, alpha=1)
+        ax3.fill_between(np.arange(1, n_cell + 1), (activity - activity_err)[::-1], (activity + activity_err)[::-1], color=red, alpha=0.2,linewidth=0)
        # x , y , silent_experiment = get_activity_data_dyncode(dyncode_filename)
         #p3 = ax3.bar(x,y,bottom=silent_experiment,width=0.9,alpha=0.3,linewidth=0.0,color = green)
         ax3.plot(x,y[::-1],linewidth=0.5, marker = "." , color = green, markersize=0, alpha=1)
@@ -336,12 +344,47 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
     
     
     #mean activity
-    # ax4 = plt.subplot(gs_row_2_in[2]); plt.rc('axes.spines', top=False, bottom=True, left=True, right=False); 
+    gs_row_2_in = gridspec.GridSpecFromSubplotSpec(nrows=1, ncols=3, subplot_spec=gs_row_2[0,0])
+    ax4 = plt.subplot(gs_row_2_in[2]); plt.rc('axes.spines', top=False, bottom=True, left=True, right=False); 
 
     
-    # if len(activity) > 0:
+    if len(activity) > 0:
+        #arr = [activity_mean_normed,total_pulses_normed,isolated_pulses_normed,consecutive_pulses_normed]
+        arr = [activity_mean]
+
+
+        
+        X1 = [np.ones(len(arr[i]))*(i+1) for i in range(0,len(arr))]
+        bp1 = ax4.boxplot(arr,vert=True,whis=[5, 95],patch_artist=True,showmeans=False,meanline=True,showfliers=False )
+
+        for i,box_ in enumerate(bp1['boxes']):
+             box_.set( color=red, linewidth=0.0,facecolor=red,alpha = 0.1)# change outline color
+        for i,whisker in enumerate(bp1['whiskers']):
+            whisker.set(color=red,linestyle = '-', linewidth=1,alpha=0.3)
+        for i,cap in enumerate(bp1['caps']):
+            cap.set(color=red,linestyle = '-', linewidth=1,alpha=0.3)## change color and linewidth of the caps
+        for i,median in enumerate(bp1['medians']):
+            median.set(color=red,linestyle = '-', linewidth=1.5)## change color and linewidth of the medians
+        for i,flyer in enumerate(bp1['fliers']):
+            flyer.set(markeredgecolor='black')## change color and linewidth of the medians
+        
+        for i in range(len(X1)):
+            xA = np.random.normal(0, 0.1, len(arr[i])), 
+            ax4.scatter(xA+X1[i],arr[i], alpha=1,s = 1.5,color='black',edgecolors='black',linewidths=0.0)
+
+
+        ax4.tick_params(axis='x', labelsize=8,length=2); 
+        ax4.tick_params(axis='y', labelsize=8,length=2)
+        ax4.set_xlabel(' ',fontsize=8)
+        ax4.set_ylabel('normalized counts',fontsize=8)
+        ax4.set_ylim([0.0,1.5])
+        ax4.xaxis.set_label_coords(0.5, -0.12);ax6.yaxis.set_label_coords(-0.05,0.5)
+        ax4.tick_params(labelsize=6,direction='out', pad=1,length=2)
+        ax4.set_xticklabels([' total' ,'isolated','consecutive'],rotation = 0)    
+        
+        
     #     p1 = ax4.barh(1,width = np.mean(silent),xerr=np.std(silent),left =0,color='darkgray',alpha=0.5,linewidth=0.0,height=0.6)
-    #     p2 = ax4.barh(1,width = np.mean(activity),left=np.mean(silent),xerr = np.std(activity),color = violet,alpha=0.8,linewidth=0.0,height=0.6)
+    #     p2 = ax4.barh(1,width = np.mean(activity),left=np.mean(silent),xerr = np.std(activity),color = red,alpha=0.8,linewidth=0.0,height=0.6)
     #     p3 = ax4.barh(1,width = np.mean(x),left=np.mean(silent_experiment),alpha=0.3,linewidth=0.0,height=0.6,color = green)
 
     # ax4.set_xticks([0,50,100])
@@ -364,7 +407,8 @@ def ts_figure3_m3a2_(dt,beg,T,d,N,Delta,data_folder,save_path_name,tuple_):
     '''
     (omega,alpha0,sigma,tau,D,number),dataset = tuple_[0],tuple_[1]
     delta0 = np.round(alpha0/omega,4)  
-    violet = sns.color_palette("deep",6)[4]
+    red = sns.color_palette("deep",6)[3]
+
 ###############################################################################
 ### Plotting parameters
 ###############################################################################    
@@ -395,7 +439,7 @@ def ts_figure3_m3a2_(dt,beg,T,d,N,Delta,data_folder,save_path_name,tuple_):
                 beg_ = int(beg/(dt*d))
                 assert len(t) == len(theta), (len(t),len(theta))
                 
-                ax.plot(t[beg_:end:1],(1+ np.sin(theta))[beg_:end:1],linewidth=2,color = violet)
+                ax.plot(t[beg_:end:1],(1+ np.sin(theta))[beg_:end:1],linewidth=2,color = red)
 
             if check_file('max_'+file_name,data_folder):            
                     
@@ -432,3 +476,62 @@ def ts_figure3_m3a2_(dt,beg,T,d,N,Delta,data_folder,save_path_name,tuple_):
     
     plt.savefig(save_path_name + 'ts_figure3_m3a2_'+str(delta0)+'_'+str(sigma)+'_'+str(tau)+'_'+str(D)+'.pdf', format='pdf')
     return(0)
+
+
+#%%
+
+def figure4_m3a2_(dt,T,d,mother_path,root_path,params,n):
+
+    params_keys = list(params.keys())
+    params_grouped_keys = [[key, f'{key}_m', f'{key}_p'] for key in params_keys]
+    colors = ["r","g","b"] 
+    labels = ["0","-","+"]
+    
+    fig = plt.figure(constrained_layout=False, figsize=(8.27, 11.692))
+    gs_main = gridspec.GridSpec(nrows=5, ncols=2, figure=fig); gs_main.update(left=0.1, right=0.9, bottom=0.1, top=0.90, hspace=0.3,wspace=0.3)
+    
+# =============================================================================
+#     consecutiveness plot
+# =============================================================================
+    
+    for j,params_group_keys in enumerate(params_grouped_keys): #por cada parametro
+        ax5 = plt.subplot(gs_main[1,j])
+        ax3 = plt.subplot(gs_main[0,j]); #plt.rc('axes.spines', top=False, bottom=True, left=True, right=False); 
+
+        for i,p in enumerate(params_group_keys): #por cada variacion de parametro
+            path = mother_path+p+"/" if i != 0 else root_path #esto es donde encontramos realizations  
+           
+            # para definir dataset
+            ref = pd.read_excel(path+"descriptions/description_0.xlsx",sheet_name= 'File_references');ref.set_index('Unnamed: 0',inplace=True);
+            tuple_ = list(ref.groupby(['omega', 'alpha0','sigma','tau','D','number'])); assert len(tuple_) == 1
+            _ ,dataset = tuple_[0][0],tuple_[0][1]
+         
+            #para definir save_data_arr
+            _ , save_data_arr = get_realizations_parameters(path,n)
+            
+            (mean_trains_cons,std_trains_cons),total_pulses_mean,isolated_pulses_mean,consecutive_pulses_mean = load_consecutive_statistics_realizations_mean(dataset,save_data_arr,T)
+            (activity,activity_err),(silent,_),n_cell,activity_mean,silent_mean = load_activity_realizations(dataset,save_data_arr,dt,T,d)
+
+            ax5.plot(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons, linewidth=0.5, marker = "." , color = colors[i],markersize=7, alpha=1,label = labels[i])
+            ax5.fill_between(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons-std_trains_cons,mean_trains_cons+std_trains_cons,color = colors[i],alpha = 0.2,linewidth=0)
+            if len(activity) > 0:
+                ax3.plot(np.arange(1 ,n_cell + 1),activity[::-1],linewidth=0.5, marker = "." , color = colors[i], markersize=0, alpha=1)
+                ax3.fill_between(np.arange(1, n_cell + 1), (activity - activity_err)[::-1], (activity + activity_err)[::-1], color = colors[i], alpha=0.2,linewidth=0)
+            
+        ax3.set_xlim([0,n_cell]);ax3.set_ylim([0,100])
+        ax3.set_xticks([1,n_cell + 1])
+        ax3.set_yticks([0,50,100])
+        ax3.tick_params(labelsize=6,direction='out', pad=1,length=2)
+
+        ax5.set_xlim([0,8.5]);
+        ax5.set_yscale('log')
+        ax5.set_ylim([10**(-2),10**1])
+
+    ax5.set_ylabel('counts x trace',fontsize=10); ax5.set_xlabel('length of sequence of \n consecutive pulses',fontsize=10)
+    ax5.xaxis.set_label_coords(0.5, -0.08);ax5.yaxis.set_label_coords(-0.2,0.5);
+    ax5.set_xticks([1,4,8])  
+    ax5.legend()      
+    ax3.xaxis.set_label_coords(0.5,-0.06)
+    ax3.set_xlabel( ' trazas ',fontsize=8); 
+
+    plt.savefig(root_path+'figures/figure5_m3a2.pdf', format='pdf')
