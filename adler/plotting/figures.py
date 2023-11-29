@@ -376,8 +376,8 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
         ax4.tick_params(axis='x', labelsize=8,length=2); 
         ax4.tick_params(axis='y', labelsize=8,length=2)
         ax4.set_xlabel(' ',fontsize=8)
-        ax4.set_ylabel('normalized counts',fontsize=8)
-        ax4.set_ylim([0.0,1.5])
+        ax4.set_ylabel('proportion of\ncell track',fontsize=8)
+        ax4.set_ylim([0,100])
         ax4.xaxis.set_label_coords(0.5, -0.12);ax6.yaxis.set_label_coords(-0.05,0.5)
         ax4.tick_params(labelsize=6,direction='out', pad=1,length=2)
         ax4.set_xticklabels(['mean \n activity'],rotation = 0)    
