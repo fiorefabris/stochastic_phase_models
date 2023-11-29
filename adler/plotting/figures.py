@@ -480,7 +480,7 @@ def ts_figure3_m3a2_(dt,beg,T,d,N,Delta,data_folder,save_path_name,tuple_):
 
 #%%
 
-def figure4_m3a2_(dt,T,d,mother_path,root_path,params,n):
+def figure4_m3a2(dt,T,d,mother_path,root_path,params,n):
 
     params_keys = list(params.keys())
     params_grouped_keys = [[key, f'{key}_m', f'{key}_p'] for key in params_keys]

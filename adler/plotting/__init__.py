@@ -28,7 +28,7 @@ from adler.plotting.plotting_pulses import  plot_activity_square_dist,plot_activ
 from adler.plotting.plotting_pulses import plot_2d_quantifiers,plot_2d_superposition
 from adler.plotting.plotting_consecutive import plot_consecutiveness_activity,plot_consecutiveness_activity_dist,plot_consecutiveness_activity_ou,plot_consecutiveness_activity_ou_D
 
-from adler.plotting.figures import figure3_m3a2
+from adler.plotting.figures import figure3_m3a2,figure4_m3a2
 
 from adler.plotting.plotting_dt_alpha import plot_simulated_dt_alpha,plot_theta_alpha, plot_simulated_fixed_dt_alpha,plot_theta_fixed_alpha
 from adler.plotting.plotting_simulated_dt_noise import plot_epsilon_plus,plot_epsilon_plus_in_x_minus,plot_t_plus,plot_t_plus_in_x_minus
