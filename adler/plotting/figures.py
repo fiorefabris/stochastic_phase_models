@@ -496,8 +496,8 @@ def figure4_m3a2(dt,T,d,mother_path,root_path,params,n):
 # =============================================================================
     
     for j,params_group_keys in enumerate(params_grouped_keys): #por cada parametro
-        ax5 = plt.subplot(gs_main[1,j])
-        ax3 = plt.subplot(gs_main[0,j]); #plt.rc('axes.spines', top=False, bottom=True, left=True, right=False); 
+        ax5 = plt.subplot(gs_main[j,1])
+        ax3 = plt.subplot(gs_main[j,0]); #plt.rc('axes.spines', top=False, bottom=True, left=True, right=False); 
 
         for i,p in enumerate(params_group_keys): #por cada variacion de parametro
             path = mother_path+p+"/" if i != 0 else root_path #esto es donde encontramos realizations  
