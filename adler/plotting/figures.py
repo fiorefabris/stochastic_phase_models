@@ -6,6 +6,7 @@ from math import ceil
 import multiprocessing as mp
 from functools import partial 
 import seaborn as sns
+import os
 
 from adler.data_managing_functions import download_data,check_file,time
 
@@ -500,23 +501,29 @@ def figure4_m3a2(dt,T,d,mother_path,root_path,params,n):
 
         for i,p in enumerate(params_group_keys): #por cada variacion de parametro
             path = mother_path+p+"/" if i != 0 else root_path #esto es donde encontramos realizations  
-           
-            # para definir dataset
-            ref = pd.read_excel(path+"descriptions/description_0.xlsx",sheet_name= 'File_references');ref.set_index('Unnamed: 0',inplace=True);
-            tuple_ = list(ref.groupby(['omega', 'alpha0','sigma','tau','D','number'])); assert len(tuple_) == 1
-            _ ,dataset = tuple_[0][0],tuple_[0][1]
-         
-            #para definir save_data_arr
-            _ , save_data_arr = get_realizations_parameters(path,n)
             
-            (mean_trains_cons,std_trains_cons),total_pulses_mean,isolated_pulses_mean,consecutive_pulses_mean = load_consecutive_statistics_realizations_mean(dataset,save_data_arr,T)
-            (activity,activity_err),(silent,_),n_cell,activity_mean,silent_mean = load_activity_realizations(dataset,save_data_arr,dt,T,d)
-
-            ax5.plot(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons, linewidth=0.5, marker = "." , color = colors[i],markersize=7, alpha=1,label = labels[i])
-            ax5.fill_between(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons-std_trains_cons,mean_trains_cons+std_trains_cons,color = colors[i],alpha = 0.2,linewidth=0)
-            if len(activity) > 0:
-                ax3.plot(np.arange(1 ,n_cell + 1),activity[::-1],linewidth=0.5, marker = "." , color = colors[i], markersize=0, alpha=1)
-                ax3.fill_between(np.arange(1, n_cell + 1), (activity - activity_err)[::-1], (activity + activity_err)[::-1], color = colors[i], alpha=0.2,linewidth=0)
+            if os.path.exists(path+"descriptions/"):
+                if len(os.listdir(path+"descriptions/"))==100:
+                    # para definir dataset
+                    ref = pd.read_excel(path+"descriptions/description_0.xlsx",sheet_name= 'File_references');ref.set_index('Unnamed: 0',inplace=True);
+                    tuple_ = list(ref.groupby(['omega', 'alpha0','sigma','tau','D','number'])); assert len(tuple_) == 1
+                    _ ,dataset = tuple_[0][0],tuple_[0][1]
+                 
+                    #para definir save_data_arr
+                    _ , save_data_arr = get_realizations_parameters(path,n)
+                    
+                    (mean_trains_cons,std_trains_cons),total_pulses_mean,isolated_pulses_mean,consecutive_pulses_mean = load_consecutive_statistics_realizations_mean(dataset,save_data_arr,T)
+                    (activity,activity_err),(silent,_),n_cell,activity_mean,silent_mean = load_activity_realizations(dataset,save_data_arr,dt,T,d)
+        
+                    ax5.plot(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons, linewidth=0.5, marker = "." , color = colors[i],markersize=7, alpha=1,label = labels[i])
+                    ax5.fill_between(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons-std_trains_cons,mean_trains_cons+std_trains_cons,color = colors[i],alpha = 0.2,linewidth=0)
+                    if len(activity) > 0:
+                        ax3.plot(np.arange(1 ,n_cell + 1),activity[::-1],linewidth=0.5, marker = "." , color = colors[i], markersize=0, alpha=1)
+                        ax3.fill_between(np.arange(1, n_cell + 1), (activity - activity_err)[::-1], (activity + activity_err)[::-1], color = colors[i], alpha=0.2,linewidth=0)
+                else:
+                    n_cell = 69
+            else:
+                n_cell = 69
             
         ax3.set_xlim([0,n_cell]);ax3.set_ylim([0,100])
         ax3.set_xticks([1,n_cell + 1])
