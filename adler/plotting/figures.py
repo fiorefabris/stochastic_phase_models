@@ -380,7 +380,7 @@ def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,
         ax4.set_ylim([0.0,1.5])
         ax4.xaxis.set_label_coords(0.5, -0.12);ax6.yaxis.set_label_coords(-0.05,0.5)
         ax4.tick_params(labelsize=6,direction='out', pad=1,length=2)
-        ax4.set_xticklabels([' total' ,'isolated','consecutive'],rotation = 0)    
+        ax4.set_xticklabels(['mean \n activity'],rotation = 0)    
         
         
     #     p1 = ax4.barh(1,width = np.mean(silent),xerr=np.std(silent),left =0,color='darkgray',alpha=0.5,linewidth=0.0,height=0.6)
@@ -534,4 +534,4 @@ def figure4_m3a2(dt,T,d,mother_path,root_path,params,n):
     ax3.xaxis.set_label_coords(0.5,-0.06)
     ax3.set_xlabel( ' trazas ',fontsize=8); 
 
-    plt.savefig(root_path+'figures/figure5_m3a2.pdf', format='pdf')
+    plt.savefig(root_path+'figures/figure4_m3a2.pdf', format='pdf')
