@@ -529,6 +529,8 @@ def figure4_m3a2(dt,T,d,mother_path,root_path,params,n):
         ax3.set_xticks([1,n_cell + 1])
         ax3.set_yticks([0,50,100])
         ax3.tick_params(labelsize=6,direction='out', pad=1,length=2)
+        ax3.set_ylabel(params_group_keys[0],fontsize=8); 
+
 
         ax5.set_xlim([0,8.5]);
         ax5.set_yscale('log')
