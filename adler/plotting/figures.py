@@ -130,7 +130,7 @@ def figure3_m3a2(dt,beg,T,d,N,Delta,description_file,data_folder,save_folder,dyn
 
 def figure3_m3a2_(dt,T,d,data_folder,save_folder,dyncode_filename,save_data_arr,tuple_):
     
-    red = sns.color_palette("deep",6)[3]
+    red = "r"#sns.color_palette("deep",6)[3]
     green =  sns.color_palette(sns.dark_palette("#2ecc71",30,reverse=False))[15]
 
     fig = plt.figure(constrained_layout=False, figsize=(8.27, 11.692))
@@ -408,7 +408,7 @@ def ts_figure3_m3a2_(dt,beg,T,d,N,Delta,data_folder,save_path_name,tuple_):
     '''
     (omega,alpha0,sigma,tau,D,number),dataset = tuple_[0],tuple_[1]
     delta0 = np.round(alpha0/omega,4)  
-    red = sns.color_palette("deep",6)[3]
+    red = "r"#sns.color_palette("deep",6)[3]
 
 ###############################################################################
 ### Plotting parameters
@@ -485,7 +485,7 @@ def figure4_m3a2(dt,T,d,mother_path,root_path,params,n):
 
     params_keys = list(params.keys())
     params_grouped_keys = [[key, f'{key}_m', f'{key}_p'] for key in params_keys]
-    colors = ["r","g","b"] 
+    colors = ["r","c","b"] 
     labels = ["0","-","+"]
     
     fig = plt.figure(constrained_layout=False, figsize=(8.27, 11.692))
@@ -536,7 +536,7 @@ def figure4_m3a2(dt,T,d,mother_path,root_path,params,n):
         ax5.set_yscale('log')
         ax5.set_ylim([10**(-2),10**1])
         ax5.set_xticks([1,4,8])  
-        ax5.set_xticks([10**(-2),10**1])
+        ax5.set_yticks([10**(-2),10**1])
 
 
     ax5.set_ylabel('counts x trace',fontsize=10); ax5.set_xlabel('length of sequence of \n consecutive pulses',fontsize=10)
