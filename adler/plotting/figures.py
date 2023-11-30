@@ -489,7 +489,7 @@ def figure4_m3a2(dt,T,d,mother_path,root_path,params,n):
     labels = ["0","-","+"]
     
     fig = plt.figure(constrained_layout=False, figsize=(8.27, 11.692))
-    gs_main = gridspec.GridSpec(nrows=5, ncols=2, figure=fig); gs_main.update(left=0.1, right=0.9, bottom=0.1, top=0.90, hspace=0.3,wspace=0.3)
+    gs_main = gridspec.GridSpec(nrows=10, ncols=4, figure=fig); gs_main.update(left=0.1, right=0.9, bottom=0.1, top=0.90, hspace=0.3,wspace=0.3)
     
 # =============================================================================
 #     consecutiveness plot
