@@ -535,10 +535,12 @@ def figure4_m3a2(dt,T,d,mother_path,root_path,params,n):
         ax5.set_xlim([0,8.5]);
         ax5.set_yscale('log')
         ax5.set_ylim([10**(-2),10**1])
+        ax5.set_xticks([1,4,8])  
+        ax5.set_xticks([10**(-2),10**1])
+
 
     ax5.set_ylabel('counts x trace',fontsize=10); ax5.set_xlabel('length of sequence of \n consecutive pulses',fontsize=10)
     ax5.xaxis.set_label_coords(0.5, -0.08);ax5.yaxis.set_label_coords(-0.2,0.5);
-    ax5.set_xticks([1,4,8])  
     ax5.legend()      
     ax3.xaxis.set_label_coords(0.5,-0.06)
     ax3.set_xlabel( ' trazas ',fontsize=8); 
