@@ -489,7 +489,7 @@ def figure4_m3a2(dt,T,d,mother_path,root_path,params,n):
     labels = ["0","-","+"]
     
     fig = plt.figure(constrained_layout=False, figsize=(8.27, 11.692))
-    gs_main = gridspec.GridSpec(nrows=10, ncols=4, figure=fig); gs_main.update(left=0.1, right=0.9, bottom=0.1, top=0.90, hspace=0.3,wspace=0.3)
+    gs_main = gridspec.GridSpec(nrows=10, ncols=6, figure=fig); gs_main.update(left=0.1, right=0.9, bottom=0.1, top=0.90, hspace=0.3,wspace=0.3)
     
 # =============================================================================
 #     consecutiveness plot
@@ -498,7 +498,11 @@ def figure4_m3a2(dt,T,d,mother_path,root_path,params,n):
     for j,params_group_keys in enumerate(params_grouped_keys): #por cada parametro
         ax5 = plt.subplot(gs_main[j,1])
         ax3 = plt.subplot(gs_main[j,0]); #plt.rc('axes.spines', top=False, bottom=True, left=True, right=False); 
-
+        
+        ax1 = plt.subplot(gs_main[j,2])
+        ax2 = plt.subplot(gs_main[j,3])
+        ax4 = plt.subplot(gs_main[j,4])
+        
         for i,p in enumerate(params_group_keys): #por cada variacion de parametro
             path = mother_path+p+"/" if i != 0 else root_path #esto es donde encontramos realizations  
             
@@ -514,12 +518,36 @@ def figure4_m3a2(dt,T,d,mother_path,root_path,params,n):
                     
                     (mean_trains_cons,std_trains_cons),total_pulses_mean,isolated_pulses_mean,consecutive_pulses_mean = load_consecutive_statistics_realizations_mean(dataset,save_data_arr,T)
                     (activity,activity_err),(silent,_),n_cell,activity_mean,silent_mean = load_activity_realizations(dataset,save_data_arr,dt,T,d)
-        
+                    
+                    #consecutive
                     ax5.plot(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons, linewidth=0.5, marker = "." , color = colors[i],markersize=7, alpha=1,label = labels[i])
                     ax5.fill_between(np.arange(1,len(mean_trains_cons)+1),mean_trains_cons-std_trains_cons,mean_trains_cons+std_trains_cons,color = colors[i],alpha = 0.2,linewidth=0)
+                
+                    #activity
                     if len(activity) > 0:
                         ax3.plot(np.arange(1 ,n_cell + 1),activity[::-1],linewidth=0.5, marker = "." , color = colors[i], markersize=0, alpha=1)
                         ax3.fill_between(np.arange(1, n_cell + 1), (activity - activity_err)[::-1], (activity + activity_err)[::-1], color = colors[i], alpha=0.2,linewidth=0)
+                
+                
+                    # histograms
+                    DT,IPI,joint_duration,dm,pulse_rate =  download_quantifiers_realizations(dataset,save_data_arr,T,dt,d) 
+                    
+                    
+                    hist, edges = np.histogram(DT,bins=np.linspace(0,20,21),density=True); 
+                    bin_centers = (edges[:-1] + edges[1:]) / 2
+                    ax1.plot(bin_centers, hist, linewidth=0.5, marker = "." , color = colors[i], markersize=7, alpha=1)
+
+                    
+                    hist, edges = np.histogram(IPI,bins=np.linspace(0,20,11),density=True); 
+                    bin_centers = (edges[:-1] + edges[1:]) / 2
+                    ax2.plot(bin_centers, hist, linewidth=0.5, marker = "." , color = colors[i], markersize=7, alpha=1)
+
+                
+                    hist, edges = np.histogram(pulse_rate,bins=np.linspace(0,0.08,10),density=True); 
+                    bin_centers = (edges[:-1] + edges[1:]) / 2
+                    ax4.plot(bin_centers, hist, linewidth=0.5, marker = "." , color = colors[i], markersize=7, alpha=1)
+
+                
                 else:
                     n_cell = 69
             else:
@@ -538,11 +566,42 @@ def figure4_m3a2(dt,T,d,mother_path,root_path,params,n):
         ax5.set_xticks([1,4,8])  
         ax5.set_yticks([10**(-2),10**1])
 
+        for ax in [ax1]:
+            ax.set_ylim([0,0.3]);
+            ax.set_xlim([0,20])
+            set_scale(ax,[0,5,10,15,20], [0,0.3])
+            ax.set_yticklabels([0,0.3])
+            ax.tick_params(labelsize=10)
+
+        
+        for ax in [ax2]:
+            ax.set_ylim([0,0.15]);
+            ax.set_xlim([0,20])
+            set_scale(ax,[0,5,10,15,20], [0,0.15])
+            ax.set_yticklabels([0,0.15])
+            ax.tick_params(labelsize=10)
+
+        
+        for ax in [ax4]:
+            ax.set_ylim([0,30]);
+            ax.set_xlim([0,0.08])
+            set_scale(ax,[0,0.08], [0,30])       
+            ax.set_yticklabels([0,30])
+            ax.tick_params(labelsize=10)    
+
+
 
     ax5.set_ylabel('counts x trace',fontsize=10); ax5.set_xlabel('length of sequence of \n consecutive pulses',fontsize=10)
     ax5.xaxis.set_label_coords(0.5, -0.08);ax5.yaxis.set_label_coords(-0.2,0.5);
     ax5.legend()      
     ax3.xaxis.set_label_coords(0.5,-0.06)
     ax3.set_xlabel( ' trazas ',fontsize=8); 
+    ax1.set_xticklabels([0,5,10,15,20])
+    ax1.set_xlabel('duration (min)' ,fontsize=10); 
+    ax2.set_xticklabels([0,5,10,15,20])
+    ax2.set_xlabel('Interpulse interval (min)' ,fontsize=10); 
+    ax4.set_xticklabels([0,0.08])
+    ax4.set_xlabel('pulse rate (1/min)' ,fontsize=10); 
+
 
     plt.savefig(root_path+'figures/figure4_m3a2.pdf', format='pdf')
