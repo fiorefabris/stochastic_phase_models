@@ -104,6 +104,72 @@ def load_consecutive_statistics_mean(dataset,data_folder,T):
                     #para get_mean_value_place, es lo mismo lista vacía que lista con cerois
         return get_mean_value_place(consecutive_trains_dataset,True),np.mean(total_pulses_dataset),np.mean(isolated_pulses_dataset),np.mean(consecutive_pulses_dataset)
 
+#%%
+
+
+def load_consecutive_statistics_realizations_mean_dist(dataset,save_data_arr,T):
+    mean_trains_cons_trials,total_pulses_trials,isolated_pulses_trials,consecutive_pulses_trials = [],[],[],[]
+    
+    for data_folder in save_data_arr:
+        #para cada trial
+        mean_trains_cons,total_pulses,isolated_pulses,consecutive_pulses = load_consecutive_statistics_mean_dist(dataset,data_folder,T)
+        mean_trains_cons_trials.append(mean_trains_cons)
+        total_pulses_trials.append(total_pulses/T)
+        isolated_pulses_trials.append(isolated_pulses/T)
+        consecutive_pulses_trials.append(consecutive_pulses/T)
+        
+    return get_mean_value_place(mean_trains_cons_trials,False),total_pulses_trials,isolated_pulses_trials,consecutive_pulses_trials
+
+
+def load_consecutive_statistics_mean_dist(dataset,data_folder,T):
+        ''' le pasas un experimento  y te devuelve la estadistica de pulsos cons
+        
+        FALTAAA VER CONSECUTIVE TRIAL
+
+        para total, consec, isolated te devuelve el promedio del pulse rate (para un solo trial que le pasaste)
+        
+        '''
+        isolated_pulses_dataset = []
+        total_pulses_dataset = []
+        consecutive_pulses_dataset = []
+        consecutive_trains_dataset = []
+        n_cell = 0
+        
+        for (order, alpha), row in dataset.groupby(['order', 'alpha']):
+            if n_cell < 68:
+                number      = int(row.number)
+                file_name   =  str(number)+'_'+str(order)+'.pkl'
+                n_cell = n_cell+1
+                
+                if (check_file('i_'+file_name,data_folder)): 
+                    #esto sucede solamente si hay pulsos en la serie temporal
+                    
+                    isolated_pulses = download_data(data_folder+'i_'+file_name)
+                    isolated_pulses_dataset.append(isolated_pulses)
+                
+                    consecutive_trial = download_data(data_folder+'c_'+file_name) #esto es sin normalizar
+                    #consecutive_trains_dataset.append(consecutive_trial)
+                    total_pulses_dataset.append(consecutive_trial[0])
+                    
+                    consecutive_pulses = consecutive_trial[0]-isolated_pulses
+                    #print(consecutive_trial[0],isolated_pulses,consecutive_pulses)
+                    consecutive_pulses_dataset.append(consecutive_pulses)
+                    
+                    
+                else:
+                    isolated_pulses_dataset.append(0)
+                    total_pulses_dataset.append(0)
+                    consecutive_pulses_dataset.append(0)
+                    
+                if (check_file('exp_c_'+file_name,data_folder)):
+                    #esto sucede sólo si hay máximos
+                    consecutive_trial_exp = download_data(data_folder+'exp_c_'+file_name)
+                    consecutive_trains_dataset.append(consecutive_trial_exp)
+                else:
+                    consecutive_trains_dataset.append([0])
+                    #para get_mean_value_place, es lo mismo lista vacía que lista con cerois
+        return get_mean_value_place(consecutive_trains_dataset,True),np.mean(total_pulses_dataset),np.mean(isolated_pulses_dataset),np.mean(consecutive_pulses_dataset)
+
 
 
 #%%
